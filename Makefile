@@ -1,53 +1,55 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/04/07 20:53:41 by mchardin         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME		= a.out
 
-PREFIX		=	./
+SRCS		= \
+			  main.c \
 
-SRCS		=	$(addprefix $(PREFIX), \
-								main.cpp \
-								)
+HEADER		= \
 
-OBJS		=	${SRCS:.cpp=.o}
+RM			= rm -f
 
-DEPS		=	${OBJS:.o=.d}
+CC			= clang
+CFLAGS		= -Wall -Wextra -Werror -pthread
 
-CXX			=	clang++
+OBJS		=	$(SRCS:.c=.o)
 
-CXXFLAGS	=	-Werror -Wextra -Wall -MMD
+.c.o:
+			$(CC) $(CFLAGS) -c $< -o ${<:.c=.o}
 
-NAME 		=	webserv
+all:		$(NAME)
 
-RM			=	rm -f
-
-all:
-			${MAKE} ${NAME}
-
-${NAME}:	${OBJS}
-			${CXX} ${CXXFLAGS} ${OBJS} -o ${NAME}
-
-run:		all
-			./$(NAME)
+$(NAME):	$(SRCS) $(OBJS) $(HEADER)
+			$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -I.
 
 clean:
-			${RM} ${OBJS}
-			${RM} ${DEPS}
+			$(RM) -r $(OBJS)
 
-fclean:
-			${RM} ${OBJS}
-			${RM} ${DEPS}
-			${RM} ${NAME}
+fclean:		clean
+			$(RM) -r $(NAME)
 
 re:			fclean all
 
-.PHONY: 	all re run clean fclean
 
--include	${DEPS}
+config:
+	git config --global user.email "cdai@student.42.fr";
+	git config --global user.name "cdai";
+	git clone https://github.com/42paris/42header;
+	mkdir -p ~/.vim/plugin;
+	sed 's/marvin/cdai/' 42header/vim/stdheader.vim | sed 's/42.fr/student.42.fr/' > ~/.vim/plugin/stdheader.vim;
+	git config --global core.editor vim;
+	rm -rf 42header;
+	echo '*.log' > .gitignore
+	echo '.*.swp' >> .gitignore
+	echo .gitignore >> .gitignore
+	echo test >> .gitignore
+	echo '*.o' >> .gitignore
+
+test: all
+	./$(NAME)
+
+
+valgrind: all
+	valgrind ./$(NAME)
+
+norm:
+	norminette $(SRCS) $(HEADER)
+
