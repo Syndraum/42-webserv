@@ -78,134 +78,8 @@
 //	return 0;
 //}
 
-/* source: https://www.binarytides.com/socket-programming-c-linux-tutorial/ */
-//#include<stdio.h>
-//#include<string.h>	//strlen
-//#include<stdlib.h>	//strlen
-//#include<sys/socket.h>
-//#include<arpa/inet.h>	//inet_addr
-//#include<unistd.h>	//write
-//
-//#include<pthread.h> //for threading , link with lpthread
-//
-//void *connection_handler(void *);
-//
-//int main()
-//{
-//	int socket_desc , new_socket , c , *new_sock;
-//	struct sockaddr_in server , client;
-//	char *message;
-//
-//	//Create socket
-//	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
-//	if (socket_desc == -1)
-//	{
-//		printf("Could not create socket");
-//	}
-//
-//	//Prepare the sockaddr_in structure
-//	server.sin_family = AF_INET;
-//	server.sin_addr.s_addr = INADDR_ANY;
-//	server.sin_port = htons( 8888 );
-//
-//	//Bind
-//	if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
-//	{
-//		puts("bind failed");
-//		return 1;
-//	}
-//	puts("bind done");
-//
-//	//Listen
-//	listen(socket_desc , 3);
-//
-//	//Accept and incoming connection
-//	puts("Waiting for incoming connections...");
-//	c = sizeof(struct sockaddr_in);
-//	while( (new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) )
-//	{
-//		puts("Connection accepted");
-//
-//		//Reply to the client
-//		message = "Hello Client , I have received your connection. And now I will assign a handler for you\n";
-//		write(new_socket , message , strlen(message));
-//
-//		pthread_t sniffer_thread;
-//		new_sock = malloc(1);
-//		*new_sock = new_socket;
-//
-//		if( pthread_create( &sniffer_thread , NULL ,  connection_handler , (void*) new_sock) < 0)
-//		{
-//			perror("could not create thread");
-//			return 1;
-//		}
-//
-//		//Now join the thread , so that we dont terminate before the thread
-//		//pthread_join( sniffer_thread , NULL);
-//		puts("Handler assigned");
-//	}
-//
-//	if (new_socket<0)
-//	{
-//		perror("accept failed");
-//		return 1;
-//	}
-//
-//	return 0;
-//}
-//
-///*
-// * This will handle connection for each client
-// * */
-//void *connection_handler(void *socket_desc)
-//{
-//	//Get the socket descriptor
-//	int sock = *(int*)socket_desc;
-//	int read_size;
-//	char *message , client_message[2000];
-//
-//	//Send some messages to the client
-//	message = "Greetings! I am your connection handler\n";
-//	write(sock , message , strlen(message));
-//
-//	message = "Now type something and i shall repeat what you type \n";
-//	write(sock , message , strlen(message));
-//
-//	//Receive a message from client
-//	while( (read_size = recv(sock , client_message , 2000 , 0)) > 0 )
-//	{
-//		//Send the message back to client
-//		write(sock , client_message , strlen(client_message));
-//	}
-//
-//	if(read_size == 0)
-//	{
-//		puts("Client disconnected");
-//		fflush(stdout);
-//	}
-//	else if(read_size == -1)
-//	{
-//		perror("recv failed");
-//	}
-//
-//	//Free the socket pointer
-//	free(socket_desc);
-//
-//	return 0;
-//}
-
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <arpa/inet.h>
-#include <err.h>
-
-char response[] = "HTTP/1.1 200 OK\r\n"
+char response[] = 
+"HTTP/1.1 200 OK\r\n"
 "Content-Type: text/html; charset=UTF-8\r\n\r\n"
 "<!DOCTYPE html><html><head><title>Bye-bye baby bye-bye</title>"
 "<style>body { background-color: #111 }"
@@ -213,55 +87,196 @@ char response[] = "HTTP/1.1 200 OK\r\n"
 " text-shadow: 0 0 2mm red}</style></head>"
 "<body><h1>Goodbye, world!</h1></body></html>\r\n";
 
+/* source: https://www.binarytides.com/socket-programming-c-linux-tutorial/ */
+#include<stdio.h>
+#include<string.h>	//strlen
+#include<stdlib.h>	//strlen
+#include<sys/socket.h>
+#include<arpa/inet.h>	//inet_addr
+#include<unistd.h>	//write
+
+#include<pthread.h> //for threading , link with lpthread
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+void *connection_handler(void *);
+char *strjoin(char *str1, char *str2);
+
 int main()
 {
-	int					one = 1;
-	int					client_fd;
-	struct sockaddr_in	server_address;
-	struct sockaddr_in	client_address;
-	socklen_t			socket_in_length = sizeof(client_address);
+	int socket_desc , new_socket , c , one = 1;
+	struct sockaddr_in server , client;
 
-	// get socket fd
-	int sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock < 0)
-		err(1, "can't open socket");
+	//Create socket
+	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
+	if (socket_desc == -1)
+		printf("Could not create socket");
 
+	//Set option on socket_fd (like REUSEADDR to rebind (and so, re-test quickly))
+	setsockopt(socket_desc, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
 
-	// set socket option	
-	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
+	//Prepare the sockaddr_in structure
+	server.sin_family = AF_INET;
+	server.sin_addr.s_addr = INADDR_ANY;
+	server.sin_port = htons( 8888 );
 
-
-	// set server port and ip, values, etc
-	int port = 8888;
-	server_address.sin_family = AF_INET;
-	server_address.sin_addr.s_addr = INADDR_ANY;
-	server_address.sin_port = htons(port);
-
-
-	// bind socket_fd to addr value
-	if (bind(sock, (struct sockaddr *) &server_address, sizeof(server_address)) == -1) {
-		close(sock);
-		err(1, "Can't bind");
+	//Bind socket to ip addr
+	if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
+	{
+		puts("bind failed");
+		return 1;
 	}
+	puts("bind done");
 
+	//Listen
+	listen(socket_desc , 3);
 
-	// make socket_fd listen and can use accept on it
-	listen(sock, 5); // the second argument is max_queue_client
+	//Accept and incoming connection
+	puts("Waiting for incoming connections...");
+	c = sizeof(struct sockaddr_in);
+	while( (new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) )
+	{
+		puts("---- ---- ---- Connection accepted ---- ---- ----");
 
+		int read_size, length; //recv return value, i think i like read (read the fucking manual)
+		char client_message[2000], answer[10000], *header, *response;
 
-	// while loop cause be want our server loop for ever
-	while (1) {
-		// get client fd, fullfill client_address struct
-		client_fd = accept(sock, (struct sockaddr *) &client_address, &socket_in_length);
-		printf("got connection\n");
+		response = malloc(10000);
+		if( (read_size = recv(new_socket , client_message , 2000 , 0)) > 0 )
+		{
+			printf("---- read_size: %d ----\n", read_size);
 
-		if (client_fd == -1) {
-			perror("Can't accept");
-			continue;
+			client_message[read_size] = 0;
+			write(1, client_message , strlen(client_message));
 		}
 
-		// write on client_fd 
-		write(client_fd, response, sizeof(response) - 1); /*-1:'\0'*/
-		close(client_fd);
+
+		// like ctrl + d, i think, or EOF
+		if(read_size == 0)
+		{
+			puts("Client disconnected");
+			fflush(stdout);
+		} // handle recv error
+		else if(read_size == -1)
+			perror("recv failed");
+		else
+		{
+			header =
+				"HTTP/1.1 200 OK\r\n"
+				"Content-Type: text/html; charset=UTF-8\r\n\r\n";
+
+			int file_fd = open("index.html", O_RDONLY);
+			int end = read(file_fd, answer, 10000);
+			answer[end] = 0;
+
+			header = strjoin(header, answer);
+			header = strjoin(header, "\r\n");
+
+			//printf("header: \n%s\n", header);
+			close(file_fd);
+			length = strlen(header);
+			response = header;
+
+			write(1, response, length);
+			send(new_socket, response, length, 0);
+			close(new_socket);
+		}
+
+		if (!strcmp(client_message, "CLOSE\r\n"))
+			break;
 	}
+
+	// handle accept() fail
+	if (new_socket < 0)
+	{
+		perror("accept failed");
+		return 1;
+	}
+
+	return 0;
 }
+
+char *strjoin(char *str1, char *str2)
+{
+	char *res = malloc(strlen(str1) + strlen(str2) + 1);
+	for (unsigned long i = 0; i < strlen(str1); i++)
+		res[i] = str1[i];
+	for (unsigned long i = 0; i < strlen(str2); i++)
+		res[strlen(str1) + i] = str2[i];
+	res[strlen(str1) + strlen(str2) + 1] = 0;
+
+	return res;
+}
+
+/* https://www.rosettacode.org/wiki/Hello_world/Web_server */
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <unistd.h>
+//#include <sys/types.h>
+//#include <sys/socket.h>
+//#include <netinet/in.h>
+//#include <netdb.h>
+//#include <arpa/inet.h>
+//#include <err.h>
+//
+//char response[] = "HTTP/1.1 200 OK\r\n"
+//"Content-Type: text/html; charset=UTF-8\r\n\r\n"
+//"<!DOCTYPE html><html><head><title>Bye-bye baby bye-bye</title>"
+//"<style>body { background-color: #111 }"
+//"h1 { font-size:4cm; text-align: center; color: black;"
+//" text-shadow: 0 0 2mm red}</style></head>"
+//"<body><h1>Goodbye, world!</h1></body></html>\r\n";
+//
+//int main()
+//{
+//	int					one = 1;
+//	int					client_fd;
+//	struct sockaddr_in	server_address;
+//	struct sockaddr_in	client_address;
+//	socklen_t			socket_in_length = sizeof(client_address);
+//
+//	// get socket fd
+//	int sock = socket(AF_INET, SOCK_STREAM, 0);
+//	if (sock < 0)
+//		err(1, "can't open socket");
+//
+//
+//	// set socket option	
+//	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
+//
+//
+//	// set server port and ip, values, etc
+//	int port = 8888;
+//	server_address.sin_family = AF_INET;
+//	server_address.sin_addr.s_addr = INADDR_ANY;
+//	server_address.sin_port = htons(port);
+//
+//
+//	// bind socket_fd to addr value
+//	if (bind(sock, (struct sockaddr *) &server_address, sizeof(server_address)) == -1) {
+//		close(sock);
+//		err(1, "Can't bind");
+//	}
+//
+//
+//	// make socket_fd listen and can use accept on it
+//	listen(sock, 5); // the second argument is max_queue_client
+//
+//
+//	// while loop cause be want our server loop for ever
+//	while (1) {
+//		// get client fd, fullfill client_address struct
+//		client_fd = accept(sock, (struct sockaddr *) &client_address, &socket_in_length);
+//		printf("got connection\n");
+//
+//		if (client_fd == -1) {
+//			perror("Can't accept");
+//			continue;
+//		}
+//
+//		// write on client_fd 
+//		write(client_fd, response, sizeof(response) - 1); /*-1:'\0'*/
+//		close(client_fd);
+//	}
+//}
