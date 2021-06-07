@@ -1,9 +1,13 @@
 NAME		= a.out
 
 SRCS		= \
+			  get_new_socket.c \
+			  init_server.c \
+			  server_bind.c \
 			  main.c \
 
 HEADER		= \
+			  cdai_test.h \
 
 RM			= rm -f
 
