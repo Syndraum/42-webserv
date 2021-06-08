@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/08 18:04:41 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/08 18:15:36 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,19 @@ using namespace std;
 #define POST 1
 #define DELETE 2
 
+#define VERSION "HTTP/1.1"
+
 #define OK 200
 #define BAD_REQUEST 400
 #define BAD_VERSION 505
+#define NOT_IMPLEMENTED 501
 
 class request_info
 {
 private:
 	int		method;
 	string	path;
+	string version;
 	int		response_code;
 
 	string	error_msg(int code);
@@ -64,6 +68,8 @@ string	request_info::error_msg(int code)
 		return ("Bad Request");
 	else if(code == BAD_VERSION)
 		return ("HTTP Version Not Supported");
+	else if(code == NOT_IMPLEMENTED)
+		return("Not Implemented");
 	return (0);
 }
 
@@ -92,7 +98,7 @@ int		request_info::which_method(string line)
 	}
 	else
 	{
-		response_code = BAD_REQUEST;
+		response_code = NOT_IMPLEMENTED;
 		return (-1);
 	}
 }
@@ -112,11 +118,12 @@ int		request_info::which_path(string line)
 
 int		request_info::which_version(string line)
 {
-	if (line.compare(0, 8, "HTTP/1.1"))
+	if (line.compare(0, 8, VERSION))
 	{
 		response_code = BAD_VERSION;
 		return (-1);
 	}
+	version = VERSION;
 	return (8);
 }
 

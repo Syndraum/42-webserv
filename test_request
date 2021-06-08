@@ -1,2 +1,2 @@
-GET /coucou HTTP/1.1
+GETO /coucou HTTP/1.1
 coucou: salut
