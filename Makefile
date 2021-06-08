@@ -4,6 +4,8 @@ SRCS		= \
 			  get_new_socket.c \
 			  init_server.c \
 			  server_bind.c \
+			  build_response.c \
+			  strjoin.c \
 			  main.c \
 
 HEADER		= \

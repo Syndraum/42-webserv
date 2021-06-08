@@ -17,6 +17,8 @@
 int get_new_socket(void); // return a fd
 void	init_server(struct sockaddr_in *server); // fullfill a (struct sockaddr_in)
 int	server_bind(int fd, struct sockaddr_in * server); // use bind
+char *build_response(char *file_name);
+char *strjoin(char *str1, char *str2);
 
 
 #endif
