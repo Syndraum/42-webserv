@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/08 18:15:36 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/08 18:25:52 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,42 +27,42 @@ using namespace std;
 #define BAD_VERSION 505
 #define NOT_IMPLEMENTED 501
 
-class request_info
+class Request
 {
 private:
 	int		method;
 	string	path;
-	string version;
+	string	version;
 	int		response_code;
 
 	string	error_msg(int code);
 	int		return_error(string msg);
-	int		which_method(string line);
-	int		which_path(string line);
-	int		which_version(string line);
+	int		set_method(string line);
+	int		set_path(string line);
+	int		set_version(string line);
 	int		first_line(string line);
 	int		parse_headers(string line);
 	/* data */
 public:
-	request_info(/* args */);
-	~request_info();
+	Request(/* args */);
+	~Request();
 
 	int		parsing();
 	void	print_debug();
 };
 
-request_info::request_info() : response_code(200)
+Request::Request() : response_code(200)
 {}
 
-request_info::~request_info()
+Request::~Request()
 {}
 
-void	request_info::print_debug()
+void	Request::print_debug()
 {
 	cerr << "METHOD CODE : " << method << " PATH : \"" << path << "\"";
 }
 
-string	request_info::error_msg(int code)
+string	Request::error_msg(int code)
 {
 	if (code == BAD_REQUEST)
 		return ("Bad Request");
@@ -73,13 +73,13 @@ string	request_info::error_msg(int code)
 	return (0);
 }
 
-int		request_info::return_error(string msg)
+int		Request::return_error(string msg)
 {
 	cout << response_code << " " << error_msg(response_code) << " : " << msg << endl;
 	return(response_code);
 }
 
-int		request_info::which_method(string line)
+int		Request::set_method(string line)
 {
 	if (!line.compare(0, 4, "GET "))
 	{
@@ -103,7 +103,7 @@ int		request_info::which_method(string line)
 	}
 }
 
-int		request_info::which_path(string line)
+int		Request::set_path(string line)
 {
 	size_t		len = line.find(' ');
 	if (len == string::npos)
@@ -116,7 +116,7 @@ int		request_info::which_path(string line)
 	return(len + 1);
 }
 
-int		request_info::which_version(string line)
+int		Request::set_version(string line)
 {
 	if (line.compare(0, 8, VERSION))
 	{
@@ -127,32 +127,32 @@ int		request_info::which_version(string line)
 	return (8);
 }
 
-int		request_info::first_line(string line)
+int		Request::first_line(string line)
 {
-	int	j = which_method(line);
+	int	j = set_method(line);
 	if (j < 0)
 		return (return_error("wrong method"));
-	j += which_path(&line[j]);
+	j += set_path(&line[j]);
 	if (j < 0)
 		return (return_error("wrong path"));
-	j += which_version(&line[j]);
+	j += set_version(&line[j]);
 	if (j < 0)
 		return (return_error("wrong version"));
 	if (line[j] != '\r')
 	{
 		response_code = BAD_REQUEST;
-		return (return_error("wrong line end")); //ERROR
+		return (return_error("")); //ERROR
 	}
 	return (OK);
 }
 
-int		request_info::parse_headers(string line)
+int		Request::parse_headers(string line)
 {
 	(void)line;
 	return (OK);
 }
 
-int		request_info::parsing()
+int		Request::parsing()
 {
 	string						line;
 	int							i;
@@ -171,7 +171,7 @@ int		request_info::parsing()
 
 int		main()
 {
-	request_info	request;
+	Request	request;
 	int				code;
 
 	code = request.parsing();
