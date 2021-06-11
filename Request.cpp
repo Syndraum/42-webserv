@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Request.cpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/11 16:28:56 by mchardin          #+#    #+#             */
+/*   Updated: 2021/06/11 16:42:11 by mchardin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # include "Request.hpp"
 
 using namespace std;
@@ -106,15 +118,13 @@ int		Request::_first_line(string line)
 int		Request::_parse_headers(string line)
 {
     size_t		len = line.find(": ");
-(void)len;
-	if (line[line.length() - 1] != '\r')
+
+	if (line[line.length() - 1] != '\r' || len == string::npos || line[len - 1] == ' ')
 	{
 		_response_code = BAD_REQUEST;
 		return (_return_error("")); //ERROR
 	}
-    std::cout << "len : " << len <<  ", lenght : " << line.length() << ", line : " << line << std::endl;
-    if (len != string::npos)
-        _headers.insert(pair<string, string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
+    _headers.insert(pair<string, string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
 	return (OK);
 }
 
