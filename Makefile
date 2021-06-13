@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
+#    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/04/07 20:53:41 by mchardin         ###   ########.fr        #
+#    Updated: 2021/06/13 16:03:39 by syndraum         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,8 @@ PREFIX		=	./
 
 SRCS		=	$(addprefix $(PREFIX), \
 								main.cpp \
+								Server.cpp \
+								ServerSocket.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}
