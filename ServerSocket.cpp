@@ -20,7 +20,7 @@ ServerSocket &	ServerSocket::operator=(ServerSocket const & rhs)
 	return *this;
 }
 
-void			ServerSocket::SetupSocket()
+void			ServerSocket::setupSocket()
 {
 	_socket = socket(AF_INET , SOCK_STREAM , 0);
 	if (_socket == -1)
@@ -35,7 +35,7 @@ void			ServerSocket::bindSocket()
 {
 	if ((bind(_socket, reinterpret_cast<sockaddr*>(&_server), sizeof(_server)) < 0))
 		throw "Bind failed";
-	std::cout << "bind done" << std::endl;
+	std::cout << "bind done. Listen on port " << _port <<std::endl;
 }
 
 void			ServerSocket::listenSocket(int worker_connection)
@@ -45,23 +45,23 @@ void			ServerSocket::listenSocket(int worker_connection)
 	std::cout << "Waiting for incoming connection..." << std::endl;
 }
 
-ServerSocket *	ServerSocket::SetPort(int port)
+ServerSocket *	ServerSocket::setPort(int port)
 {
 	_port = port;
 	return this;
 }
 
-int				ServerSocket::GetPort()
+int				ServerSocket::getPort()
 {
 	return (_port);
 }
 
-int				ServerSocket::GetSocket()
+int				ServerSocket::getSocket()
 {
 	return (_socket);
 }
 
-sockaddr_in &		ServerSocket::GetServer()
+sockaddr_in &		ServerSocket::getServer()
 {
 	return (_server);
 }

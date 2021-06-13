@@ -13,14 +13,14 @@ public:
 	virtual ~ServerSocket(void);
 	ServerSocket &	operator=(ServerSocket const &rhs);
 
-	void			SetupSocket();
+	void			setupSocket();
 	void			bindSocket();
 	void			listenSocket(int worker_connection);
 
-	ServerSocket *	SetPort(int port);
-	int				GetPort();
-	int				GetSocket();
-	sockaddr_in		& GetServer();
+	ServerSocket *	setPort(int port);
+	int				getPort();
+	int				getSocket();
+	sockaddr_in		& getServer();
 
 private:
 	int	_port;

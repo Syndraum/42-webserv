@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/13 16:14:08 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/13 17:51:11 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <sys/socket.h>
 # include <exception>
 # include "ServerSocket.hpp"
+# include "unistd.h"
+# include "cstring"
 
 
 class Server
@@ -37,13 +39,13 @@ public:
 private:
 	std::string					_name;
 	std::vector<ServerSocket>	_serverSockets;
-	int							_clientSocket;
-	// std::vector<int>			_clientSockets;
+	// int							_clientSocket;
+	std::vector<int>			_clientSockets;
 	// int							_bodySize;
 	// std::string					_pathErrorPage;
 	std::string					_root;
 	// bool						_autoindex;
-	// int							_worker;
+	int							_worker;
 	
 };
 
