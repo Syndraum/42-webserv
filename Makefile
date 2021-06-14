@@ -6,7 +6,7 @@
 #    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/06/13 16:03:39 by syndraum         ###   ########.fr        #
+#    Updated: 2021/06/14 15:45:27 by syndraum         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								main.cpp \
 								Server.cpp \
 								ServerSocket.cpp \
+								Core.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}

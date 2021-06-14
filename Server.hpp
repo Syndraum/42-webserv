@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/13 17:51:11 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/14 18:13:15 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define SERVER
 
 # include <vector>
+# include <map>
+# include <utility>
 # include <string>
 # include <sys/types.h>
 # include <sys/socket.h>
@@ -21,14 +23,17 @@
 # include "ServerSocket.hpp"
 # include "unistd.h"
 # include "cstring"
+#include <algorithm>
 
 
 class Server
 {
+	Server(void);
 public:
 
-	Server(void);
-	Server(std::string root, int port = 80);
+	typedef std::map<int, ServerSocket>		server_socket;
+
+	Server(std::string root, int port = 8080);
 	Server(Server const & src);
 	virtual ~Server(void);
 	Server &	operator=(Server const &rhs);
@@ -36,16 +41,14 @@ public:
 	void	addPort(int port);
 	void	start();
 
+	ServerSocket &	getServerSocket(int port);
+
+	void	print();
+
 private:
 	std::string					_name;
-	std::vector<ServerSocket>	_serverSockets;
-	// int							_clientSocket;
-	std::vector<int>			_clientSockets;
-	// int							_bodySize;
-	// std::string					_pathErrorPage;
+	server_socket				_serverSockets;
 	std::string					_root;
-	// bool						_autoindex;
-	int							_worker;
 	
 };
 

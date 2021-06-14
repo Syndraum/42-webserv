@@ -3,7 +3,10 @@
 
 # include <sys/socket.h>
 # include <netinet/in.h>
+
 # include <iostream>
+# include <cerrno>
+# include <cstring>
 
 class ServerSocket
 {
@@ -22,10 +25,12 @@ public:
 	int				getSocket();
 	sockaddr_in		& getServer();
 
+	void			print();
+
 private:
-	int	_port;
-	int	_socket;
-	sockaddr_in _server;
+	int			_port;
+	int			_socket;
+	sockaddr_in _address;
 };
 
 #endif

@@ -1,7 +1,9 @@
 #include "ServerSocket.hpp"
 
 ServerSocket::ServerSocket(int port) : _port(port), _socket(-1)
-{}
+{
+
+}
 
 ServerSocket::ServerSocket(ServerSocket const & src)
 {
@@ -15,8 +17,11 @@ ServerSocket::~ServerSocket(void)
 
 ServerSocket &	ServerSocket::operator=(ServerSocket const & rhs)
 {
-	if (&rhs != this)
+	if (&rhs != this){
 		this->_port = rhs._port;
+		this->_socket = rhs._socket;
+		this->_address = rhs._address;
+	}
 	return *this;
 }
 
@@ -25,16 +30,17 @@ void			ServerSocket::setupSocket()
 	_socket = socket(AF_INET , SOCK_STREAM , 0);
 	if (_socket == -1)
 		throw "Socket error";
-
-	_server.sin_family = AF_INET;
-	_server.sin_addr.s_addr = INADDR_ANY;
-	_server.sin_port = htons( _port );
+	_address.sin_family = AF_INET;
+	_address.sin_addr.s_addr = INADDR_ANY;
+	_address.sin_port = htons( _port );
 }
 
 void			ServerSocket::bindSocket()
 {
-	if ((bind(_socket, reinterpret_cast<sockaddr*>(&_server), sizeof(_server)) < 0))
-		throw "Bind failed";
+	if ((bind(_socket, reinterpret_cast<sockaddr*>(&_address), sizeof(_address)) < 0)){
+		std::cerr << strerror(errno) << std::endl;
+		throw std::exception();
+	}
 	std::cout << "bind done. Listen on port " << _port <<std::endl;
 }
 
@@ -63,5 +69,12 @@ int				ServerSocket::getSocket()
 
 sockaddr_in &		ServerSocket::getServer()
 {
-	return (_server);
+	return (_address);
+}
+
+void	ServerSocket::print()
+{
+	std::cout << " adress : " << this << "\n";
+	std::cout << " port : " << _port << "\n";
+	std::cout << " fd : " << _socket << "\n";
 }
