@@ -1,12 +1,14 @@
 #ifndef CORE
 # define CORE
 
-#include "Server.hpp"
-#include <vector>
+# include "Server.hpp"
+# include <vector>
+# include "ClientSocket.hpp"
 
 class Core
 {
 public:
+	typedef std::vector<ClientSocket> client_vector;
 
 	Core(void);
 	Core(Core const & src);
@@ -27,7 +29,7 @@ private:
 	int					_maxfd;
 	int					_nbActive;
 	std::vector<int>	_serverSockets;
-	std::vector<int>	_clientSockets;
+	client_vector		_client;
 };
 
 #endif

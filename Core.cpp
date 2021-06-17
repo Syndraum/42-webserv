@@ -2,7 +2,6 @@
 
 Core::Core(void) : _worker(3), _maxfd(-1), _nbActive(0)
 {
-	_clientSockets.insert(_clientSockets.begin(), _worker, 0);
 }
 
 Core::Core(Core const & src)
@@ -49,9 +48,9 @@ void	Core::start(){
 			if(fd > _maxfd)
 				_maxfd = fd;
 		}
-		for (size_t i = 0; i < _clientSockets.size(); i++)
+		for (size_t i = 0; i < _client.size(); i++)
 		{
-			int fd = _clientSockets[i];
+			int fd = _client[i].getSocket();
 			if(fd > 0)
 				FD_SET(fd, &_readfds);
 			if(fd > _maxfd)
@@ -64,33 +63,27 @@ void	Core::start(){
 
 			if (FD_ISSET(fd, &_readfds))
 			{
-				if ((new_socket = accept(fd, reinterpret_cast<sockaddr*>(&_servers[0].getServerSocket(8080).getServer()) , reinterpret_cast<socklen_t*>(&c))) < 0)
+				_client.push_back(ClientSocket());
+				ClientSocket & cs = _client.back();
+				if ((new_socket = accept(fd, &cs.getAddress() , reinterpret_cast<socklen_t*>(&c))) < 0)
 				{
 					perror("accept failed");
 					exit(EXIT_FAILURE);
 				}
 				std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
-				for (int i = 0; i < _worker; i++)
-				{  
-					//if position is empty 
-					if( _clientSockets[i] == 0 )  
-					{  
-						_clientSockets[i] = new_socket;  
-						printf("Adding to list of sockets as %d\n" , i);  
-							
-						break;  
-					}
-				} 
+				cs.setSocket(new_socket);
+				std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
+				// printf("Adding to list of sockets as %zu\n" , _client.size());
 			}
 		}
-		for (int i = 0; i < _worker; i++)  
+		for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
 		{
-			int fd = _clientSockets[i];  
+			int fd = it->getSocket();  
 			int valread;
 			char buffer[1025];
-					
-			if (FD_ISSET( fd , &_readfds))  
-			{  
+
+			if (FD_ISSET( fd , &_readfds)) 
+			{
 				//Check if it was for closing , and also read the 
 				//incoming message 
 				if ((valread = read( fd , buffer, 1024)) == 0)  
@@ -98,7 +91,8 @@ void	Core::start(){
 					std::cout << "Host disconnected" << std::endl;  
 
 					close( fd );  
-					_clientSockets[i] = 0;  
+					_client.erase(it);  
+					break;
 				}  
 						
 				//Echo back the message that came in 
@@ -108,9 +102,9 @@ void	Core::start(){
 					//of the data read 
 					buffer[valread] = '\0';  
 					send(fd , buffer , std::strlen(buffer) , 0 );  
-				}  
+				} 
 			}
-		} 
+		}
 	}
 }
 
