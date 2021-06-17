@@ -61,6 +61,7 @@ void	Core::start(){
 		for (size_t i = 0; i < _serverSockets.size(); i++)
 		{
 			int fd = _serverSockets[i];
+
 			if (FD_ISSET(fd, &_readfds))
 			{
 				if ((new_socket = accept(fd, reinterpret_cast<sockaddr*>(&_servers[0].getServerSocket(8080).getServer()) , reinterpret_cast<socklen_t*>(&c))) < 0)
@@ -68,7 +69,7 @@ void	Core::start(){
 					perror("accept failed");
 					exit(EXIT_FAILURE);
 				}
-				std::cout << "New connection, socket fd is " << new_socket << std::endl;
+				std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
 				for (int i = 0; i < _worker; i++)
 				{  
 					//if position is empty 
@@ -82,26 +83,6 @@ void	Core::start(){
 				} 
 			}
 		}
-		// if (FD_ISSET(main_fd, &_readfds))
-		// {
-		// 	if ((new_socket = accept(main_fd, reinterpret_cast<sockaddr*>(&_servers[0].getServerSocket(8080).getServer()) , reinterpret_cast<socklen_t*>(&c))) < 0)
-		// 	{
-		// 		perror("accept failed");
-		// 		exit(EXIT_FAILURE);
-		// 	}
-		// 	std::cout << "New connection, socket fd is " << new_socket << std::endl;
-		// 	for (int i = 0; i < _worker; i++)
-		// 	{  
-		// 		//if position is empty 
-		// 		if( _clientSockets[i] == 0 )  
-		// 		{  
-		// 			_clientSockets[i] = new_socket;  
-		// 			printf("Adding to list of sockets as %d\n" , i);  
-						
-		// 			break;  
-		// 		}
-		// 	} 
-		// }
 		for (int i = 0; i < _worker; i++)  
 		{
 			int fd = _clientSockets[i];  

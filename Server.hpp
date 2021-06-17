@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 12:25:42 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/17 17:03:52 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include "ServerSocket.hpp"
 # include "unistd.h"
 # include "cstring"
-#include <algorithm>
+# include <algorithm>
 
 
 class Server
