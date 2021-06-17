@@ -26,6 +26,7 @@ private:
 	fd_set				_readfds;
 	int					_maxfd;
 	int					_nbActive;
+	std::vector<int>	_serverSockets;
 	std::vector<int>	_clientSockets;
 };
 

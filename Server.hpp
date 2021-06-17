@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/14 18:13:15 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/17 11:31:24 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,20 @@ public:
 	Server &	operator=(Server const &rhs);
 
 	void	addPort(int port);
-	void	start();
+	void	start(int worker);
 
-	ServerSocket &	getServerSocket(int port);
+	ServerSocket &		getServerSocket(int port);
+	std::vector<int> &	getActiveSocket();
+
 
 	void	print();
 
 private:
-	std::string					_name;
-	server_socket				_serverSockets;
-	std::string					_root;
+	std::vector<int>	_activePort;
+	std::vector<int>	_activeSocket;
+	std::string			_name;
+	server_socket		_serverSockets;
+	std::string			_root;
 	
 };
 

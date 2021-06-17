@@ -25,18 +25,30 @@ Core &	Core::operator=(Core const & rhs)
 void	Core::start(){
 	int new_socket = -1;
 	int c = sizeof(struct sockaddr_in);
+	int fd;
+	std::vector<int> activeSocket;
 
 	for (size_t i = 0; i < _servers.size(); i++)
 	{
-		_servers[i].start();
+		_servers[i].start(_worker);
+		activeSocket = _servers[i].getActiveSocket();
+		_serverSockets.insert(
+			_serverSockets.begin(),
+			activeSocket.begin(),
+			activeSocket.end()
+		);
 	}
-	int main_fd = _servers[0].getServerSocket(8080).getSocket();
+	// int main_fd = _servers[0].getServerSocket(8080).getSocket();
 	while (true)
 	{
 		FD_ZERO(&_readfds);
-		FD_SET(main_fd, &_readfds);
-		_maxfd = main_fd;
-
+		for (size_t i = 0; i < _serverSockets.size(); i++)
+		{
+			fd = _serverSockets[i];
+			FD_SET(fd, &_readfds);
+			if(fd > _maxfd)
+				_maxfd = fd;
+		}
 		for (size_t i = 0; i < _clientSockets.size(); i++)
 		{
 			int fd = _clientSockets[i];
@@ -46,26 +58,50 @@ void	Core::start(){
 				_maxfd = fd;
 		}
 		_nbActive = select( _maxfd + 1, &_readfds, NULL, NULL, NULL);
-		if (FD_ISSET(main_fd, &_readfds))
+		for (size_t i = 0; i < _serverSockets.size(); i++)
 		{
-			if ((new_socket = accept(main_fd, reinterpret_cast<sockaddr*>(&_servers[0].getServerSocket(8080).getServer()) , reinterpret_cast<socklen_t*>(&c))) < 0)
+			int fd = _serverSockets[i];
+			if (FD_ISSET(fd, &_readfds))
 			{
-				perror("accept failed");
-				exit(EXIT_FAILURE);
-			}
-			std::cout << "New connection, socket fd is " << new_socket << std::endl;
-			for (int i = 0; i < _worker; i++)
-			{  
-				//if position is empty 
-				if( _clientSockets[i] == 0 )  
-				{  
-					_clientSockets[i] = new_socket;  
-					printf("Adding to list of sockets as %d\n" , i);  
-						
-					break;  
+				if ((new_socket = accept(fd, reinterpret_cast<sockaddr*>(&_servers[0].getServerSocket(8080).getServer()) , reinterpret_cast<socklen_t*>(&c))) < 0)
+				{
+					perror("accept failed");
+					exit(EXIT_FAILURE);
 				}
-			} 
+				std::cout << "New connection, socket fd is " << new_socket << std::endl;
+				for (int i = 0; i < _worker; i++)
+				{  
+					//if position is empty 
+					if( _clientSockets[i] == 0 )  
+					{  
+						_clientSockets[i] = new_socket;  
+						printf("Adding to list of sockets as %d\n" , i);  
+							
+						break;  
+					}
+				} 
+			}
 		}
+		// if (FD_ISSET(main_fd, &_readfds))
+		// {
+		// 	if ((new_socket = accept(main_fd, reinterpret_cast<sockaddr*>(&_servers[0].getServerSocket(8080).getServer()) , reinterpret_cast<socklen_t*>(&c))) < 0)
+		// 	{
+		// 		perror("accept failed");
+		// 		exit(EXIT_FAILURE);
+		// 	}
+		// 	std::cout << "New connection, socket fd is " << new_socket << std::endl;
+		// 	for (int i = 0; i < _worker; i++)
+		// 	{  
+		// 		//if position is empty 
+		// 		if( _clientSockets[i] == 0 )  
+		// 		{  
+		// 			_clientSockets[i] = new_socket;  
+		// 			printf("Adding to list of sockets as %d\n" , i);  
+						
+		// 			break;  
+		// 		}
+		// 	} 
+		// }
 		for (int i = 0; i < _worker; i++)  
 		{
 			int fd = _clientSockets[i];  
