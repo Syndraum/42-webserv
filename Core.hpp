@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:32:05 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/17 18:44:51 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ private:
 	int					_nbActive;
 	std::vector<int>	_serverSockets;
 	client_vector		_client;
+	int					_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
 };
 
 #endif

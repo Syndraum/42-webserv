@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:40:48 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/17 18:46:03 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ void	Core::print()
 void	Core::_acceptConnection()
 {
 	int new_socket = -1;
-	int c = sizeof(struct sockaddr_in);
 
 	for (size_t i = 0; i < _serverSockets.size(); i++)
 	{
@@ -109,7 +108,7 @@ void	Core::_acceptConnection()
 		{
 			_client.push_back(ClientSocket());
 			ClientSocket & cs = _client.back();
-			if ((new_socket = accept(fd, &cs.getAddress() , reinterpret_cast<socklen_t*>(&c))) < 0)
+			if ((new_socket = accept(fd, &cs.getAddress() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
 			{
 				perror("accept failed");
 				exit(EXIT_FAILURE);
