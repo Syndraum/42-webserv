@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 11:31:24 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/17 18:31:58 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include "ServerSocket.hpp"
 # include "unistd.h"
 # include "cstring"
-#include <algorithm>
+# include <algorithm>
 
 
 class Server
@@ -31,14 +31,14 @@ class Server
 	Server(void);
 public:
 
-	typedef std::map<int, ServerSocket>		server_socket;
+	typedef std::map<int, ServerSocket>		port_vector;
 
 	Server(std::string root, int port = 8080);
 	Server(Server const & src);
 	virtual ~Server(void);
 	Server &	operator=(Server const &rhs);
 
-	void	addPort(int port);
+	Server &	addPort(int port);
 	void	start(int worker);
 
 	ServerSocket &		getServerSocket(int port);
@@ -51,7 +51,7 @@ private:
 	std::vector<int>	_activePort;
 	std::vector<int>	_activeSocket;
 	std::string			_name;
-	server_socket		_serverSockets;
+	port_vector			_serverSockets;
 	std::string			_root;
 	
 };

@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 11:31:11 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/17 18:20:18 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,15 @@ Server &	Server::operator=(Server const & rhs)
 }
 
 
-void	Server::addPort(int port)
+Server &	Server::addPort(int port)
 {
 	this->_serverSockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port)));
+	return(*this);
 }
 
 void	Server::start(int worker)
 {
-	for (server_socket::iterator it = _serverSockets.begin(); it != _serverSockets.end() ; it++)
+	for (port_vector::iterator it = _serverSockets.begin(); it != _serverSockets.end() ; it++)
 	{
 		ServerSocket & ss = it->second;
 
@@ -72,7 +73,7 @@ std::vector<int> &	Server::getActiveSocket()
 void	Server::print()
 {
 	std::cout << "Server " << _name << std::endl;
-	for (server_socket::iterator it = _serverSockets.begin(); it != _serverSockets.end(); it++)
+	for (port_vector::iterator it = _serverSockets.begin(); it != _serverSockets.end(); it++)
 	{
 		it->second.print();
 	}
