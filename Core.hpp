@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:14:02 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/17 18:32:05 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ public:
 	void	print();
 
 private:
+
+	void				_acceptConnection();
+	void				_detectCloseConnection();
+
 	std::vector<Server>	_servers;
 	int					_worker;
 	fd_set				_readfds;

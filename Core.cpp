@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:14:12 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/17 18:40:48 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ Core &	Core::operator=(Core const & rhs)
 }
 
 void	Core::start(){
-	int new_socket = -1;
-	int c = sizeof(struct sockaddr_in);
 	int fd;
 	std::vector<int> activeSocket;
 
@@ -49,7 +47,6 @@ void	Core::start(){
 			activeSocket.end()
 		);
 	}
-	// int main_fd = _servers[0].getServerSocket(8080).getSocket();
 	while (true)
 	{
 		FD_ZERO(&_readfds);
@@ -69,54 +66,8 @@ void	Core::start(){
 				_maxfd = fd;
 		}
 		_nbActive = select( _maxfd + 1, &_readfds, NULL, NULL, NULL);
-		for (size_t i = 0; i < _serverSockets.size(); i++)
-		{
-			int fd = _serverSockets[i];
-
-			if (FD_ISSET(fd, &_readfds))
-			{
-				_client.push_back(ClientSocket());
-				ClientSocket & cs = _client.back();
-				if ((new_socket = accept(fd, &cs.getAddress() , reinterpret_cast<socklen_t*>(&c))) < 0)
-				{
-					perror("accept failed");
-					exit(EXIT_FAILURE);
-				}
-				std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
-				cs.setSocket(new_socket);
-				std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
-				// printf("Adding to list of sockets as %zu\n" , _client.size());
-			}
-		}
-		for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
-		{
-			int fd = it->getSocket();  
-			int valread;
-			char buffer[1025];
-
-			if (FD_ISSET( fd , &_readfds)) 
-			{
-				//Check if it was for closing , and also read the 
-				//incoming message 
-				if ((valread = read( fd , buffer, 1024)) == 0)  
-				{    
-					std::cout << "Host disconnected" << std::endl;  
-
-					close( fd );  
-					_client.erase(it);  
-					break;
-				}  
-						
-				//Echo back the message that came in 
-				else 
-				{  
-					//set the string terminating NULL byte on the end 
-					//of the data read 
-					buffer[valread] = '\0';  
-					send(fd , buffer , std::strlen(buffer) , 0 );  
-				} 
-			}
-		}
+		_acceptConnection();
+		_detectCloseConnection();
 	}
 }
 
@@ -143,4 +94,62 @@ void	Core::print()
 	}
 	if (_servers.size() == 0)
 		std::cout << "no Server found \n";
+}
+
+void	Core::_acceptConnection()
+{
+	int new_socket = -1;
+	int c = sizeof(struct sockaddr_in);
+
+	for (size_t i = 0; i < _serverSockets.size(); i++)
+	{
+		int fd = _serverSockets[i];
+
+		if (FD_ISSET(fd, &_readfds))
+		{
+			_client.push_back(ClientSocket());
+			ClientSocket & cs = _client.back();
+			if ((new_socket = accept(fd, &cs.getAddress() , reinterpret_cast<socklen_t*>(&c))) < 0)
+			{
+				perror("accept failed");
+				exit(EXIT_FAILURE);
+			}
+			std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
+			cs.setSocket(new_socket);
+			std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
+		}
+	}
+}
+
+void	Core::_detectCloseConnection()
+{
+	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
+	{
+		int fd = it->getSocket();  
+		int valread;
+		char buffer[1025];
+
+		if (FD_ISSET( fd , &_readfds)) 
+		{
+			//Check if it was for closing , and also read the 
+			//incoming message 
+			if ((valread = read( fd , buffer, 1024)) == 0)  
+			{    
+				std::cout << "Host disconnected" << std::endl;  
+
+				close( fd );  
+				_client.erase(it);  
+				break;
+			}  
+					
+			//Echo back the message that came in 
+			else 
+			{  
+				//set the string terminating NULL byte on the end 
+				//of the data read 
+				buffer[valread] = '\0';  
+				send(fd , buffer , std::strlen(buffer) , 0 );  
+			} 
+		}
+	}
 }
