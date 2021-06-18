@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:41 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/18 15:41:34 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/18 15:57:00 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ public:
 	std::string	getMessage(int code);
 
 private:
+
+	std::string		_1xx__response(int code);
+	std::string		_2xx__response(int code);
+	std::string		_3xx__response(int code);
+	std::string		_4xx__response(int code);
+	std::string		_5xx__response(int code);
+
 	std::string		_version;
 	int				_code;
 	header_map		_headers;
