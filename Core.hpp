@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:44:51 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/18 12:08:48 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "Server.hpp"
 # include <vector>
 # include "ClientSocket.hpp"
+# include <poll.h>
 
 class Core
 {
@@ -36,8 +37,8 @@ public:
 
 private:
 
-	void				_acceptConnection();
-	void				_detectCloseConnection();
+	void				_acceptConnection(struct pollfd fds[]);
+	void				_detectCloseConnection(struct pollfd fds[]);
 
 	std::vector<Server>	_servers;
 	int					_worker;

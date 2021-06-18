@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:46:03 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/18 15:35:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ Core &	Core::operator=(Core const & rhs)
 void	Core::start(){
 	int fd;
 	std::vector<int> activeSocket;
+	int counter = 0;
+	struct pollfd fds[10];
 
 	for (size_t i = 0; i < _servers.size(); i++)
 	{
@@ -53,21 +55,36 @@ void	Core::start(){
 		for (size_t i = 0; i < _serverSockets.size(); i++)
 		{
 			fd = _serverSockets[i];
-			FD_SET(fd, &_readfds);
+			fds[counter].fd = fd;
+			fds[counter].events = POLLIN;
+			fds[counter].revents = 0;
+			counter++;
 			if(fd > _maxfd)
 				_maxfd = fd;
 		}
 		for (size_t i = 0; i < _client.size(); i++)
 		{
-			int fd = _client[i].getSocket();
-			if(fd > 0)
-				FD_SET(fd, &_readfds);
+			fd = _client[i].getSocket();
+			fds[counter].fd = fd;
+			fds[counter].events = POLLOUT;
+			fds[counter].revents = 0;
+			counter++;
 			if(fd > _maxfd)
 				_maxfd = fd;
 		}
-		_nbActive = select( _maxfd + 1, &_readfds, NULL, NULL, NULL);
-		_acceptConnection();
-		_detectCloseConnection();
+		_nbActive = poll(fds, counter, 60000);
+		_acceptConnection(fds);
+		_detectCloseConnection(fds);
+		counter = 0;
+
+		// detect and set serversocket to POLLIN or not
+		if (!_client.size())
+			for (size_t i = 0; i < _serverSockets.size(); i++)
+				if (fds[i].revents & POLLIN)
+				{
+					fds[i].revents = 0;
+					std::cout << "revents = 0" << std::endl;
+				}
 	}
 }
 
@@ -96,7 +113,7 @@ void	Core::print()
 		std::cout << "no Server found \n";
 }
 
-void	Core::_acceptConnection()
+void	Core::_acceptConnection(struct pollfd fds[])
 {
 	int new_socket = -1;
 
@@ -104,7 +121,7 @@ void	Core::_acceptConnection()
 	{
 		int fd = _serverSockets[i];
 
-		if (FD_ISSET(fd, &_readfds))
+		if (fds[i].revents & POLLIN)
 		{
 			_client.push_back(ClientSocket());
 			ClientSocket & cs = _client.back();
@@ -120,35 +137,38 @@ void	Core::_acceptConnection()
 	}
 }
 
-void	Core::_detectCloseConnection()
+void	Core::_detectCloseConnection(struct pollfd fds[])
 {
 	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
 	{
 		int fd = it->getSocket();  
 		int valread;
 		char buffer[1025];
+		int fds_index;
 
-		if (FD_ISSET( fd , &_readfds)) 
-		{
-			//Check if it was for closing , and also read the 
-			//incoming message 
-			if ((valread = read( fd , buffer, 1024)) == 0)  
-			{    
-				std::cout << "Host disconnected" << std::endl;  
+		for (unsigned long i = 0; i < _serverSockets.size(); i++)
+			if (fd == fds[i].fd)
+				fds_index = i;
+		//Check if it was for closing , and also read the 
+		//incoming message 
+		if ((valread = recv( fd , buffer, 1024, 0)) == 0)  
+		{    
+			std::cout << "Host disconnected" << std::endl;  
 
-				close( fd );  
-				_client.erase(it);  
-				break;
-			}  
-					
-			//Echo back the message that came in 
-			else 
-			{  
-				//set the string terminating NULL byte on the end 
-				//of the data read 
-				buffer[valread] = '\0';  
-				send(fd , buffer , std::strlen(buffer) , 0 );  
-			} 
-		}
+			close( fd );  
+			_client.erase(it);  
+			break;
+		}  
+				
+		//Echo back the message that came in 
+		else 
+		{  
+			std::cout << buffer << std::endl;
+			//set the string terminating NULL byte on the end 
+			//of the data read 
+			buffer[valread] = '\0';  
+			send(fd , buffer , std::strlen(buffer) , 0 );  
+		} 
 	}
+
 }

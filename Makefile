@@ -6,7 +6,7 @@
 #    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/06/17 17:52:06 by syndraum         ###   ########.fr        #
+#    Updated: 2021/06/18 11:55:16 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,9 @@ fclean:
 			${RM} ${NAME}
 
 re:			fclean all
+
+test:		all
+			$(PREFIX)$(NAME)
 
 .PHONY: 	all re run clean fclean
 

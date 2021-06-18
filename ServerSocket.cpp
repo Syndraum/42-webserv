@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:14:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:14:24 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/17 21:40:27 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,14 @@ ServerSocket &	ServerSocket::operator=(ServerSocket const & rhs)
 
 void			ServerSocket::setupSocket()
 {
+	int one = 1;
 	_socket = socket(AF_INET , SOCK_STREAM , 0);
 	if (_socket == -1)
 		throw "Socket error";
 	_address.sin_family = AF_INET;
 	_address.sin_addr.s_addr = INADDR_ANY;
 	_address.sin_port = htons( _port );
+	setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
 }
 
 void			ServerSocket::bindSocket()
