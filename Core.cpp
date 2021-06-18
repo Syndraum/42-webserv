@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/18 15:35:36 by user42           ###   ########.fr       */
+/*   Updated: 2021/06/18 15:56:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	Core::start(){
 	}
 	while (true)
 	{
-		FD_ZERO(&_readfds);
+		counter = 0;
+		//FD_ZERO(&_readfds);
 		for (size_t i = 0; i < _serverSockets.size(); i++)
 		{
 			fd = _serverSockets[i];
@@ -75,7 +76,6 @@ void	Core::start(){
 		_nbActive = poll(fds, counter, 60000);
 		_acceptConnection(fds);
 		_detectCloseConnection(fds);
-		counter = 0;
 
 		// detect and set serversocket to POLLIN or not
 		if (!_client.size())

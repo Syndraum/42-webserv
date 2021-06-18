@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/18 12:08:48 by user42           ###   ########.fr       */
+/*   Updated: 2021/06/18 15:56:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ private:
 
 	std::vector<Server>	_servers;
 	int					_worker;
-	fd_set				_readfds;
+	//fd_set				_readfds;
 	int					_maxfd;
 	int					_nbActive;
 	std::vector<int>	_serverSockets;
