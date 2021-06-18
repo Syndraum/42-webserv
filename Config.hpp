@@ -1,49 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Request.hpp                                        :+:      :+:    :+:   */
+/*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/18 18:27:00 by mchardin         ###   ########.fr       */
+/*   Created: 2021/06/18 18:26:21 by mchardin          #+#    #+#             */
+/*   Updated: 2021/06/18 18:37:39 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REQUEST_HPP
-# define REQUEST_HPP
-
-# define GET 0
-# define POST 1
-# define DELETE 2
-
-# define VERSION "HTTP/1.1"
+#ifndef CONFIG_HPP
+# define CONFIG_HPP
 
 # include "includes.hpp"
 
 using namespace std;
 
-class Request
+class Config
 {
 private:
-	int						_method;
-	string					_path;
-	string					_version;
-	int						_response_code;
-	map<string, string>		_headers;
-
+	string					_name;
+	vector<int>				_port;
+	vector<int>				_socket;
+	int						_bodySize;
+	string	 				_pathErrorPage;
+	vector<string>			_listMethod;
+	string	 				_root;
+	bool					_autoIndex;
 
 	string	_error_msg(int code);
 	int		_return_error(string msg);
-	int		_set_method(string line);
-	int		_set_path(string line);
-	int		_set_version(string line);
-	int		_first_line(string line);
-	int		_parse_headers(string line);
-	/* data */
+	int		_set_index(string line);
+	int		_set_body_size(string line);
+	int		_set_port_n_socket(string line);
+	int		_set_name(string line);
+	int		_parse_server(string line);
 public:
-	Request(/* args */);
-	~Request();
+	Config();
+	~Config();
 
 	int		parsing();
 	void	print_debug();
