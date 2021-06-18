@@ -6,13 +6,16 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/18 15:56:43 by user42           ###   ########.fr       */
+/*   Updated: 2021/06/18 18:22:48 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Core.hpp"
 
-Core::Core(void) : _worker(3), _maxfd(-1), _nbActive(0)
+Core::Core(void) :
+	_worker(3),
+	//_maxfd(-1),
+	_nbActive(0)
 {
 }
 
@@ -22,9 +25,7 @@ Core::Core(Core const & src)
 }
 
 Core::~Core(void)
-{
-	
-}
+{}
 
 Core &	Core::operator=(Core const & rhs)
 {
@@ -36,8 +37,8 @@ Core &	Core::operator=(Core const & rhs)
 void	Core::start(){
 	int fd;
 	std::vector<int> activeSocket;
-	int counter = 0;
-	struct pollfd fds[10];
+
+	_fds = new struct pollfd[10];
 
 	for (size_t i = 0; i < _servers.size(); i++)
 	{
@@ -51,40 +52,31 @@ void	Core::start(){
 	}
 	while (true)
 	{
-		counter = 0;
-		//FD_ZERO(&_readfds);
+		// value given to poll (nbFds)
+		_nbFds = 0;
 		for (size_t i = 0; i < _serverSockets.size(); i++)
 		{
 			fd = _serverSockets[i];
-			fds[counter].fd = fd;
-			fds[counter].events = POLLIN;
-			fds[counter].revents = 0;
-			counter++;
-			if(fd > _maxfd)
-				_maxfd = fd;
+			_fds[_nbFds].fd = fd;
+			_fds[_nbFds].events = POLLIN;
+			_fds[_nbFds].revents = 0;
+			_nbFds++;
 		}
 		for (size_t i = 0; i < _client.size(); i++)
 		{
 			fd = _client[i].getSocket();
-			fds[counter].fd = fd;
-			fds[counter].events = POLLOUT;
-			fds[counter].revents = 0;
-			counter++;
-			if(fd > _maxfd)
-				_maxfd = fd;
+			_fds[_nbFds].fd = fd;
+			_fds[_nbFds].events = POLLOUT;
+			_fds[_nbFds].revents = 0;
+			_nbFds++;
 		}
-		_nbActive = poll(fds, counter, 60000);
-		_acceptConnection(fds);
-		_detectCloseConnection(fds);
+		_nbActive = poll(_fds, _nbFds, 60000);
+		_acceptConnection();
+		_detectCloseConnection();
+		_detectResetServerPollFD();
 
 		// detect and set serversocket to POLLIN or not
-		if (!_client.size())
-			for (size_t i = 0; i < _serverSockets.size(); i++)
-				if (fds[i].revents & POLLIN)
-				{
-					fds[i].revents = 0;
-					std::cout << "revents = 0" << std::endl;
-				}
+		_detectResetServerPollFD();
 	}
 }
 
@@ -113,15 +105,16 @@ void	Core::print()
 		std::cout << "no Server found \n";
 }
 
-void	Core::_acceptConnection(struct pollfd fds[])
+void	Core::_acceptConnection()
 {
 	int new_socket = -1;
+	int one = 1;
 
 	for (size_t i = 0; i < _serverSockets.size(); i++)
 	{
 		int fd = _serverSockets[i];
 
-		if (fds[i].revents & POLLIN)
+		if (_fds[i].revents & POLLIN)
 		{
 			_client.push_back(ClientSocket());
 			ClientSocket & cs = _client.back();
@@ -130,6 +123,7 @@ void	Core::_acceptConnection(struct pollfd fds[])
 				perror("accept failed");
 				exit(EXIT_FAILURE);
 			}
+			setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
 			std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
 			cs.setSocket(new_socket);
 			std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
@@ -137,7 +131,8 @@ void	Core::_acceptConnection(struct pollfd fds[])
 	}
 }
 
-void	Core::_detectCloseConnection(struct pollfd fds[])
+// this function is more 'read' than 'close'
+void	Core::_detectCloseConnection()
 {
 	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
 	{
@@ -147,28 +142,53 @@ void	Core::_detectCloseConnection(struct pollfd fds[])
 		int fds_index;
 
 		for (unsigned long i = 0; i < _serverSockets.size(); i++)
-			if (fd == fds[i].fd)
+			if (fd == _fds[i].fd)
 				fds_index = i;
 		//Check if it was for closing , and also read the 
 		//incoming message 
-		if ((valread = recv( fd , buffer, 1024, 0)) == 0)  
-		{    
+		if ((valread = recv( fd , buffer, 1024, MSG_DONTWAIT)) == 0)  
+		{
 			std::cout << "Host disconnected" << std::endl;  
 
 			close( fd );  
 			_client.erase(it);  
 			break;
-		}  
-				
-		//Echo back the message that came in 
-		else 
-		{  
-			std::cout << buffer << std::endl;
-			//set the string terminating NULL byte on the end 
-			//of the data read 
-			buffer[valread] = '\0';  
-			send(fd , buffer , std::strlen(buffer) , 0 );  
-		} 
-	}
+		}
 
+		else if(valread > 0)
+		{
+			buffer[valread] = '\0';
+		
+			std::cout << buffer << std::endl;
+			send(fd , buffer , std::strlen(buffer) , 0 );
+
+			std::cout << "Host disconnected" << std::endl;  
+
+			close( fd );  
+			_client.erase(it);  
+			break;
+		}
+
+		//Echo back the message that came in 
+		//and echo in stdin/std::cout
+//		else
+//		{
+//			//set the string terminating NULL byte on the end
+//			//of the data read
+//			buffer[valread] = '\0';
+//			std::cout << buffer << std::endl;
+//			send(fd , buffer , std::strlen(buffer) , 0 );
+//		}
+	}
+}
+
+void	Core::_detectResetServerPollFD()
+{
+	if (!_client.size())
+		for (size_t i = 0; i < _serverSockets.size(); i++)
+			if (_fds[i].revents & POLLIN)
+			{
+				_fds[i].revents = 0;
+				std::cout << "revents = 0 (to remove from Core.cpp - line 174)" << std::endl;
+			}
 }

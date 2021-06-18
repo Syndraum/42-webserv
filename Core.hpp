@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/18 15:56:53 by user42           ###   ########.fr       */
+/*   Updated: 2021/06/18 17:09:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,18 @@ public:
 
 private:
 
-	void				_acceptConnection(struct pollfd fds[]);
-	void				_detectCloseConnection(struct pollfd fds[]);
+	void				_acceptConnection();
+	void				_detectCloseConnection();
+	void				_detectResetServerPollFD();
 
 	std::vector<Server>	_servers;
 	int					_worker;
-	//fd_set				_readfds;
-	int					_maxfd;
 	int					_nbActive;
 	std::vector<int>	_serverSockets;
 	client_vector		_client;
 	int					_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
+	struct pollfd *		_fds;
+	int					_nbFds;
 };
 
 #endif
