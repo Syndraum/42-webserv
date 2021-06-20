@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:31:58 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/20 00:02:07 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@
 
 class Server
 {
-	Server(void);
 public:
 
 	typedef std::map<int, ServerSocket>		port_vector;
 
+	Server(void);
 	Server(std::string root, int port = 8080);
 	Server(Server const & src);
 	virtual ~Server(void);
