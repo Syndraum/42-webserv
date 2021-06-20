@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:46:03 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/20 00:07:33 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,10 @@ void	Core::addServer(Server & server)
 	_servers.push_back(server);
 }
 
-void	Core::addServer()
+Server	&	Core::addServer()
 {
-	_servers.push_back(Server(""));
+	_servers.push_back(Server());
+	return(_servers.back());
 }
 
 Server	&	Core::getServer(int index)

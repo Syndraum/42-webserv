@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:44:51 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/20 00:03:35 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ public:
 
 	void	start();
 	void	addServer(Server & server);
-	void	addServer();
+	Server	&	addServer();
 	Server	&	getServer(int index = 0);
 
 	void	print();
