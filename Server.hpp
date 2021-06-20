@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/20 00:02:07 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/20 11:14:28 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,12 @@ public:
 
 	ServerSocket &		getServerSocket(int port);
 	std::vector<int> &	getActiveSocket();
-
-
+	
+	Server &	setName(std::string name);
+	Server &	setRoot(std::string root);
+	Server &	setAutoIndex(bool autoIndex);
+	Server &	setClientMaxBodySize(int limit);
+	Server &	setPathErrorPage(std::string path);
 	void	print();
 
 private:
@@ -53,7 +57,9 @@ private:
 	std::string			_name;
 	port_vector			_serverSockets;
 	std::string			_root;
-	
+	bool				_autoIndex;
+	int					_clientMaxBodySize;
+	std::string			_pathErrorPage;
 };
 
 #endif
