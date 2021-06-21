@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/18 17:09:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/06/21 14:16:55 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <vector>
 # include "ClientSocket.hpp"
 # include <poll.h>
+// cdai_temp
+# include <fstream>
 
 class Core
 {
@@ -40,6 +42,8 @@ private:
 	void				_acceptConnection();
 	void				_detectCloseConnection();
 	void				_detectResetServerPollFD();
+	void				_cdaiTempSendResponse();
+	void				_cdaiTempSendImage();
 
 	std::vector<Server>	_servers;
 	int					_worker;

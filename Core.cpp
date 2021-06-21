@@ -6,11 +6,13 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/18 18:22:48 by user42           ###   ########.fr       */
+/*   Updated: 2021/06/21 17:27:09 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Core.hpp"
+#include <cstring>
+#include <fstream>
 
 Core::Core(void) :
 	_worker(3),
@@ -147,6 +149,7 @@ void	Core::_detectCloseConnection()
 		//Check if it was for closing , and also read the 
 		//incoming message 
 		if ((valread = recv( fd , buffer, 1024, MSG_DONTWAIT)) == 0)  
+		//if ((valread = recv( fd , buffer, 1024, 0)) == 0)  
 		{
 			std::cout << "Host disconnected" << std::endl;  
 
@@ -160,7 +163,12 @@ void	Core::_detectCloseConnection()
 			buffer[valread] = '\0';
 		
 			std::cout << buffer << std::endl;
-			send(fd , buffer , std::strlen(buffer) , 0 );
+
+			if (strstr(buffer, "temp"))
+				_cdaiTempSendImage();
+			else if (strstr(buffer, " / "))
+				_cdaiTempSendResponse();
+//			send(fd , buffer , std::strlen(buffer) , 0 );
 
 			std::cout << "Host disconnected" << std::endl;  
 
@@ -191,4 +199,101 @@ void	Core::_detectResetServerPollFD()
 				_fds[i].revents = 0;
 				std::cout << "revents = 0 (to remove from Core.cpp - line 174)" << std::endl;
 			}
+}
+
+void	Core::_cdaiTempSendResponse()
+{
+	
+	std::ifstream ifs("./index.html");
+
+	ifs.seekg (0, ifs.end);
+    int length = ifs.tellg();
+    ifs.seekg (0, ifs.beg);
+
+	char * buffer = new char [length];
+
+    std::cout << "Reading " << length << " characters... ";
+    // read data as a block:
+    ifs.read (buffer,length);
+//	buffer[length + 1] = 0;
+
+    if (ifs)
+      std::cout << buffer << std::endl;
+    else
+      std::cout << "error: only " << ifs.gcount() << " could be read";
+	
+	ClientSocket & cs = _client.back();
+	int clientSocket = cs.getSocket();
+
+	char header[] =
+		"HTTP/1.1 200 OK\r\n"
+		"Content-Length: 308\r\n"
+		"Content-Type: text/html; charset=UTF-8\r\n\r\n";
+
+	send(clientSocket, header, sizeof(header) - 1, 0);
+	send(clientSocket, buffer, length, 0);
+
+	char end[] = "\r\n\r\n";
+	send(clientSocket, end, sizeof(end) - 1, 0);
+
+	std::cout << header << buffer << end << std::endl;
+
+
+
+
+	ifs.close();
+
+
+}
+
+void	Core::_cdaiTempSendImage()
+{
+	
+	std::ifstream ifs("./temp.png", std::ifstream::binary);
+
+	ifs.seekg (0, ifs.end);
+    int length = ifs.tellg();
+    ifs.seekg (0, ifs.beg);
+
+	char * buffer = new char [length];
+
+    std::cout << "Reading " << length << " characters... ";
+    // read data as a block:
+    ifs.read (buffer,length);
+//	buffer[length] = 0;
+
+	
+//    if (ifs)
+//      std::cout << buffer << std::endl;
+//    else
+//      std::cout << "error: only " << ifs.gcount() << " could be read";
+	
+	ClientSocket & cs = _client.back();
+	int clientSocket = cs.getSocket();
+
+	char header[] =
+		"HTTP/1.1 200 OK\r\n"
+		"Content-Type: image/png\r\n"
+		"Content-Length: 18271\r\n"
+		//"Connection: keep-alive\r\n"
+		"\r\n";
+
+	send(clientSocket, header, sizeof(header) - 1, 0);
+	write(1, buffer, length);
+	write(clientSocket, buffer, length);
+//	send(clientSocket, buffer, length, 0);
+
+	char end[] = "\r\n\r\n";
+	send(clientSocket, end, sizeof(end) - 1, 0);
+
+	std::cout << header << buffer << end << std::endl;
+
+
+
+
+	ifs.close();
+
+	delete[] buffer;
+
+
 }
