@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/21 17:27:09 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/21 18:41:29 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +166,11 @@ void	Core::_detectCloseConnection()
 
 			if (strstr(buffer, "temp"))
 				_cdaiTempSendImage();
-			else if (strstr(buffer, " / "))
+			else if (strstr(buffer, "favicon"))
+				_cdaiTempSendFavicon();
+			else
 				_cdaiTempSendResponse();
+
 //			send(fd , buffer , std::strlen(buffer) , 0 );
 
 			std::cout << "Host disconnected" << std::endl;  
@@ -210,12 +213,12 @@ void	Core::_cdaiTempSendResponse()
     int length = ifs.tellg();
     ifs.seekg (0, ifs.beg);
 
-	char * buffer = new char [length];
+	char * buffer = new char [length + 1];
 
     std::cout << "Reading " << length << " characters... ";
     // read data as a block:
     ifs.read (buffer,length);
-//	buffer[length + 1] = 0;
+	buffer[length + 1] = 0;
 
     if (ifs)
       std::cout << buffer << std::endl;
@@ -227,7 +230,7 @@ void	Core::_cdaiTempSendResponse()
 
 	char header[] =
 		"HTTP/1.1 200 OK\r\n"
-		"Content-Length: 308\r\n"
+		"Content-Length: 369\r\n"
 		"Content-Type: text/html; charset=UTF-8\r\n\r\n";
 
 	send(clientSocket, header, sizeof(header) - 1, 0);
@@ -296,4 +299,53 @@ void	Core::_cdaiTempSendImage()
 	delete[] buffer;
 
 
+}
+
+void	Core::_cdaiTempSendFavicon()
+{
+	std::ifstream ifs("./favicon.ico", std::ifstream::binary);
+
+	ifs.seekg (0, ifs.end);
+    int length = ifs.tellg();
+    ifs.seekg (0, ifs.beg);
+
+	char * buffer = new char [length];
+
+    std::cout << "Reading " << length << " characters... ";
+    // read data as a block:
+    ifs.read (buffer,length);
+//	buffer[length] = 0;
+
+	
+//    if (ifs)
+//      std::cout << buffer << std::endl;
+//    else
+//      std::cout << "error: only " << ifs.gcount() << " could be read";
+	
+	ClientSocket & cs = _client.back();
+	int clientSocket = cs.getSocket();
+
+	char header[] =
+		"HTTP/1.1 200 OK\r\n"
+		"Content-Type: image/x-icon\r\n"
+		"Content-Length: 5539\r\n"
+		//"Connection: keep-alive\r\n"
+		"\r\n";
+
+	send(clientSocket, header, sizeof(header) - 1, 0);
+	write(1, buffer, length);
+	write(clientSocket, buffer, length);
+//	send(clientSocket, buffer, length, 0);
+
+	char end[] = "\r\n\r\n";
+	send(clientSocket, end, sizeof(end) - 1, 0);
+
+	std::cout << header << buffer << end << std::endl;
+
+
+
+
+	ifs.close();
+
+	delete[] buffer;
 }

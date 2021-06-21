@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/21 14:16:55 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/21 17:42:02 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ private:
 	void				_detectResetServerPollFD();
 	void				_cdaiTempSendResponse();
 	void				_cdaiTempSendImage();
+	void				_cdaiTempSendFavicon();
 
 	std::vector<Server>	_servers;
 	int					_worker;
