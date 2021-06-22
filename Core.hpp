@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/21 17:42:02 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/22 17:41:05 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <vector>
 # include "ClientSocket.hpp"
 # include <poll.h>
+# include "Response.hpp"
 // cdai_temp
 # include <fstream>
 
@@ -32,7 +33,7 @@ public:
 
 	void	start();
 	void	addServer(Server & server);
-	void	addServer();
+	Server	&	addServer();
 	Server	&	getServer(int index = 0);
 
 	void	print();
@@ -45,6 +46,7 @@ private:
 	void				_cdaiTempSendResponse();
 	void				_cdaiTempSendImage();
 	void				_cdaiTempSendFavicon();
+	std::string			_cdai_temp_get_requested_file(std::string & buffer);
 
 	std::vector<Server>	_servers;
 	int					_worker;

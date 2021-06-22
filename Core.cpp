@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/21 18:41:29 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/22 19:28:04 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,10 @@ void	Core::addServer(Server & server)
 	_servers.push_back(server);
 }
 
-void	Core::addServer()
+Server	&	Core::addServer()
 {
-	_servers.push_back(Server(""));
+	_servers.push_back(Server());
+	return(_servers.back());
 }
 
 Server	&	Core::getServer(int index)
@@ -161,17 +162,30 @@ void	Core::_detectCloseConnection()
 		else if(valread > 0)
 		{
 			buffer[valread] = '\0';
-		
+
 			std::cout << buffer << std::endl;
 
-			if (strstr(buffer, "temp"))
-				_cdaiTempSendImage();
-			else if (strstr(buffer, "favicon"))
-				_cdaiTempSendFavicon();
-			else
-				_cdaiTempSendResponse();
 
-//			send(fd , buffer , std::strlen(buffer) , 0 );
+			// to update with Request Class
+			std::string ROOT = ".";
+			std::string request(buffer);
+			std::string requested_file = _cdai_temp_get_requested_file(request);
+			std::string filename = ROOT + requested_file;
+			if (filename == "./")
+				filename = "./index.html";
+
+			// create and send response
+			Response response(200);
+			response.setBody(filename);
+
+			// need client socket
+			ClientSocket & cs = _client.back();
+			int clientSocket = cs.getSocket();
+
+			response.sendResponse(clientSocket);
+
+
+
 
 			std::cout << "Host disconnected" << std::endl;  
 
@@ -179,17 +193,6 @@ void	Core::_detectCloseConnection()
 			_client.erase(it);  
 			break;
 		}
-
-		//Echo back the message that came in 
-		//and echo in stdin/std::cout
-//		else
-//		{
-//			//set the string terminating NULL byte on the end
-//			//of the data read
-//			buffer[valread] = '\0';
-//			std::cout << buffer << std::endl;
-//			send(fd , buffer , std::strlen(buffer) , 0 );
-//		}
 	}
 }
 
@@ -204,148 +207,10 @@ void	Core::_detectResetServerPollFD()
 			}
 }
 
-void	Core::_cdaiTempSendResponse()
+std::string Core::_cdai_temp_get_requested_file(std::string & buffer)
 {
-	
-	std::ifstream ifs("./index.html");
+	std::size_t start = buffer.find('/');
+	std::size_t end = buffer.find(' ', start + 1);
 
-	ifs.seekg (0, ifs.end);
-    int length = ifs.tellg();
-    ifs.seekg (0, ifs.beg);
-
-	char * buffer = new char [length + 1];
-
-    std::cout << "Reading " << length << " characters... ";
-    // read data as a block:
-    ifs.read (buffer,length);
-	buffer[length + 1] = 0;
-
-    if (ifs)
-      std::cout << buffer << std::endl;
-    else
-      std::cout << "error: only " << ifs.gcount() << " could be read";
-	
-	ClientSocket & cs = _client.back();
-	int clientSocket = cs.getSocket();
-
-	char header[] =
-		"HTTP/1.1 200 OK\r\n"
-		"Content-Length: 369\r\n"
-		"Content-Type: text/html; charset=UTF-8\r\n\r\n";
-
-	send(clientSocket, header, sizeof(header) - 1, 0);
-	send(clientSocket, buffer, length, 0);
-
-	char end[] = "\r\n\r\n";
-	send(clientSocket, end, sizeof(end) - 1, 0);
-
-	std::cout << header << buffer << end << std::endl;
-
-
-
-
-	ifs.close();
-
-
-}
-
-void	Core::_cdaiTempSendImage()
-{
-	
-	std::ifstream ifs("./temp.png", std::ifstream::binary);
-
-	ifs.seekg (0, ifs.end);
-    int length = ifs.tellg();
-    ifs.seekg (0, ifs.beg);
-
-	char * buffer = new char [length];
-
-    std::cout << "Reading " << length << " characters... ";
-    // read data as a block:
-    ifs.read (buffer,length);
-//	buffer[length] = 0;
-
-	
-//    if (ifs)
-//      std::cout << buffer << std::endl;
-//    else
-//      std::cout << "error: only " << ifs.gcount() << " could be read";
-	
-	ClientSocket & cs = _client.back();
-	int clientSocket = cs.getSocket();
-
-	char header[] =
-		"HTTP/1.1 200 OK\r\n"
-		"Content-Type: image/png\r\n"
-		"Content-Length: 18271\r\n"
-		//"Connection: keep-alive\r\n"
-		"\r\n";
-
-	send(clientSocket, header, sizeof(header) - 1, 0);
-	write(1, buffer, length);
-	write(clientSocket, buffer, length);
-//	send(clientSocket, buffer, length, 0);
-
-	char end[] = "\r\n\r\n";
-	send(clientSocket, end, sizeof(end) - 1, 0);
-
-	std::cout << header << buffer << end << std::endl;
-
-
-
-
-	ifs.close();
-
-	delete[] buffer;
-
-
-}
-
-void	Core::_cdaiTempSendFavicon()
-{
-	std::ifstream ifs("./favicon.ico", std::ifstream::binary);
-
-	ifs.seekg (0, ifs.end);
-    int length = ifs.tellg();
-    ifs.seekg (0, ifs.beg);
-
-	char * buffer = new char [length];
-
-    std::cout << "Reading " << length << " characters... ";
-    // read data as a block:
-    ifs.read (buffer,length);
-//	buffer[length] = 0;
-
-	
-//    if (ifs)
-//      std::cout << buffer << std::endl;
-//    else
-//      std::cout << "error: only " << ifs.gcount() << " could be read";
-	
-	ClientSocket & cs = _client.back();
-	int clientSocket = cs.getSocket();
-
-	char header[] =
-		"HTTP/1.1 200 OK\r\n"
-		"Content-Type: image/x-icon\r\n"
-		"Content-Length: 5539\r\n"
-		//"Connection: keep-alive\r\n"
-		"\r\n";
-
-	send(clientSocket, header, sizeof(header) - 1, 0);
-	write(1, buffer, length);
-	write(clientSocket, buffer, length);
-//	send(clientSocket, buffer, length, 0);
-
-	char end[] = "\r\n\r\n";
-	send(clientSocket, end, sizeof(end) - 1, 0);
-
-	std::cout << header << buffer << end << std::endl;
-
-
-
-
-	ifs.close();
-
-	delete[] buffer;
+	return buffer.substr(start, end - start);
 }
