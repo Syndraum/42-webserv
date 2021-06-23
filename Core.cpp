@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/22 19:28:04 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/23 15:22:33 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void	Core::_detectCloseConnection()
 			std::cout << buffer << std::endl;
 
 
-			// to update with Request Class
+			// TODO !! to update with Request Class
 			std::string ROOT = ".";
 			std::string request(buffer);
 			std::string requested_file = _cdai_temp_get_requested_file(request);
@@ -187,7 +187,7 @@ void	Core::_detectCloseConnection()
 
 
 
-			std::cout << "Host disconnected" << std::endl;  
+			std::cout << "Host disconnected" << std::endl;  // message for debug, to remove later
 
 			close( fd );  
 			_client.erase(it);  
@@ -203,7 +203,7 @@ void	Core::_detectResetServerPollFD()
 			if (_fds[i].revents & POLLIN)
 			{
 				_fds[i].revents = 0;
-				std::cout << "revents = 0 (to remove from Core.cpp - line 174)" << std::endl;
+				std::cout << "revents = 0 (to remove from Core.cpp - line 206)" << std::endl;
 			}
 }
 

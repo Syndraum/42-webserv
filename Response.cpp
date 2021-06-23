@@ -6,12 +6,11 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/22 19:29:53 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/23 15:19:47 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
-#include <iostream>
 
 Response::Response(int code) : _version("HTTP/1.1"), _code(code), _body("")
 {
