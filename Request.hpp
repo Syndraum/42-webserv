@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/18 18:27:00 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/23 12:41:14 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,28 +25,32 @@ using namespace std;
 
 class Request
 {
-private:
-	int						_method;
-	string					_path;
-	string					_version;
-	int						_response_code;
-	map<string, string>		_headers;
+	private:
+		int						_method;
+		string					_path;
+		string					_version;
+		map<string, string>		_headers;
 
+	public:
+		Request();
+		Request(int method, string const &path, string const &version, map<string, string> const &headers);
+		Request(Request const &rhs);
+		~Request();
+		Request const &operator=(Request const &rhs);
 
-	string	_error_msg(int code);
-	int		_return_error(string msg);
-	int		_set_method(string line);
-	int		_set_path(string line);
-	int		_set_version(string line);
-	int		_first_line(string line);
-	int		_parse_headers(string line);
-	/* data */
-public:
-	Request(/* args */);
-	~Request();
+		int							get_method() const;
+		string const				&get_path() const;
+		string const				&get_version() const;
+		map<string, string> const	&get_headers() const;
+		string const				&get_header(string const &key);
 
-	int		parsing();
-	void	print_debug();
+		void						set_method(int rhs);
+		void						set_path(string const &rhs);
+		void						set_version(string const &rhs);
+		void						set_headers(map<string, string> const &rhs);
+		void						add_header(pair<string, string> const &rhs);
+
+		void						print_debug() const;
 };
 
 #endif
