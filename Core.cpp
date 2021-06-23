@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/23 15:22:33 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/23 15:57:14 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void	Core::start(){
 	int fd;
 	std::vector<int> activeSocket;
 
-	_fds = new struct pollfd[10];
+	// this has to be something we can keep and update
+	_fds = new struct pollfd[_servers.size() + _client.size()];
 
 	for (size_t i = 0; i < _servers.size(); i++)
 	{
@@ -54,6 +55,7 @@ void	Core::start(){
 	}
 	while (true)
 	{
+
 		// value given to poll (nbFds)
 		_nbFds = 0;
 		for (size_t i = 0; i < _serverSockets.size(); i++)
@@ -74,7 +76,7 @@ void	Core::start(){
 		}
 		_nbActive = poll(_fds, _nbFds, 60000);
 		_acceptConnection();
-		_detectCloseConnection();
+		_handle_request_and_detect_close_connection();
 		_detectResetServerPollFD();
 
 		// detect and set serversocket to POLLIN or not
@@ -134,8 +136,7 @@ void	Core::_acceptConnection()
 	}
 }
 
-// this function is more 'read' than 'close'
-void	Core::_detectCloseConnection()
+void	Core::_handle_request_and_detect_close_connection()
 {
 	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
 	{
@@ -187,8 +188,9 @@ void	Core::_detectCloseConnection()
 
 
 
-			std::cout << "Host disconnected" << std::endl;  // message for debug, to remove later
+			std::cout << "Server disconnected" << std::endl << std::endl;  // message for debug, to remove later, many to remove.
 
+			// actually, i always close the client fd
 			close( fd );  
 			_client.erase(it);  
 			break;
@@ -201,10 +203,10 @@ void	Core::_detectResetServerPollFD()
 	if (!_client.size())
 		for (size_t i = 0; i < _serverSockets.size(); i++)
 			if (_fds[i].revents & POLLIN)
-			{
+//			{
 				_fds[i].revents = 0;
-				std::cout << "revents = 0 (to remove from Core.cpp - line 206)" << std::endl;
-			}
+//				std::cout << "revents = 0 (to remove from Core.cpp - line 206)" << std::endl;
+//			}
 }
 
 std::string Core::_cdai_temp_get_requested_file(std::string & buffer)

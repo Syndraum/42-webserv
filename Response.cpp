@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/23 15:19:47 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/23 15:46:51 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ std::string Response::getMessage(int code)
 //cdai setBody
 Response &	Response::setBody(std::string & filename)
 {
+	try
+	{
 	std::ifstream ifs(filename.c_str());
 
 	// get file length
@@ -108,6 +110,15 @@ Response &	Response::setBody(std::string & filename)
 	addHeader("Content-Length", std::to_string(length));
 
 	ifs.close();
+	}
+	catch (std::exception & e )
+	{
+		(void)e;
+		std::string error("error 404 (TODO)");
+		int length = error.length();
+		addHeader("Content-Length", std::to_string(length));
+		_body = error;
+	}
 	return *this;
 }
 
