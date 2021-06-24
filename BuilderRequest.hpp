@@ -34,13 +34,15 @@ public:
 	int		add_method(std::string line);
 	int		add_path(std::string line);
 	int		add_version(std::string line);
-	int		first_line(std::string line);
-	int		parse_headers(std::string line);
-	int		parse_request(std::istream &fd);
+	void	first_line(std::string line);
+	void	parse_headers(std::string line);
+	void	parse_request(std::istream &fd);
+
 	Request * get_request() const;
 	void	reset();
 private:
 	Request	*	_request;
+	
 };
 
 #endif

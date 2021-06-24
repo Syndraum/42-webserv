@@ -58,46 +58,40 @@ int		BuilderRequest::add_version(std::string line)
 	return (8);
 }
 
-int		BuilderRequest::first_line(std::string line)
+void	BuilderRequest::first_line(std::string line)
 {
 	int	j = add_method(line);
 	j += add_path(&line[j]);
 	j += add_version(&line[j]);
 	if (line[j] != '\r')
 		throw BadResquest();
-	return (OK);
 }
 
-int		BuilderRequest::parse_headers(std::string line)
+void	BuilderRequest::parse_headers(std::string line)
 {
-    size_t		len = line.find(": ");
+	size_t		len = line.find(": ");
 
 	if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
 		throw BadResquest();
-    _request->add_header(std::pair<std::string, std::string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
-	return (OK);
+	_request->add_header(std::pair<std::string, std::string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
 }
 
-int		BuilderRequest::parse_request(std::istream &fd)
+void	BuilderRequest::parse_request(std::istream &fd)
 {
 	std::string		line;
-	int				i;
-	int				ret;
+	bool			is_first_line = true;
 
-	i = 0;
 	while(getline(fd, line))
 	{
 		//check printable characters
-		if (i == 0)
+		if (is_first_line)
 		{
-			if ((ret = first_line(line)) != OK)
-				return(ret);
+			first_line(line);
+			is_first_line = false;
 		}
-		else if ((ret = parse_headers(line)) != OK)
-				return(ret);
-		i++;
+		else
+			parse_headers(line);
 	}
-	return(ret);
 }
 
 Request * BuilderRequest::get_request() const
