@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/18 17:34:17 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/23 15:19:47 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,11 @@ std::string	Response::getResponse()
 	{
 		ss << it->first << ": " << it->second << "\r\n";
 	}
-	ss << "\r\n\r\n";
+	ss << "\r\n";
 	if (_body != "")
 		ss << _body;
+	ss << "\r\n";
+	ss << "\r\n";
 	return ss.str();
 }
 
@@ -80,6 +82,17 @@ std::string Response::getMessage(int code)
 		return (_1xx__response(code));
 	else
 		throw std::exception();
+}
+
+//cdai setBody
+Response &	Response::setBody(std::string & filename)
+{
+	Reader	file_reader(filename);
+	file_reader.open();
+	file_reader.to_string(_body);
+	addHeader("Content-Length", std::to_string(file_reader.get_lenght()));
+	file_reader.close();
+	return *this;
 }
 
 std::string	Response::_1xx__response(int code)

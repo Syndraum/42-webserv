@@ -6,7 +6,7 @@
 #    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/06/18 15:41:53 by syndraum         ###   ########.fr        #
+#    Updated: 2021/06/22 16:30:23 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								ClientSocket.cpp \
 								Core.cpp \
 								Response.cpp \
+								Reader.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}
@@ -52,6 +53,9 @@ fclean:
 			${RM} ${NAME}
 
 re:			fclean all
+
+test:		all
+			$(PREFIX)$(NAME)
 
 .PHONY: 	all re run clean fclean
 

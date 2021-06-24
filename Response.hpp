@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:41 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/18 15:57:00 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/22 18:32:26 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@
 # include <utility>
 # include <sstream>
 
-#include <unistd.h>
+# include <unistd.h>
+# include <fstream>
+# include "Reader.hpp"
 
 class Response
 {
@@ -34,6 +36,7 @@ public:
 	std::string	getResponse();
 	void		sendResponse(int fd);
 	std::string	getMessage(int code);
+	Response &	setBody(std::string & filename);
 
 private:
 
