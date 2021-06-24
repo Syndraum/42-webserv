@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/23 19:13:29 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/24 10:38:57 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ int		count_whitespace(std::string line)
 		if (!isspace(line[i]))
 			return (i);
 	return (line.length());
+}
+
+int		skip_comment(std::string line)
+{
+	return(line.find('\n') + 1);
 }
 
 int		parse_server_port(std::string line, Server *server)
@@ -133,6 +138,8 @@ int		parse_config(std::istream fd, Core *core)
 			if (ret = parse_server(&line[i + 7], core)) < 0)
 				return (ret);
 		}
+		else if (!line.compare(i, 1, "#")
+			ret = skip_comment(&line[i + 1]);
 		else
 			return (-1); // determine specific errors
 		i += ret;
