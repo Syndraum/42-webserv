@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/23 12:41:14 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/24 21:34:07 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,34 +21,32 @@
 
 # include "includes.hpp"
 
-using namespace std;
-
 class Request
 {
 	private:
 		int						_method;
-		string					_path;
-		string					_version;
-		map<string, string>		_headers;
+		std::string					_path;
+		std::string					_version;
+		std::map<std::string, std::string>		_headers;
 
 	public:
 		Request();
-		Request(int method, string const &path, string const &version, map<string, string> const &headers);
+		Request(int method, std::string const &path, std::string const &version, std::map<std::string, std::string> const &headers);
 		Request(Request const &rhs);
 		~Request();
 		Request const &operator=(Request const &rhs);
 
 		int							get_method() const;
-		string const				&get_path() const;
-		string const				&get_version() const;
-		map<string, string> const	&get_headers() const;
-		string const				&get_header(string const &key);
+		std::string const				&get_path() const;
+		std::string const				&get_version() const;
+		std::map<std::string, std::string> const	&get_headers() const;
+		std::string const				&get_header(std::string const &key);
 
 		void						set_method(int rhs);
-		void						set_path(string const &rhs);
-		void						set_version(string const &rhs);
-		void						set_headers(map<string, string> const &rhs);
-		void						add_header(pair<string, string> const &rhs);
+		void						set_path(std::string const &rhs);
+		void						set_version(std::string const &rhs);
+		void						set_headers(std::map<std::string, std::string> const &rhs);
+		void						add_header(std::pair<std::string, std::string> const &rhs);
 
 		void						print_debug() const;
 };

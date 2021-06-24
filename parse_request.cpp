@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_request.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 11:23:19 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/23 12:46:24 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/24 21:35:58 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes.hpp"
 
-using namespace std;
-
-int		add_method(string line, Request *request)
+int		add_method(std::string line, Request *request)
 {
 	if (!line.compare(0, 4, "GET "))
 	{
@@ -35,17 +33,17 @@ int		add_method(string line, Request *request)
 		return (-1);
 }
 
-int		add_path(string line, Request *request)
+int		add_path(std::string line, Request *request)
 {
 	size_t		len = line.find(' ');
-	if (len == string::npos)
+	if (len == std::string::npos)
 		return(-1);
 	request->set_path(line.substr(0, len));
 	// check characters
 	return(len + 1);
 }
 
-int		add_version(string line, Request *request)
+int		add_version(std::string line, Request *request)
 {
 	if (line.compare(0, 8, VERSION))
 		return (-1);
@@ -53,7 +51,7 @@ int		add_version(string line, Request *request)
 	return (8);
 }
 
-int		first_line(string line, Request *request)
+int		first_line(std::string line, Request *request)
 {
 	int	j = add_method(line, request);
 	if (j < 0)
@@ -69,19 +67,19 @@ int		first_line(string line, Request *request)
 	return (OK);
 }
 
-int		parse_headers(string line, Request *request)
+int		parse_headers(std::string line, Request *request)
 {
     size_t		len = line.find(": ");
 
-	if (line[line.length() - 1] != '\r' || len == string::npos || line[len - 1] == ' ')
+	if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
 		return (BAD_REQUEST);
-    request->add_header(pair<string, string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
+    request->add_header(std::pair<std::string, std::string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
 	return (OK);
 }
 
-int		parse_request(istream &fd, Request *request)
+int		parse_request(std::istream &fd, Request *request)
 {
-	string						line;
+	std::string						line;
 	int							i;
     int                         ret;
 

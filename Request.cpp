@@ -3,21 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/11 16:28:56 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/23 12:41:06 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/24 21:37:26 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-using namespace std;
-
 Request::Request()
 {}
 
-Request::Request(int method, string const &path, string const &version, map<string, string> const &headers)
+Request::Request(int method, std::string const &path, std::string const &version, std::map<std::string, std::string> const &headers)
 : _method(method), _path(path), _version(version), _headers(headers)
 {}
 
@@ -39,23 +37,23 @@ Request const 				&Request::operator=(Request const &rhs)
 }
 
 int							Request::get_method() const { return (_method); }
-string const				&Request::get_path() const { return (_path); }
-string const				&Request::get_version() const { return (_version); }
-map<string, string> const	&Request::get_headers() const { return (_headers); }
-string const				&Request::get_header(string const &key) { return (_headers[key]); }
+std::string const				&Request::get_path() const { return (_path); }
+std::string const				&Request::get_version() const { return (_version); }
+std::map<std::string, std::string> const	&Request::get_headers() const { return (_headers); }
+std::string const				&Request::get_header(std::string const &key) { return (_headers[key]); }
 
 void						Request::set_method(int rhs){ _method = rhs; }
-void						Request::set_path(string const &rhs){ _path = rhs; }
-void						Request::set_version(string const &rhs){ _version = rhs; }
-void						Request::set_headers(map<string, string> const &rhs){ _headers = rhs; }
-void						Request::add_header(pair<string, string> const &rhs){ _headers.insert(rhs); }
+void						Request::set_path(std::string const &rhs){ _path = rhs; }
+void						Request::set_version(std::string const &rhs){ _version = rhs; }
+void						Request::set_headers(std::map<std::string, std::string> const &rhs){ _headers = rhs; }
+void						Request::add_header(std::pair<std::string, std::string> const &rhs){ _headers.insert(rhs); }
 
 void						Request::print_debug() const //TMP
 {
-	cerr << "METHOD CODE : " << _method << " PATH : \"" << _path << "\" " << _version << endl;
-    cerr << "HEADERS : " << endl;
+	std::cerr << "METHOD CODE : " << _method << " PATH : \"" << _path << "\" " << _version << std::endl;
+    std::cerr << "HEADERS : " << std::endl;
 
     for (auto& it: _headers)
-        cout << "\"" << it.first << "\" - \"" << it.second << "\"" << endl;
+        std::cout << "\"" << it.first << "\" - \"" << it.second << "\"" << std::endl;
 
 }
