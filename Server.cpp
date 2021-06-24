@@ -6,17 +6,15 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:20:18 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/20 11:15:36 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(void){}
-
-Server::Server(std::string root, int port) : _root(root)
+Server::Server(void) : _name("_"), _autoIndex(false), _clientMaxBodySize(5)
 {
-	addPort(port);
+
 }
 
 Server::Server(Server const & src)
@@ -68,6 +66,36 @@ ServerSocket	& Server::getServerSocket(int port)
 std::vector<int> &	Server::getActiveSocket()
 {
 	return _activeSocket;
+}
+
+Server &	Server::setName(std::string name)
+{
+	_name = name;
+	return(*this);
+}
+
+Server &	Server::setRoot(std::string root)
+{
+	_root = root;
+	return(*this);
+}
+
+Server &	Server::setAutoIndex(bool autoIndex)
+{
+	_autoIndex = autoIndex;
+	return(*this);
+}
+
+Server &	Server::setClientMaxBodySize(int limit)
+{
+	_clientMaxBodySize = limit;
+	return(*this);
+}
+
+Server &	Server::setPathErrorPage(std::string path)
+{
+	_pathErrorPage = path;
+	return(*this);
 }
 
 void	Server::print()

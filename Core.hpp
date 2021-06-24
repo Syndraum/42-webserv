@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/17 18:44:51 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/23 15:54:22 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@
 # include "Server.hpp"
 # include <vector>
 # include "ClientSocket.hpp"
+# include <poll.h>
+# include "Response.hpp"
+// cdai_temp
+# include <fstream>
 
 class Core
 {
@@ -29,7 +33,7 @@ public:
 
 	void	start();
 	void	addServer(Server & server);
-	void	addServer();
+	Server	&	addServer();
 	Server	&	getServer(int index = 0);
 
 	void	print();
@@ -37,16 +41,18 @@ public:
 private:
 
 	void				_acceptConnection();
-	void				_detectCloseConnection();
+	void				_handle_request_and_detect_close_connection();
+	void				_detectResetServerPollFD();
+	std::string			_cdai_temp_get_requested_file(std::string & buffer);
 
 	std::vector<Server>	_servers;
 	int					_worker;
-	fd_set				_readfds;
-	int					_maxfd;
 	int					_nbActive;
 	std::vector<int>	_serverSockets;
 	client_vector		_client;
 	int					_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
+	struct pollfd *		_fds;
+	int					_nbFds;
 };
 
 #endif
