@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/24 22:10:12 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/24 22:58:23 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,23 @@ int		print_error(int code) // ADD TO RESPONSE
 int		main() // run with "cat test_request | ./webserv"
 {
 	BuilderRequest bd;
-	Request	*	request;
-	int			code;
+	Request	*	request = 0;
+	// int			code;
 
-	code = bd.parse_request(std::cin);
-	request = bd.get_request();
-	bd.reset();
+	try
+	{	
+		bd.parse_request(std::cin);
+		request = bd.get_request();
+		bd.reset();
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 	// code = parse_request(std::cin, &request);
-	if (code != OK)
-		return(print_error(code));
-	request->print_debug();
+	// if (code != OK)
+	// 	return(print_error(code));
+	if (request)
+		request->print_debug();
 	delete request;
 }

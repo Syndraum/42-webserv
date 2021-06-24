@@ -37,14 +37,14 @@ int		BuilderRequest::add_method(std::string line)
 		return (7);
 	}
 	else
-		return (-1);
+		throw MethodNotImplemented();
 }
 
 int		BuilderRequest::add_path(std::string line)
 {
 	size_t		len = line.find(' ');
 	if (len == std::string::npos)
-		return(-1);
+		throw BadResquest();
 	_request->set_path(line.substr(0, len));
 	// check characters
 	return(len + 1);
@@ -53,7 +53,7 @@ int		BuilderRequest::add_path(std::string line)
 int		BuilderRequest::add_version(std::string line)
 {
 	if (line.compare(0, 8, VERSION))
-		return (-1);
+		throw BadHttpVesion();
 	_request->set_version(VERSION);
 	return (8);
 }
@@ -61,16 +61,10 @@ int		BuilderRequest::add_version(std::string line)
 int		BuilderRequest::first_line(std::string line)
 {
 	int	j = add_method(line);
-	if (j < 0)
-		return (NOT_IMPLEMENTED);
 	j += add_path(&line[j]);
-	if (j < 0)
-		return (BAD_REQUEST);
 	j += add_version(&line[j]);
-	if (j < 0)
-		return (BAD_VERSION);
 	if (line[j] != '\r')
-		return (BAD_REQUEST);
+		throw BadResquest();
 	return (OK);
 }
 
@@ -79,16 +73,16 @@ int		BuilderRequest::parse_headers(std::string line)
     size_t		len = line.find(": ");
 
 	if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
-		return (BAD_REQUEST);
+		throw BadResquest();
     _request->add_header(std::pair<std::string, std::string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
 	return (OK);
 }
 
 int		BuilderRequest::parse_request(std::istream &fd)
 {
-	std::string						line;
-	int							i;
-    int                         ret;
+	std::string		line;
+	int				i;
+	int				ret;
 
 	i = 0;
 	while(getline(fd, line))

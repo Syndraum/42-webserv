@@ -2,11 +2,30 @@
 # define BUILDERREQUEST
 
 # include "Request.hpp"
+# include <exception>
 
 class BuilderRequest
 {
 public:
-
+	class BadResquest : public std::exception
+	{
+		virtual const char* what() const throw(){
+			return "Bad Request";
+		}
+	};
+	class BadHttpVesion : public std::exception
+	{
+		virtual const char* what() const throw(){
+			return "HTTP Version Not Supported";
+		}
+	};
+	class MethodNotImplemented : public std::exception
+	{
+		virtual const char* what() const throw(){
+			return "Not Implemented";
+		}
+	};
+	
 	BuilderRequest(void);
 	BuilderRequest(BuilderRequest const & src);
 	virtual ~BuilderRequest(void);
