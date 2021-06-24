@@ -6,7 +6,7 @@
 #    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/06/24 19:03:59 by cdai             ###   ########.fr        #
+#    Updated: 2021/06/24 22:11:23 by syndraum         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								Reader.cpp \
 								main_to_test_request.cpp \
 								Request.cpp \
-								parse_request.cpp \
+								BuilderRequest.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}

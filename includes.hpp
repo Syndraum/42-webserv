@@ -10,8 +10,4 @@
 # include "Request.hpp"
 // # include "Server.hpp"
 
-class Request;
-
-int		parse_request(std::istream &fd, Request *request);
-
 #endif
