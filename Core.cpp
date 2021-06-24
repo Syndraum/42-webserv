@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/23 15:57:14 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/24 18:35:14 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	Core::start(){
 	std::vector<int> activeSocket;
 
 	// this has to be something we can keep and update
-	_fds = new struct pollfd[_servers.size() + _client.size()];
+	_fds = new struct pollfd[10];
 
 	for (size_t i = 0; i < _servers.size(); i++)
 	{
