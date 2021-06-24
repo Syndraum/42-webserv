@@ -87,27 +87,11 @@ std::string Response::getMessage(int code)
 //cdai setBody
 Response &	Response::setBody(std::string & filename)
 {
-	std::ifstream ifs(filename.c_str());
-
-	// get file length
-	ifs.seekg (0, ifs.end);
-    int length = ifs.tellg();
-    ifs.seekg (0, ifs.beg);
-
-
-	// read the file requested
-	char * buffer = new char[length + 1];
-	ifs.read(buffer, length);
-	buffer[length] = '\0';
-
-	std::string temp(buffer, length);
-	_body = temp;
-	delete[] buffer;
-
-	// setup Content-Length
-	addHeader("Content-Length", std::to_string(length));
-
-	ifs.close();
+	Reader	file_reader(filename);
+	file_reader.open();
+	file_reader.to_string(_body);
+	addHeader("Content-Length", std::to_string(file_reader.get_lenght()));
+	file_reader.close();
 	return *this;
 }
 
