@@ -19,6 +19,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								ClientSocket.cpp \
 								Core.cpp \
 								Response.cpp \
+								Reader.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}

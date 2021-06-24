@@ -20,6 +20,7 @@
 
 # include <unistd.h>
 # include <fstream>
+# include "Reader.hpp"
 
 class Response
 {
