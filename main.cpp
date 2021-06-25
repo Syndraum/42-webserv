@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_to_test_request.cpp                           :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/25 14:17:07 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/25 17:52:09 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,21 @@
 #include "Core.hpp"
 #include "Server.hpp"
 #include "includes.hpp"
+#include "DevSocket.hpp"
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 int		main()
 {
+	int fd = open("./main.cpp", O_RDONLY);
+	std::cout << "fd: " << fd << std::endl;
+	std::string str;
+	DevSocket socket(fd);
+	socket.get_next_line(str);
+	std::cout << str << std::endl;
+
 	Core core = Core();
 	core.addServer()
 		.addPort(8888)

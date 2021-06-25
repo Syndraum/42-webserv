@@ -6,7 +6,7 @@
 #    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/06/25 15:54:51 by cdai             ###   ########.fr        #
+#    Updated: 2021/06/25 17:23:11 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,8 @@ PREFIX		=	./
 SRCS		=	$(addprefix $(PREFIX), \
 								main.cpp \
 								Server.cpp \
+								ASocket.cpp \
+								DevSocket.cpp \
 								ServerSocket.cpp \
 								ClientSocket.cpp \
 								Core.cpp \
