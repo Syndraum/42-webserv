@@ -6,19 +6,22 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/24 18:35:14 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/25 15:02:26 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Core.hpp"
 #include <cstring>
 #include <fstream>
+#include "Request.hpp"
+#include "includes.hpp"
 
 Core::Core(void) :
 	_worker(3),
 	//_maxfd(-1),
 	_nbActive(0)
 {
+	_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
 }
 
 Core::Core(Core const & src)
@@ -144,6 +147,7 @@ void	Core::_handle_request_and_detect_close_connection()
 		int valread;
 		char buffer[1025];
 		int fds_index;
+		Request request;
 
 		for (unsigned long i = 0; i < _serverSockets.size(); i++)
 			if (fd == _fds[i].fd)
@@ -166,12 +170,15 @@ void	Core::_handle_request_and_detect_close_connection()
 
 			std::cout << buffer << std::endl;
 
+			std::stringstream ss;
+			ss << buffer;
+			parse_request(ss, &request);
 
-			// TODO !! to update with Request Class
+			// get requested file path
 			std::string ROOT = ".";
-			std::string request(buffer);
-			std::string requested_file = _cdai_temp_get_requested_file(request);
-			std::string filename = ROOT + requested_file;
+			std::string filename = ROOT + request.get_path();
+
+			std::cout << filename << std::endl;
 			if (filename == "./")
 				filename = "./index.html";
 
@@ -188,7 +195,7 @@ void	Core::_handle_request_and_detect_close_connection()
 
 
 
-			std::cout << "Server disconnected" << std::endl << std::endl;  // message for debug, to remove later, many to remove.
+			std::cout << "Server still connected" << std::endl << std::endl;  // message for debug, to remove later, many to remove.
 
 			// actually, i always close the client fd
 			close( fd );  

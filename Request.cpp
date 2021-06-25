@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/11 16:28:56 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/23 12:41:06 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/25 15:29:22 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ void						Request::set_version(string const &rhs){ _version = rhs; }
 void						Request::set_headers(map<string, string> const &rhs){ _headers = rhs; }
 void						Request::add_header(pair<string, string> const &rhs){ _headers.insert(rhs); }
 
-void						Request::print_debug() const //TMP
-{
-	cerr << "METHOD CODE : " << _method << " PATH : \"" << _path << "\" " << _version << endl;
-    cerr << "HEADERS : " << endl;
-
-    for (auto& it: _headers)
-        cout << "\"" << it.first << "\" - \"" << it.second << "\"" << endl;
-
-}
+//void						Request::print_debug() const //TMP
+//{
+//	cerr << "METHOD CODE : " << _method << " PATH : \"" << _path << "\" " << _version << endl;
+//    cerr << "HEADERS : " << endl;
+//
+//    for (auto& it: _headers)
+//        cout << "\"" << it.first << "\" - \"" << it.second << "\"" << endl;
+//
+//}
