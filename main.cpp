@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/25 17:52:09 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/25 18:14:53 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ int		main()
 	std::cout << "fd: " << fd << std::endl;
 	std::string str;
 	DevSocket socket(fd);
+	socket.get_next_line(str);
+	std::cout << str << std::endl;
+
+	socket.get_next_line(str);
+	std::cout << str << std::endl;
+
 	socket.get_next_line(str);
 	std::cout << str << std::endl;
 
