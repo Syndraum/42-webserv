@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:41 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/22 18:32:26 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/25 16:12:33 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ public:
 	void		sendResponse(int fd);
 	std::string	getMessage(int code);
 	Response &	setBody(std::string & filename);
+	Response &	set404(std::string & filename);
 
 private:
 

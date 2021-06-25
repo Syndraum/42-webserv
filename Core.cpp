@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/25 15:02:26 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/25 16:32:42 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,25 +166,36 @@ void	Core::_handle_request_and_detect_close_connection()
 
 		else if(valread > 0)
 		{
+			// debug
 			buffer[valread] = '\0';
-
 			std::cout << buffer << std::endl;
 
+			// parse_request ?
 			std::stringstream ss;
 			ss << buffer;
 			parse_request(ss, &request);
 
 			// get requested file path
-			std::string ROOT = ".";
+			std::string ROOT = "./webserviette_root";
 			std::string filename = ROOT + request.get_path();
 
 			std::cout << filename << std::endl;
-			if (filename == "./")
-				filename = "./index.html";
+			if (filename == ROOT + "/")
+				filename += "index.html";
 
 			// create and send response
 			Response response(200);
-			response.setBody(filename);
+			try
+			{
+				response.setBody(filename);
+			}
+			catch (std::exception & e)
+			{
+				std::cout << e.what() << std::endl;
+
+				filename = ROOT + "/404.html";
+				response.set404(filename);
+			}
 
 			// need client socket
 			ClientSocket & cs = _client.back();
@@ -195,11 +206,11 @@ void	Core::_handle_request_and_detect_close_connection()
 
 
 
-			std::cout << "Server still connected" << std::endl << std::endl;  // message for debug, to remove later, many to remove.
+			// message for debug, to remove later
+			std::cout << "Server still connected" << std::endl << std::endl;
 
-			// actually, i always close the client fd
-			close( fd );  
-			_client.erase(it);  
+			//close( fd );  
+			//_client.erase(it);  
 			break;
 		}
 	}
@@ -210,16 +221,5 @@ void	Core::_detectResetServerPollFD()
 	if (!_client.size())
 		for (size_t i = 0; i < _serverSockets.size(); i++)
 			if (_fds[i].revents & POLLIN)
-//			{
 				_fds[i].revents = 0;
-//				std::cout << "revents = 0 (to remove from Core.cpp - line 206)" << std::endl;
-//			}
-}
-
-std::string Core::_cdai_temp_get_requested_file(std::string & buffer)
-{
-	std::size_t start = buffer.find('/');
-	std::size_t end = buffer.find(' ', start + 1);
-
-	return buffer.substr(start, end - start);
 }

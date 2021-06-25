@@ -6,20 +6,20 @@
 #    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/06/25 15:00:10 by cdai             ###   ########.fr        #
+#    Updated: 2021/06/25 15:54:51 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 PREFIX		=	./
 
 SRCS		=	$(addprefix $(PREFIX), \
+								main.cpp \
 								Server.cpp \
 								ServerSocket.cpp \
 								ClientSocket.cpp \
 								Core.cpp \
 								Response.cpp \
 								Reader.cpp \
-								main_to_test_request.cpp \
 								Request.cpp \
 								parse_request.cpp \
 								)

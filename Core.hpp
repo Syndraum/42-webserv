@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/25 15:02:51 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/25 15:53:33 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ private:
 	void				_acceptConnection();
 	void				_handle_request_and_detect_close_connection();
 	void				_detectResetServerPollFD();
-	std::string			_cdai_temp_get_requested_file(std::string & buffer);
 
 	std::vector<Server>	_servers;
 	int					_worker;

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/23 12:41:14 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/25 15:51:09 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ class Request
 		void						set_headers(map<string, string> const &rhs);
 		void						add_header(pair<string, string> const &rhs);
 
-		void						print_debug() const;
+//		void						print_debug() const;
 };
 
 #endif

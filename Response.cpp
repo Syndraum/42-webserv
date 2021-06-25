@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/25 15:07:02 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/25 16:12:00 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,21 @@ Response &	Response::setBody(std::string & filename)
 	Reader	file_reader(filename);
 	file_reader.open();
 	file_reader.to_string(_body);
+
+	// std::to_string is c++11
 	std::stringstream ss;
 	ss << file_reader.get_length();
-
 	addHeader("Content-Length", ss.str());
+
 	file_reader.close();
+
 	return *this;
+}
+
+Response & Response::set404(std::string & filename)
+{
+	_code = 404;
+	return setBody(filename);
 }
 
 std::string	Response::_1xx__response(int code)
