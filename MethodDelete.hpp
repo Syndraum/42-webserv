@@ -12,7 +12,7 @@ public:
 	MethodDelete(void);
 	virtual ~MethodDelete(void);
 
-	virtual void action(const Request &, Response &) const;
+	virtual void action(const Request &, Response &);
 
 private:
 

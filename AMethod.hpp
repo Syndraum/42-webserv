@@ -9,6 +9,8 @@
 
 class AMethod
 {
+protected:
+	AMethod(void);
 	AMethod &	operator=(AMethod const &rhs);
 	AMethod(AMethod const & src);
 	
@@ -16,10 +18,10 @@ class AMethod
 
 public:
 
-	AMethod(void);
+	AMethod(std::string name);
 	virtual ~AMethod(void);
 
-	virtual void	action(const Request &, Response &) const = 0;
+	virtual void	action(const Request &, Response &) = 0;
 
 };
 

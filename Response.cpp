@@ -95,7 +95,7 @@ Response & Response::setCode(int code)
 }
 
 //cdai setBody
-Response &	Response::setBody(std::string & filename)
+Response &	Response::setBody(const std::string & filename)
 {
 	Reader	file_reader(filename);
 	file_reader.open();

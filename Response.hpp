@@ -38,7 +38,7 @@ public:
 	void		sendResponse(int fd);
 	std::string	getMessage(int code);
 	Response &	setCode(int code);
-	Response &	setBody(std::string & filename);
+	Response &	setBody(const std::string & filename);
 
 private:
 
