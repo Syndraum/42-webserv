@@ -33,9 +33,11 @@ public:
 	Response &	operator=(Response const &rhs);
 
 	Response &	addHeader(std::string name, std::string content);
+	void		clearHeader();
 	std::string	getResponse();
 	void		sendResponse(int fd);
 	std::string	getMessage(int code);
+	Response &	setCode(int code);
 	Response &	setBody(std::string & filename);
 
 private:

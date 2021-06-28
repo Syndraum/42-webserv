@@ -44,6 +44,11 @@ Response & Response::addHeader(std::string name, std::string content)
 	return *this;
 }
 
+void	Response::clearHeader()
+{
+	_headers.clear();
+}
+
 std::string	Response::getResponse()
 {
 	std::stringstream ss;
@@ -82,6 +87,11 @@ std::string Response::getMessage(int code)
 		return (_1xx__response(code));
 	else
 		throw std::exception();
+}
+
+Response & Response::setCode(int code)
+{
+	_code = code;
 }
 
 //cdai setBody
