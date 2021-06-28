@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/25 18:14:53 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/28 19:12:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,17 @@ int		main()
 	std::cout << "fd: " << fd << std::endl;
 	std::string str;
 	DevSocket socket(fd);
-	socket.get_next_line(str);
-	std::cout << str << std::endl;
+	int gnl_ret = 1;
 
-	socket.get_next_line(str);
-	std::cout << str << std::endl;
+//	for (int i = 0; i < 80; i++)
+	while ((gnl_ret = socket.get_next_line(str)))
+	{
+		std::cout << "gnl_ret: " << gnl_ret << std::endl;
+		std::cout << "str: " << str << std::endl;
+	}
+	std::cout << "gnl_ret: " << gnl_ret << std::endl;
+	std::cout << "str: " << str << std::endl;
 
-	socket.get_next_line(str);
-	std::cout << str << std::endl;
 
 	Core core = Core();
 	core.addServer()

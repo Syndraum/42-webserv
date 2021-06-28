@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/06/25 18:15:46 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/28 19:11:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,49 @@ void	ASocket::set_socket(int socket)
 
 int		ASocket::get_next_line(std::string & str)
 {
-	static char buffer[1024] = {0};
-	std::string line;
-	int ret = 0;
+	int	response = 2;
+	int ret = 1;
+	static char buffer[BUFFER_SIZE];
 
-	if (!buffer[0])
+	std::string temp("");
+	size_t found;
+	str = "";
+
+	while (response > 1)
 	{
-//	ret = recv(_socket, buffer, 1023, 0);
-	ret = read(_socket, buffer, 1023);
-	buffer[ret] = 0;
+		temp += buffer;
+		found = temp.find("\r\n");
+//		std::cout << "temp: " << temp << std::endl;
+//		std::cout << "found: " << found << std::endl;
+		if (ret == 0)
+		{
+			str = temp;
+			response = 0;
+			break;
+		}
+		else if (found == std::string::npos)
+		{
+			ret = read(_socket, buffer, BUFFER_SIZE - 1);
+			buffer[ret] = 0;
+		}
+		else
+		{
+			// strdup ou substr
+			temp.copy(buffer, found, 0);
+			buffer[found] = 0;
+			str = buffer;
+
+			response = 1;
+			break;
+		}
 	}
-	line = buffer;
-//	size_t found = line.find("\r\n");
-	size_t found = line.find("\n");
-	line.copy(buffer, ret - found, found + 1);
-	buffer[ret - found - 1] = 0;
 
-//	std::cout << "buffer: " << buffer << std::endl;
 
-	str = line.substr(0, found);
-	return 0;
+	if (temp.length() > found)
+	{
+		temp.copy(buffer, temp.length() - found - 2, found + 2);
+		buffer[temp.length() - found - 2] = 0;
+	}
+
+	return response;
 }

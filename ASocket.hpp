@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:44:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/06/25 17:45:37 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/28 19:06:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include <netinet/in.h>
 # include <iostream>
 # include <unistd.h>
+
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 3
+#endif
 
 class ASocket
 {
