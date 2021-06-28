@@ -2,10 +2,11 @@
 # define AMETHOD
 
 # include <string>
-# include "Request.hpp"
 # include "Response.hpp"
 # include <cstdio>
 # include <exception>
+
+class Request;
 
 class AMethod
 {
@@ -24,5 +25,7 @@ public:
 	virtual void	action(const Request &, Response &) = 0;
 
 };
+
+# include "Request.hpp"
 
 #endif

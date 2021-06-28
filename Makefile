@@ -22,6 +22,8 @@ SRCS		=	$(addprefix $(PREFIX), \
 								main_to_test_request.cpp \
 								Request.cpp \
 								BuilderRequest.cpp \
+								AMethod.cpp \
+								MethodGet.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}

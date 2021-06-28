@@ -15,9 +15,6 @@
 Request::Request()
 {}
 
-Request::Request(int method, std::string const &path, std::string const &version, std::map<std::string, std::string> const &headers)
-: _method(method), _path(path), _version(version), _headers(headers)
-{}
 
 Request::Request(Request const &rhs)
 {
@@ -36,17 +33,21 @@ Request const 				&Request::operator=(Request const &rhs)
 	return (*this);
 }
 
-int							Request::get_method() const { return (_method); }
+AMethod *						Request::get_method() const { return (_method); }
 std::string const				&Request::get_path() const { return (_path); }
 std::string const				&Request::get_version() const { return (_version); }
 std::map<std::string, std::string> const	&Request::get_headers() const { return (_headers); }
 std::string const				&Request::get_header(std::string const &key) { return (_headers[key]); }
 
-void						Request::set_method(int rhs){ _method = rhs; }
+void						Request::set_method(AMethod * rhs){ _method = rhs; }
 void						Request::set_path(std::string const &rhs){ _path = rhs; }
 void						Request::set_version(std::string const &rhs){ _version = rhs; }
 void						Request::set_headers(std::map<std::string, std::string> const &rhs){ _headers = rhs; }
 void						Request::add_header(std::pair<std::string, std::string> const &rhs){ _headers.insert(rhs); }
+void						Request::action(Response & response)
+{
+		_method->action(*this, response);
+}
 
 void						Request::print_debug() const //TMP
 {

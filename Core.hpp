@@ -18,6 +18,8 @@
 # include "ClientSocket.hpp"
 # include <poll.h>
 # include "Response.hpp"
+# include "Request.hpp"
+# include "MethodGet.hpp"
 // cdai_temp
 # include <fstream>
 

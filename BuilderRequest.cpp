@@ -23,17 +23,17 @@ int		BuilderRequest::add_method(std::string line)
 {
 	if (!line.compare(0, 4, "GET "))
 	{
-		_request->set_method(GET);
+		// _request->set_method(GET);
 		return (4);
 	}
 	else if (!line.compare(0, 5, "POST "))
 	{
-		_request->set_method(POST);
+		// _request->set_method(POST);
 		return (5);
 	}
 	else if (!line.compare(0, 7, "DELETE "))
 	{
-		_request->set_method(DELETE);
+		// _request->set_method(DELETE);
 		return (7);
 	}
 	else

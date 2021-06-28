@@ -5,12 +5,11 @@
 
 class MethodGet : public AMethod
 {
-	MethodGet(void);
 	MethodGet &	operator=(MethodGet const &rhs);
-public:
-
 	MethodGet(MethodGet const & src);
-	virtual ~MethodGet(void);
+public:
+	MethodGet(void);
+	~MethodGet(void);
 
 	virtual void action(const Request &, Response &);
 

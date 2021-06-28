@@ -92,6 +92,7 @@ std::string Response::getMessage(int code)
 Response & Response::setCode(int code)
 {
 	_code = code;
+	return *this;
 }
 
 //cdai setBody

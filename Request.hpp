@@ -20,35 +20,40 @@
 # define VERSION "HTTP/1.1"
 
 # include "includes.hpp"
+# include "Response.hpp"
+
+class AMethod;
 
 class Request
 {
 	private:
-		int						_method;
+		AMethod	*					_method;
 		std::string					_path;
 		std::string					_version;
 		std::map<std::string, std::string>		_headers;
 
 	public:
 		Request();
-		Request(int method, std::string const &path, std::string const &version, std::map<std::string, std::string> const &headers);
 		Request(Request const &rhs);
 		~Request();
 		Request const &operator=(Request const &rhs);
 
-		int							get_method() const;
+		AMethod *						get_method() const;
 		std::string const				&get_path() const;
 		std::string const				&get_version() const;
 		std::map<std::string, std::string> const	&get_headers() const;
 		std::string const				&get_header(std::string const &key);
 
-		void						set_method(int rhs);
+		void						set_method(AMethod * rhs);
 		void						set_path(std::string const &rhs);
 		void						set_version(std::string const &rhs);
 		void						set_headers(std::map<std::string, std::string> const &rhs);
 		void						add_header(std::pair<std::string, std::string> const &rhs);
+		void						action(Response &);
 
 		void						print_debug() const;
 };
+
+# include "AMethod.hpp"
 
 #endif

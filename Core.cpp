@@ -166,18 +166,27 @@ void	Core::_handle_request_and_detect_close_connection()
 
 			std::cout << buffer << std::endl;
 
-
-			// TODO !! to update with Request Class
-			std::string ROOT = ".";
-			std::string request(buffer);
-			std::string requested_file = _cdai_temp_get_requested_file(request);
-			std::string filename = ROOT + requested_file;
-			if (filename == "./")
-				filename = "./index.html";
-
-			// create and send response
+			Request request;
 			Response response(200);
-			response.setBody(filename);
+			MethodGet get_m;
+
+			request.set_method(&get_m);
+			request.set_path("./index.html");
+			request.set_version("HTTP/1.1");
+
+			request.action(response);
+
+			// // TODO !! to update with Request Class
+			// std::string ROOT = ".";
+			// std::string request(buffer);
+			// std::string requested_file = _cdai_temp_get_requested_file(request);
+			// std::string filename = ROOT + requested_file;
+			// if (filename == "./")
+			// 	filename = "./index.html";
+
+			// // create and send response
+			// Response response(200);
+			// response.setBody(filename);
 
 			// need client socket
 			ClientSocket & cs = _client.back();
