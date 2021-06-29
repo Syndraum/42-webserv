@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/06/28 19:11:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/06/29 12:08:37 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,16 @@ int	ASocket::get_socket(void) const
 void	ASocket::set_socket(int socket)
 {
 	_socket = socket;
+}
+
+sockaddr_in	& ASocket::get_address(void)
+{
+	return this->_address;
+}
+
+void		ASocket::set_address(sockaddr_in & Address)
+{
+	this->_address = Address;
 }
 
 int		ASocket::get_next_line(std::string & str)
@@ -49,7 +59,7 @@ int		ASocket::get_next_line(std::string & str)
 		}
 		else if (found == std::string::npos)
 		{
-			ret = read(_socket, buffer, BUFFER_SIZE - 1);
+			ret = recv(_socket, buffer, BUFFER_SIZE - 1, MSG_DONTWAIT);
 			buffer[ret] = 0;
 		}
 		else

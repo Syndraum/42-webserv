@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/28 19:12:39 by user42           ###   ########.fr       */
+/*   Updated: 2021/06/29 14:50:16 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,29 @@
 #include "Core.hpp"
 #include "Server.hpp"
 #include "includes.hpp"
-#include "DevSocket.hpp"
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
+// file to delete
+//#include "DevSocket.hpp"
 int		main()
 {
-	int fd = open("./main.cpp", O_RDONLY);
-	std::cout << "fd: " << fd << std::endl;
-	std::string str;
-	DevSocket socket(fd);
-	int gnl_ret = 1;
-
-//	for (int i = 0; i < 80; i++)
-	while ((gnl_ret = socket.get_next_line(str)))
-	{
-		std::cout << "gnl_ret: " << gnl_ret << std::endl;
-		std::cout << "str: " << str << std::endl;
-	}
-	std::cout << "gnl_ret: " << gnl_ret << std::endl;
-	std::cout << "str: " << str << std::endl;
+//GNL tester, from cdai
+//	int fd = open("./main.cpp", O_RDONLY);
+//	std::cout << "fd: " << fd << std::endl;
+//	std::string str;
+//	DevSocket socket(fd);
+//	int gnl_ret = 1;
+//
+//	while ((gnl_ret = socket.get_next_line(str)))
+//	{
+//		std::cout << "gnl_ret: " << gnl_ret << std::endl;
+//		std::cout << "str: " << str << std::endl;
+//	}
+//	std::cout << "gnl_ret: " << gnl_ret << std::endl;
+//	std::cout << "str: " << str << std::endl;
 
 
 	Core core = Core();
@@ -46,6 +47,7 @@ int		main()
 		.addPort(3333)
 		;
 	core.start();
+
 //maia's part
 //#include "includes.hpp"
 //

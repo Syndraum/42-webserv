@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/25 16:32:42 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/29 15:05:50 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	Core::start(){
 		}
 		for (size_t i = 0; i < _client.size(); i++)
 		{
-			fd = _client[i].getSocket();
+			fd = _client[i].get_socket();
 			_fds[_nbFds].fd = fd;
 			_fds[_nbFds].events = POLLOUT;
 			_fds[_nbFds].revents = 0;
@@ -126,14 +126,14 @@ void	Core::_acceptConnection()
 		{
 			_client.push_back(ClientSocket());
 			ClientSocket & cs = _client.back();
-			if ((new_socket = accept(fd, &cs.getAddress() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
+			if ((new_socket = accept(fd, (struct sockaddr *)&cs.get_address() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
 			{
 				perror("accept failed");
 				exit(EXIT_FAILURE);
 			}
 			setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
 			std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
-			cs.setSocket(new_socket);
+			cs.set_socket(new_socket);
 			std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
 		}
 	}
@@ -143,39 +143,20 @@ void	Core::_handle_request_and_detect_close_connection()
 {
 	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
 	{
-		int fd = it->getSocket();  
-		int valread;
-		char buffer[1025];
-		int fds_index;
+//		int valread;
+//		char buffer[1025];
 		Request request;
 
-		for (unsigned long i = 0; i < _serverSockets.size(); i++)
-			if (fd == _fds[i].fd)
-				fds_index = i;
 		//Check if it was for closing , and also read the 
 		//incoming message 
-		if ((valread = recv( fd , buffer, 1024, MSG_DONTWAIT)) == 0)  
-		//if ((valread = recv( fd , buffer, 1024, 0)) == 0)  
-		{
-			std::cout << "Host disconnected" << std::endl;  
 
-			close( fd );  
-			_client.erase(it);  
-			break;
-		}
+		int parse_ret = parse_request(&request, *it);
+		std::cout << "parse_request: " <<  parse_ret << std::endl;
 
-		else if(valread > 0)
-		{
-			// debug
-			buffer[valread] = '\0';
-			std::cout << buffer << std::endl;
+		std::cout << "method: " << request.get_method() << std::endl;
 
-			// parse_request ?
-			std::stringstream ss;
-			ss << buffer;
-			parse_request(ss, &request);
-
-			// get requested file path
+		//if (parse_ret == OK)
+		//{
 			std::string ROOT = "./webserviette_root";
 			std::string filename = ROOT + request.get_path();
 
@@ -197,22 +178,78 @@ void	Core::_handle_request_and_detect_close_connection()
 				response.set404(filename);
 			}
 
-			// need client socket
 			ClientSocket & cs = _client.back();
-			int clientSocket = cs.getSocket();
+			int clientSocket = cs.get_socket();
 
+			std::cout << "clientSocket: " << clientSocket << std::endl;
 			response.sendResponse(clientSocket);
 
+//		close( fd );  
+//		_client.erase(it);  
+		break;
+		//}
 
-
-
-			// message for debug, to remove later
-			std::cout << "Server still connected" << std::endl << std::endl;
-
-			//close( fd );  
-			//_client.erase(it);  
-			break;
-		}
+//		if ((valread = recv( fd , buffer, 1024, MSG_DONTWAIT)) == 0)  
+//		//if ((valread = recv( fd , buffer, 1024, 0)) == 0)  
+//		{
+//			std::cout << "Host disconnected" << std::endl;  
+//
+//			close( fd );  
+//			_client.erase(it);  
+//			break;
+//		}
+//
+//		else if(valread > 0)
+//		{
+//
+//			// debug
+//			buffer[valread] = '\0';
+//			std::cout << buffer << std::endl;
+//
+//			// parse_request ?
+//			std::stringstream ss;
+//			ss << buffer;
+//			parse_request(ss, &request);
+//
+//			// get requested file path
+//			std::string ROOT = "./webserviette_root";
+//			std::string filename = ROOT + request.get_path();
+//
+//			std::cout << filename << std::endl;
+//			if (filename == ROOT + "/")
+//				filename += "index.html";
+//
+//			// create and send response
+//			Response response(200);
+//			try
+//			{
+//				response.setBody(filename);
+//			}
+//			catch (std::exception & e)
+//			{
+//				std::cout << e.what() << std::endl;
+//
+//				filename = ROOT + "/404.html";
+//				response.set404(filename);
+//			}
+//
+//			// need client socket
+//			ClientSocket & cs = _client.back();
+//			int clientSocket = cs.get_socket();
+//
+//			std::cout << "clientSocket: " << clientSocket << std::endl;
+//			response.sendResponse(clientSocket);
+//
+//
+//
+//
+//			// message for debug, to remove later
+//			std::cout << "Server still connected" << std::endl << std::endl;
+//
+//			//close( fd );  
+//			//_client.erase(it);  
+//			break;
+//		}
 	}
 }
 
