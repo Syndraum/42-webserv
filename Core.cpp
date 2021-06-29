@@ -169,9 +169,17 @@ void	Core::_handle_request_and_detect_close_connection()
 
 			request->action(response);
 		}
-		catch (std::exception &e)
+		catch (BuilderRequest::BadResquest &e)
 		{
-			response.setCode(404).clearHeader();
+			response.setCode(400).clearHeader();
+		}
+		catch (BuilderRequest::BadHttpVesion &e)
+		{
+			response.setCode(505).clearHeader();
+		}
+		catch (BuilderRequest::MethodNotImplemented &e)
+		{
+			response.setCode(501).clearHeader();
 		}
 		// std::cout << "parse_request: " <<  parse_ret << std::endl;
 
