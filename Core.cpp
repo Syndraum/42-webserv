@@ -13,7 +13,6 @@
 #include "Core.hpp"
 #include <cstring>
 #include <fstream>
-#include "Request.hpp"
 #include "includes.hpp"
 
 Core::Core(void) :
@@ -22,6 +21,10 @@ Core::Core(void) :
 	_nbActive(0)
 {
 	_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
+	_methods
+		.add_method(new MethodGet())
+		.add_method(new MethodDelete())
+		;
 }
 
 Core::Core(Core const & src)
@@ -30,7 +33,9 @@ Core::Core(Core const & src)
 }
 
 Core::~Core(void)
-{}
+{
+
+}
 
 Core &	Core::operator=(Core const & rhs)
 {
@@ -113,23 +118,6 @@ void	Core::print()
 		std::cout << "no Server found \n";
 }
 
-Core	& Core::add_method(AMethod * method)
-{
-	_methods.push_back(method);
-	return *this;
-}
-
-AMethod	*	Core::get_method(const std::string & name)
-{
-	std::vector<AMethod *>::iterator ite = _methods.end();
-	for (std::vector<AMethod *>::iterator it = _methods.begin(); it != ite; it++)
-	{
-		if ((*it)->get_name() == name)
-			return (*it);
-	}
-	return (0);
-}
-
 void	Core::_acceptConnection()
 {
 	int new_socket = -1;
@@ -174,7 +162,6 @@ void	Core::_handle_request_and_detect_close_connection()
 			br.reset();
 			std::cout << "path : " << request->get_path() << std::endl;
 			std::cout << "request : " << request->get_method()->get_name() << std::endl;
-			// request->set_method(get_method("GET"));
 			if (request->get_path() == "/")
 				request->set_path("/index.html");
 			request->set_path("./webserviette_root" + request->get_path());

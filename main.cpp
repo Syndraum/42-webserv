@@ -44,13 +44,6 @@ int		main()
 
 
 	Core core = Core();
-	MethodDelete	md;
-	MethodGet		mg;
-
-	core
-		.add_method(&mg)
-		.add_method(&md)
-		;
 	core.addServer()
 		.addPort(8888)
 		.addPort(3333)

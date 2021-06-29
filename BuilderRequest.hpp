@@ -4,6 +4,7 @@
 # include "Request.hpp"
 # include "ASocket.hpp"
 # include <exception>
+# include "MethodLibrary.hpp"
 
 class BuilderRequest
 {
@@ -29,7 +30,7 @@ public:
 			return "Not Implemented";
 		}
 	};
-	BuilderRequest(std::vector<AMethod *>	&);
+	BuilderRequest(MethodLibrary	&);
 	virtual ~BuilderRequest(void);
 
 	int		add_method(std::string line);
@@ -43,7 +44,7 @@ public:
 	void	reset();
 private:
 	Request	*	_request;
-	std::vector<AMethod *>	& _list_method;
+	MethodLibrary	& _methods;
 	
 };
 

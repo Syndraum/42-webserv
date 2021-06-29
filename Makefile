@@ -27,6 +27,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								AMethod.cpp \
 								MethodGet.cpp \
 								MethodDelete.cpp \
+								MethodLibrary.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}

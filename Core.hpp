@@ -21,6 +21,8 @@
 # include "Request.hpp"
 # include "BuilderRequest.hpp"
 # include "MethodGet.hpp"
+# include "MethodDelete.hpp"
+# include "MethodLibrary.hpp"
 // cdai_temp
 # include <fstream>
 
@@ -57,7 +59,7 @@ private:
 	int					_SIZE_SOCK_ADDR;
 	struct pollfd *		_fds;
 	int					_nbFds;
-	std::vector<AMethod *>	_methods;
+	MethodLibrary		_methods;
 };
 
 #endif
