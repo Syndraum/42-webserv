@@ -7,6 +7,9 @@
 
 class BuilderRequest
 {
+	BuilderRequest(void);
+	BuilderRequest &	operator=(BuilderRequest const &rhs);
+	BuilderRequest(BuilderRequest const & src);
 public:
 	class BadResquest : public std::exception
 	{
@@ -26,11 +29,8 @@ public:
 			return "Not Implemented";
 		}
 	};
-	
-	BuilderRequest(void);
-	BuilderRequest(BuilderRequest const & src);
+	BuilderRequest(std::vector<AMethod *>	&);
 	virtual ~BuilderRequest(void);
-	BuilderRequest &	operator=(BuilderRequest const &rhs);
 
 	int		add_method(std::string line);
 	int		add_path(std::string line);
@@ -43,6 +43,7 @@ public:
 	void	reset();
 private:
 	Request	*	_request;
+	std::vector<AMethod *>	& _list_method;
 	
 };
 

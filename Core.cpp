@@ -162,7 +162,7 @@ void	Core::_handle_request_and_detect_close_connection()
 	{
 //		int valread;
 //		char buffer[1025];
-		BuilderRequest	br;
+		BuilderRequest	br(_methods);
 		Request * request = 0;
 		Response response(200);
 
@@ -173,7 +173,8 @@ void	Core::_handle_request_and_detect_close_connection()
 			request = br.get_request();
 			br.reset();
 			std::cout << "path : " << request->get_path() << std::endl;
-			request->set_method(get_method("GET"));
+			std::cout << "request : " << request->get_method()->get_name() << std::endl;
+			// request->set_method(get_method("GET"));
 			if (request->get_path() == "/")
 				request->set_path("/index.html");
 			request->set_path("./webserviette_root" + request->get_path());

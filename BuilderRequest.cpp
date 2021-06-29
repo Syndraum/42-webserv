@@ -1,43 +1,46 @@
 #include "BuilderRequest.hpp"
 
-BuilderRequest::BuilderRequest(void) : _request(new Request()) {}
-
-BuilderRequest::BuilderRequest(BuilderRequest const & src)
-{
-	*this = src;
-}
+BuilderRequest::BuilderRequest(std::vector<AMethod *>	& vector) : _request(new Request()), _list_method(vector) {}
 
 BuilderRequest::~BuilderRequest(void)
 {
 	delete _request;
 }
 
-BuilderRequest &	BuilderRequest::operator=(BuilderRequest const & rhs)
-{
-	if (this != &rhs)
-		;
-	return *this;
-}
-
 int		BuilderRequest::add_method(std::string line)
 {
+	std::string name;
+	int ret = 0;
+
+
 	if (!line.compare(0, 4, "GET "))
 	{
-		// _request->set_method(GET);
-		return (4);
+		name = "GET";
+		ret = 4;
 	}
 	else if (!line.compare(0, 5, "POST "))
 	{
-		// _request->set_method(POST);
-		return (5);
+		name = "POST";
+		ret = 5;
 	}
 	else if (!line.compare(0, 7, "DELETE "))
 	{
-		// _request->set_method(DELETE);
-		return (7);
+		name = "DELETE";
+		ret = 7;
 	}
 	else
 		throw MethodNotImplemented();
+	std::vector<AMethod *>::iterator ite = _list_method.end();
+	for (std::vector<AMethod *>::iterator it = _list_method.begin(); it != ite; it++)
+	{
+		// std::cout << "try : " << (*it)->get_name() << std::endl;
+		if ((*it)->get_name() == name){
+			_request->set_method(*it);
+			break;
+		}
+			// return (*it);
+	}
+	return (ret);
 }
 
 int		BuilderRequest::add_path(std::string line)
