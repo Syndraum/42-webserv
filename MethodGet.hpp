@@ -9,7 +9,7 @@ class MethodGet : public AMethod
 	MethodGet(MethodGet const & src);
 public:
 	MethodGet(void);
-	~MethodGet(void);
+	virtual ~MethodGet(void);
 
 	virtual void action(const Request &, Response &);
 

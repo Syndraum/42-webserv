@@ -37,6 +37,8 @@ public:
 	void	addServer(Server & server);
 	Server	&	addServer();
 	Server	&	getServer(int index = 0);
+	Core	&	add_method(AMethod *);
+	AMethod	*	get_method(const std::string &);
 
 	void	print();
 
@@ -55,6 +57,7 @@ private:
 	int					_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
 	struct pollfd *		_fds;
 	int					_nbFds;
+	std::vector<AMethod *>	_methods;
 };
 
 #endif

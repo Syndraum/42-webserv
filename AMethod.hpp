@@ -22,6 +22,8 @@ public:
 	AMethod(std::string name);
 	virtual ~AMethod(void);
 
+	const std::string & get_name() const;
+
 	virtual void	action(const Request &, Response &) = 0;
 
 };

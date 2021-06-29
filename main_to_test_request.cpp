@@ -15,10 +15,19 @@
 
 #include "Core.hpp"
 #include "Server.hpp"
+#include "MethodGet.hpp"
+#include "MethodDelete.hpp"
 
 int		main()
 {
 	Core core = Core();
+	MethodDelete	md;
+	MethodGet		mg;
+
+	core
+		.add_method(&mg)
+		.add_method(&md)
+		;
 	core.addServer();
 	core.getServer()
 		.addPort(8888)

@@ -110,6 +110,23 @@ void	Core::print()
 		std::cout << "no Server found \n";
 }
 
+Core	& Core::add_method(AMethod * method)
+{
+	_methods.push_back(method);
+	return *this;
+}
+
+AMethod	*	Core::get_method(const std::string & name)
+{
+	std::vector<AMethod *>::iterator ite = _methods.end();
+	for (std::vector<AMethod *>::iterator it = _methods.begin(); it != ite; it++)
+	{
+		if ((*it)->get_name() == name)
+			return (*it);
+	}
+	return (0);
+}
+
 void	Core::_acceptConnection()
 {
 	int new_socket = -1;
@@ -168,25 +185,12 @@ void	Core::_handle_request_and_detect_close_connection()
 
 			Request request;
 			Response response(200);
-			MethodGet get_m;
 
-			request.set_method(&get_m);
+			request.set_method(get_method("GET"));
 			request.set_path("./index.html");
 			request.set_version("HTTP/1.1");
 
 			request.action(response);
-
-			// // TODO !! to update with Request Class
-			// std::string ROOT = ".";
-			// std::string request(buffer);
-			// std::string requested_file = _cdai_temp_get_requested_file(request);
-			// std::string filename = ROOT + requested_file;
-			// if (filename == "./")
-			// 	filename = "./index.html";
-
-			// // create and send response
-			// Response response(200);
-			// response.setBody(filename);
 
 			// need client socket
 			ClientSocket & cs = _client.back();

@@ -8,3 +8,8 @@ AMethod::~AMethod(void)
 {
 	
 }
+
+const std::string & AMethod::get_name() const
+{
+	return (_name);
+}

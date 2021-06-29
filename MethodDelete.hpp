@@ -5,8 +5,8 @@
 
 class MethodDelete : public AMethod
 {
-	MethodDelete(MethodDelete const & src);
 	MethodDelete &	operator=(MethodDelete const &rhs);
+	MethodDelete(MethodDelete const & src);
 public:
 
 	MethodDelete(void);
