@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/24 21:34:07 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/25 15:51:09 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ class Request
 		void						add_header(std::pair<std::string, std::string> const &rhs);
 		void						action(Response &);
 
-		void						print_debug() const;
+//		void						print_debug() const;
 };
 
 # include "AMethod.hpp"

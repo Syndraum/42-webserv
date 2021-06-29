@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/23 15:54:22 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/25 15:53:33 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <poll.h>
 # include "Response.hpp"
 # include "Request.hpp"
+# include "BuilderRequest.hpp"
 # include "MethodGet.hpp"
 // cdai_temp
 # include <fstream>
@@ -47,14 +48,13 @@ private:
 	void				_acceptConnection();
 	void				_handle_request_and_detect_close_connection();
 	void				_detectResetServerPollFD();
-	std::string			_cdai_temp_get_requested_file(std::string & buffer);
 
 	std::vector<Server>	_servers;
 	int					_worker;
 	int					_nbActive;
 	std::vector<int>	_serverSockets;
 	client_vector		_client;
-	int					_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
+	int					_SIZE_SOCK_ADDR;
 	struct pollfd *		_fds;
 	int					_nbFds;
 	std::vector<AMethod *>	_methods;

@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/11 16:28:56 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/24 21:37:26 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/25 15:29:22 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ void						Request::action(Response & response)
 		_method->action(*this, response);
 }
 
-void						Request::print_debug() const //TMP
-{
-	std::cerr << "METHOD CODE : " << _method << " PATH : \"" << _path << "\" " << _version << std::endl;
-    std::cerr << "HEADERS : " << std::endl;
-
-    for (auto& it: _headers)
-        std::cout << "\"" << it.first << "\" - \"" << it.second << "\"" << std::endl;
-
-}
+//void						Request::print_debug() const //TMP
+//{
+//	cerr << "METHOD CODE : " << _method << " PATH : \"" << _path << "\" " << _version << endl;
+//    cerr << "HEADERS : " << endl;
+//
+//    for (auto& it: _headers)
+//        cout << "\"" << it.first << "\" - \"" << it.second << "\"" << endl;
+//
+//}

@@ -2,6 +2,7 @@
 # define BUILDERREQUEST
 
 # include "Request.hpp"
+# include "ASocket.hpp"
 # include <exception>
 
 class BuilderRequest
@@ -35,8 +36,8 @@ public:
 	int		add_path(std::string line);
 	int		add_version(std::string line);
 	void	first_line(std::string line);
-	void	parse_headers(std::string line);
-	void	parse_request(std::istream &fd);
+	bool	parse_headers(std::string line);
+	void	parse_request(ASocket &);
 
 	Request * get_request() const;
 	void	reset();

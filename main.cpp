@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_to_test_request.cpp                           :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/24 22:58:23 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/06/29 14:50:16 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,32 @@
 #include "Server.hpp"
 #include "MethodGet.hpp"
 #include "MethodDelete.hpp"
+#include "includes.hpp"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+// file to delete
+//#include "DevSocket.hpp"
 int		main()
 {
+//GNL tester, from cdai
+//	int fd = open("./main.cpp", O_RDONLY);
+//	std::cout << "fd: " << fd << std::endl;
+//	std::string str;
+//	DevSocket socket(fd);
+//	int gnl_ret = 1;
+//
+//	while ((gnl_ret = socket.get_next_line(str)))
+//	{
+//		std::cout << "gnl_ret: " << gnl_ret << std::endl;
+//		std::cout << "str: " << str << std::endl;
+//	}
+//	std::cout << "gnl_ret: " << gnl_ret << std::endl;
+//	std::cout << "str: " << str << std::endl;
+
+
 	Core core = Core();
 	MethodDelete	md;
 	MethodGet		mg;
@@ -28,12 +51,12 @@ int		main()
 		.add_method(&mg)
 		.add_method(&md)
 		;
-	core.addServer();
-	core.getServer()
+	core.addServer()
 		.addPort(8888)
 		.addPort(3333)
 		;
 	core.start();
+
 //maia's part
 // #include "includes.hpp"
 // #include "BuilderRequest.hpp"
