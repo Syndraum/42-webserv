@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:14:00 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/30 15:08:44 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/30 16:42:11 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ public:
 	void			listen_socket(int worker_connection);
 
 	ServerSocket *	set_port(int port);
-	int				get_port();
+	int				get_port() const;
 	void			print();
 
 private:

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/30 15:14:44 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/30 16:52:38 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,20 @@ Server	&	Core::add_server()
 	return(_servers.back());
 }
 
-Server	&	Core::get_server(int index)
+Server	const &	Core::get_server(int index) const
 {
 	return (_servers.at(index));
+}
+
+int			Core::get_worker(void) const
+{
+	return (_worker);
+}
+
+Core	&	Core::set_worker(int worker)
+{
+	_worker = worker;
+	return(*this);
 }
 
 void	Core::print()

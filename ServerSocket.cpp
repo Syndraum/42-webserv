@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:14:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/30 15:08:41 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/30 16:42:01 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ ServerSocket *	ServerSocket::set_port(int port)
 	return this;
 }
 
-int				ServerSocket::get_port()
+int				ServerSocket::get_port() const
 {
 	return (_port);
 }

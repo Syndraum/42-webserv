@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/30 15:05:35 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/30 16:51:38 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ public:
 	Server &	add_port(int port);
 	void	start(int worker);
 
-	ServerSocket &		get_server_socket(int port);
-	std::vector<int> &	get_active_socket();
+	ServerSocket const &	get_server_socket(int port) const;
+	std::vector<int> const &	get_active_socket() const;
 	
 	Server &	set_name(std::string name);
 	Server &	set_root(std::string root);

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/30 14:42:58 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/30 16:53:02 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,11 @@ public:
 	void	start();
 	void	add_server(Server & server);
 	Server	&	add_server();
-	Server	&	get_server(int index = 0);
+	Server	const &	get_server(int index = 0) const;
 	Core	&	add_method(AMethod *);
-	AMethod	*	get_method(const std::string &);
-
+	AMethod	*	get_method(const std::string &) const;
+	Core	&	set_worker(int);
+	int			get_worker(void) const;
 	void	print();
 
 private:

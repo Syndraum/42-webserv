@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/30 15:09:11 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/30 16:51:49 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ void	Server::start(int worker)
 	}
 }
 
-ServerSocket	& Server::get_server_socket(int port)
+ServerSocket const &Server::get_server_socket(int port) const
 {
 	return _server_sockets.at(port);
 }
 
-std::vector<int> &	Server::get_active_socket()
+std::vector<int> const &	Server::get_active_socket() const
 {
 	return _active_socket;
 }
