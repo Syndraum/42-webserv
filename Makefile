@@ -6,22 +6,28 @@
 #    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/06/24 19:03:59 by cdai             ###   ########.fr        #
+#    Updated: 2021/06/25 17:23:11 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 PREFIX		=	./
 
 SRCS		=	$(addprefix $(PREFIX), \
+								main.cpp \
 								Server.cpp \
+								ASocket.cpp \
+								DevSocket.cpp \
 								ServerSocket.cpp \
 								ClientSocket.cpp \
 								Core.cpp \
 								Response.cpp \
 								Reader.cpp \
-								main_to_test_request.cpp \
 								Request.cpp \
-								parse_request.cpp \
+								BuilderRequest.cpp \
+								AMethod.cpp \
+								MethodGet.cpp \
+								MethodDelete.cpp \
+								MethodLibrary.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}
@@ -30,7 +36,7 @@ DEPS		=	${OBJS:.o=.d}
 
 CXX			=	clang++
 
-CXXFLAGS	=	-Werror -Wextra -Wall -MMD
+CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98
 
 NAME 		=	webserv
 
