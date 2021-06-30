@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 11:23:19 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/23 12:46:24 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/06/29 14:47:54 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,20 @@ int		parse_headers(string line, Request *request)
 	return (OK);
 }
 
-int		parse_request(istream &fd, Request *request)
+int		parse_request(Request *request, ASocket & socket)
 {
 	string						line;
 	int							i;
     int                         ret;
+	int							gnl_ret;
 
 	i = 0;
-	while(getline(fd, line))
+	while((gnl_ret = socket.get_next_line(line)))
 	{
+//		std::cout << "gnl_ret: " << gnl_ret << std::endl;
+//		std::cout << "line: " << line << std::endl;
+
+		line += "\r"; // Maybe, we can remote this line ? (from cdai)
 		//check printable characters
 		if (i == 0)
         {
