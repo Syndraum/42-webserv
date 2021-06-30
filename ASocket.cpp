@@ -6,11 +6,16 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/06/29 12:08:37 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/30 19:05:03 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ASocket.hpp"
+
+ASocket::ASocket(void)
+{
+	reset_buffer();
+}
 
 ASocket::~ASocket(void)
 {}
@@ -39,7 +44,7 @@ int		ASocket::get_next_line(std::string & str)
 {
 	int	response = 2;
 	int ret = 1;
-	static char buffer[BUFFER_SIZE];
+//	static char buffer[BUFFER_SIZE];
 
 	std::string temp("");
 	size_t found;
@@ -47,7 +52,7 @@ int		ASocket::get_next_line(std::string & str)
 
 	while (response > 1)
 	{
-		temp += buffer;
+		temp += _buffer;
 		found = temp.find("\r\n");
 //		std::cout << "temp: " << temp << std::endl;
 //		std::cout << "found: " << found << std::endl;
@@ -55,31 +60,34 @@ int		ASocket::get_next_line(std::string & str)
 		{
 			str = temp;
 			response = 0;
-			break;
 		}
 		else if (found == std::string::npos)
 		{
-			ret = recv(_socket, buffer, BUFFER_SIZE - 1, MSG_DONTWAIT);
-			buffer[ret] = 0;
+			ret = recv(_socket, _buffer, BUFFER_SIZE - 1, MSG_DONTWAIT);
+			_buffer[ret] = 0;
 		}
 		else
 		{
 			// strdup ou substr
-			temp.copy(buffer, found, 0);
-			buffer[found] = 0;
-			str = buffer;
-
+			str = temp.substr(0, found);
 			response = 1;
-			break;
 		}
 	}
 
 
 	if (temp.length() > found)
 	{
-		temp.copy(buffer, temp.length() - found - 2, found + 2);
-		buffer[temp.length() - found - 2] = 0;
+		temp.copy(_buffer, temp.length() - found - 2, found + 2);
+		_buffer[temp.length() - found - 2] = 0;
 	}
 
 	return response;
+}
+
+void	ASocket::reset_buffer(void)
+{
+	for (int i = 0; i < BUFFER_SIZE; i++)
+	{
+		_buffer[i] = '\0';
+	}
 }

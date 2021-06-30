@@ -12,6 +12,7 @@ int		BuilderRequest::add_method(std::string line)
 	int ret = line.find(' ');
 	std::string name = line.substr(0, ret);
 
+	//std::cout << "name: " << name << std::endl;
 	_request->set_method(_methods.get_method(name));
 	if (!_request->get_method())
 		throw MethodNotImplemented();
@@ -66,7 +67,7 @@ void	BuilderRequest::parse_request(ASocket & socket)
 	while( gnl_ret && (gnl_ret = socket.get_next_line(line)))
 	{
 //		std::cout << "gnl_ret: " << gnl_ret << std::endl;
-//		std::cout << "line: " << line << std::endl;
+		std::cout << "line: " << line << std::endl;
 
 		line += "\r"; // Maybe, we can remote this line ? (from cdai)
 		//check printable characters
@@ -77,7 +78,10 @@ void	BuilderRequest::parse_request(ASocket & socket)
 		}
 		else{
 			if (!parse_headers(line))
+			{
+				socket.reset_buffer();
 				gnl_ret = 0;
+			}
 		}
 	}
 }

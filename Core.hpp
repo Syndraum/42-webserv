@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/25 15:53:33 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/30 17:36:56 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ public:
 	Server	&	getServer(int index = 0);
 	Core	&	add_method(AMethod *);
 	AMethod	*	get_method(const std::string &);
+	std::string get_path(std::string);
 
 	void	print();
 

@@ -6,7 +6,7 @@
 #    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/06/25 17:23:11 by cdai             ###   ########.fr        #
+#    Updated: 2021/06/30 17:59:11 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ DEPS		=	${OBJS:.o=.d}
 
 CXX			=	clang++
 
-CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98
+CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98 -g
 
 NAME 		=	webserv
 

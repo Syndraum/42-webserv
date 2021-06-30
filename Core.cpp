@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/29 15:05:50 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/30 19:02:43 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,9 @@ void	Core::_handle_request_and_detect_close_connection()
 	{
 //		int valread;
 //		char buffer[1025];
+//		Request request;
+//		int fd = it->get_socket();
+
 		BuilderRequest	br(_methods);
 		Request * request = 0;
 		Response response(200);
@@ -197,8 +200,8 @@ void	Core::_handle_request_and_detect_close_connection()
 			std::cout << "clientSocket: " << clientSocket << std::endl;
 			response.sendResponse(clientSocket);
 
-		close( it->get_socket() );  
-		_client.erase(it);  
+//		close( it->get_socket() );  
+//		_client.erase(it);  
 		break;
 		//}
 
@@ -220,13 +223,13 @@ void	Core::_handle_request_and_detect_close_connection()
 //			std::cout << buffer << std::endl;
 //
 //			// parse_request ?
-//			std::stringstream ss;
-//			ss << buffer;
-//			parse_request(ss, &request);
+////			std::stringstream ss;
+////			ss << buffer;
+////			parse_request(ss, &request);
 //
 //			// get requested file path
 //			std::string ROOT = "./webserviette_root";
-//			std::string filename = ROOT + request.get_path();
+//			std::string filename = ROOT + get_path(buffer);
 //
 //			std::cout << filename << std::endl;
 //			if (filename == ROOT + "/")
@@ -272,4 +275,14 @@ void	Core::_detectResetServerPollFD()
 		for (size_t i = 0; i < _serverSockets.size(); i++)
 			if (_fds[i].revents & POLLIN)
 				_fds[i].revents = 0;
+}
+
+std::string Core::get_path(std::string buffer)
+{
+	std::string path;
+	size_t start = buffer.find("/");
+	size_t end = buffer.find(" HTTP");
+
+	path = buffer.substr(start, end - start);
+	return path;
 }
