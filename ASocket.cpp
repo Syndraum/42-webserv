@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ASocket.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/06/29 12:08:37 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/30 15:01:30 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int		ASocket::get_next_line(std::string & str)
 			break;
 		}
 	}
-
 
 	if (temp.length() > found)
 	{

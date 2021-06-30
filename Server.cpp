@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/29 11:02:31 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/30 15:09:11 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(void) : _name("_"), _autoIndex(false), _clientMaxBodySize(5)
+Server::Server(void) : _name("_"), _auto_index(false), _client_max_body_size(5)
 {
 
 }
@@ -32,80 +32,80 @@ Server &	Server::operator=(Server const & rhs)
 	if (&rhs != this){
 		this->_name = rhs._name;
 		this->_root = rhs._root;
-		this->_serverSockets = rhs._serverSockets;
+		this->_server_sockets = rhs._server_sockets;
 	}
 	return *this;
 }
 
 
-Server &	Server::addPort(int port)
+Server &	Server::add_port(int port)
 {
-	this->_serverSockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port)));
+	this->_server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port)));
 	return(*this);
 }
 
 void	Server::start(int worker)
 {
-	for (port_vector::iterator it = _serverSockets.begin(); it != _serverSockets.end() ; it++)
+	for (port_vector::iterator it = _server_sockets.begin(); it != _server_sockets.end() ; it++)
 	{
 		ServerSocket & ss = it->second;
 
-		ss.setupSocket();
-		ss.bindSocket();
-		ss.listenSocket(worker);
-		_activePort.push_back(ss.getPort());
-		_activeSocket.push_back(ss.get_socket());
+		ss.setup_socket();
+		ss.bind_socket();
+		ss.listen_socket(worker);
+		_active_port.push_back(ss.get_port());
+		_active_socket.push_back(ss.get_socket());
 	}
 }
 
-ServerSocket	& Server::getServerSocket(int port)
+ServerSocket	& Server::get_server_socket(int port)
 {
-	return _serverSockets.at(port);
+	return _server_sockets.at(port);
 }
 
-std::vector<int> &	Server::getActiveSocket()
+std::vector<int> &	Server::get_active_socket()
 {
-	return _activeSocket;
+	return _active_socket;
 }
 
-Server &	Server::setName(std::string name)
+Server &	Server::set_name(std::string name)
 {
 	_name = name;
 	return(*this);
 }
 
-Server &	Server::setRoot(std::string root)
+Server &	Server::set_root(std::string root)
 {
 	_root = root;
 	return(*this);
 }
 
-Server &	Server::setAutoIndex(bool autoIndex)
+Server &	Server::set_auto_index(bool auto_index)
 {
-	_autoIndex = autoIndex;
+	_auto_index = auto_index;
 	return(*this);
 }
 
-Server &	Server::setClientMaxBodySize(int limit)
+Server &	Server::set_client_max_body_size(int limit)
 {
-	_clientMaxBodySize = limit;
+	_client_max_body_size = limit;
 	return(*this);
 }
 
-Server &	Server::setPathErrorPage(std::string path)
+Server &	Server::set_path_error_page(std::string path)
 {
-	_pathErrorPage = path;
+	_path_error_page = path;
 	return(*this);
 }
 
 void	Server::print()
 {
 	std::cout << "Server " << _name << std::endl;
-	for (port_vector::iterator it = _serverSockets.begin(); it != _serverSockets.end(); it++)
+	for (port_vector::iterator it = _server_sockets.begin(); it != _server_sockets.end(); it++)
 	{
 		it->second.print();
 	}
-	if (_serverSockets.size() == 0)
+	if (_server_sockets.size() == 0)
 		std::cout << "no port found\n";
 	
 }

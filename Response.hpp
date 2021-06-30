@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:41 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/25 16:12:33 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/30 15:11:13 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ public:
 	virtual ~Response(void);
 	Response &	operator=(Response const &rhs);
 
-	Response &	addHeader(std::string name, std::string content);
-	void		clearHeader();
-	std::string	getResponse();
-	void		sendResponse(int fd);
-	std::string	getMessage(int code);
-	Response &	setCode(int code);
-	Response &	setBody(const std::string & filename);
-	Response &	set404(std::string & filename);
+	Response &	add_header(std::string name, std::string content);
+	void		clear_header();
+	std::string	get_response();
+	void		send_response(int fd);
+	std::string	get_message(int code);
+	Response &	set_code(int code);
+	Response &	set_body(const std::string & filename);
+	Response &	set_404(std::string & filename);
 
 private:
 

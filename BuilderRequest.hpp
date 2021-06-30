@@ -12,13 +12,13 @@ class BuilderRequest
 	BuilderRequest &	operator=(BuilderRequest const &rhs);
 	BuilderRequest(BuilderRequest const & src);
 public:
-	class BadResquest : public std::exception
+	class BadRequest : public std::exception
 	{
 		virtual const char* what() const throw(){
 			return "Bad Request";
 		}
 	};
-	class BadHttpVesion : public std::exception
+	class BadHttpVersion : public std::exception
 	{
 		virtual const char* what() const throw(){
 			return "HTTP Version Not Supported";

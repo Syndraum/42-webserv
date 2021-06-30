@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ServerSocket.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:14:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/29 12:01:39 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/30 15:08:41 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ ServerSocket &	ServerSocket::operator=(ServerSocket const & rhs)
 	return *this;
 }
 
-void			ServerSocket::setupSocket()
+void			ServerSocket::setup_socket()
 {
 	int one = 1;
 	_socket = socket(AF_INET , SOCK_STREAM | SOCK_NONBLOCK , 0);
@@ -49,7 +49,7 @@ void			ServerSocket::setupSocket()
 	setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
 }
 
-void			ServerSocket::bindSocket()
+void			ServerSocket::bind_socket()
 {
 	if ((bind(_socket, reinterpret_cast<sockaddr*>(&_address), sizeof(_address)) < 0)){
 		std::cerr << strerror(errno) << std::endl;
@@ -58,20 +58,20 @@ void			ServerSocket::bindSocket()
 	std::cout << "bind done. Listen on port " << _port <<std::endl;
 }
 
-void			ServerSocket::listenSocket(int worker_connection)
+void			ServerSocket::listen_socket(int worker_connection)
 {
 	if ((listen(_socket, worker_connection)) < 0)
 		throw "listen failed";
 	std::cout << "Waiting for incoming connection..." << std::endl;
 }
 
-ServerSocket *	ServerSocket::setPort(int port)
+ServerSocket *	ServerSocket::set_port(int port)
 {
 	_port = port;
 	return this;
 }
 
-int				ServerSocket::getPort()
+int				ServerSocket::get_port()
 {
 	return (_port);
 }

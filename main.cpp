@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/29 14:50:16 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/30 15:04:53 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int		main()
 
 
 	Core core = Core();
-	core.addServer()
-		.addPort(8888)
-		.addPort(3333)
+	core.add_server()
+		.add_port(8888)
+		.add_port(3333)
 		;
 	core.start();
 
