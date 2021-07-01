@@ -6,16 +6,17 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/30 15:11:13 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/01 15:33:20 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 
-Response::Response(int code) : _version("HTTP/1.1"), _code(code), _body("")
-{
-
-}
+Response::Response(int code) :
+_version("HTTP/1.1"),
+_code(code),
+_body("")
+{}
 
 Response::Response(Response const & src)
 {
@@ -27,7 +28,8 @@ Response::~Response(void)
 	
 }
 
-Response &	Response::operator=(Response const & rhs)
+Response &
+Response::operator=(Response const & rhs)
 {
 	if (&rhs != this){
 		this->_version = rhs._version;
@@ -38,18 +40,21 @@ Response &	Response::operator=(Response const & rhs)
 	return *this;
 }
 
-Response & Response::add_header(std::string name, std::string content)
+Response &
+Response::add_header(std::string name, std::string content)
 {
 	_headers.insert(std::pair<std::string, std::string>(name, content));
 	return *this;
 }
 
-void	Response::clear_header()
+void
+Response::clear_header()
 {
 	_headers.clear();
 }
 
-std::string	Response::get_response()
+std::string
+Response::get_response()
 {
 	std::stringstream ss;
 
@@ -66,14 +71,16 @@ std::string	Response::get_response()
 	return ss.str();
 }
 
-void	Response::send_response(int fd)
+void
+Response::send_response(int fd)
 {
 	std::string response = get_response();
 
 	write(fd, response.data(), response.size());
 }
 
-std::string Response::get_message(int code)
+std::string
+Response::get_message(int code)
 {
 	if (code >= 500)
 		return (_5xx__response(code));
@@ -89,14 +96,16 @@ std::string Response::get_message(int code)
 		throw std::exception();
 }
 
-Response & Response::set_code(int code)
+Response &
+Response::set_code(int code)
 {
 	_code = code;
 	return *this;
 }
 
 //cdai set_body
-Response &	Response::set_body(const std::string & filename)
+Response &
+Response::set_body(const std::string & filename)
 {
 	Reader	file_reader(filename);
 	file_reader.open();
@@ -112,13 +121,15 @@ Response &	Response::set_body(const std::string & filename)
 	return *this;
 }
 
-Response & Response::set_404(std::string & filename)
+Response &
+Response::set_404(std::string & filename)
 {
 	_code = 404;
 	return set_body(filename);
 }
 
-std::string	Response::_1xx__response(int code)
+std::string
+Response::_1xx__response(int code)
 {
 	switch (code)
 	{
@@ -136,7 +147,8 @@ std::string	Response::_1xx__response(int code)
 	}
 }
 
-std::string	Response::_2xx__response(int code)
+std::string
+Response::_2xx__response(int code)
 {
 	switch (code)
 	{
@@ -160,7 +172,8 @@ std::string	Response::_2xx__response(int code)
 	}
 }
 
-std::string	Response::_3xx__response(int code)
+std::string
+Response::_3xx__response(int code)
 {
 	switch (code)
 	{
@@ -190,7 +203,8 @@ std::string	Response::_3xx__response(int code)
 	}
 }
 
-std::string	Response::_4xx__response(int code)
+std::string
+Response::_4xx__response(int code)
 {
 	switch (code)
 	{
@@ -240,7 +254,8 @@ std::string	Response::_4xx__response(int code)
 	}
 }
 
-std::string	Response::_5xx__response(int code)
+std::string
+Response::_5xx__response(int code)
 {
 	switch (code)
 	{

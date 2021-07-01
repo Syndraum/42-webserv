@@ -6,36 +6,40 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/06/30 16:47:20 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/01 15:37:07 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ASocket.hpp"
 
-ASocket::~ASocket(void)
-{}
+ASocket::~ASocket(void) {}
 
-int	ASocket::get_socket(void) const
+int
+ASocket::get_socket(void) const
 {
 	return _socket;
 }
 
-void	ASocket::set_socket(int socket)
+void
+ASocket::set_socket(int socket)
 {
 	_socket = socket;
 }
 
-const sockaddr_in	& ASocket::get_address(void) const
+const sockaddr_in &
+ASocket::get_address(void) const
 {
 	return _address;
 }
 
-void		ASocket::set_address(const sockaddr_in & Address)
+void
+ASocket::set_address(const sockaddr_in & Address)
 {
 	this->_address = Address;
 }
 
-int		ASocket::get_next_line(std::string & str)
+int
+ASocket::get_next_line(std::string & str)
 {
 	int	response = 2;
 	int ret = 1;
