@@ -171,15 +171,24 @@ void	Core::_handle_request_and_detect_close_connection()
 		}
 		catch (BuilderRequest::BadResquest &e)
 		{
-			response.setCode(400).clearHeader();
+			response.setCode(400).clearHeader()
+				.addHeader("Content-Length", "0")
+				.addHeader("Connection", "close");
+				;
 		}
 		catch (BuilderRequest::BadHttpVesion &e)
 		{
-			response.setCode(505).clearHeader();
+			response.setCode(505).clearHeader()
+				.addHeader("Content-Length", "0")
+				.addHeader("Connection", "close");
+				;
 		}
 		catch (BuilderRequest::MethodNotImplemented &e)
 		{
-			response.setCode(501).clearHeader();
+			response.setCode(501).clearHeader()
+				.addHeader("Content-Length", "0")
+				.addHeader("Connection", "close");
+				;
 		}
 		// std::cout << "parse_request: " <<  parse_ret << std::endl;
 
@@ -197,8 +206,8 @@ void	Core::_handle_request_and_detect_close_connection()
 			std::cout << "clientSocket: " << clientSocket << std::endl;
 			response.sendResponse(clientSocket);
 
-		close( it->get_socket() );  
-		_client.erase(it);  
+		close( it->get_socket() );
+		_client.erase(it);
 		break;
 		//}
 
