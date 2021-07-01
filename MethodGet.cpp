@@ -11,10 +11,10 @@ MethodGet::~MethodGet(void)
 void	MethodGet::action(const Request & request, Response & response)
 {	try
 	{
-		response.setCode(200).setBody(request.get_path().c_str());
+		response.set_code(200).set_body(request.get_path().c_str());
 	}
 	catch(const std::exception& e)
 	{
-		response.setCode(404).clearHeader();
+		response.set_code(404).clear_header();
 	}
 }

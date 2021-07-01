@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ASocket.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:44:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/06/29 11:31:46 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/30 16:47:05 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ public:
 
 	int				get_socket(void) const;
 	void			set_socket(int socket);
-	sockaddr_in	&	get_address(void);
-	void			set_address(sockaddr_in & Address);
+	const sockaddr_in	&	get_address(void) const;
+	void			set_address(const sockaddr_in & Address);
 	int				get_next_line(std::string & str);
 
 protected:

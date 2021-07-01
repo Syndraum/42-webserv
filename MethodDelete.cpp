@@ -11,10 +11,10 @@ void	MethodDelete::action(const Request & request, Response & response)
 {
 	if (0 != (std::remove(request.get_path().c_str())))
 	{
-		response.setCode(404).clearHeader();
+		response.set_code(404).clear_header();
 	}
 	else
 	{
-		response.setCode(204);
+		response.set_code(204);
 	}
 }

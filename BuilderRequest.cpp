@@ -22,7 +22,7 @@ int		BuilderRequest::add_path(std::string line)
 {
 	size_t		len = line.find(' ');
 	if (len == std::string::npos)
-		throw BadResquest();
+		throw BadRequest();
 	_request->set_path(line.substr(0, len));
 	// check characters
 	return(len + 1);
@@ -31,7 +31,7 @@ int		BuilderRequest::add_path(std::string line)
 int		BuilderRequest::add_version(std::string line)
 {
 	if (line.compare(0, 8, VERSION))
-		throw BadHttpVesion();
+		throw BadHttpVersion();
 	_request->set_version(VERSION);
 	return (8);
 }
@@ -42,7 +42,7 @@ void	BuilderRequest::first_line(std::string line)
 	j += add_path(&line[j]);
 	j += add_version(&line[j]);
 	if (line[j] != '\r')
-		throw BadResquest();
+		throw BadRequest();
 }
 
 bool	BuilderRequest::parse_headers(std::string line)
@@ -52,7 +52,7 @@ bool	BuilderRequest::parse_headers(std::string line)
 	if (line.length() == 1 && line[0] == '\r')
 		return false;
 	if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
-		throw BadResquest();
+		throw BadRequest();
 	_request->add_header(std::pair<std::string, std::string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
 	return (true);
 }

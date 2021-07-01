@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ASocket.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/06/29 12:08:37 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/30 16:47:20 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ void	ASocket::set_socket(int socket)
 	_socket = socket;
 }
 
-sockaddr_in	& ASocket::get_address(void)
+const sockaddr_in	& ASocket::get_address(void) const
 {
-	return this->_address;
+	return _address;
 }
 
-void		ASocket::set_address(sockaddr_in & Address)
+void		ASocket::set_address(const sockaddr_in & Address)
 {
 	this->_address = Address;
 }
@@ -73,7 +73,6 @@ int		ASocket::get_next_line(std::string & str)
 			break;
 		}
 	}
-
 
 	if (temp.length() > found)
 	{

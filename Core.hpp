@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/25 15:53:33 by cdai             ###   ########.fr       */
+/*   Updated: 2021/06/30 16:53:02 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,28 +37,29 @@ public:
 	Core &	operator=(Core const &rhs);
 
 	void	start();
-	void	addServer(Server & server);
-	Server	&	addServer();
-	Server	&	getServer(int index = 0);
+	void	add_server(Server & server);
+	Server	&	add_server();
+	Server	const &	get_server(int index = 0) const;
 	Core	&	add_method(AMethod *);
-	AMethod	*	get_method(const std::string &);
-
+	AMethod	*	get_method(const std::string &) const;
+	Core	&	set_worker(int);
+	int			get_worker(void) const;
 	void	print();
 
 private:
 
-	void				_acceptConnection();
+	void				_accept_connection();
 	void				_handle_request_and_detect_close_connection();
-	void				_detectResetServerPollFD();
+	void				_detect_reset_server_poll_fd();
 
 	std::vector<Server>	_servers;
 	int					_worker;
-	int					_nbActive;
-	std::vector<int>	_serverSockets;
+	int					_nb_active;
+	std::vector<int>	_server_sockets;
 	client_vector		_client;
 	int					_SIZE_SOCK_ADDR;
 	struct pollfd *		_fds;
-	int					_nbFds;
+	int					_nb_fds;
 	MethodLibrary		_methods;
 };
 
