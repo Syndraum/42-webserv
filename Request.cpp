@@ -6,13 +6,14 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/11 16:28:56 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/25 15:29:22 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/01 17:23:01 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request()
+Request::Request(): 
+	_method(0)
 {}
 
 
@@ -46,7 +47,9 @@ void						Request::set_headers(std::map<std::string, std::string> const &rhs){ _
 void						Request::add_header(std::pair<std::string, std::string> const &rhs){ _headers.insert(rhs); }
 void						Request::action(Response & response)
 {
-		_method->action(*this, response);
+	if (!_method) //if method == NULL
+		throw NoMethod();
+	_method->action(*this, response);
 }
 
 //void						Request::print_debug() const //TMP

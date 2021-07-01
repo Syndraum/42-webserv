@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/30 19:02:43 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/01 17:16:11 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	Core::start(){
 		_nbActive = poll(_fds, _nbFds, 60000);
 		_acceptConnection();
 		_handle_request_and_detect_close_connection();
-		_detectResetServerPollFD();
+		//_detectResetServerPollFD();
 
 		// detect and set serversocket to POLLIN or not
 		_detectResetServerPollFD();
@@ -127,7 +127,7 @@ void	Core::_acceptConnection()
 	{
 		int fd = _serverSockets[i];
 
-		if (_fds[i].revents & POLLIN)
+		if (_fds[i].revents == _fds[i].events)
 		{
 			_client.push_back(ClientSocket());
 			ClientSocket & cs = _client.back();
@@ -148,6 +148,8 @@ void	Core::_handle_request_and_detect_close_connection()
 {
 	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
 	{
+		std::cout << "test" << std::endl;
+
 //		int valread;
 //		char buffer[1025];
 //		Request request;
@@ -156,6 +158,7 @@ void	Core::_handle_request_and_detect_close_connection()
 		BuilderRequest	br(_methods);
 		Request * request = 0;
 		Response response(200);
+		std::cout << "test" << std::endl;
 
 		//Check if it was for closing , and also read the 
 		//incoming message 
@@ -163,8 +166,8 @@ void	Core::_handle_request_and_detect_close_connection()
 			br.parse_request(*it);
 			request = br.get_request();
 			br.reset();
-			std::cout << "path : " << request->get_path() << std::endl;
-			std::cout << "request : " << request->get_method()->get_name() << std::endl;
+//			std::cout << "path : " << request->get_path() << std::endl;
+//			std::cout << "request : " << request->get_method()->get_name() << std::endl;
 			if (request->get_path() == "/")
 				request->set_path("/index.html");
 			request->set_path("./webserviette_root" + request->get_path());
@@ -184,6 +187,24 @@ void	Core::_handle_request_and_detect_close_connection()
 		{
 			response.setCode(501).clearHeader();
 		}
+		catch (BuilderRequest::NoRequest &e)
+		{
+			continue;
+		}
+		catch (Request::NoMethod &e)
+		{
+			close( it->get_socket() );  
+			_client.erase(it);  
+			break;
+		}
+//		catch (BuilderRequest::SocketClosed &e)	
+//		{
+//			std::cout << "Host disconnected" << std::endl;  
+//
+//			close( it->get_socket() );  
+//			_client.erase(it);  
+//			break;
+//		}
 		// std::cout << "parse_request: " <<  parse_ret << std::endl;
 
 		// std::cout << "method: " << request.get_method() << std::endl;
@@ -200,10 +221,11 @@ void	Core::_handle_request_and_detect_close_connection()
 			std::cout << "clientSocket: " << clientSocket << std::endl;
 			response.sendResponse(clientSocket);
 
-//		close( it->get_socket() );  
-//		_client.erase(it);  
+		close( it->get_socket() );  
+		_client.erase(it);  
 		break;
 		//}
+
 
 //		if ((valread = recv( fd , buffer, 1024, MSG_DONTWAIT)) == 0)  
 //		//if ((valread = recv( fd , buffer, 1024, 0)) == 0)  
@@ -256,9 +278,6 @@ void	Core::_handle_request_and_detect_close_connection()
 //			std::cout << "clientSocket: " << clientSocket << std::endl;
 //			response.sendResponse(clientSocket);
 //
-//
-//
-//
 //			// message for debug, to remove later
 //			std::cout << "Server still connected" << std::endl << std::endl;
 //
@@ -273,7 +292,7 @@ void	Core::_detectResetServerPollFD()
 {
 	if (!_client.size())
 		for (size_t i = 0; i < _serverSockets.size(); i++)
-			if (_fds[i].revents & POLLIN)
+			if (_fds[i].revents & POLLOUT)
 				_fds[i].revents = 0;
 }
 

@@ -30,6 +30,18 @@ public:
 			return "Not Implemented";
 		}
 	};
+	class NoRequest : public std::exception
+	{
+		virtual const char* what() const throw(){
+			return "NoRequest";
+		}
+	};
+	class SocketClosed : public std::exception
+	{
+		virtual const char* what() const throw(){
+			return "SocketClosed";
+		}
+	};
 	BuilderRequest(MethodLibrary	&);
 	virtual ~BuilderRequest(void);
 

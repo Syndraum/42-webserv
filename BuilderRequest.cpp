@@ -39,6 +39,8 @@ int		BuilderRequest::add_version(std::string line)
 
 void	BuilderRequest::first_line(std::string line)
 {
+	if (line[0] == '\0')
+		throw BadResquest();
 	int	j = add_method(line);
 	j += add_path(&line[j]);
 	j += add_version(&line[j]);
@@ -66,7 +68,12 @@ void	BuilderRequest::parse_request(ASocket & socket)
 
 	while( gnl_ret && (gnl_ret = socket.get_next_line(line)))
 	{
-//		std::cout << "gnl_ret: " << gnl_ret << std::endl;
+//		if (gnl_ret == 0)
+//			throw SocketClosed();
+		if (gnl_ret == -1)
+			throw NoRequest();
+		
+		std::cout << "gnl_ret: " << gnl_ret << std::endl;
 		std::cout << "line: " << line << std::endl;
 
 		line += "\r"; // Maybe, we can remote this line ? (from cdai)

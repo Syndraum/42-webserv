@@ -6,7 +6,7 @@
 #    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/06/30 17:59:11 by cdai             ###   ########.fr        #
+#    Updated: 2021/07/01 14:13:03 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,9 @@ re:			fclean all
 
 test:		all
 			$(PREFIX)$(NAME)
+
+valgrind:	all
+			valgrind $(PREFIX)$(NAME)
 
 .PHONY: 	all re run clean fclean
 
