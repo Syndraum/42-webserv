@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/30 16:52:38 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/01 15:38:17 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 #include "includes.hpp"
 
 Core::Core(void) :
-	_worker(3),
-	//_maxfd(-1),
-	_nb_active(0)
+_worker(3),
+//_maxfd(-1),
+_nb_active(0)
 {
 	_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
 	_methods
@@ -32,19 +32,19 @@ Core::Core(Core const & src)
 	*this = src;
 }
 
-Core::~Core(void)
-{
+Core::~Core() {}
 
-}
-
-Core &	Core::operator=(Core const & rhs)
+Core &
+Core::operator=(Core const & rhs)
 {
 	if (&rhs != this)
 		this->_worker = rhs._worker;
 	return *this;
 }
 
-void	Core::start(){
+void
+Core::start()
+{
 	int fd;
 	std::vector<int> active_socket;
 
@@ -92,34 +92,40 @@ void	Core::start(){
 	}
 }
 
-void	Core::add_server(Server & server)
+void
+Core::add_server(Server & server)
 {
 	_servers.push_back(server);
 }
 
-Server	&	Core::add_server()
+Server &
+Core::add_server()
 {
 	_servers.push_back(Server());
 	return(_servers.back());
 }
 
-Server	const &	Core::get_server(int index) const
+Server	const &
+Core::get_server(int index) const
 {
 	return (_servers.at(index));
 }
 
-int			Core::get_worker(void) const
+int	
+Core::get_worker(void) const
 {
 	return (_worker);
 }
 
-Core	&	Core::set_worker(int worker)
+Core &
+Core::set_worker(int worker)
 {
 	_worker = worker;
 	return(*this);
 }
 
-void	Core::print()
+void
+Core::print() const
 {
 	for (size_t i = 0; i < _servers.size(); i++)
 	{
@@ -129,7 +135,8 @@ void	Core::print()
 		std::cout << "no Server found \n";
 }
 
-void	Core::_accept_connection()
+void
+Core::_accept_connection()
 {
 	int new_socket = -1;
 	int one = 1;
@@ -155,7 +162,8 @@ void	Core::_accept_connection()
 	}
 }
 
-void	Core::_handle_request_and_detect_close_connection()
+void
+Core::_handle_request_and_detect_close_connection()
 {
 	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
 	{
@@ -277,7 +285,8 @@ void	Core::_handle_request_and_detect_close_connection()
 	}
 }
 
-void	Core::_detect_reset_server_poll_fd()
+void
+Core::_detect_reset_server_poll_fd()
 {
 	if (!_client.size())
 		for (size_t i = 0; i < _server_sockets.size(); i++)

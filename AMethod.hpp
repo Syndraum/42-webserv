@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   AMethod.hpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/01 15:48:57 by mchardin          #+#    #+#             */
+/*   Updated: 2021/07/01 15:48:58 by mchardin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef AMETHOD
 # define AMETHOD
 
@@ -10,21 +22,21 @@ class Request;
 
 class AMethod
 {
-protected:
-	AMethod(void);
-	AMethod &	operator=(AMethod const &rhs);
-	AMethod(AMethod const & src);
+	protected:
 	
-	std::string	_name;
+		std::string			_name;
 
-public:
+		AMethod(void);
+		AMethod(AMethod const & src);
+		AMethod &			operator=(AMethod const &rhs);
 
-	AMethod(std::string name);
-	virtual ~AMethod(void);
+	public:
 
-	const std::string & get_name() const;
+		AMethod(std::string name);
+		virtual ~AMethod(void);
 
-	virtual void	action(const Request &, Response &) = 0;
+		const std::string &	get_name() const;
+		virtual void		action(const Request &, Response &) = 0;
 
 };
 

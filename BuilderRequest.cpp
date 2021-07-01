@@ -1,13 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   BuilderRequest.cpp                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/01 15:49:15 by mchardin          #+#    #+#             */
+/*   Updated: 2021/07/01 15:49:16 by mchardin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "BuilderRequest.hpp"
 
-BuilderRequest::BuilderRequest(MethodLibrary & methods) : _request(new Request()), _methods(methods) {}
+BuilderRequest::BuilderRequest(MethodLibrary & methods) :
+_request(new Request()),
+_methods(methods)
+{}
 
 BuilderRequest::~BuilderRequest(void)
 {
 	delete _request;
 }
 
-int		BuilderRequest::add_method(std::string line)
+int
+BuilderRequest::add_method(std::string line)
 {
 	int ret = line.find(' ');
 	std::string name = line.substr(0, ret);
@@ -18,7 +34,8 @@ int		BuilderRequest::add_method(std::string line)
 	return (ret + 1);
 }
 
-int		BuilderRequest::add_path(std::string line)
+int
+BuilderRequest::add_path(std::string line)
 {
 	size_t		len = line.find(' ');
 	if (len == std::string::npos)
@@ -28,7 +45,8 @@ int		BuilderRequest::add_path(std::string line)
 	return(len + 1);
 }
 
-int		BuilderRequest::add_version(std::string line)
+int
+BuilderRequest::add_version(std::string line)
 {
 	if (line.compare(0, 8, VERSION))
 		throw BadHttpVersion();
@@ -36,7 +54,8 @@ int		BuilderRequest::add_version(std::string line)
 	return (8);
 }
 
-void	BuilderRequest::first_line(std::string line)
+void
+BuilderRequest::first_line(std::string line)
 {
 	int	j = add_method(line);
 	j += add_path(&line[j]);
@@ -45,7 +64,8 @@ void	BuilderRequest::first_line(std::string line)
 		throw BadRequest();
 }
 
-bool	BuilderRequest::parse_headers(std::string line)
+bool
+BuilderRequest::parse_headers(std::string line)
 {
 	size_t		len = line.find(": ");
 
@@ -57,7 +77,8 @@ bool	BuilderRequest::parse_headers(std::string line)
 	return (true);
 }
 
-void	BuilderRequest::parse_request(ASocket & socket)
+void
+BuilderRequest::parse_request(ASocket & socket)
 {
 	std::string		line;
 	bool			is_first_line = true;
@@ -82,12 +103,14 @@ void	BuilderRequest::parse_request(ASocket & socket)
 	}
 }
 
-Request * BuilderRequest::get_request() const
+Request *
+BuilderRequest::get_request() const
 {
 	return _request;
 }
 
-void	BuilderRequest::reset()
+void
+BuilderRequest::reset()
 {
 	_request = new Request();
 }

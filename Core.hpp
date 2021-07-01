@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/30 16:53:02 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/01 15:26:47 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,39 +28,42 @@
 
 class Core
 {
-public:
-	typedef std::vector<ClientSocket> client_vector;
+	public:
 
-	Core(void);
-	Core(Core const & src);
-	virtual ~Core(void);
-	Core &	operator=(Core const &rhs);
+		typedef std::vector<ClientSocket>	client_vector;
 
-	void	start();
-	void	add_server(Server & server);
-	Server	&	add_server();
-	Server	const &	get_server(int index = 0) const;
-	Core	&	add_method(AMethod *);
-	AMethod	*	get_method(const std::string &) const;
-	Core	&	set_worker(int);
-	int			get_worker(void) const;
-	void	print();
+	private:
 
-private:
+		std::vector<Server>					_servers;
+		int									_worker;
+		int									_nb_active;
+		std::vector<int>					_server_sockets;
+		client_vector						_client;
+		int									_SIZE_SOCK_ADDR;
+		struct pollfd *						_fds;
+		int									_nb_fds;
+		MethodLibrary						_methods;
 
-	void				_accept_connection();
-	void				_handle_request_and_detect_close_connection();
-	void				_detect_reset_server_poll_fd();
+		void								_accept_connection();
+		void								_handle_request_and_detect_close_connection();
+		void								_detect_reset_server_poll_fd();
 
-	std::vector<Server>	_servers;
-	int					_worker;
-	int					_nb_active;
-	std::vector<int>	_server_sockets;
-	client_vector		_client;
-	int					_SIZE_SOCK_ADDR;
-	struct pollfd *		_fds;
-	int					_nb_fds;
-	MethodLibrary		_methods;
+	public:
+
+		Core(void);
+		Core(Core const & src);
+		virtual ~Core(void);
+		Core &								operator=(Core const &rhs);
+
+		void								start();
+		void								add_server(Server & server);
+		Server &							add_server();
+		Server const &						get_server(int index = 0) const;
+		Core &								add_method(AMethod *);
+		AMethod	*							get_method(const std::string &) const;
+		Core &								set_worker(int);
+		int									get_worker(void) const;
+		void								print() const;
 };
 
 #endif
