@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ASocket.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/02 15:10:21 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/02 15:35:36 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,34 @@ ASocket::ASocket(void)
 	reset_buffer();
 }
 
-ASocket::~ASocket(void)
-{}
+ASocket::~ASocket(void){}
 
-int	ASocket::get_socket(void) const
+int
+ASocket::get_socket(void) const
 {
 	return _socket;
 }
 
-void	ASocket::set_socket(int socket)
+void
+ASocket::set_socket(int socket)
 {
 	_socket = socket;
 }
 
-sockaddr_in	& ASocket::get_address(void)
+const sockaddr_in &
+ASocket::get_address(void) const
 {
-	return this->_address;
+	return _address;
 }
 
-void		ASocket::set_address(sockaddr_in & Address)
+void
+ASocket::set_address(const sockaddr_in & Address)
 {
 	this->_address = Address;
 }
 
-int		ASocket::get_next_line(std::string & str)
+int
+ASocket::get_next_line(std::string & str)
 {
 	int	response = 2;
 	int ret = 1;
@@ -82,7 +86,6 @@ int		ASocket::get_next_line(std::string & str)
 		}
 	}
 
-
 	if (temp.length() > found) //Handle found == std::string::npos (size_t MAX)
 	{
 		temp.copy(_buffer, temp.length() - found - 2, found + 2);
@@ -92,7 +95,8 @@ int		ASocket::get_next_line(std::string & str)
 	return response;
 }
 
-void	ASocket::reset_buffer(void)
+void
+ASocket::reset_buffer(void)
 {
 	for (int i = 0; i < BUFFER_SIZE; i++)
 		_buffer[i] = '\0';

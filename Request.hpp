@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/02 14:57:24 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/02 15:51:43 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ class AMethod;
 class Request
 {
 	private:
-		AMethod	*					_method;
-		std::string					_path;
-		std::string					_version;
-		std::map<std::string, std::string>		_headers;
+		AMethod	*									_method;
+		std::string									_path;
+		std::string									_version;
+		std::map<std::string, std::string>			_headers;
 
 	public:
 		class NoMethod : public std::exception
@@ -41,22 +41,23 @@ class Request
 		Request();
 		Request(Request const &rhs);
 		~Request();
-		Request const &operator=(Request const &rhs);
+		Request const &								operator=(Request const &rhs);
 
-		AMethod *						get_method() const;
-		std::string const				&get_path() const;
-		std::string const				&get_version() const;
-		std::map<std::string, std::string> const	&get_headers() const;
-		std::string const				&get_header(std::string const &key);
+		AMethod *									get_method() const;
+		std::string const &							get_path() const;
+		std::string const &							get_version() const;
+		std::map<std::string, std::string> const &	get_headers() const;
+		std::string const &							get_header(std::string const &key);
 
-		void						set_method(AMethod * rhs);
-		void						set_path(std::string const &rhs);
-		void						set_version(std::string const &rhs);
-		void						set_headers(std::map<std::string, std::string> const &rhs);
-		void						add_header(std::pair<std::string, std::string> const &rhs);
-		void						action(Response &);
+		void										set_method(AMethod * rhs);
+		void										set_path(std::string const &rhs);
+		void										set_version(std::string const &rhs);
+		void										set_headers(std::map<std::string, std::string> const &rhs);
+		void										add_header(std::pair<std::string, std::string> const &rhs);
 
-//		void						print_debug() const;
+		void										action(Response &);
+
+//		void										print_debug() const;
 };
 
 # include "AMethod.hpp"

@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/02 15:06:35 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/02 15:50:10 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Core.hpp"
+#include "BuilderCore.hpp"
 
 int		main()
 {
 	Core core = Core();
-	core.addServer()
-		.addPort(8888)
-		.addPort(3333)
-		;
+	BuilderCore builder_core(std::cin, &core);
+	builder_core.print_debug();
 	core.start();
 
 //maia's part

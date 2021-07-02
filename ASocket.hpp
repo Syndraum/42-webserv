@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ASocket.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:44:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/06/30 19:05:20 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/02 15:34:51 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,22 @@
 
 class ASocket
 {
-public:
-	ASocket(void);
-	virtual ~ASocket(void);
+	protected:
+		int						_socket;
+		sockaddr_in				_address;
+		char					_buffer[BUFFER_SIZE];
 
-	int				get_socket(void) const;
-	void			set_socket(int socket);
-	sockaddr_in	&	get_address(void);
-	void			set_address(sockaddr_in & Address);
-	int				get_next_line(std::string & str);
-	void			reset_buffer(void);
+	public:
+		
+		ASocket(void);
+		virtual ~ASocket(void);
 
-protected:
-	int			_socket;
-	sockaddr_in	_address;
-	char		_buffer[BUFFER_SIZE];
-
+		int						get_socket(void) const;
+		void					set_socket(int socket);
+		const sockaddr_in &		get_address(void) const;
+		void					set_address(const sockaddr_in & Address);
+		int						get_next_line(std::string & str);
+		void					reset_buffer(void);
 };
 
 #endif

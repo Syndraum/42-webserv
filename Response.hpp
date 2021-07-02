@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:41 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/25 16:12:33 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/01 15:44:01 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,36 +24,38 @@
 
 class Response
 {
-public:
-	typedef std::map<std::string, std::string>	header_map;
+	public:
 
-	Response(int code = 200);
-	Response(Response const & src);
-	virtual ~Response(void);
-	Response &	operator=(Response const &rhs);
+		typedef std::map<std::string, std::string>	header_map;
 
-	Response &	addHeader(std::string name, std::string content);
-	void		clearHeader();
-	std::string	getResponse();
-	void		sendResponse(int fd);
-	std::string	getMessage(int code);
-	Response &	setCode(int code);
-	Response &	setBody(const std::string & filename);
-	Response &	set404(std::string & filename);
+	private:
 
-private:
+		std::string									_version;
+		int											_code;
+		header_map									_headers;
+		std::string									_body;
+	
+		std::string									_1xx__response(int code);
+		std::string									_2xx__response(int code);
+		std::string									_3xx__response(int code);
+		std::string									_4xx__response(int code);
+		std::string									_5xx__response(int code);
+								
+	public:
 
-	std::string		_1xx__response(int code);
-	std::string		_2xx__response(int code);
-	std::string		_3xx__response(int code);
-	std::string		_4xx__response(int code);
-	std::string		_5xx__response(int code);
+		Response(int code = 200);
+		Response(Response const & src);
+		virtual ~Response(void);
+		Response &									operator=(Response const &rhs);
 
-	std::string		_version;
-	int				_code;
-	header_map		_headers;
-	std::string		_body;
-
+		Response &									add_header(std::string name, std::string content);
+		void										clear_header();
+		std::string									get_response();
+		void										send_response(int fd);
+		std::string									get_message(int code);
+		Response &									set_code(int code);
+		Response &									set_body(const std::string & filename);
+		Response &									set_404(std::string & filename);
 };
 
 #endif

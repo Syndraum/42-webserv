@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/01 14:44:41 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/02 15:41:38 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 
-Response::Response(int code) : _version("HTTP/1.1"), _code(code), _body("")
-{
-
-}
+Response::Response(int code) :
+_version("HTTP/1.1"),
+_code(code),
+_body("")
+{}
 
 Response::Response(Response const & src)
 {
@@ -27,7 +28,8 @@ Response::~Response(void)
 	
 }
 
-Response &	Response::operator=(Response const & rhs)
+Response &
+Response::operator=(Response const & rhs)
 {
 	if (&rhs != this){
 		this->_version = rhs._version;
@@ -38,22 +40,25 @@ Response &	Response::operator=(Response const & rhs)
 	return *this;
 }
 
-Response & Response::addHeader(std::string name, std::string content)
+Response &
+Response::add_header(std::string name, std::string content)
 {
 	_headers.insert(std::pair<std::string, std::string>(name, content));
 	return *this;
 }
 
-void	Response::clearHeader()
+void
+Response::clear_header()
 {
 	_headers.clear();
 }
 
-std::string	Response::getResponse()
+std::string
+Response::get_response()
 {
 	std::stringstream ss;
 
-	ss << _version << " " << _code << " " << getMessage(_code) << "\r\n";
+	ss << _version << " " << _code << " " << get_message(_code) << "\r\n";
 	for (header_map::iterator it = _headers.begin(); it != _headers.end(); it++)
 	{
 		ss << it->first << ": " << it->second << "\r\n";
@@ -66,14 +71,16 @@ std::string	Response::getResponse()
 	return ss.str();
 }
 
-void	Response::sendResponse(int fd)
+void
+Response::send_response(int fd)
 {
-	std::string response = getResponse();
+	std::string response = get_response();
 
 	write(fd, response.data(), response.size());
 }
 
-std::string Response::getMessage(int code)
+std::string
+Response::get_message(int code)
 {
 	if (code >= 500)
 		return (_5xx__response(code));
@@ -89,14 +96,16 @@ std::string Response::getMessage(int code)
 		throw std::exception();
 }
 
-Response & Response::setCode(int code)
+Response &
+Response::set_code(int code)
 {
 	_code = code;
 	return *this;
 }
 
-//cdai setBody
-Response &	Response::setBody(const std::string & filename)
+//cdai set_body
+Response &
+Response::set_body(const std::string & filename)
 {
 	Reader	file_reader(filename);
 	file_reader.open();
@@ -105,20 +114,22 @@ Response &	Response::setBody(const std::string & filename)
 	// std::to_string is c++11
 	std::stringstream ss;
 	ss << file_reader.get_length();
-	addHeader("Content-Length", ss.str());
+	add_header("Content-Length", ss.str());
 
 	file_reader.close();
 
 	return *this;
 }
 
-Response & Response::set404(std::string & filename)
+Response &
+Response::set_404(std::string & filename)
 {
 	_code = 404;
-	return setBody(filename);
+	return set_body(filename);
 }
 
-std::string	Response::_1xx__response(int code)
+std::string
+Response::_1xx__response(int code)
 {
 	switch (code)
 	{
@@ -136,7 +147,8 @@ std::string	Response::_1xx__response(int code)
 	}
 }
 
-std::string	Response::_2xx__response(int code)
+std::string
+Response::_2xx__response(int code)
 {
 	switch (code)
 	{
@@ -160,7 +172,8 @@ std::string	Response::_2xx__response(int code)
 	}
 }
 
-std::string	Response::_3xx__response(int code)
+std::string
+Response::_3xx__response(int code)
 {
 	switch (code)
 	{
@@ -190,7 +203,8 @@ std::string	Response::_3xx__response(int code)
 	}
 }
 
-std::string	Response::_4xx__response(int code)
+std::string
+Response::_4xx__response(int code)
 {
 	switch (code)
 	{
@@ -240,7 +254,8 @@ std::string	Response::_4xx__response(int code)
 	}
 }
 
-std::string	Response::_5xx__response(int code)
+std::string
+Response::_5xx__response(int code)
 {
 	switch (code)
 	{

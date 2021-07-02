@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Reader.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/01 15:50:40 by mchardin          #+#    #+#             */
+/*   Updated: 2021/07/01 15:50:41 by mchardin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef READER
 # define READER
 
@@ -6,23 +18,25 @@
 
 class Reader
 {
-public:
+	private:
 
-	Reader(void);
-	Reader(const std::string &);
-	Reader(Reader const & src);
-	virtual ~Reader(void);
-	Reader &	operator=(Reader const &rhs);
+		std::string		_path;
+		std::ifstream	_ifs;
+		int				_length;
 
-	void	open();
-	void	to_string(std::string & );
-	void	close();
+	public:
 
-	int		get_length() const;
-private:
-	std::string		_path;
-	std::ifstream	_ifs;
-	int				_length;
+		Reader(void);
+		Reader(const std::string &);
+		Reader(Reader const & src);
+		virtual ~Reader(void);
+		Reader &		operator=(Reader const &rhs);
+
+		void			open();
+		void			to_string(std::string & );
+		void			close();
+
+		int				get_length() const;
 };
 
 #endif

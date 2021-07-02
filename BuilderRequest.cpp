@@ -1,13 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   BuilderRequest.cpp                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/01 15:49:15 by mchardin          #+#    #+#             */
+/*   Updated: 2021/07/02 16:00:52 by cdai             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "BuilderRequest.hpp"
 
-BuilderRequest::BuilderRequest(MethodLibrary & methods) : _request(new Request()), _methods(methods) {}
+BuilderRequest::BuilderRequest(MethodLibrary & methods) :
+_request(new Request()),
+_methods(methods)
+{}
 
 BuilderRequest::~BuilderRequest(void)
 {
 	delete _request;
 }
 
-int		BuilderRequest::add_method(std::string line)
+int
+BuilderRequest::add_method(std::string line)
 {
 	int ret = line.find(' ');
 //	std::cout << "ret: " << ret << std::endl;
@@ -20,48 +36,53 @@ int		BuilderRequest::add_method(std::string line)
 	return (ret + 1);
 }
 
-int		BuilderRequest::add_path(std::string line)
+int
+BuilderRequest::add_path(std::string line)
 {
 	size_t		len = line.find(' ');
 	if (len == std::string::npos)
-		throw BadResquest();
+		throw BadRequest();
 	_request->set_path(line.substr(0, len));
 	// check characters
 	return(len + 1);
 }
 
-int		BuilderRequest::add_version(std::string line)
+int
+BuilderRequest::add_version(std::string line)
 {
 	if (line.compare(0, 8, VERSION))
-		throw BadHttpVesion();
+		throw BadHttpVersion();
 	_request->set_version(VERSION);
 	return (8);
 }
 
-void	BuilderRequest::first_line(std::string line)
+void
+BuilderRequest::first_line(std::string line)
 {
 	if (line[0] == '\0')
-		throw BadResquest();
+		throw BadRequest();
 	int	j = add_method(line);
 	j += add_path(&line[j]);
 	j += add_version(&line[j]);
 	if (line[j] != '\r')
-		throw BadResquest();
+		throw BadRequest();
 }
 
-bool	BuilderRequest::parse_headers(std::string line)
+bool
+BuilderRequest::parse_headers(std::string line)
 {
 	size_t		len = line.find(": ");
 
 	if (line.length() == 1 && line[0] == '\r')
 		return false;
 	if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
-		throw BadResquest();
+		throw BadRequest();
 	_request->add_header(std::pair<std::string, std::string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
 	return (true);
 }
 
-void	BuilderRequest::parse_request(ASocket & socket)
+void
+BuilderRequest::parse_request(ASocket & socket)
 {
 	std::string		line;
 	bool			is_first_line = true;
@@ -91,12 +112,14 @@ void	BuilderRequest::parse_request(ASocket & socket)
 	}
 }
 
-Request * BuilderRequest::get_request() const
+Request *
+BuilderRequest::get_request() const
 {
 	return _request;
 }
 
-void	BuilderRequest::reset()
+void
+BuilderRequest::reset()
 {
 	_request = new Request();
 }
