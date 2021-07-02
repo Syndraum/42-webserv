@@ -6,14 +6,11 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/02 11:11:25 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/02 15:13:13 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Core.hpp"
-#include <cstring>
-#include <fstream>
-#include "includes.hpp"
 
 Core::Core(void) :
 	_worker(3),
@@ -84,11 +81,11 @@ void	Core::start(){
 		}
 		_nbActive = poll(_fds, _nbFds, 60000);
 		_acceptConnection();
+
 		_handle_request_and_detect_close_connection();
 //		_cdai_dirty_function();
-		//_detectResetServerPollFD();
 
-		// detect and set serversocket to POLLIN or not
+		// detect and set serversocket from POLLIN/POLLOUT to 0
 		_detectResetServerPollFD();
 	}
 }
@@ -189,18 +186,12 @@ void	Core::_handle_request_and_detect_close_connection()
 		}
 		catch (Request::NoMethod &e)
 		{
-			close( it->get_socket() );  
-			_client.erase(it);  
-			break;
-		}
-//		catch (BuilderRequest::SocketClosed &e)	
-//		{
-//			std::cout << "Host disconnected" << std::endl;  
-//
+//			std::cout << "Client " << it->get_socket() << " disconnected" << std::endl;  
+
 //			close( it->get_socket() );  
 //			_client.erase(it);  
-//			break;
-//		}
+			break;
+		}
 		// std::cout << "parse_request: " <<  parse_ret << std::endl;
 
 		// std::cout << "method: " << request.get_method() << std::endl;
@@ -210,9 +201,9 @@ void	Core::_handle_request_and_detect_close_connection()
 			// std::string ROOT = "./webserviette_root";
 			// std::string filename = ROOT + request.get_path();
 
-			delete request;
-			std::cout << "write in Socket: " << it->get_socket() << std::endl;
-			response.sendResponse(it->get_socket());
+		delete request;
+		std::cout << "write in Socket: " << it->get_socket() << std::endl;
+		response.sendResponse(it->get_socket());
 
 		close( it->get_socket() );  
 		_client.erase(it);  
@@ -225,7 +216,7 @@ void	Core::_detectResetServerPollFD()
 {
 	if (!_client.size())
 		for (size_t i = 0; i < _serverSockets.size(); i++)
-			if (_fds[i].revents & POLLOUT)
+			if (_fds[i].revents & POLLOUT || _fds[i].revents & POLLIN)
 				_fds[i].revents = 0;
 }
 

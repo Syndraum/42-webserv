@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 17:05:29 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/02 14:57:24 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 # define VERSION "HTTP/1.1"
 
-# include "includes.hpp"
 # include "Response.hpp"
 
 class AMethod;
