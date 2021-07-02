@@ -6,12 +6,11 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/02 15:25:06 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 16:53:05 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BuilderCore.hpp"
-#include <cctype>
 
 BuilderCore::BuilderCore(std::istream &fd, Core *core) :
 _idx(0),
@@ -29,8 +28,8 @@ _core(core)
 			skip_comments();
 		else
 		{
-			std::cerr << "Parsing Error : unknown directive " << _line.substr(_idx, _line.find_first_of(";} \n\r\t\v\f", _idx) - _idx) << " on line " << line_count() << std::endl;
-			throw (ParsingError()); // determine specific errors
+			std::cerr << "Parsing Error : unknown directive \"" << _line.substr(_idx, _line.find_first_of(";} \n\r\t\v\f", _idx) - _idx) << "\" on line " << line_count() << std::endl;
+			throw (ParsingError());
 		}
 		skip_whitespaces();
 	}
@@ -47,15 +46,17 @@ BuilderCore::get_builded_core() const
 int
 BuilderCore::line_count()
 {
-	return(std::count(_line.begin(), _line.begin() + _idx, '\n'));
+	return (std::count(_line.begin(), _line.begin() + _idx, '\n'));
 }
 
 void
 BuilderCore::skip_whitespaces()
 {
-	while(_line[_idx])
+	std::locale	loc;
+	
+	while (_line[_idx])
 	{
-		if (!isspace(_line[_idx]))
+		if (!std::isspace(_line[_idx], loc))
 			return ;
 		_idx++;
 	}
@@ -64,7 +65,7 @@ BuilderCore::skip_whitespaces()
 void
 BuilderCore::skip_comments()
 {
-	while(_line[_idx] == '#')
+	while (_line[_idx] == '#')
 	{
 		_idx += _line.find('\n') + 1;
 		skip_whitespaces();
@@ -77,14 +78,19 @@ BuilderCore::parse_server_port(Server *server)
 	int	port;
 	_idx += 7;
 	skip_whitespaces();
-	while(_line[_idx] != ';' && _line[_idx] != '}')
+	while (_line[_idx] && _line[_idx] != ';')
 	{
 		port = stoi_skip_number();
 		server->add_port(port);
 		skip_whitespaces();
 	}
-	if(_line[_idx] == ';')
+	if (_line[_idx] == ';')
 		_idx++;
+	else
+	{
+		std::cerr << "directive \"listen\" is not terminated by \";\"" << std::endl;
+		throw (ParsingError());
+	}
 }
 
 void
@@ -95,16 +101,18 @@ BuilderCore::parse_server_name(Server *server)
 	size_t	len = _line.find_first_of(";} \n\r\t\v\f", _idx) - _idx;
 	if (!len)
 	{
-		std::cerr << "Missing name" << std::endl;
-		throw (std::exception());
+		std::cerr << "Parsing Error : invalid number of arguments in \"server_name\" directive" << " on line " << line_count() << std::endl;
+		throw (ParsingError());
 	}
 	server->set_name(_line.substr(_idx, len));
 	_idx += len;
 	skip_whitespaces();
-	if (_line[_idx] != ';' && _line[_idx] != '}')
-		throw (std::exception());
-	if(_line[_idx] == ';')
-		_idx++;
+	if (_line[_idx] != ';')
+	{
+		std::cerr << "directive \"server_name\" is not terminated by \";\"" << std::endl;
+		throw (ParsingError());
+	}
+	_idx++;
 }
 void
 BuilderCore::parse_server_root(Server *server)
@@ -113,13 +121,18 @@ BuilderCore::parse_server_root(Server *server)
 	skip_whitespaces();
 	size_t	len = _line.find_first_of(";} \n\r\t\v\f", _idx) - _idx;
 	if (!len)
-		throw (std::exception());
+	{
+		std::cerr << "Parsing Error : invalid number of arguments in \"root\" directive" << " on line " << line_count() << std::endl;
+		throw (ParsingError());
+	}
 	server->set_root(_line.substr(_idx, len));
 	_idx += len;
 	skip_whitespaces();
-	if (_line[_idx] != ';' && _line[_idx] != '}')
-		throw (std::exception());
-	if(_line[_idx] == ';')
+	if (_line[_idx] != ';')
+	{
+		std::cerr << "directive \"root\" is not terminated by \";\"" << std::endl;
+		throw (ParsingError());
+	}
 		_idx++;
 }
 
@@ -130,14 +143,19 @@ BuilderCore::parse_server_path_error_page(Server *server)
 	skip_whitespaces();
 	size_t	len = _line.find_first_of(";} \n\r\t\v\f", _idx) - _idx;
 	if (!len)
-		throw (std::exception());
+	{
+		std::cerr << "Parsing Error : invalid number of arguments in \"path_error_page\" directive" << " on line " << line_count() << std::endl;
+		throw (ParsingError());
+	}
 	server->set_path_error_page(_line.substr(_idx, len));
 	_idx += len;
 	skip_whitespaces();
-	if (_line[_idx] != ';' && _line[_idx] != '}')
-		throw (std::exception());
-	if(_line[_idx] == ';')
-		_idx++;
+	if (_line[_idx] != ';')
+	{
+		std::cerr << "directive \"path_error_page\" is not terminated by \";\"" << std::endl;
+		throw (ParsingError());
+	}
+	_idx++;
 }
 
 void
@@ -157,17 +175,16 @@ BuilderCore::parse_server_auto_index(Server *server)
 	}
 	else
 	{
-		std::cerr << "On or Off only for autoindex" << std::endl;
-		throw (std::exception());
+		std::cerr << "invalid value \"" << _line.substr(_idx, _line.find_first_of(";} \n\r\t\v\f", _idx) - _idx) << "\" in \"autoindex\" directive, it must be \"on\" or \"off\"" << std::endl;
+		throw (ParsingError());
 	}
 	skip_whitespaces();
-	if (_line[_idx] != ';' && _line[_idx] != '}')
+	if (_line[_idx] != ';')
 	{
-		std::cerr << "Should end by ; or }" << std::endl;
-		throw (std::exception());
+		std::cerr << "directive \"autoindex\" is not terminated by \";\"" << std::endl;
+		throw (ParsingError());
 	}
-	if(_line[_idx] == ';')
-		_idx++;
+	_idx++;
 }
 
 void
@@ -187,10 +204,12 @@ BuilderCore::parse_server_client_max_body_size(Server *server)
 	_idx++;
 	server->set_client_max_body_size(client_max_body_size);
 	skip_whitespaces();
-	if (_line[_idx] != ';' && _line[_idx] != '}')
-		throw (std::exception());
-	if(_line[_idx] == ';')
-		_idx++;
+	if (_line[_idx] != ';')
+	{
+		std::cerr << "directive \"client_max_body_size\" is not terminated by \";\"" << std::endl;
+		throw (ParsingError());
+	}
+	_idx++;
 }
 
 void
@@ -200,7 +219,10 @@ BuilderCore::parse_server()
 	skip_whitespaces();
 	Server server;
 	if (_line [_idx++] != '{')
-		throw (std::exception());
+	{
+		std::cerr << "directive \"server\" has no opening \"{\"" << std::endl;
+		throw (ParsingError());
+	}
 	skip_whitespaces();
 	while (_line[_idx] && _line[_idx] != '}')
 	{
@@ -219,9 +241,14 @@ BuilderCore::parse_server()
 		else
 		{
 			std::cerr << "Wrong directive in server" << std::endl;
-			throw (std::exception());
+			throw (ParsingError());
 		}
 		skip_whitespaces();
+	}
+	if (_line[_idx] != '}')
+	{
+		std::cerr << "unexpected end of file, expecting \"}\"" << std::endl;
+		throw (ParsingError());
 	}
 	_core->add_server(server);
 	_idx ++;
@@ -240,26 +267,30 @@ BuilderCore::parse_worker()
 		_idx++;
 		return ;
 	}
-	std::cerr << "Wrong worker" << std::endl;
-	throw (std::exception());
+	else
+	{
+		std::cerr << "directive \"worker\" is not terminated by \";\"" << std::endl;
+		throw (ParsingError());
+	}
 }
 
 int
 BuilderCore::stoi_skip_number()
 {
-	int		ret;
-	int		i = 0;
+	int			ret;
+	int			i = 0;
+	std::locale loc;
 
 	while(_line[i + _idx])
 	{
-		if (!isdigit(_line[i + _idx]))
+		if (!isdigit(_line[i + _idx], loc))
 			break ;
 		i++;
 	}
 	if (!i)
 	{
 		std::cerr << "Missing number" << std::endl;
-		throw (std::exception());
+		throw (ParsingError());
 	}
 	std::stringstream ss(_line.substr(_idx, i));
 	ss >> ret;
