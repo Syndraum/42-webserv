@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:46:36 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 15:25:16 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ class BuilderCore
 		size_t			_idx;
 		std::string		_line;
 		Core			*_core;
+		std::string		_error_msg;
 
 		void			skip_whitespaces();
 		void			skip_comments();
+		int				line_count();
 		void			parse_server_port(Server *server);
 		void			parse_server_name(Server *server);
 		void			parse_server_root(Server *server);
@@ -39,4 +41,11 @@ class BuilderCore
 		~BuilderCore();
 		void			print_debug() const; //tmp
 		Core *			get_builded_core() const;
+	
+		class ParsingError : public std::exception
+		{
+				virtual const char*	what() const throw(){
+					return ("Parsing Error");
+			}
+		};
 };

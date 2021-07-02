@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:08:58 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/01 16:49:05 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 # define VERSION "HTTP/1.1"
 
-# include "includes.hpp"
 # include "Response.hpp"
 
 class AMethod;

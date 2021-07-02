@@ -6,14 +6,13 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/01 15:38:17 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/01 16:48:40 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Core.hpp"
 #include <cstring>
 #include <fstream>
-#include "includes.hpp"
 
 Core::Core(void) :
 _worker(3),

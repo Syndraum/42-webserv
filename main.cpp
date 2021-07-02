@@ -6,18 +6,20 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/30 18:08:43 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/01 16:47:47 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include <map>
 
+#include "Request.hpp"
 #include "Core.hpp"
 #include "Server.hpp"
 #include "MethodGet.hpp"
 #include "MethodDelete.hpp"
-#include "includes.hpp"
 #include "BuilderCore.hpp"
 
 #include <sys/types.h>

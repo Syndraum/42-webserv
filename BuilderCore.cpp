@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:36:50 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 15:25:06 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ _core(core)
 			skip_comments();
 		else
 		{
-			std::cerr << "Wrong directive" << std::endl;
-			throw (std::exception()); // determine specific errors
+			std::cerr << "Parsing Error : unknown directive " << _line.substr(_idx, _line.find_first_of(";} \n\r\t\v\f", _idx) - _idx) << " on line " << line_count() << std::endl;
+			throw (ParsingError()); // determine specific errors
 		}
 		skip_whitespaces();
 	}
@@ -42,6 +42,12 @@ Core *
 BuilderCore::get_builded_core() const
 {
 	return (_core);
+}
+
+int
+BuilderCore::line_count()
+{
+	return(std::count(_line.begin(), _line.begin() + _idx, '\n'));
 }
 
 void
