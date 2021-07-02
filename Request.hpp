@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 16:49:05 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 15:51:43 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ class Request
 		std::map<std::string, std::string>			_headers;
 
 	public:
+		class NoMethod : public std::exception
+		{
+			virtual const char* what() const throw(){
+				return "NoMethod";
+			}
+		};
 		Request();
 		Request(Request const &rhs);
 		~Request();

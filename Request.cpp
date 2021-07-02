@@ -6,13 +6,14 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/11 16:28:56 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 16:45:44 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 15:53:14 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request() {}
+Request::Request():
+_method(0) {}
 
 Request::Request(Request const &rhs)
 {
@@ -74,7 +75,9 @@ Request::add_header(std::pair<std::string, std::string> const &rhs)
 void
 Request::action(Response & response)
 {
-		_method->action(*this, response);
+	if (!_method) //if method == NULL
+		throw NoMethod();
+	_method->action(*this, response);
 }
 
 //void

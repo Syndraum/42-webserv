@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:44:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/01 15:14:38 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 15:34:51 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@ class ASocket
 	protected:
 		int						_socket;
 		sockaddr_in				_address;
+		char					_buffer[BUFFER_SIZE];
 
 	public:
 		
+		ASocket(void);
 		virtual ~ASocket(void);
 
 		int						get_socket(void) const;
@@ -38,6 +40,7 @@ class ASocket
 		const sockaddr_in &		get_address(void) const;
 		void					set_address(const sockaddr_in & Address);
 		int						get_next_line(std::string & str);
+		void					reset_buffer(void);
 };
 
 #endif

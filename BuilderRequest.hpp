@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:20 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:49:21 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 16:00:18 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ class BuilderRequest
 		{
 			virtual const char* what() const throw(){
 				return "Not Implemented";
+			}
+		};
+		class NoRequest : public std::exception
+		{
+			virtual const char* what() const throw(){
+				return "NoRequest";
 			}
 		};
 };

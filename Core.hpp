@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/01 15:26:47 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 15:58:45 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 class Core
 {
 	public:
-
 		typedef std::vector<ClientSocket>	client_vector;
 
 	private:
@@ -48,6 +47,8 @@ class Core
 		void								_handle_request_and_detect_close_connection();
 		void								_detect_reset_server_poll_fd();
 
+		void								_cdai_dirty_function(void); //temp but please keep it till the end;
+		std::string							_get_path(std::string);
 	public:
 
 		Core(void);

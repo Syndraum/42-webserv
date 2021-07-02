@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:15 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:49:16 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 16:00:52 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ int
 BuilderRequest::add_method(std::string line)
 {
 	int ret = line.find(' ');
+//	std::cout << "ret: " << ret << std::endl;
 	std::string name = line.substr(0, ret);
 
+//	std::cout << "name: " << name << std::endl;
 	_request->set_method(_methods.get_method(name));
 	if (!_request->get_method())
 		throw MethodNotImplemented();
@@ -57,6 +59,8 @@ BuilderRequest::add_version(std::string line)
 void
 BuilderRequest::first_line(std::string line)
 {
+	if (line[0] == '\0')
+		throw BadRequest();
 	int	j = add_method(line);
 	j += add_path(&line[j]);
 	j += add_version(&line[j]);
@@ -86,8 +90,10 @@ BuilderRequest::parse_request(ASocket & socket)
 
 	while( gnl_ret && (gnl_ret = socket.get_next_line(line)))
 	{
+		if (gnl_ret == -1)
+			throw NoRequest();
 //		std::cout << "gnl_ret: " << gnl_ret << std::endl;
-//		std::cout << "line: " << line << std::endl;
+		std::cout << "line: " << line << std::endl;
 
 		line += "\r"; // Maybe, we can remote this line ? (from cdai)
 		//check printable characters
@@ -98,7 +104,10 @@ BuilderRequest::parse_request(ASocket & socket)
 		}
 		else{
 			if (!parse_headers(line))
+			{
+				socket.reset_buffer();
 				gnl_ret = 0;
+			}
 		}
 	}
 }
