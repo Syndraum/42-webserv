@@ -22,6 +22,7 @@ _nb_active(0)
 		.add_method(new MethodGet())
 		.add_method(new MethodDelete())
 		;
+	_br.set_library(&_methods);
 }
 
 Core::Core(Core const & src)
@@ -167,17 +168,18 @@ Core::_handle_request_and_detect_close_connection()
 	{
 //		std::cout << "test" << std::endl;
 
-		BuilderRequest	br(_methods);
-		Request * request = 0;
+		// BuilderRequest	br(_methods);
+		Request * request = &it->get_request();
 		Response response(200);
 //		std::cout << "test" << std::endl;
 
 		//Check if it was for closing , and also read the 
 		//incoming message 
 		try{
-			br.parse_request(*it);
-			request = br.get_request();
-			br.reset();
+			_br.set_request(request);
+			_br.parse_request(*it);
+			// request = br.get_request();
+			// br.reset();
 //			std::cout << "path : " << request->get_path() << std::endl;
 //			std::cout << "request : " << request->get_method()->get_name() << std::endl;
 			if (request->get_path() == "/")
@@ -220,7 +222,8 @@ Core::_handle_request_and_detect_close_connection()
 			// std::string ROOT = "./webserviette_root";
 			// std::string filename = ROOT + request.get_path();
 
-		delete request;
+		// delete request;
+		request->reset();
 		std::cout << "write in Socket: " << it->get_socket() << std::endl;
 		response.send_response(it->get_socket());
 

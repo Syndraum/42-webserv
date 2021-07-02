@@ -30,6 +30,7 @@ class Request
 		std::string									_path;
 		std::string									_version;
 		std::map<std::string, std::string>			_headers;
+		bool										_is_first_line;
 
 	public:
 		class NoMethod : public std::exception
@@ -48,14 +49,17 @@ class Request
 		std::string const &							get_version() const;
 		std::map<std::string, std::string> const &	get_headers() const;
 		std::string const &							get_header(std::string const &key);
+		bool										get_first_line() const;
 
 		void										set_method(AMethod * rhs);
 		void										set_path(std::string const &rhs);
 		void										set_version(std::string const &rhs);
 		void										set_headers(std::map<std::string, std::string> const &rhs);
 		void										add_header(std::pair<std::string, std::string> const &rhs);
+		void										set_first_line(bool);
 
 		void										action(Response &);
+		void										reset();
 
 //		void										print_debug() const;
 };

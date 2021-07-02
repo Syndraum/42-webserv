@@ -16,15 +16,19 @@
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include "ASocket.hpp"
+# include "Request.hpp"
 
 class ClientSocket : public ASocket
 {
+		Request		_request;
 	public:
 
 		ClientSocket(void);
 		ClientSocket(ClientSocket const & src);
 		virtual ~ClientSocket(void);
 		ClientSocket &	operator=(ClientSocket const &rhs);
+
+		Request &	get_request();
 };
 
 #endif

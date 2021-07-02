@@ -22,16 +22,16 @@ class BuilderRequest
 {
 	private:
 	
-		Request	*				_request;
-		MethodLibrary &			_methods;
+		Request	*			_request;
+		MethodLibrary *		_methods;
 
-		BuilderRequest(void);
 		BuilderRequest(BuilderRequest const & src);
 		BuilderRequest &		operator=(BuilderRequest const &rhs);
 
 	public:
 
-		BuilderRequest(MethodLibrary &);
+		BuilderRequest(void);
+		BuilderRequest(MethodLibrary *);
 		virtual ~BuilderRequest(void);
 
 		int						add_method(std::string line);
@@ -41,7 +41,8 @@ class BuilderRequest
 		bool					parse_headers(std::string line);
 		void					parse_request(ASocket &);
 		Request *				get_request() const;
-		void					reset();
+		void					set_request(Request *);
+		void					set_library(MethodLibrary *);
 
 		class BadRequest : public std::exception
 		{

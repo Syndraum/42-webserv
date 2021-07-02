@@ -51,6 +51,9 @@ ${NAME}:	${OBJS}
 run:		all
 			cat test.conf | ./$(NAME)
 
+vg:	all
+			cat test.conf | valgrind ./$(NAME)
+
 clean:
 			${RM} ${OBJS}
 			${RM} ${DEPS}

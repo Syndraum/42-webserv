@@ -12,8 +12,13 @@
 
 #include "BuilderRequest.hpp"
 
-BuilderRequest::BuilderRequest(MethodLibrary & methods) :
-_request(new Request()),
+BuilderRequest::BuilderRequest(void) :
+_request(0),
+_methods(0)
+{}
+
+BuilderRequest::BuilderRequest(MethodLibrary * methods) :
+_request(0),
 _methods(methods)
 {}
 
@@ -30,7 +35,7 @@ BuilderRequest::add_method(std::string line)
 	std::string name = line.substr(0, ret);
 
 //	std::cout << "name: " << name << std::endl;
-	_request->set_method(_methods.get_method(name));
+	_request->set_method(_methods->get_method(name));
 	if (!_request->get_method())
 		throw MethodNotImplemented();
 	return (ret + 1);
@@ -59,6 +64,7 @@ BuilderRequest::add_version(std::string line)
 void
 BuilderRequest::first_line(std::string line)
 {
+	_request->set_first_line(false);
 	if (line[0] == '\0')
 		throw BadRequest();
 	int	j = add_method(line);
@@ -85,7 +91,7 @@ void
 BuilderRequest::parse_request(ASocket & socket)
 {
 	std::string		line;
-	bool			is_first_line = true;
+	// bool			is_first_line = true;
 	int				gnl_ret = 1;
 
 	while( gnl_ret && (gnl_ret = socket.get_next_line(line)))
@@ -97,10 +103,9 @@ BuilderRequest::parse_request(ASocket & socket)
 
 		line += "\r"; // Maybe, we can remote this line ? (from cdai)
 		//check printable characters
-		if (is_first_line)
+		if (_request->get_first_line())
 		{
 			first_line(line);
-			is_first_line = false;
 		}
 		else{
 			if (!parse_headers(line))
@@ -119,7 +124,17 @@ BuilderRequest::get_request() const
 }
 
 void
-BuilderRequest::reset()
+BuilderRequest::set_request(Request * request)
 {
-	_request = new Request();
+	if (!request)
+		throw std::exception();
+	_request = request;
+}
+
+void
+BuilderRequest::set_library(MethodLibrary * library)
+{
+	if (!library)
+		throw std::exception();
+	_methods = library;
 }

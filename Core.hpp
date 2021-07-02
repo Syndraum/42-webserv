@@ -42,6 +42,7 @@ class Core
 		struct pollfd *						_fds;
 		int									_nb_fds;
 		MethodLibrary						_methods;
+		BuilderRequest						_br;
 
 		void								_accept_connection();
 		void								_handle_request_and_detect_close_connection();
