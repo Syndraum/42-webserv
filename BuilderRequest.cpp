@@ -10,9 +10,10 @@ BuilderRequest::~BuilderRequest(void)
 int		BuilderRequest::add_method(std::string line)
 {
 	int ret = line.find(' ');
+//	std::cout << "ret: " << ret << std::endl;
 	std::string name = line.substr(0, ret);
 
-	//std::cout << "name: " << name << std::endl;
+//	std::cout << "name: " << name << std::endl;
 	_request->set_method(_methods.get_method(name));
 	if (!_request->get_method())
 		throw MethodNotImplemented();
@@ -73,7 +74,7 @@ void	BuilderRequest::parse_request(ASocket & socket)
 		if (gnl_ret == -1)
 			throw NoRequest();
 		
-		std::cout << "gnl_ret: " << gnl_ret << std::endl;
+//		std::cout << "gnl_ret: " << gnl_ret << std::endl;
 		std::cout << "line: " << line << std::endl;
 
 		line += "\r"; // Maybe, we can remote this line ? (from cdai)

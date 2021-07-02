@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/01 17:16:11 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/02 11:11:25 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	Core::start(){
 		_nbActive = poll(_fds, _nbFds, 60000);
 		_acceptConnection();
 		_handle_request_and_detect_close_connection();
+//		_cdai_dirty_function();
 		//_detectResetServerPollFD();
 
 		// detect and set serversocket to POLLIN or not
@@ -148,17 +149,12 @@ void	Core::_handle_request_and_detect_close_connection()
 {
 	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
 	{
-		std::cout << "test" << std::endl;
-
-//		int valread;
-//		char buffer[1025];
-//		Request request;
-//		int fd = it->get_socket();
+//		std::cout << "test" << std::endl;
 
 		BuilderRequest	br(_methods);
 		Request * request = 0;
 		Response response(200);
-		std::cout << "test" << std::endl;
+//		std::cout << "test" << std::endl;
 
 		//Check if it was for closing , and also read the 
 		//incoming message 
@@ -215,76 +211,13 @@ void	Core::_handle_request_and_detect_close_connection()
 			// std::string filename = ROOT + request.get_path();
 
 			delete request;
-			ClientSocket & cs = _client.back();
-			int clientSocket = cs.get_socket();
-
-			std::cout << "clientSocket: " << clientSocket << std::endl;
-			response.sendResponse(clientSocket);
+			std::cout << "write in Socket: " << it->get_socket() << std::endl;
+			response.sendResponse(it->get_socket());
 
 		close( it->get_socket() );  
 		_client.erase(it);  
 		break;
 		//}
-
-
-//		if ((valread = recv( fd , buffer, 1024, MSG_DONTWAIT)) == 0)  
-//		//if ((valread = recv( fd , buffer, 1024, 0)) == 0)  
-//		{
-//			std::cout << "Host disconnected" << std::endl;  
-//
-//			close( fd );  
-//			_client.erase(it);  
-//			break;
-//		}
-//
-//		else if(valread > 0)
-//		{
-//
-//			// debug
-//			buffer[valread] = '\0';
-//			std::cout << buffer << std::endl;
-//
-//			// parse_request ?
-////			std::stringstream ss;
-////			ss << buffer;
-////			parse_request(ss, &request);
-//
-//			// get requested file path
-//			std::string ROOT = "./webserviette_root";
-//			std::string filename = ROOT + get_path(buffer);
-//
-//			std::cout << filename << std::endl;
-//			if (filename == ROOT + "/")
-//				filename += "index.html";
-//
-//			// create and send response
-//			Response response(200);
-//			try
-//			{
-//				response.setBody(filename);
-//			}
-//			catch (std::exception & e)
-//			{
-//				std::cout << e.what() << std::endl;
-//
-//				filename = ROOT + "/404.html";
-//				response.set404(filename);
-//			}
-//
-//			// need client socket
-//			ClientSocket & cs = _client.back();
-//			int clientSocket = cs.get_socket();
-//
-//			std::cout << "clientSocket: " << clientSocket << std::endl;
-//			response.sendResponse(clientSocket);
-//
-//			// message for debug, to remove later
-//			std::cout << "Server still connected" << std::endl << std::endl;
-//
-//			//close( fd );  
-//			//_client.erase(it);  
-//			break;
-//		}
 	}
 }
 
@@ -294,6 +227,79 @@ void	Core::_detectResetServerPollFD()
 		for (size_t i = 0; i < _serverSockets.size(); i++)
 			if (_fds[i].revents & POLLOUT)
 				_fds[i].revents = 0;
+}
+
+void	Core::_cdai_dirty_function()
+{
+	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
+	{
+//		std::cout << "test" << std::endl;
+
+		int valread;
+		char buffer[1025];
+		Request request;
+		int fd = it->get_socket();
+
+		if ((valread = recv( fd , buffer, 1024, MSG_DONTWAIT)) == 0)  
+		//if ((valread = recv( fd , buffer, 1024, 0)) == 0)  
+		{
+			std::cout << "Host disconnected" << std::endl;  
+
+			close( fd );  
+			_client.erase(it);  
+			break;
+		}
+
+		else if(valread > 0)
+		{
+
+			// debug
+			buffer[valread] = '\0';
+			std::cout << buffer << std::endl;
+
+			// parse_request ?
+//			std::stringstream ss;
+//			ss << buffer;
+//			parse_request(ss, &request);
+
+			// get requested file path
+			std::string ROOT = "./webserviette_root";
+			std::string filename = ROOT + get_path(buffer);
+
+			std::cout << filename << std::endl;
+			if (filename == ROOT + "/")
+				filename += "index.html";
+
+			// create and send response
+			Response response(200);
+			try
+			{
+				response.setBody(filename);
+			}
+			catch (std::exception & e)
+			{
+				std::cout << e.what() << std::endl;
+
+				filename = ROOT + "/404.html";
+				response.set404(filename);
+			}
+
+			// need client socket
+			ClientSocket & cs = _client.back();
+			int clientSocket = cs.get_socket();
+
+			std::cout << "clientSocket: " << clientSocket << std::endl;
+			response.sendResponse(it->get_socket());
+
+			// message for debug, to remove later
+			std::cout << "Server still connected" << std::endl << std::endl;
+
+			//close( fd );  
+			//_client.erase(it);  
+			break;
+		}
+	}
+
 }
 
 std::string Core::get_path(std::string buffer)

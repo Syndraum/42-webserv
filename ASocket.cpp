@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/01 16:56:38 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/02 10:52:37 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int		ASocket::get_next_line(std::string & str)
 {
 	int	response = 2;
 	int ret = 1;
-//	static char buffer[BUFFER_SIZE];
 
 	std::string temp("");
 	size_t found;
@@ -64,8 +63,9 @@ int		ASocket::get_next_line(std::string & str)
 		else if (found == std::string::npos)
 		{
 //			std::cout << "recv" << std::endl;
+			std::cout << "ASocket->_socket" << _socket << std::endl;
 			ret = recv(_socket, _buffer, BUFFER_SIZE - 1, MSG_DONTWAIT);
-			std::cout << "ret" << ret << std::endl;
+//			std::cout << "ret" << ret << std::endl;
 //			if (ret == 0)
 //				return 0;
 			if (ret == -1)
