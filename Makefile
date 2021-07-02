@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
+#    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/06/25 17:23:11 by cdai             ###   ########.fr        #
+#    Updated: 2021/06/30 18:32:13 by mchardin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								Reader.cpp \
 								Request.cpp \
 								BuilderRequest.cpp \
+								BuilderCore.cpp \
 								AMethod.cpp \
 								MethodGet.cpp \
 								MethodDelete.cpp \
@@ -49,7 +50,7 @@ ${NAME}:	${OBJS}
 			${CXX} ${CXXFLAGS} ${OBJS} -o ${NAME}
 
 run:		all
-			./$(NAME)
+			cat test.conf | ./$(NAME)
 
 clean:
 			${RM} ${OBJS}

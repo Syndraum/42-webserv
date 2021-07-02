@@ -3,21 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/06/29 14:50:16 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/01 16:47:47 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include <map>
 
+#include "Request.hpp"
 #include "Core.hpp"
 #include "Server.hpp"
 #include "MethodGet.hpp"
 #include "MethodDelete.hpp"
-#include "includes.hpp"
+#include "BuilderCore.hpp"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -42,12 +45,9 @@ int		main()
 //	std::cout << "gnl_ret: " << gnl_ret << std::endl;
 //	std::cout << "str: " << str << std::endl;
 
-
 	Core core = Core();
-	core.addServer()
-		.addPort(8888)
-		.addPort(3333)
-		;
+	BuilderCore builder_core(std::cin, &core);
+	builder_core.print_debug();
 	core.start();
 
 //maia's part

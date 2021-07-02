@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientSocket.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:56 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/29 11:48:04 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/01 15:21:37 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,12 @@
 
 class ClientSocket : public ASocket
 {
-public:
+	public:
 
-	ClientSocket(void);
-	ClientSocket(ClientSocket const & src);
-	virtual ~ClientSocket(void);
-	ClientSocket &	operator=(ClientSocket const &rhs);
-
-private:
+		ClientSocket(void);
+		ClientSocket(ClientSocket const & src);
+		virtual ~ClientSocket(void);
+		ClientSocket &	operator=(ClientSocket const &rhs);
 };
 
 #endif

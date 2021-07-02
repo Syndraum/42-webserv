@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ClientSocket.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:14:07 by syndraum          #+#    #+#             */
-/*   Updated: 2021/06/29 11:33:20 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/01 15:21:21 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,10 @@ ClientSocket::ClientSocket(ClientSocket const & src)
 	*this = src;
 }
 
-ClientSocket::~ClientSocket(void)
-{
-	
-}
+ClientSocket::~ClientSocket(void) {}
 
-ClientSocket &	ClientSocket::operator=(ClientSocket const & rhs)
+ClientSocket &
+ClientSocket::operator=(ClientSocket const & rhs)
 {
 	if (&rhs != this)
 		this->_socket = rhs._socket;

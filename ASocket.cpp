@@ -3,39 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   ASocket.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/06/29 12:08:37 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/01 15:37:07 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ASocket.hpp"
 
-ASocket::~ASocket(void)
-{}
+ASocket::~ASocket(void) {}
 
-int	ASocket::get_socket(void) const
+int
+ASocket::get_socket(void) const
 {
 	return _socket;
 }
 
-void	ASocket::set_socket(int socket)
+void
+ASocket::set_socket(int socket)
 {
 	_socket = socket;
 }
 
-sockaddr_in	& ASocket::get_address(void)
+const sockaddr_in &
+ASocket::get_address(void) const
 {
-	return this->_address;
+	return _address;
 }
 
-void		ASocket::set_address(sockaddr_in & Address)
+void
+ASocket::set_address(const sockaddr_in & Address)
 {
 	this->_address = Address;
 }
 
-int		ASocket::get_next_line(std::string & str)
+int
+ASocket::get_next_line(std::string & str)
 {
 	int	response = 2;
 	int ret = 1;
@@ -73,7 +77,6 @@ int		ASocket::get_next_line(std::string & str)
 			break;
 		}
 	}
-
 
 	if (temp.length() > found)
 	{
