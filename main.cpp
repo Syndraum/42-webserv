@@ -14,10 +14,17 @@
 #include "BuilderCore.hpp"
 #include "Reader.hpp"
 
-int		main()
+int		main(int argc, char *argv[])
 {
 	std::string path_config_file = "default.conf";
 
+	if (argc > 2)
+	{
+		std::cerr << "Error: too much arguemnt" <<std::endl;
+		return (2);
+	}
+	if (argc == 2)
+		path_config_file = argv[1];
 	Reader reader(path_config_file);
 	reader.open();
 	if (reader.get_ifs().fail())
