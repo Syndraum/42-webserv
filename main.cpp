@@ -26,8 +26,11 @@ int		main(int argc, char *argv[])
 	if (argc == 2)
 		path_config_file = argv[1];
 	Reader reader(path_config_file);
-	reader.open();
-	if (reader.get_ifs().fail())
+	try
+	{
+		reader.open();
+	}
+	catch(const std::exception& e)
 	{
 		std::cerr << "Error: Configuration file: " << path_config_file << " not found" << std::endl;
 		return (1);

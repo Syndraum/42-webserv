@@ -43,6 +43,8 @@ void
 Reader::open()
 {
 	_ifs.open(_path.c_str());
+	if (_ifs.fail())
+		throw std::exception();
 	_ifs.seekg (0, _ifs.end);
 	_length = _ifs.tellg();
 	_ifs.seekg (0, _ifs.beg);
