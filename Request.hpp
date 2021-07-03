@@ -19,9 +19,11 @@
 
 # define VERSION "HTTP/1.1"
 
-# include "Response.hpp"
+# include <map>
+# include <string>
 
 class AMethod;
+class Response;
 
 class Request
 {
@@ -65,5 +67,6 @@ class Request
 };
 
 # include "AMethod.hpp"
+# include "Response.hpp"
 
 #endif

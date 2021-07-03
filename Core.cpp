@@ -170,7 +170,7 @@ Core::_handle_request_and_detect_close_connection()
 
 		// BuilderRequest	br(_methods);
 		Request * request = &it->get_request();
-		Response response(200);
+		Response response(*request, 200);
 //		std::cout << "test" << std::endl;
 
 		//Check if it was for closing , and also read the 
@@ -223,7 +223,7 @@ Core::_handle_request_and_detect_close_connection()
 			// std::string filename = ROOT + request.get_path();
 
 		// delete request;
-		request->reset();
+		// request->reset();
 		std::cout << "write in Socket: " << it->get_socket() << std::endl;
 		response.send_response(it->get_socket());
 
@@ -285,7 +285,7 @@ void	Core::_cdai_dirty_function()
 				filename += "index.html";
 
 			// create and send response
-			Response response(200);
+			Response response(it->get_request(), 200);
 			try
 			{
 				response.set_body(filename);
