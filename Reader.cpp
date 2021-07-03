@@ -42,14 +42,7 @@ Reader::operator=(Reader const & rhs)
 void
 Reader::open()
 {
-	try
-	{
-		_ifs.open(_path.c_str());
-	}
-	catch(const std::exception& e)
-	{
-		throw;
-	}
+	_ifs.open(_path.c_str());
 	_ifs.seekg (0, _ifs.end);
 	_length = _ifs.tellg();
 	_ifs.seekg (0, _ifs.beg);
@@ -76,4 +69,10 @@ int
 Reader::get_length() const
 {
 	return _length;
+}
+
+std::ifstream &
+Reader::get_ifs()
+{
+	return _ifs;
 }

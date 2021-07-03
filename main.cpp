@@ -12,11 +12,21 @@
 
 #include "Core.hpp"
 #include "BuilderCore.hpp"
+#include "Reader.hpp"
 
 int		main()
 {
+	std::string path_config_file = "default.conf";
+
+	Reader reader(path_config_file);
+	reader.open();
+	if (reader.get_ifs().fail())
+	{
+		std::cerr << "Error: Configuration file: " << path_config_file << " not found" << std::endl;
+		return (1);
+	}
 	Core core = Core();
-	BuilderCore builder_core(std::cin, &core);
+	BuilderCore builder_core(reader.get_ifs(), &core);
 	builder_core.print_debug();
 	core.start();
 
