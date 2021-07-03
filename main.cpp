@@ -33,8 +33,17 @@ int		main(int argc, char *argv[])
 		return (1);
 	}
 	Core core = Core();
-	BuilderCore builder_core(reader.get_ifs(), &core);
-	builder_core.print_debug();
+	try
+	{
+		BuilderCore builder_core(reader.get_ifs(), &core);
+		builder_core.print_debug();
+	}
+	catch(const std::exception& e)
+	{
+		// std::cerr << e.what() << '\n';
+		return (3);
+	}
+	
 	core.start();
 
 //maia's part
