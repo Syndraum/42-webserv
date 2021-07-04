@@ -28,6 +28,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								MethodGet.cpp \
 								MethodDelete.cpp \
 								MethodLibrary.cpp \
+								Extension.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}
@@ -49,10 +50,10 @@ ${NAME}:	${OBJS}
 			${CXX} ${CXXFLAGS} ${OBJS} -o ${NAME}
 
 run:		all
-			cat test.conf | ./$(NAME)
+			./$(NAME)
 
 vg:	all
-			cat test.conf | valgrind ./$(NAME)
+			valgrind ./$(NAME)
 
 clean:
 			${RM} ${OBJS}
