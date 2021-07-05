@@ -42,7 +42,9 @@ Reader::operator=(Reader const & rhs)
 void
 Reader::open()
 {
-	_ifs.open(_path.c_str());
+	if (_ifs.is_open())
+		close();
+	_ifs.open(_path.c_str(), std::ios_base::in );
 	if (_ifs.fail())
 		throw std::exception();
 	_ifs.seekg (0, _ifs.end);
@@ -65,6 +67,12 @@ void
 Reader::close()
 {
 	_ifs.close();
+}
+
+void
+Reader::get_line()
+{
+	std::getline(_ifs, _line);
 }
 
 int

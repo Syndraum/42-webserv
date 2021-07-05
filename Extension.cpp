@@ -41,5 +41,4 @@ Extension::get_mine_type(const std::string & ext )
 		return ("image/png");
 	else
 		return ("application/octet-stream");
-	
 }
