@@ -24,7 +24,11 @@ MethodGet::action(const Request & request, Response & response)
 {
 	try
 	{
-		response.set_code(200).set_body(request.get_path().c_str());
+		response
+			.set_code(200)
+			.set_body(request.get_path().c_str())
+			.add_header("Content-type", Extension::get_mine_type(Extension::get_extention(request.get_path().c_str())))
+			;
 	}
 	catch(const std::exception& e)
 	{

@@ -36,6 +36,7 @@ class Reader
 		void			to_string(std::string & );
 		void			close();
 
+		std::ifstream &	get_ifs();
 		int				get_length() const;
 };
 

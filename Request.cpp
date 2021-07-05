@@ -6,13 +6,19 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/11 16:28:56 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 16:45:44 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 15:53:14 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request() {}
+Request::Request():
+_method(0),
+_path(),
+_version(),
+_headers(),
+_is_first_line(true)
+{}
 
 Request::Request(Request const &rhs)
 {
@@ -51,6 +57,10 @@ std::string const &
 Request::get_header(std::string const &key)
 { return (_headers[key]); }
 
+bool
+Request::get_first_line() const
+{ return (_is_first_line); }
+
 void
 Request::set_method(AMethod * rhs)
 { _method = rhs; }
@@ -72,9 +82,25 @@ Request::add_header(std::pair<std::string, std::string> const &rhs)
 { _headers.insert(rhs); }
 
 void
+Request::set_first_line(bool last_line)
+{ _is_first_line = last_line; }
+
+void
 Request::action(Response & response)
 {
-		_method->action(*this, response);
+	if (!_method) //if method == NULL
+		throw NoMethod();
+	_method->action(*this, response);
+}
+
+void
+Request::reset()
+{
+	_method = 0;
+	_path = "";
+	_version = "";
+	_headers.clear();
+	_is_first_line  = true;
 }
 
 //void

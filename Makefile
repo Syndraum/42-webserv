@@ -6,7 +6,7 @@
 #    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/06/30 18:32:13 by mchardin         ###   ########.fr        #
+#    Updated: 2021/07/02 15:28:43 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,6 @@ SRCS		=	$(addprefix $(PREFIX), \
 								main.cpp \
 								Server.cpp \
 								ASocket.cpp \
-								DevSocket.cpp \
 								ServerSocket.cpp \
 								ClientSocket.cpp \
 								Core.cpp \
@@ -29,6 +28,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								MethodGet.cpp \
 								MethodDelete.cpp \
 								MethodLibrary.cpp \
+								Extension.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}
@@ -37,7 +37,7 @@ DEPS		=	${OBJS:.o=.d}
 
 CXX			=	clang++
 
-CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98
+CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98 -g
 
 NAME 		=	webserv
 
@@ -50,7 +50,10 @@ ${NAME}:	${OBJS}
 			${CXX} ${CXXFLAGS} ${OBJS} -o ${NAME}
 
 run:		all
-			cat test.conf | ./$(NAME)
+			./$(NAME)
+
+vg:	all
+			valgrind ./$(NAME)
 
 clean:
 			${RM} ${OBJS}
@@ -65,6 +68,9 @@ re:			fclean all
 
 test:		all
 			$(PREFIX)$(NAME)
+
+valgrind:	all
+			valgrind $(PREFIX)$(NAME)
 
 .PHONY: 	all re run clean fclean
 

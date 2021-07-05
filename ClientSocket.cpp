@@ -12,7 +12,7 @@
 
 #include "ClientSocket.hpp"
 
-ClientSocket::ClientSocket(void)
+ClientSocket::ClientSocket(void) : ASocket(), _request()
 {
 	// _address = {0};
 	_socket = 0;
@@ -31,4 +31,10 @@ ClientSocket::operator=(ClientSocket const & rhs)
 	if (&rhs != this)
 		this->_socket = rhs._socket;
 	return *this;
+}
+
+Request &
+ClientSocket::get_request()
+{
+	return (_request);
 }

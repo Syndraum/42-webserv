@@ -1,0 +1,10 @@
+version: '3.3'
+services:
+  nginx:
+    container_name : test_nginx
+    image: nginx:latest
+    restart: on-failure
+    volumes:
+      - ./app:/usr/share/nginx/html
+    ports:
+      - '8080:80'

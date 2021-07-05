@@ -6,19 +6,20 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/01 15:33:20 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 15:41:38 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 
-Response::Response(int code) :
+Response::Response(Request & request, int code) :
 _version("HTTP/1.1"),
 _code(code),
-_body("")
+_body(""),
+_request(request)
 {}
 
-Response::Response(Response const & src)
+Response::Response(Response const & src) : _request(src._request)
 {
 	*this = src;
 }
@@ -36,6 +37,7 @@ Response::operator=(Response const & rhs)
 		this->_code = rhs._code;
 		this->_headers = rhs._headers;
 		this->_body = rhs._body;
+		this->_request = rhs._request;
 	}
 	return *this;
 }
@@ -77,6 +79,7 @@ Response::send_response(int fd)
 	std::string response = get_response();
 
 	write(fd, response.data(), response.size());
+	_request.reset();
 }
 
 std::string

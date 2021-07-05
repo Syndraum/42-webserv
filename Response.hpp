@@ -22,6 +22,8 @@
 # include <fstream>
 # include "Reader.hpp"
 
+class Request;
+
 class Response
 {
 	public:
@@ -34,6 +36,7 @@ class Response
 		int											_code;
 		header_map									_headers;
 		std::string									_body;
+		Request &									_request;
 	
 		std::string									_1xx__response(int code);
 		std::string									_2xx__response(int code);
@@ -43,7 +46,7 @@ class Response
 								
 	public:
 
-		Response(int code = 200);
+		Response(Request &, int code = 200);
 		Response(Response const & src);
 		virtual ~Response(void);
 		Response &									operator=(Response const &rhs);
@@ -57,5 +60,7 @@ class Response
 		Response &									set_body(const std::string & filename);
 		Response &									set_404(std::string & filename);
 };
+
+# include "Request.hpp"
 
 #endif

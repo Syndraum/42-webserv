@@ -6,14 +6,19 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:15 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:49:16 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/02 16:00:52 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BuilderRequest.hpp"
 
-BuilderRequest::BuilderRequest(MethodLibrary & methods) :
-_request(new Request()),
+BuilderRequest::BuilderRequest(void) :
+_request(0),
+_methods(0)
+{}
+
+BuilderRequest::BuilderRequest(MethodLibrary * methods) :
+_request(0),
 _methods(methods)
 {}
 
@@ -26,9 +31,11 @@ int
 BuilderRequest::add_method(std::string line)
 {
 	int ret = line.find(' ');
+//	std::cout << "ret: " << ret << std::endl;
 	std::string name = line.substr(0, ret);
 
-	_request->set_method(_methods.get_method(name));
+//	std::cout << "name: " << name << std::endl;
+	_request->set_method(_methods->get_method(name));
 	if (!_request->get_method())
 		throw MethodNotImplemented();
 	return (ret + 1);
@@ -57,6 +64,9 @@ BuilderRequest::add_version(std::string line)
 void
 BuilderRequest::first_line(std::string line)
 {
+	_request->set_first_line(false);
+	if (line[0] == '\0')
+		throw BadRequest();
 	int	j = add_method(line);
 	j += add_path(&line[j]);
 	j += add_version(&line[j]);
@@ -81,24 +91,28 @@ void
 BuilderRequest::parse_request(ASocket & socket)
 {
 	std::string		line;
-	bool			is_first_line = true;
+	// bool			is_first_line = true;
 	int				gnl_ret = 1;
 
 	while( gnl_ret && (gnl_ret = socket.get_next_line(line)))
 	{
+		if (gnl_ret == -1)
+			throw NoRequest();
 //		std::cout << "gnl_ret: " << gnl_ret << std::endl;
-//		std::cout << "line: " << line << std::endl;
+		std::cout << "line: " << line << std::endl;
 
 		line += "\r"; // Maybe, we can remote this line ? (from cdai)
 		//check printable characters
-		if (is_first_line)
+		if (_request->get_first_line())
 		{
 			first_line(line);
-			is_first_line = false;
 		}
 		else{
 			if (!parse_headers(line))
+			{
+				socket.reset_buffer();
 				gnl_ret = 0;
+			}
 		}
 	}
 }
@@ -110,7 +124,17 @@ BuilderRequest::get_request() const
 }
 
 void
-BuilderRequest::reset()
+BuilderRequest::set_request(Request * request)
 {
-	_request = new Request();
+	if (!request)
+		throw std::exception();
+	_request = request;
+}
+
+void
+BuilderRequest::set_library(MethodLibrary * library)
+{
+	if (!library)
+		throw std::exception();
+	_methods = library;
 }
