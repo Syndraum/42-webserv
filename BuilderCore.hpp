@@ -6,9 +6,12 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/02 15:44:12 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/05 16:14:47 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef BUILDER_CORE_HPP
+# define BUILDER_CORE_HPP
 
 #include "Core.hpp"
 #include <locale>
@@ -49,3 +52,6 @@ class BuilderCore
 			}
 		};
 };
+
+
+#endif
