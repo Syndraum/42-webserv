@@ -14,6 +14,7 @@
 # define METHODGET
 
 # include "AMethod.hpp"
+# include "Extension.hpp"
 
 class MethodGet : public AMethod
 {
