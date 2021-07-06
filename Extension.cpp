@@ -1,44 +1,54 @@
 #include "Extension.hpp"
 
-Extension::Extension(void){}
+Extension * Extension::_extension= 0;
 
-Extension::Extension(Extension const & src)
+Extension::Extension(void) : _csv_reader("./config/mine_type.csv")
 {
-	*this = src;
+	try
+	{
+		std::cout << "open" << std::endl;
+		_csv_reader.open();
+		_csv_reader
+			.parse_categeries()
+			.set_key_name("Name")
+			.parse_content()
+			;
+		// _csv_reader.debug();
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << "Warning: mine_type ressource is missing or incorrect" << std::endl;
+	}
 }
 
 Extension::~Extension(void)
 {
-	
-}
-
-Extension &	Extension::operator=(Extension const & rhs)
-{
-	if (this == &rhs)
-		;
-	return *this;
+	delete _extension;
 }
 
 std::string
-Extension::get_extention(const std::string & path)
+Extension::get_extension(const std::string & path)
 {
 	size_t posistion = path.rfind(".");
 
 	if (posistion == std::string::npos)
-		// throw std::exception();
 		return ("");
 	return (path.substr(posistion + 1));
 }
 
 std::string
-Extension::get_mine_type(const std::string & ext )
+Extension::get_mine_type(const std::string & ext, CsvReader & csv)
 {
-	if (ext == "html")
-		return ("text/html");
-	else if (ext == "txt")
-		return ("text/plain");
-	else if (ext == "png")
-		return ("image/png");
-	else
-		return ("application/octet-stream");
+	std::string mine_type = csv[ext];
+	if (mine_type.empty())
+		mine_type = "application/octet-stream";
+	return (mine_type);
+}
+
+Extension *
+Extension::get_instance(void)
+{
+	if (_extension == 0)
+		_extension = new Extension();
+	return (_extension);
 }

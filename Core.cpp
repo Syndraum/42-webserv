@@ -124,6 +124,12 @@ Core::set_worker(int worker)
 }
 
 void
+Core::set_extension(Extension * extension)
+{
+	_extension = extension;
+}
+
+void
 Core::print() const
 {
 	for (size_t i = 0; i < _servers.size(); i++)

@@ -81,7 +81,6 @@ CsvReader::parse_content()
 	{
 		tmp_vector = vector();
 		it = _categories.begin();
-		get_line();
 		find = _line.find('\r');
 		if (find != std::string::npos)
 			_line.erase(find, 1);
@@ -96,6 +95,19 @@ CsvReader::parse_content()
 		_content.insert(std::pair< std::string, vector >(key, tmp_vector));
 	}
 	return (*this);
+}
+
+std::string
+CsvReader::operator[](const std::string & key) const
+{
+	try
+	{
+		return (_content.at(key).at(0));
+	}
+	catch(const std::exception& e)
+	{
+		return ("");
+	}
 }
 
 void

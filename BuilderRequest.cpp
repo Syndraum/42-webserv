@@ -35,7 +35,7 @@ BuilderRequest::add_method(std::string line)
 	std::string name = line.substr(0, ret);
 
 //	std::cout << "name: " << name << std::endl;
-	_request->set_method(_methods->get_method(name));
+	_request->set_method(_methods->get_method( name));
 	if (!_request->get_method())
 		throw MethodNotImplemented();
 	return (ret + 1);

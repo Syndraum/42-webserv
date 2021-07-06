@@ -21,13 +21,23 @@ MethodGet::~MethodGet()
 
 void
 MethodGet::action(const Request & request, Response & response)
-{
+{	
+	Extension * extension = Extension::get_instance();
+	std::string ext = Extension::get_extension(request.get_path().c_str());
+	std::string mine = extension->get_reader()[ext];
+
+	if (mine.empty())
+		mine = "application/octet-stream";
+	// std::cout << "ext : " << ext << std::endl;
 	try
 	{
 		response
 			.set_code(200)
 			.set_body(request.get_path().c_str())
-			.add_header("Content-type", Extension::get_mine_type(Extension::get_extention(request.get_path().c_str())))
+			.add_header(
+				"Content-type", 
+				mine
+				)
 			;
 	}
 	catch(const std::exception& e)

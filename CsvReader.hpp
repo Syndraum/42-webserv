@@ -17,6 +17,7 @@ private:
 	vector				_categories;
 	std::string			_key_name;
 	map					_content;
+	// std::string			_empty;
 public:
 
 	CsvReader(void);
@@ -29,6 +30,8 @@ public:
 	CsvReader &	set_key_name(const std::string &);
 	CsvReader &	parse_categeries();
 	CsvReader &	parse_content();
+
+	std::string operator[](const std::string &) const;
 
 	void	debug() const;
 };

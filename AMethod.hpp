@@ -17,6 +17,7 @@
 # include "Response.hpp"
 # include <cstdio>
 # include <exception>
+# include "Extension.hpp"
 
 class Request;
 
