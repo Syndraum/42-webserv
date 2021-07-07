@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 16:13:49 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/07 12:19:08 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/07 15:02:59 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <map>
 # include <iostream>
 # include <string>
+# include <sys/wait.h>
+# include <unistd.h>
 
 class CGI
 {
@@ -27,6 +29,7 @@ class CGI
 	private:
 	
 		std::string									_exec_name;
+		char *										_arg;
 		char **										_env;
 
 		CGI(void);
@@ -39,9 +42,9 @@ class CGI
 	
 	public:
 
-		CGI(char **envp, env_map my_env, std::string exec_name);
+		CGI(std::string exec_name, char * arg, char ** envp, env_map my_env);
 		virtual ~CGI(void);
-		void										start();
+		int											start();
 		class MyError: public std::exception
 		{
 			virtual const char*	what() const throw(){

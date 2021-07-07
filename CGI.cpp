@@ -6,11 +6,22 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/07 12:19:44 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/07 15:02:46 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
+
+CGI::CGI(std::string exec_name, char * arg, char ** envp, env_map my_env):
+_exec_name(exec_name),
+_arg(arg),
+_env(join_env(envp, my_env))
+{}
+
+CGI::~CGI(void)
+{
+	str_table_delete(_env);
+}
 
 int
 CGI::str_table_len(const char ** table) const
@@ -72,20 +83,33 @@ CGI::join_env(char **envp, env_map my_env)
 	return (ret);
 }
 
-CGI::CGI(char **envp, env_map my_env, std::string exec_name):
-_env(join_env(envp, my_env)),
-_exec_name(exec_name)
-{}
-
-CGI::~CGI(void)
-{
-	str_table_delete(_env);
-}
-
-void
+int
 CGI::start()
 {
-	pid_t		pid;
+	int			ret;
+	pid_t		pid = fork();
+	int			pipe_out[2];
+	int			pipe_err[2];
 
-	
+	if (pipe(pipe_out) < 0 || pipe(pipe_err) < 0
+	|| dup2(pipe_out[1], 1) < 0 || dup2(pipe_err[1], 2) < 0)
+		throw (std::exception()); // specify
+	if (pid < 0)
+		throw (std::exception()); // specify
+	else if (!pid)
+	{
+		if (execle(_exec_name.c_str(), _arg, _env) < 0)
+			throw (std::exception()); // specify
+		exit(0);
+	}
+	else
+	{
+		waitpid(pid, &ret, 0);
+		if (ret)
+			throw (std::exception()); // specify
+		close(pipe_out[1]);
+		close(pipe_err[1]);
+		close(pipe_err[0]);
+	}
+	return (pipe_out[0]);
 }
