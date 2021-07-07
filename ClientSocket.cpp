@@ -12,13 +12,19 @@
 
 #include "ClientSocket.hpp"
 
-ClientSocket::ClientSocket(void) : ASocket(), _request()
+// ClientSocket::ClientSocket(void) : ASocket(), _request()
+// {
+// 	// _address = {0};
+// 	_socket = 0;
+// }
+
+ClientSocket::ClientSocket(Server & server) : ASocket(), _request(), _server(server)
 {
 	// _address = {0};
 	_socket = 0;
 }
 
-ClientSocket::ClientSocket(ClientSocket const & src)
+ClientSocket::ClientSocket(ClientSocket const & src) : _server(src._server)
 {
 	*this = src;
 }

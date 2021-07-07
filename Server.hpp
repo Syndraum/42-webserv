@@ -33,8 +33,6 @@ class Server
 
 	private:
 
-		std::vector<int>					_active_port;
-		std::vector<int>					_active_socket;
 		std::string							_name;
 		port_vector							_server_sockets;
 		std::string							_root;
@@ -53,8 +51,8 @@ class Server
 		Server &							add_port(int port);
 		void								start(int worker);
 
+		port_vector &						get_server_socket();
 		ServerSocket const &				get_server_socket(int port) const;
-		std::vector<int> const &			get_active_socket() const;
 
 		Server &							set_name(std::string name);
 		Server &							set_root(std::string root);

@@ -52,32 +52,43 @@ Core::start()
 	for (size_t i = 0; i < _servers.size(); i++)
 	{
 		_servers[i].start(_worker);
-		active_socket = _servers[i].get_active_socket();
-		_server_sockets.insert(
-			_server_sockets.begin(),
-			active_socket.begin(),
-			active_socket.end()
-		);
 	}
 	while (true)
 	{
 
 		// value given to poll (nbFds)
 		_nb_fds = 0;
-		for (size_t i = 0; i < _server_sockets.size(); i++)
+		for (size_t i = 0; i < _servers.size(); i++)
 		{
-			fd = _server_sockets[i];
-			_fds[_nb_fds].fd = fd;
-			_fds[_nb_fds].events = POLLIN;
-			_fds[_nb_fds].revents = 0;
-			_nb_fds++;
+			Server & server = _servers[i];
+			for (Server::port_vector::iterator it = server.get_server_socket().begin(); 
+				it != server.get_server_socket().end(); it++)
+			{
+				ServerSocket & server_socket = it->second;
+
+				fd = server_socket.get_socket();
+				_fds[_nb_fds].fd = fd;
+				_fds[_nb_fds].events = POLLIN;
+				_fds[_nb_fds].revents = 0;
+				server_socket.set_id(_nb_fds);
+				_nb_fds++;
+			}
 		}
+		// for (size_t i = 0; i < _server_sockets.size(); i++)
+		// {
+		// 	fd = _server_sockets[i];
+		// 	_fds[_nb_fds].fd = fd;
+		// 	_fds[_nb_fds].events = POLLIN;
+		// 	_fds[_nb_fds].revents = 0;
+		// 	_nb_fds++;
+		// }
 		for (size_t i = 0; i < _client.size(); i++)
 		{
 			fd = _client[i].get_socket();
 			_fds[_nb_fds].fd = fd;
 			_fds[_nb_fds].events = POLLOUT;
 			_fds[_nb_fds].revents = 0;
+			_client[i].set_id(_nb_fds);
 			_nb_fds++;
 		}
 		_nb_active = poll(_fds, _nb_fds, 60000);
@@ -146,25 +157,52 @@ Core::_accept_connection()
 	int new_socket = -1;
 	int one = 1;
 
-	for (size_t i = 0; i < _server_sockets.size(); i++)
+	for (size_t i = 0; i < _servers.size(); i++)
 	{
-		int fd = _server_sockets[i];
-
-		if (_fds[i].revents == _fds[i].events)
+		Server & server = _servers[i];
+		for (Server::port_vector::iterator it = server.get_server_socket().begin(); 
+				it != server.get_server_socket().end(); it++)
 		{
-			_client.push_back(ClientSocket());
-			ClientSocket & cs = _client.back();
-			if ((new_socket = accept(fd, (struct sockaddr *)&cs.get_address() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
+			ServerSocket & server_socket = it->second;
+			int fd = server_socket.get_socket();
+
+			if (_fds[server_socket.get_id()].revents == _fds[server_socket.get_id()].events)
 			{
-				perror("accept failed");
-				exit(EXIT_FAILURE);
+				_client.push_back(ClientSocket(server));
+				ClientSocket & cs = _client.back();
+				if ((new_socket = accept(fd, (struct sockaddr *)&cs.get_address() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
+				{
+					perror("accept failed");
+					exit(EXIT_FAILURE);
+				}
+				setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
+				std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
+				cs.set_socket(new_socket);
+				std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
 			}
-			setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
-			std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
-			cs.set_socket(new_socket);
-			std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
 		}
+		
 	}
+	
+	// for (size_t i = 0; i < _server_sockets.size(); i++)
+	// {
+	// 	int fd = _server_sockets[i];
+
+	// 	if (_fds[i].revents == _fds[i].events)
+	// 	{
+	// 		_client.push_back(ClientSocket());
+	// 		ClientSocket & cs = _client.back();
+	// 		if ((new_socket = accept(fd, (struct sockaddr *)&cs.get_address() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
+	// 		{
+	// 			perror("accept failed");
+	// 			exit(EXIT_FAILURE);
+	// 		}
+	// 		setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
+	// 		std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
+	// 		cs.set_socket(new_socket);
+	// 		std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
+	// 	}
+	// }
 }
 
 void
@@ -244,9 +282,22 @@ void
 Core::_detect_reset_server_poll_fd()
 {
 	if (!_client.size())
-		for (size_t i = 0; i < _server_sockets.size(); i++)
-			if (_fds[i].revents & POLLOUT || _fds[i].revents & POLLIN)
-				_fds[i].revents = 0;
+	{
+		for (size_t i = 0; i < _servers.size(); i++)
+		{
+			Server & server = _servers[i];
+			for (Server::port_vector::iterator it = server.get_server_socket().begin(); 
+					it != server.get_server_socket().end(); it++)
+			{
+				ServerSocket & server_socket = it->second;
+				_fds[server_socket.get_id()].revents = 0;
+			}
+		}
+	}
+	// if (!_client.size())
+		// for (size_t i = 0; i < _server_sockets.size(); i++)
+		// 	if (_fds[i].revents & POLLOUT || _fds[i].revents & POLLIN)
+		// 		_fds[i].revents = 0;
 }
 
 void	Core::_cdai_dirty_function()

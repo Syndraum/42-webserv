@@ -53,21 +53,19 @@ Server::start(int worker)
 		ss.setup_socket();
 		ss.bind_socket();
 		ss.listen_socket(worker);
-		_active_port.push_back(ss.get_port());
-		_active_socket.push_back(ss.get_socket());
 	}
+}
+
+Server::port_vector &
+Server::get_server_socket(void)
+{
+	return (_server_sockets);
 }
 
 ServerSocket const &
 Server::get_server_socket(int port) const
 {
 	return _server_sockets.at(port);
-}
-
-std::vector<int> const &
-Server::get_active_socket() const
-{
-	return _active_socket;
 }
 
 Server &
@@ -109,6 +107,7 @@ void
 Server::print() const
 {
 	std::cout << "Server " << _name << std::endl;
+	std::cout << "adress " << this << std::endl;
 	for (port_vector::const_iterator it = _server_sockets.begin(); it != _server_sockets.end(); it++)
 	{
 		it->second.print();
