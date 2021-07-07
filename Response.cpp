@@ -68,8 +68,6 @@ Response::get_response()
 	ss << "\r\n";
 	if (_body != "")
 		ss << _body;
-	ss << "\r\n";
-	ss << "\r\n";
 	return ss.str();
 }
 

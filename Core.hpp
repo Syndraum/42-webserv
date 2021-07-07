@@ -23,6 +23,7 @@
 # include "MethodGet.hpp"
 # include "MethodDelete.hpp"
 # include "MethodLibrary.hpp"
+# include "Extension.hpp"
 // cdai_temp
 # include <fstream>
 
@@ -43,6 +44,8 @@ class Core
 		int									_nb_fds;
 		MethodLibrary						_methods;
 		BuilderRequest						_br;
+		Extension *							_extension;
+
 
 		void								_accept_connection();
 		void								_handle_request_and_detect_close_connection();
@@ -65,6 +68,8 @@ class Core
 		AMethod	*							get_method(const std::string &) const;
 		Core &								set_worker(int);
 		int									get_worker(void) const;
+		void								set_extension(Extension * extensoin);
+		// CsvReader &							get_csv_reader();
 		void								print() const;
 };
 

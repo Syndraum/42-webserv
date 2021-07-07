@@ -18,11 +18,12 @@
 
 class Reader
 {
-	private:
+	protected:
 
 		std::string		_path;
 		std::ifstream	_ifs;
 		int				_length;
+		std::string		_line;
 
 	public:
 
@@ -35,6 +36,7 @@ class Reader
 		void			open();
 		void			to_string(std::string & );
 		void			close();
+		void			get_line();
 
 		std::ifstream &	get_ifs();
 		int				get_length() const;
