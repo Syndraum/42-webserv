@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/05 20:52:51 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/06 15:41:24 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ BuilderCore::parse_server_name(Server *server)
 	}
 	_idx++;
 }
+
 void
 BuilderCore::parse_server_root(Server *server)
 {
@@ -382,7 +383,7 @@ BuilderCore::parse_server()
 		}
 		else
 		{
-			std::cerr << "Parsing Error : Wrong directive in server" << " on line " << line_count() << std::endl;
+			std::cerr << "Parsing Error : unknown directive \"" << directive << "\" on line " << line_count() << std::endl;
 			throw (ParsingError());
 		}
 		skip_whitespaces();

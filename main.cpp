@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/02 15:50:10 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/07 12:02:18 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		main(int argc, char *argv[])
 
 	if (argc > 2)
 	{
-		std::cerr << "Error: too much arguemnt" <<std::endl;
+		std::cerr << "Error: too many arguments" << std::endl;
 		return (2);
 	}
 	if (argc == 2)
