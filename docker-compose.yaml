@@ -2,9 +2,13 @@ version: '3.3'
 services:
   nginx:
     container_name : test_nginx
-    image: nginx:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
     restart: on-failure
     volumes:
       - ./app:/usr/share/nginx/html
+      - ${PWD}/docker/config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ${PWD}/docker/config/default.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
       - '8080:80'

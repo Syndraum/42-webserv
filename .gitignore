@@ -4,3 +4,4 @@ webserv
 .vscode
 .devcontainer
 app
+.DS_Store

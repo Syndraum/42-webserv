@@ -443,3 +443,11 @@ BuilderCore::print_debug() const
 	std::cerr << "Worker : " << _core->get_worker() << std::endl;
 	_core->print();
 }
+
+
+void
+BuilderCore::parse_mine_type()
+{
+	Extension * extension = Extension::get_instance();
+	_core->set_extension(extension);
+}

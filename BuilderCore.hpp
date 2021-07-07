@@ -44,6 +44,7 @@ class BuilderCore
 		~BuilderCore();
 		void			print_debug() const; //tmp
 		Core *			get_builded_core() const;
+		void			parse_mine_type();
 	
 		class ParsingError : public std::exception
 		{
