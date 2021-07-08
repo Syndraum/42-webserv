@@ -53,6 +53,7 @@ Core::start()
 	{
 		_servers[i].start(_worker);
 	}
+	print();
 	while (true)
 	{
 
@@ -74,14 +75,6 @@ Core::start()
 				_nb_fds++;
 			}
 		}
-		// for (size_t i = 0; i < _server_sockets.size(); i++)
-		// {
-		// 	fd = _server_sockets[i];
-		// 	_fds[_nb_fds].fd = fd;
-		// 	_fds[_nb_fds].events = POLLIN;
-		// 	_fds[_nb_fds].revents = 0;
-		// 	_nb_fds++;
-		// }
 		for (size_t i = 0; i < _client.size(); i++)
 		{
 			fd = _client[i].get_socket();
@@ -183,26 +176,6 @@ Core::_accept_connection()
 		}
 		
 	}
-	
-	// for (size_t i = 0; i < _server_sockets.size(); i++)
-	// {
-	// 	int fd = _server_sockets[i];
-
-	// 	if (_fds[i].revents == _fds[i].events)
-	// 	{
-	// 		_client.push_back(ClientSocket());
-	// 		ClientSocket & cs = _client.back();
-	// 		if ((new_socket = accept(fd, (struct sockaddr *)&cs.get_address() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
-	// 		{
-	// 			perror("accept failed");
-	// 			exit(EXIT_FAILURE);
-	// 		}
-	// 		setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
-	// 		std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
-	// 		cs.set_socket(new_socket);
-	// 		std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
-	// 	}
-	// }
 }
 
 void
@@ -210,22 +183,15 @@ Core::_handle_request_and_detect_close_connection()
 {
 	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
 	{
-//		std::cout << "test" << std::endl;
-
-		// BuilderRequest	br(_methods);
 		Request * request = &it->get_request();
 		Response response(*request, 200);
-//		std::cout << "test" << std::endl;
 
+		(*it).get_server().print();
 		//Check if it was for closing , and also read the 
 		//incoming message 
 		try{
 			_br.set_request(request);
 			_br.parse_request(*it);
-			// request = br.get_request();
-			// br.reset();
-//			std::cout << "path : " << request->get_path() << std::endl;
-//			std::cout << "request : " << request->get_method()->get_name() << std::endl;
 			if (request->get_path() == "/")
 				request->set_path("/index.html");
 			request->set_path("./webserviette_root" + request->get_path());
@@ -253,28 +219,16 @@ Core::_handle_request_and_detect_close_connection()
 		{
 //			std::cout << "Client " << it->get_socket() << " disconnected" << std::endl;  
 
-//			close( it->get_socket() );  
-//			_client.erase(it);  
+//			close( it->get_socket() );
+//			_client.erase(it);
 			break;
 		}
-		// std::cout << "parse_request: " <<  parse_ret << std::endl;
-
-		// std::cout << "method: " << request.get_method() << std::endl;
-
-		//if (parse_ret == OK)
-		//{
-			// std::string ROOT = "./webserviette_root";
-			// std::string filename = ROOT + request.get_path();
-
-		// delete request;
-		// request->reset();
 		std::cout << "write in Socket: " << it->get_socket() << std::endl;
 		response.send_response(it->get_socket());
 
 		close( it->get_socket() );  
 		_client.erase(it);  
 		break;
-		//}
 	}
 }
 
@@ -294,10 +248,6 @@ Core::_detect_reset_server_poll_fd()
 			}
 		}
 	}
-	// if (!_client.size())
-		// for (size_t i = 0; i < _server_sockets.size(); i++)
-		// 	if (_fds[i].revents & POLLOUT || _fds[i].revents & POLLIN)
-		// 		_fds[i].revents = 0;
 }
 
 void	Core::_cdai_dirty_function()
