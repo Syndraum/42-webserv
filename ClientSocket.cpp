@@ -44,3 +44,9 @@ ClientSocket::get_request()
 {
 	return (_request);
 }
+
+Server &
+ClientSocket::get_server()
+{
+	return (_server);
+}

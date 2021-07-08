@@ -33,6 +33,7 @@ class ClientSocket : public ASocket
 		ClientSocket &	operator=(ClientSocket const &rhs);
 
 		Request &	get_request();
+		Server &	get_server();
 };
 
 #endif
