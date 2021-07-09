@@ -53,6 +53,7 @@ class Server
 
 		port_vector &						get_server_socket();
 		ServerSocket const &				get_server_socket(int port) const;
+		const bool	&						get_auto_index() const;
 
 		Server &							set_name(std::string name);
 		Server &							set_root(std::string root);

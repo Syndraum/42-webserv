@@ -68,6 +68,12 @@ Server::get_server_socket(int port) const
 	return _server_sockets.at(port);
 }
 
+const bool &
+Server::get_auto_index() const
+{
+	return (_auto_index);
+}
+
 Server &
 Server::set_name(std::string name)
 {
@@ -108,6 +114,7 @@ Server::print() const
 {
 	std::cout << "Server " << _name << std::endl;
 	std::cout << "adress " << this << std::endl;
+	std::cout << "autoindex " << std::boolalpha << _auto_index << std::endl;
 	for (port_vector::const_iterator it = _server_sockets.begin(); it != _server_sockets.end(); it++)
 	{
 		it->second.print();

@@ -183,21 +183,31 @@ Core::_handle_request_and_detect_close_connection()
 {
 	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
 	{
-		Request * request = &it->get_request();
-		Response response(*request, 200);
+		Request *	request	= &it->get_request();
+		Server &	server	= (*it).get_server();
+		Response	response(*request, 200);
 
-		(*it).get_server().print();
+		// (*it).get_server().print();
 		//Check if it was for closing , and also read the 
 		//incoming message 
 		try{
 			_br.set_request(request);
 			_br.parse_request(*it);
+			// if (request->get_path() == "/")
+			// 	request->set_path("/index.html");
 			if (request->get_path() == "/")
-				request->set_path("/index.html");
-			request->set_path("./webserviette_root" + request->get_path());
-			request->set_version("HTTP/1.1");
-
-			request->action(response);
+				if (!server.get_auto_index())
+					response.set_code(403).clear_header();
+				else
+				{
+					response.set_code(200);
+				}
+			else
+			{
+				request->set_path("./webserviette_root" + request->get_path());
+				request->set_version("HTTP/1.1");
+				request->action(response);
+			}
 		}
 		catch (BuilderRequest::BadRequest &e)
 		{
