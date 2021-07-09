@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/02 15:58:45 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/09 12:05:00 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ class Core
 		MethodLibrary						_methods;
 		BuilderRequest						_br;
 		Extension *							_extension;
-
 
 		void								_accept_connection();
 		void								_handle_request_and_detect_close_connection();

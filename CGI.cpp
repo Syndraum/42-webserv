@@ -6,13 +6,14 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/07 18:09:41 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/09 13:55:01 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
 
-CGI::CGI()
+CGI::CGI() :
+_env(0)
 {}
 
 CGI::CGI(std::string exec_name, char * arg, env_map glob_env, env_map my_env):
@@ -23,13 +24,25 @@ _env(join_env(glob_env, my_env))
 
 CGI::~CGI(void)
 {
-	str_table_delete(_env);
+	if (_env)
+		str_table_delete(_env);
 }
 
-int
+void
+CGI::set_exec_name(std::string const & name)
+{
+	_exec_name = name;
+}
+void
+CGI::add_CGI_param(std::string key, std::string value)
+{
+	_cgi_env.insert(std::pair<std::string, std::string>(key, value));
+}
+
+size_t
 CGI::str_table_len(const char ** table) const
 {
-	int i = 0;
+	size_t i = 0;
 	
 	while(table[i])
 		i++;
@@ -37,9 +50,9 @@ CGI::str_table_len(const char ** table) const
 }
 
 void
-CGI::str_table_delete(const char ** table) const
+CGI::str_table_delete(char ** table) const
 {
-	int i = 0;
+	size_t i = 0;
 
 	while(table[i])
 	{
@@ -52,7 +65,7 @@ CGI::str_table_delete(const char ** table) const
 char *
 CGI::string_copy(std::string str) const
 {
-	int i = -1;
+	size_t i = -1;
 
 	char * ret = new char[str.length() + 1];
 
@@ -74,9 +87,9 @@ CGI::join_env(env_map glob_env, env_map my_env)
 	for (env_map::iterator it = glob_env.begin(); it != ite; it++)
 		my_env[it->first] = it->second;
 	ret = new char *[my_env.size() + 1];
-	env_map::iterator ite = my_env.end();
+	env_map::iterator ite2 = my_env.end();
 
-	for (env_map::iterator it = my_env.begin(); it != ite; it++)
+	for (env_map::iterator it = my_env.begin(); it != ite2; it++)
 	{
 		tmp_str = it->first + "=" + it->second;
 		ret[j] = string_copy(tmp_str);
@@ -103,7 +116,7 @@ CGI::start()
 	{
 		if (execle(_exec_name.c_str(), _arg, _env) < 0)
 			throw (std::exception()); // specify
-		exit(0);
+		_exit(0);
 	}
 	else
 	{
@@ -115,4 +128,15 @@ CGI::start()
 		close(pipe_err[0]);
 	}
 	return (pipe_out[0]);
+}
+
+void
+CGI::print() const
+{
+	std::cerr << "exec name : " << _exec_name << std::endl;
+	std::cerr << "CGI params : " << std::endl;
+	for (env_map::const_iterator it = _cgi_env.begin(); it != _cgi_env.end(); it++)
+	{
+		std::cerr << it->first << " = " << it->second << std::endl;
+	}
 }

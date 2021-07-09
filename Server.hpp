@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/08 16:01:01 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/09 12:02:14 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,22 @@ class Server
 {
 	public:
 
-		typedef std::map<int, ServerSocket>					port_vector;
-		// typedef std::map<std::string, CGI>	cgi_map;
-		// typedef std::pair<std::string, CGI>	cgi_pair;
+		typedef std::map<int, ServerSocket>	port_map;
+		typedef std::map<std::string, CGI>	cgi_map;
+		typedef std::pair<std::string, CGI>	cgi_pair;
 
 	private:
 
 		std::vector<int>					_active_port;
 		std::vector<int>					_active_socket;
 		std::string							_name;
-		port_vector							_server_sockets;
+		port_map							_server_sockets;
 		std::string							_root;
 		std::list<std::string>				_index;
 		bool								_auto_index;
 		size_t								_client_max_body_size;
 		std::string							_path_error_page;
-		// cgi_map								_CGI_map;								
+		cgi_map								_CGI_map;								
 
 	public:
 
@@ -60,7 +60,7 @@ class Server
 
 		Server &							add_port(int const port);
 		Server &							add_index(std::string const & index);
-		// Server &							add_CGI(std::string name, CGI content);
+		Server &							add_CGI(std::string name, CGI content);
 		void								start(int const worker);
 
 		ServerSocket const &				get_server_socket(int port) const;

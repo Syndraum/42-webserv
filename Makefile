@@ -6,7 +6,7 @@
 #    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/07/02 15:28:43 by cdai             ###   ########.fr        #
+#    Updated: 2021/07/09 11:35:32 by mchardin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								ServerSocket.cpp \
 								ClientSocket.cpp \
 								Core.cpp \
+								CGI.cpp \
 								Response.cpp \
 								Reader.cpp \
 								Request.cpp \

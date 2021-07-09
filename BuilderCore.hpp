@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/08 16:02:15 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/09 12:34:19 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class BuilderCore
 		Core			*_core;
 		std::string		_error_msg;
 
+		std::string		next_word_skip();
 		void			skip_whitespaces();
 		void			skip_comments();
 		int				line_count();
@@ -35,6 +36,8 @@ class BuilderCore
 		void			parse_server_auto_index(Server *server);
 		void			parse_server_index(Server *server);
 		void			parse_server_client_max_body_size(Server *server);
+		void			parse_server_CGI_param(CGI *cgi);
+		void			parse_server_CGI_exec_name(CGI *cgi);
 		void			parse_server_extension(Server *server);
 		void			parse_server();
 		void			parse_worker();

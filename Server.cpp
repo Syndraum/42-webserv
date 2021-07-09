@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/08 16:13:28 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/09 12:29:42 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,17 @@ Server::add_index(std::string const &index)
 	return(*this);
 }
 
-// Server &
-// Server::add_CGI(std::string name, CGI content)
-// {
-// 	_CGI_map.insert(cgi_pair(name, content));
-// 	return(*this);
-// }
+Server &
+Server::add_CGI(std::string name, CGI content)
+{
+	_CGI_map.insert(cgi_pair(name, content));
+	return(*this);
+}
 
 void
 Server::start(int const worker)
 {
-	for (port_vector::iterator it = _server_sockets.begin(); it != _server_sockets.end() ; it++)
+	for (port_map::iterator it = _server_sockets.begin(); it != _server_sockets.end() ; it++)
 	{
 		ServerSocket & ss = it->second;
 
@@ -128,8 +128,14 @@ void
 Server::print() const
 {
 	std::cout << "Server " << _name << std::endl;
-	for (port_vector::const_iterator it = _server_sockets.begin(); it != _server_sockets.end(); it++)
+	for (port_map::const_iterator it = _server_sockets.begin(); it != _server_sockets.end(); it++)
 	{
+		it->second.print();
+	}
+	for (cgi_map::const_iterator it = _CGI_map.begin(); it != _CGI_map.end(); it++)
+	{
+		std::cerr << "CGI : " << it->first << std::endl;
+		
 		it->second.print();
 	}
 	if (_server_sockets.size() == 0)
