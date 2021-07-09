@@ -139,7 +139,7 @@ Server::get_index_page(const Request & request)
 	struct dirent *				entry;
 
 	path = get_full_path(request.get_path());
-	ss << "<html>\n<head><title>Index of /</title></head>\n<body>\n<h1>Index of /</h1><hr><pre>\n"; //<a href="../">../</a>
+	ss << "<html>\n<head><title>Index of " << request.get_path() << "</title></head>\n<body>\n<h1>Index of " << request.get_path() << "</h1><hr><pre>\n";
 	if ((directory = opendir(path.c_str())) != NULL)
 	{
 		while ((entry = readdir(directory)) != NULL){
