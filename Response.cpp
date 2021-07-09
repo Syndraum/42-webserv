@@ -45,6 +45,7 @@ Response::operator=(Response const & rhs)
 Response &
 Response::add_header(std::string name, std::string content)
 {
+	std::cout << "HEADER STRING : " << content << std::endl;
 	_headers.insert(std::pair<std::string, std::string>(name, content));
 	return *this;
 }
@@ -61,13 +62,13 @@ Response::get_response()
 	std::stringstream ss;
 
 	ss << _version << " " << _code << " " << get_message(_code) << "\r\n";
+	add_header("Content-Length", _body.length());
 	for (header_map::iterator it = _headers.begin(); it != _headers.end(); it++)
 	{
 		ss << it->first << ": " << it->second << "\r\n";
 	}
 	ss << "\r\n";
-	if (_body != "")
-		ss << _body;
+	ss << _body;
 	return ss.str();
 }
 
@@ -111,14 +112,7 @@ Response::set_body(const std::string & filename)
 	Reader	file_reader(filename);
 	file_reader.open();
 	file_reader.to_string(_body);
-
-	// std::to_string is c++11
-	std::stringstream ss;
-	ss << file_reader.get_length();
-	add_header("Content-Length", ss.str());
-
 	file_reader.close();
-
 	return *this;
 }
 

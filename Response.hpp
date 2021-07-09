@@ -22,6 +22,8 @@
 # include <fstream>
 # include "Reader.hpp"
 
+# include <iostream>
+
 class Request;
 
 class Response
@@ -43,7 +45,7 @@ class Response
 		std::string									_3xx__response(int code);
 		std::string									_4xx__response(int code);
 		std::string									_5xx__response(int code);
-								
+
 	public:
 
 		Response(Request &, int code = 200);
@@ -51,6 +53,14 @@ class Response
 		virtual ~Response(void);
 		Response &									operator=(Response const &rhs);
 
+		template <typename T>
+		Response &									add_header(std::string name, T content)
+		{
+			std::stringstream ss;
+
+			ss << content;
+			return (add_header(name, ss.str()));
+		}
 		Response &									add_header(std::string name, std::string content);
 		void										clear_header();
 		std::string									get_response();
