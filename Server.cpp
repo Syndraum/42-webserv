@@ -131,19 +131,19 @@ Server::get_full_path(const std::string & uri)
 }
 
 std::string
-Server::get_index_page(const std::string & uri)
+Server::get_index_page(const Request & request)
 {
 	std::stringstream ss;
 	std::string					path;
 	DIR *						directory;
 	struct dirent *				entry;
 
-	path = get_full_path(uri);
+	path = get_full_path(request.get_path());
 	ss << "<html>\n<head><title>Index of /</title></head>\n<body>\n<h1>Index of /</h1><hr><pre>\n"; //<a href="../">../</a>
 	if ((directory = opendir(path.c_str())) != NULL)
 	{
 		while ((entry = readdir(directory)) != NULL)
-			ss << "<a href=\"" << entry->d_name << "\">" << entry->d_name << "</a>\n";
+			ss << "<a href=\"" << request.get_path() << "\\" << entry->d_name << "\">" << entry->d_name << "</a>\n";
 	}
 	closedir (directory);
 	ss << "</pre><hr></body>\n</html>";

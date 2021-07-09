@@ -72,7 +72,7 @@ class Server
 		const std::string &					get_root() const;
 		std::string 						get_index(const std::string &);
 		std::string							get_full_path(const std::string & uri);
-		std::string							get_index_page(const std::string & uri);
+		std::string							get_index_page(const Request & uri);
 
 		Server &							set_name(std::string const & name);
 		Server &							set_root(std::string const & root);
