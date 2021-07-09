@@ -114,9 +114,7 @@ Server::get_index(const std::string & uri)
 			files.insert(entry->d_name);
 	}
 	else
-	{
-		throw std::exception();
-	}
+		return ("");
 	for (std::list<std::string>::iterator it = _index.begin(); it != _index.end(); it++)
 	{
 		if (files.find(*it) != files.end())
