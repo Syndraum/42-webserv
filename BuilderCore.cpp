@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/06 15:41:24 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/08 16:17:03 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,49 @@ BuilderCore::parse_server_port(Server *server)
 	else
 	{
 		std::cerr << "Parsing Error : directive \"listen\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
+		throw (ParsingError());
+	}
+}
+
+void
+BuilderCore::parse_server_index(Server *server)
+{
+	std::string	index;
+
+	skip_whitespaces();
+	if (_line[_idx] == ';')
+	{
+		std::cerr << "Parsing Error : invalid number of arguments in \"index\" directive" << " on line " << line_count() << std::endl;
+		throw (ParsingError());
+	}
+	else if (_line[_idx] == '}')
+	{
+		std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
+		throw (ParsingError());
+	}
+	while (_line[_idx] && _line[_idx] != ';' && _line[_idx] != '}')
+	{
+		index = _line.substr(_idx, _line.find_first_of(";{}# \n\r\t\v\f", _idx) - _idx);
+		if (!index.length())
+		{
+			std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
+			throw (ParsingError());
+		}
+		std::cerr << "Index : " << index << std::endl; 
+		server->add_index(index);
+		_idx += index.length();
+		skip_whitespaces();
+	}
+	if (_line[_idx] == ';')
+		_idx++;
+	else if (_line[_idx] == '}')
+	{
+		std::cerr << "Parsing Error : unexpected \"}\""  << " on line " << line_count() << std::endl;
+		throw (ParsingError());
+	}
+	else
+	{
+		std::cerr << "Parsing Error : directive \"index\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
 		throw (ParsingError());
 	}
 }
@@ -372,10 +415,14 @@ BuilderCore::parse_server()
 			parse_server_root(&server);
 		else if (!_line.compare(_idx - directive.length(), directive.length(), "autoindex"))
 			parse_server_auto_index(&server);
+		else if (!_line.compare(_idx - directive.length(), directive.length(), "index"))
+			parse_server_index(&server);
 		else if (!_line.compare(_idx - directive.length(), directive.length(), "client_max_body_size"))
 			parse_server_client_max_body_size(&server);
 		else if (!_line.compare(_idx - directive.length(), directive.length(), "path_error_page"))
 			parse_server_path_error_page(&server);
+		// else if (!_line.compare(_idx - directive.length(), directive.length(), "extension"))
+		// 	parse_server_extension(&server);
 		else if (_line[_idx] ==  ';')
 		{
 			std::cerr << "Parsing Error : unexpected \";\"" << " on line " << line_count() << std::endl;
@@ -394,6 +441,7 @@ BuilderCore::parse_server()
 		throw (ParsingError());
 	}
 	_core->add_server(server);
+	server.print();
 	_idx ++;
 }
 
@@ -445,9 +493,8 @@ BuilderCore::print_debug() const
 	_core->print();
 }
 
-
 void
-BuilderCore::parse_mine_type()
+BuilderCore::parse_mime_type()
 {
 	Extension * extension = Extension::get_instance();
 	_core->set_extension(extension);

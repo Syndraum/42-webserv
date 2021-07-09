@@ -6,16 +6,19 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/07 15:02:46 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/07 18:09:41 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
 
-CGI::CGI(std::string exec_name, char * arg, char ** envp, env_map my_env):
+CGI::CGI()
+{}
+
+CGI::CGI(std::string exec_name, char * arg, env_map glob_env, env_map my_env):
 _exec_name(exec_name),
 _arg(arg),
-_env(join_env(envp, my_env))
+_env(join_env(glob_env, my_env))
 {}
 
 CGI::~CGI(void)
@@ -60,26 +63,26 @@ CGI::string_copy(std::string str) const
 }
 
 char **
-CGI::join_env(char **envp, env_map my_env)
+CGI::join_env(env_map glob_env, env_map my_env)
 {
-	int				len = str_table_len(envp);
 	int				j = 0;
 	std::string		tmp_str;
 	char **			ret;
 
-	ret = new char *[my_env.size() + len + 1];
+	env_map::iterator ite = glob_env.end();
 
-	for (int i = 0; i < len; i++)
-		ret[i] = envp[i];
+	for (env_map::iterator it = glob_env.begin(); it != ite; it++)
+		my_env[it->first] = it->second;
+	ret = new char *[my_env.size() + 1];
 	env_map::iterator ite = my_env.end();
 
 	for (env_map::iterator it = my_env.begin(); it != ite; it++)
 	{
 		tmp_str = it->first + "=" + it->second;
-		ret[len + j] = string_copy(tmp_str);
+		ret[j] = string_copy(tmp_str);
 		j++;
 	}
-	ret[len + j] = 0;
+	ret[j] = 0;
 	return (ret);
 }
 

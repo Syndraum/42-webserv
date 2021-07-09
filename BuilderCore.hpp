@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/05 16:14:47 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/08 16:02:15 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ class BuilderCore
 		void			parse_server_root(Server *server);
 		void			parse_server_path_error_page(Server *server);
 		void			parse_server_auto_index(Server *server);
+		void			parse_server_index(Server *server);
 		void			parse_server_client_max_body_size(Server *server);
+		void			parse_server_extension(Server *server);
 		void			parse_server();
 		void			parse_worker();
 		int				stoi_skip_number();
@@ -44,7 +46,7 @@ class BuilderCore
 		~BuilderCore();
 		void			print_debug() const; //tmp
 		Core *			get_builded_core() const;
-		void			parse_mine_type();
+		void			parse_mime_type();
 	
 		class ParsingError : public std::exception
 		{
