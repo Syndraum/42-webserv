@@ -6,20 +6,15 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/09 13:55:01 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/09 14:59:23 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
 
 CGI::CGI() :
+_arg(0),
 _env(0)
-{}
-
-CGI::CGI(std::string exec_name, char * arg, env_map glob_env, env_map my_env):
-_exec_name(exec_name),
-_arg(arg),
-_env(join_env(glob_env, my_env))
 {}
 
 CGI::~CGI(void)
@@ -83,15 +78,18 @@ CGI::join_env(env_map glob_env, env_map my_env)
 	char **			ret;
 
 	env_map::iterator ite = glob_env.end();
+	env_map::iterator ite2 = _cgi_env.end();
 
 	for (env_map::iterator it = glob_env.begin(); it != ite; it++)
 		my_env[it->first] = it->second;
+	for (env_map::iterator it2 = _cgi_env.begin(); it2 != ite2; it2++)
+		my_env[it2->first] = it2->second;
 	ret = new char *[my_env.size() + 1];
-	env_map::iterator ite2 = my_env.end();
+	env_map::iterator ite3 = my_env.end();
 
-	for (env_map::iterator it = my_env.begin(); it != ite2; it++)
+	for (env_map::iterator it3 = my_env.begin(); it3 != ite3; it3++)
 	{
-		tmp_str = it->first + "=" + it->second;
+		tmp_str = it3->first + "=" + it3->second;
 		ret[j] = string_copy(tmp_str);
 		j++;
 	}

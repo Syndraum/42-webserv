@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 16:13:49 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/09 13:49:25 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/09 14:58:34 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ class CGI
 	public:
 
 		CGI(void);
-		CGI(std::string exec_name, char * arg, env_map glob_env, env_map my_env);
 		virtual ~CGI(void);
 		
 		void										set_exec_name(std::string const & name);
