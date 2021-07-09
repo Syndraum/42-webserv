@@ -26,6 +26,9 @@
 # include <algorithm>
 # include "ServerSocket.hpp"
 # include "CGI.hpp"
+# include <sys/types.h>
+# include <dirent.h>
+# include <set>
 
 class CGI;
 
@@ -61,9 +64,12 @@ class Server
 		Server &							add_CGI(std::string name, CGI content);
 		void								start(int const worker);
 
-		port_map &						get_server_socket();
+		port_map &							get_server_socket();
 		ServerSocket const &				get_server_socket(int port) const;
 		const bool	&						get_auto_index() const;
+		const std::string &					get_root() const;
+		std::string 						get_index(const std::string &);
+		std::string							get_full_path(const std::string & uri);
 
 		Server &							set_name(std::string const & name);
 		Server &							set_root(std::string const & root);

@@ -194,6 +194,7 @@ Core::_handle_request_and_detect_close_connection()
 			_br.set_request(request);
 			_br.parse_request(*it);
 			// if (request->get_path() == "/")
+				request->set_path(request->get_path() + server.get_index(request->get_path()));
 			// 	request->set_path("/index.html");
 			if (request->get_path() == "/")
 				if (!server.get_auto_index())
@@ -204,8 +205,8 @@ Core::_handle_request_and_detect_close_connection()
 				}
 			else
 			{
-				request->set_path("./webserviette_root" + request->get_path());
-				request->set_version("HTTP/1.1");
+				request->set_path(server.get_full_path(request->get_path()));
+				std::cout << "PATH : " << request->get_path() << std::endl;
 				request->action(response);
 			}
 		}

@@ -93,6 +93,44 @@ Server::get_auto_index() const
 	return (_auto_index);
 }
 
+const std::string &
+Server::get_root() const
+{
+	return (_root);
+}
+
+std::string
+Server::get_index(const std::string & uri)
+{
+	std::string					path;
+	DIR *						directory;
+	struct dirent *				entry;
+	std::set<std::string>		files;
+
+	path = get_full_path(uri);
+	if ((directory = opendir(path.c_str())) != NULL)
+	{
+		while ((entry = readdir(directory)) != NULL)
+			files.insert(entry->d_name);
+	}
+	else
+	{
+		throw std::exception();
+	}
+	for (std::list<std::string>::iterator it = _index.begin(); it != _index.end(); it++)
+	{
+		if (files.find(*it) != files.end())
+			return (*it);
+	}
+	return ("");
+}
+
+std::string
+Server::get_full_path(const std::string & uri)
+{
+	return (std::string (_root + uri));
+}
+
 Server &
 Server::set_name(std::string const & name)
 {
