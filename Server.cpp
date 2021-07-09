@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/01 15:33:42 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/09 12:29:42 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,24 +29,43 @@ Server &
 Server::operator=(Server const & rhs)
 {
 	if (&rhs != this){
-		this->_name = rhs._name;
-		this->_root = rhs._root;
-		this->_server_sockets = rhs._server_sockets;
+		_name = rhs._name;
+		_root = rhs._root;
+		_server_sockets = rhs._server_sockets;
+		_index = rhs._index;
+		_auto_index = rhs._auto_index;
+		_client_max_body_size = rhs._client_max_body_size;
+		_path_error_page = rhs._path_error_page;
 	}
 	return *this;
 }
 
 Server &
-Server::add_port(int port)
+Server::add_port(int const port)
 {
-	this->_server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port)));
+	_server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port)));
+	return(*this);
+}
+
+Server &
+Server::add_index(std::string const &index)
+{
+	_index.push_back(index);
+	std::cerr << "INDEX LIST SIZE : " << _index.size() << std::endl;
+	return(*this);
+}
+
+Server &
+Server::add_CGI(std::string name, CGI content)
+{
+	_CGI_map.insert(cgi_pair(name, content));
 	return(*this);
 }
 
 void
-Server::start(int worker)
+Server::start(int const worker)
 {
-	for (port_vector::iterator it = _server_sockets.begin(); it != _server_sockets.end() ; it++)
+	for (port_map::iterator it = _server_sockets.begin(); it != _server_sockets.end() ; it++)
 	{
 		ServerSocket & ss = it->second;
 
@@ -71,35 +90,35 @@ Server::get_active_socket() const
 }
 
 Server &
-Server::set_name(std::string name)
+Server::set_name(std::string const & name)
 {
 	_name = name;
 	return(*this);
 }
 
 Server &
-Server::set_root(std::string root)
+Server::set_root(std::string const & root)
 {
 	_root = root;
 	return(*this);
 }
 
 Server &
-Server::set_auto_index(bool auto_index)
+Server::set_auto_index(bool const auto_index)
 {
 	_auto_index = auto_index;
 	return(*this);
 }
 
 Server &
-Server::set_client_max_body_size(size_t limit)
+Server::set_client_max_body_size(size_t const limit)
 {
 	_client_max_body_size = limit;
 	return(*this);
 }
 
 Server &
-Server::set_path_error_page(std::string path)
+Server::set_path_error_page(std::string const & path)
 {
 	_path_error_page = path;
 	return(*this);
@@ -109,10 +128,22 @@ void
 Server::print() const
 {
 	std::cout << "Server " << _name << std::endl;
-	for (port_vector::const_iterator it = _server_sockets.begin(); it != _server_sockets.end(); it++)
+	for (port_map::const_iterator it = _server_sockets.begin(); it != _server_sockets.end(); it++)
 	{
 		it->second.print();
 	}
+	for (cgi_map::const_iterator it = _CGI_map.begin(); it != _CGI_map.end(); it++)
+	{
+		std::cerr << "CGI : " << it->first << std::endl;
+		
+		it->second.print();
+	}
 	if (_server_sockets.size() == 0)
-		std::cout << "no port found\n";
+		std::cout << "no port found" << std::endl;
+	std::cout << "Auto Index : "<< _auto_index << std::endl;
+	std::cout << "INDEX LIST SIZE : " << _index.size() << std::endl;
+	for (std::list<std::string>::const_iterator it2 = _index.begin(); it2 != _index.end(); it2++)
+	{
+		std::cout << "\"" << *it2 << "\"" << std::endl;
+	}
 }
