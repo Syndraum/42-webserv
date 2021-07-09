@@ -115,6 +115,7 @@ Server::get_index(const std::string & uri)
 	}
 	else
 		return ("");
+	closedir(directory);
 	for (std::list<std::string>::iterator it = _index.begin(); it != _index.end(); it++)
 	{
 		if (files.find(*it) != files.end())
@@ -144,6 +145,7 @@ Server::get_index_page(const std::string & uri)
 		while ((entry = readdir(directory)) != NULL)
 			ss << "<a href=\"" << entry->d_name << "\">" << entry->d_name << "</a>\n";
 	}
+	closedir (directory);
 	ss << "</pre><hr></body>\n</html>";
 	return (ss.str());
 }
@@ -181,6 +183,18 @@ Server::set_path_error_page(std::string const & path)
 {
 	_path_error_page = path;
 	return(*this);
+}
+
+bool
+Server::is_directory(const Request & request)
+{
+	std::string	path =		get_full_path(request.get_path());
+	DIR *		directory;
+
+	if ((directory = opendir(path.c_str())) == NULL)
+		return (false);
+	closedir(directory);
+	return (true);
 }
 
 void

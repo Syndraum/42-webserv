@@ -30,6 +30,7 @@
 # include <dirent.h>
 # include <set>
 # include <sstream>
+# include "Request.hpp"
 
 class CGI;
 
@@ -78,6 +79,7 @@ class Server
 		Server &							set_auto_index(bool const auto_index);
 		Server &							set_client_max_body_size(size_t const limit);
 		Server &							set_path_error_page(std::string const & path);
+		bool								is_directory(const Request &);
 		void								print() const;
 
 };
