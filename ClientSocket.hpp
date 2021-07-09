@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:56 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/01 15:21:37 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/07 11:38:08 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 class ClientSocket : public ASocket
 {
+	private:
+		
 		Request		_request;
 		Server &	_server;
 

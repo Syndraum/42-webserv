@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/02 15:50:10 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/08 16:02:34 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		main(int argc, char *argv[])
 
 	if (argc > 2)
 	{
-		std::cerr << "Error: too much arguemnt" <<std::endl;
+		std::cerr << "Error: too many arguments" << std::endl;
 		return (2);
 	}
 	if (argc == 2)
@@ -45,7 +45,7 @@ int		main(int argc, char *argv[])
 	try
 	{
 		BuilderCore builder_core(reader.get_ifs(), &core);
-		builder_core.parse_mine_type();
+		builder_core.parse_mime_type();
 		builder_core.print_debug();
 	}
 	catch(const std::exception& e)
@@ -53,6 +53,6 @@ int		main(int argc, char *argv[])
 		// std::cerr << e.what() << '\n';
 		return (3);
 	}
-	
+
 	core.start();
 }

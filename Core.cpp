@@ -62,7 +62,7 @@ Core::start()
 		for (size_t i = 0; i < _servers.size(); i++)
 		{
 			Server & server = _servers[i];
-			for (Server::port_vector::iterator it = server.get_server_socket().begin(); 
+			for (Server::port_map::iterator it = server.get_server_socket().begin(); 
 				it != server.get_server_socket().end(); it++)
 			{
 				ServerSocket & server_socket = it->second;
@@ -153,7 +153,7 @@ Core::_accept_connection()
 	for (size_t i = 0; i < _servers.size(); i++)
 	{
 		Server & server = _servers[i];
-		for (Server::port_vector::iterator it = server.get_server_socket().begin(); 
+		for (Server::port_map::iterator it = server.get_server_socket().begin(); 
 				it != server.get_server_socket().end(); it++)
 		{
 			ServerSocket & server_socket = it->second;
@@ -250,7 +250,7 @@ Core::_detect_reset_server_poll_fd()
 		for (size_t i = 0; i < _servers.size(); i++)
 		{
 			Server & server = _servers[i];
-			for (Server::port_vector::iterator it = server.get_server_socket().begin(); 
+			for (Server::port_map::iterator it = server.get_server_socket().begin(); 
 					it != server.get_server_socket().end(); it++)
 			{
 				ServerSocket & server_socket = it->second;
