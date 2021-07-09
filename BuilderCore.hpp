@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/09 12:34:19 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/09 14:39:23 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,12 @@ class BuilderCore
 		void			parse_server();
 		void			parse_worker();
 		int				stoi_skip_number();
-
+		void			unexpected_character_error(char character);
+		void			unexpected_eof_error(std::string expectation);
+		void			invalid_nb_arguments_error(std::string directive);
+		void			unknown_directive_error(std::string directive);
+		void			not_terminated_by_semicolon_error(std::string directive);
+		void			no_opening_bracket_error(std::string directive);
 	public:
 	
 		BuilderCore(std::istream &fd, Core *core);

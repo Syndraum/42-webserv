@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/09 13:54:05 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/09 14:39:37 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,11 @@ _core(core)
 		else if (!directive.compare("server"))
 			parse_server();
 		else if (_line[_idx] ==  ';')
-		{
-			std::cerr << "Parsing Error : unexpected \";\"" << " on line " << line_count() << std::endl;
-			throw (ParsingError());
-		}
+			unexpected_character_error(';');
 		else if (_line[_idx] ==  '}')
-		{
-			std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
-			throw (ParsingError());
-		}
+			unexpected_character_error('}');
 		else if (directive != "")
-		{
-			std::cerr << "Parsing Error : unknown directive \"" << directive << "\" on line " << line_count() << std::endl;
-			throw (ParsingError());
-		}
+			unknown_directive_error(directive);
 	}
 }
 
@@ -60,10 +51,7 @@ BuilderCore::next_word_skip()
 	size_t			len = _line.find_first_of(";{}# \n\r\t\v\f", _idx) - _idx;
 
 	if (len == std::string::npos)
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	std::string		ret = _line.substr(_idx, len);
 	_idx += len;
 	return(ret);
@@ -114,10 +102,7 @@ BuilderCore::stoi_skip_number()
 		i++;
 	}
 	if (!_line[i + _idx])
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	else if (!i)
 		return (-1);
 	std::stringstream ss(_line.substr(_idx, i));
@@ -133,15 +118,9 @@ BuilderCore::parse_server_port(Server *server)
 	// std::cerr << &_line[_idx] << std::endl;
 	skip_whitespaces();
 	if (_line[_idx] == ';')
-	{
-		std::cerr << "Parsing Error : invalid number of arguments in \"listen\" directive" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		invalid_nb_arguments_error("listen");
 	else if (_line[_idx] == '}')
-	{
-		std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_character_error('}');
 	while (_line[_idx] && _line[_idx] != ';' && _line[_idx] != '}')
 	{
 		port = stoi_skip_number();
@@ -154,22 +133,13 @@ BuilderCore::parse_server_port(Server *server)
 		skip_whitespaces();
 	}
 	if (!_line[_idx])
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	else if (_line[_idx] == ';')
 		_idx++;
 	else if (_line[_idx] == '}')
-	{
-		std::cerr << "Parsing Error : unexpected \"}\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_character_error('}');
 	else
-	{
-		std::cerr << "Parsing Error : directive \"listen\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		not_terminated_by_semicolon_error("listen");
 }
 
 void
@@ -179,15 +149,9 @@ BuilderCore::parse_server_index(Server *server)
 
 	skip_whitespaces();
 	if (_line[_idx] == ';')
-	{
-		std::cerr << "Parsing Error : invalid number of arguments in \"index\" directive" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		invalid_nb_arguments_error("index");
 	else if (_line[_idx] == '}')
-	{
-		std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_character_error('}');
 	while (_line[_idx] && _line[_idx] != ';' && _line[_idx] != '}')
 	{
 		index = next_word_skip();
@@ -195,22 +159,13 @@ BuilderCore::parse_server_index(Server *server)
 		server->add_index(index);
 	}
 	if (!_line[_idx])
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	else if (_line[_idx] == ';')
 		_idx++;
 	else if (_line[_idx] == '}')
-	{
-		std::cerr << "Parsing Error : unexpected \"}\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_character_error('}');
 	else
-	{
-		std::cerr << "Parsing Error : directive \"index\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		not_terminated_by_semicolon_error("index");
 }
 
 void
@@ -220,23 +175,16 @@ BuilderCore::parse_server_name(Server *server)
 	if (!arg.length())
 	{
 		if (_line[_idx] == ';')
-			std::cerr << "Parsing Error : invalid number of arguments in \"server_name\" directive" << " on line " << line_count() << std::endl;
+			invalid_nb_arguments_error("server_name");
 		else
-			std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
+			unexpected_character_error('}');
 	}
 	server->set_name(arg);
 	skip_whitespaces();
 	if (!_line[_idx])
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	else if (_line[_idx] != ';')
-	{
-		std::cerr << "Parsing Error : directive \"server_name\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		not_terminated_by_semicolon_error("server_name");
 	_idx++;
 }
 
@@ -247,23 +195,16 @@ BuilderCore::parse_server_root(Server *server)
 	if (!arg.length())
 	{
 		if (_line[_idx] == ';')
-			std::cerr << "Parsing Error : invalid number of arguments in \"root\" directive" << " on line " << line_count() << std::endl;
+			invalid_nb_arguments_error("root");
 		else
-			std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
+			unexpected_character_error('}');
 	}
 	server->set_root(arg);
 	skip_whitespaces();
 	if (!_line[_idx])
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	else if (_line[_idx] != ';')
-	{
-		std::cerr << "Parsing Error : directive \"root\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		not_terminated_by_semicolon_error("root");
 		_idx++;
 }
 
@@ -274,23 +215,16 @@ BuilderCore::parse_server_path_error_page(Server *server)
 	if (!arg.length())
 	{
 		if (_line[_idx] == ';')
-			std::cerr << "Parsing Error : invalid number of arguments in \"path_error_page\" directive" << " on line " << line_count() << std::endl;
+			invalid_nb_arguments_error("path_error_page");
 		else
-			std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
+			unexpected_character_error('}');
 	}
 	server->set_path_error_page(arg);
 	skip_whitespaces();
 	if (!_line[_idx])
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	else if (_line[_idx] != ';')
-	{
-		std::cerr << "Parsing Error : directive \"path_error_page\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		not_terminated_by_semicolon_error("path_error_page");
 	_idx++;
 }
 
@@ -303,15 +237,9 @@ BuilderCore::parse_server_auto_index(Server *server)
 	else if (!arg.compare("off"))
 		server->set_auto_index(false);
 	else if (_line[_idx] == ';')
-	{
-		std::cerr << "Parsing Error : invalid number of arguments in \"autoindex\" directive" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		invalid_nb_arguments_error("autoindex");
 	else if (_line[_idx] == '}')
-	{
-		std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_character_error('}');
 	else if (arg != "")
 	{
 		std::cerr << "Parsing Error : invalid value \"" << arg << "\" in \"autoindex\" directive, it must be \"on\" or \"off\"" << " on line " << line_count() << std::endl;
@@ -319,15 +247,9 @@ BuilderCore::parse_server_auto_index(Server *server)
 	}
 	skip_whitespaces();
 	if (!_line[_idx])
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	else if (_line[_idx] != ';')
-	{
-		std::cerr << "Parsing Error : directive \"autoindex\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		not_terminated_by_semicolon_error("autoindex");
 	_idx++;
 }
 
@@ -340,15 +262,9 @@ BuilderCore::parse_server_client_max_body_size(Server *server)
 
 	skip_whitespaces();
 	if (_line[_idx] == ';')
-	{
-		std::cerr << "Parsing Error : invalid number of arguments in \"client_max_body_size\" directive" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		invalid_nb_arguments_error("client_max_body_size");
 	else if (_line[_idx] == '}')
-	{
-		std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_character_error('}');
 	ret = stoi_skip_number();
 	if (ret < 0)
 	{
@@ -365,10 +281,7 @@ BuilderCore::parse_server_client_max_body_size(Server *server)
 	else if (_line.find_first_of(";}# \n\r\t\v\f", _idx) == _idx)
 		_idx--;
 	else if (!_line[_idx])
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	else
 	{
 		std::cerr << "Parsing Error : \"client_max_body_size\" directive invalid value"  << " on line " << line_count() << std::endl;
@@ -378,15 +291,9 @@ BuilderCore::parse_server_client_max_body_size(Server *server)
 	server->set_client_max_body_size(client_max_body_size);
 	skip_whitespaces();
 	if (!_line[_idx])
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	else if (_line[_idx] != ';')
-	{
-		std::cerr << "Parsing Error : directive \"client_max_body_size\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		not_terminated_by_semicolon_error("client_max_body_size");
 	_idx++;
 }
 
@@ -399,23 +306,16 @@ BuilderCore::parse_server_CGI_param(CGI *cgi)
 	if (!key.length() || !value.length())
 	{
 		if (_line[_idx] == ';')
-			std::cerr << "Parsing Error : invalid number of arguments in \"cgi_param\" directive" << " on line " << line_count() << std::endl;
+			invalid_nb_arguments_error("cgi_param");
 		else
-			std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
+			unexpected_character_error('}');
 	}
 	cgi->add_CGI_param(key, value);
 	skip_whitespaces();
 	if (!_line[_idx])
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	else if (_line[_idx] != ';')
-	{
-		std::cerr << "Parsing Error : directive \"path_error_page\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		not_terminated_by_semicolon_error("cgi_param");
 	_idx++;
 }
 
@@ -426,23 +326,16 @@ BuilderCore::parse_server_CGI_exec_name(CGI *cgi)
 	if (!arg.length())
 	{
 		if (_line[_idx] == ';')
-			std::cerr << "Parsing Error : invalid number of arguments in \"exec_name\" directive" << " on line " << line_count() << std::endl;
+			invalid_nb_arguments_error("exec_name");
 		else
-			std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
+			unexpected_character_error('}');
 	}
 	cgi->set_exec_name(arg);
 	skip_whitespaces();
 	if (!_line[_idx])
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \";\" or \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\";\" or \"}\"");
 	else if (_line[_idx] != ';')
-	{
-		std::cerr << "Parsing Error : directive \"path_error_page\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		not_terminated_by_semicolon_error("exec_name");
 	_idx++;
 }
 
@@ -454,10 +347,7 @@ BuilderCore::parse_server_extension(Server *server)
 	skip_whitespaces();
 	CGI cgi;
 	if (_line [_idx++] != '{')
-	{
-		std::cerr << "Parsing Error : directive \"extension\" has no opening \"{\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		no_opening_bracket_error("extension");
 	skip_whitespaces();
 	while (_line[_idx] && _line[_idx] != '}')
 	{
@@ -467,21 +357,12 @@ BuilderCore::parse_server_extension(Server *server)
 		else if (!directive.compare("exec_name"))
 			parse_server_CGI_exec_name(&cgi);
 		else if (_line[_idx] ==  ';')
-		{
-			std::cerr << "Parsing Error : unexpected \";\"" << " on line " << line_count() << std::endl;
-			throw (ParsingError());
-		}
+			unexpected_character_error(';');
 		else if (directive != "")
-		{
-			std::cerr << "Parsing Error : unknown directive \"" << directive << "\" on line " << line_count() << std::endl;
-			throw (ParsingError());
-		}
+			unknown_directive_error(directive);
 	}
 	if (_line[_idx] != '}')
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\"}\"");
 	server->add_CGI(extension_type, cgi);
 	_idx++;
 }
@@ -493,10 +374,7 @@ BuilderCore::parse_server()
 	std::string	directive;
 	Server server;
 	if (_line [_idx++] != '{')
-	{
-		std::cerr << "Parsing Error : directive \"server\" has no opening \"{\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		no_opening_bracket_error("server");
 	skip_whitespaces();
 	while (_line[_idx] && _line[_idx] != '}')
 	{
@@ -520,21 +398,12 @@ BuilderCore::parse_server()
 		else if (!directive.compare("extension"))
 			parse_server_extension(&server);
 		else if (_line[_idx] ==  ';')
-		{
-			std::cerr << "Parsing Error : unexpected \";\"" << " on line " << line_count() << std::endl;
-			throw (ParsingError());
-		}
+			unexpected_character_error(';');
 		else if (directive != "")
-		{
-			std::cerr << "Parsing Error : unknown directive \"" << directive << "\" on line " << line_count() << std::endl;
-			throw (ParsingError());
-		}
+			unknown_directive_error(directive);
 	}
 	if (_line[_idx] != '}')
-	{
-		std::cerr << "Parsing Error : unexpected end of file, expecting \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_eof_error("\"}\"");
 	_core->add_server(server);
 	server.print();
 	_idx ++;
@@ -545,15 +414,9 @@ BuilderCore::parse_worker()
 {
 	skip_whitespaces();
 	if (_line[_idx] == ';')
-	{
-		std::cerr << "Parsing Error : invalid number of arguments in \"worker\" directive" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		invalid_nb_arguments_error("worker");
 	else if (_line[_idx] == '}')
-	{
-		std::cerr << "Parsing Error : unexpected \"}\"" << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		unexpected_character_error('}');
 	int	worker = stoi_skip_number();
 	if (worker < 0)
 	{
@@ -568,10 +431,7 @@ BuilderCore::parse_worker()
 		return ;
 	}
 	else
-	{
-		std::cerr << "Parsing Error : directive \"worker\" is not terminated by \";\""  << " on line " << line_count() << std::endl;
-		throw (ParsingError());
-	}
+		not_terminated_by_semicolon_error("worker");
 }
 
 void
@@ -588,4 +448,46 @@ BuilderCore::parse_mime_type()
 {
 	Extension * extension = Extension::get_instance();
 	_core->set_extension(extension);
+}
+
+void
+BuilderCore::unexpected_character_error(char character)
+{
+	std::cerr << "Parsing Error : unexpected \"" << character << "\" on line " << line_count() << std::endl;
+	throw(ParsingError());
+}
+
+void
+BuilderCore::unexpected_eof_error(std::string expectation)
+{
+	std::cerr << "Parsing Error : unexpected end of file, expecting " << expectation << " on line " << line_count() << std::endl;
+	throw(ParsingError());
+}
+
+void
+BuilderCore::invalid_nb_arguments_error(std::string directive)
+{
+	std::cerr << "Parsing Error : invalid number of arguments in " << directive << " directive" << " on line " << line_count() << std::endl;
+	throw(ParsingError());
+}
+
+void
+BuilderCore::unknown_directive_error(std::string directive)
+{
+	std::cerr << "Parsing Error : unknown directive \"" << directive << "\" on line " << line_count() << std::endl;
+	throw(ParsingError());
+}
+
+void
+BuilderCore::not_terminated_by_semicolon_error(std::string directive)
+{
+	std::cerr << "Parsing Error : directive " << directive << " is not terminated by \";\""  << " on line " << line_count() << std::endl;
+	throw(ParsingError());
+}
+
+void
+BuilderCore::no_opening_bracket_error(std::string directive)
+{
+	std::cerr << "Parsing Error : directive " << directive << " has no opening \"{\""  << " on line " << line_count() << std::endl;
+	throw(ParsingError());
 }
