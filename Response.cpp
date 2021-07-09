@@ -45,7 +45,6 @@ Response::operator=(Response const & rhs)
 Response &
 Response::add_header(std::string name, std::string content)
 {
-	std::cout << "HEADER STRING : " << content << std::endl;
 	_headers.insert(std::pair<std::string, std::string>(name, content));
 	return *this;
 }
