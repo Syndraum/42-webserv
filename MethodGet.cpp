@@ -33,7 +33,7 @@ MethodGet::action(const Request & request, Response & response)
 	{
 		response
 			.set_code(200)
-			.set_body(request.get_path().c_str())
+			.set_body_from_file(request.get_path().c_str())
 			.add_header(
 				"Content-type", 
 				mine

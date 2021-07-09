@@ -199,7 +199,7 @@ Core::_handle_request_and_detect_close_connection()
 					response.set_code(403).clear_header();
 				else
 				{
-					response.set_code(200);
+					response.set_code(200).set_body(server.get_index_page(request->get_path()));
 				}
 			else
 			{

@@ -106,7 +106,7 @@ Response::set_code(int code)
 
 //cdai set_body
 Response &
-Response::set_body(const std::string & filename)
+Response::set_body_from_file(const std::string & filename)
 {
 	Reader	file_reader(filename);
 	file_reader.open();
@@ -116,10 +116,17 @@ Response::set_body(const std::string & filename)
 }
 
 Response &
+Response::set_body(const std::string & body)
+{
+	_body = body;
+	return *this;
+}
+
+Response &
 Response::set_404(std::string & filename)
 {
 	_code = 404;
-	return set_body(filename);
+	return set_body_from_file(filename);
 }
 
 std::string

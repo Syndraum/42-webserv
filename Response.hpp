@@ -67,7 +67,8 @@ class Response
 		void										send_response(int fd);
 		std::string									get_message(int code);
 		Response &									set_code(int code);
-		Response &									set_body(const std::string & filename);
+		Response &									set_body_from_file(const std::string & filename);
+		Response &									set_body(const std::string & body);
 		Response &									set_404(std::string & filename);
 };
 
