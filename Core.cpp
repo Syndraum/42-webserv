@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/02 15:58:24 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/11 21:00:01 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,12 +199,15 @@ Core::_handle_request_and_detect_close_connection()
 					response.set_code(403).clear_header();
 				else
 				{
-					response.set_code(200).set_body(server.get_index_page(*request));
+					response
+						.set_code(200)
+						.set_body(server.get_index_page(*request))
+						.add_header("Content-type", "text/html");
 				}
 			else
 			{
 				request->set_path(server.get_full_path(request->get_path()));
-				std::cout << "PATH : " << request->get_path() << std::endl;
+				// std::cout << "PATH : " << request->get_path() << std::endl;
 				request->action(response);
 			}
 		}
