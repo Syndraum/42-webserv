@@ -62,6 +62,7 @@ Response::get_response()
 
 	ss << _version << " " << _code << " " << get_message(_code) << "\r\n";
 	add_header("Content-Length", _body.length());
+	add_header("Server", "Webserviette/0.1");
 	for (header_map::iterator it = _headers.begin(); it != _headers.end(); it++)
 	{
 		ss << it->first << ": " << it->second << "\r\n";
