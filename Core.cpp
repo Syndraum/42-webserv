@@ -196,7 +196,7 @@ Core::_handle_request_and_detect_close_connection()
 			request->set_path(request->get_path() + server.get_index(request->get_path()));
 			if (server.is_directory(*request))
 				if (!server.get_auto_index())
-					response.set_code(403).clear_header();
+					response.set_error(403);
 				else
 				{
 					response

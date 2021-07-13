@@ -21,6 +21,7 @@
 # include <unistd.h>
 # include <fstream>
 # include "Reader.hpp"
+# include "StringPP.hpp"
 
 # include <iostream>
 
@@ -62,7 +63,7 @@ class Response
 			return (add_header(name, ss.str()));
 		}
 		Response &									add_header(std::string name, std::string content);
-		void										clear_header();
+		Response &									clear_header();
 		std::string									get_response();
 		void										send_response(int fd);
 		std::string									get_message(int code);
@@ -70,6 +71,7 @@ class Response
 		Response &									set_body_from_file(const std::string & filename);
 		Response &									set_body(const std::string & body);
 		Response &									set_404(std::string & filename);
+		Response &									set_error(int code);
 };
 
 # include "Request.hpp"

@@ -49,10 +49,11 @@ Response::add_header(std::string name, std::string content)
 	return *this;
 }
 
-void
+Response &
 Response::clear_header()
 {
 	_headers.clear();
+	return *this;
 }
 
 std::string
@@ -128,6 +129,32 @@ Response::set_404(std::string & filename)
 {
 	_code = 404;
 	return set_body_from_file(filename);
+}
+
+Response &
+Response::set_error(int code)
+{
+	Reader			file_reader("./config/error.html");
+	StringPP		m_template;
+	
+	try
+	{
+		file_reader.open();
+		file_reader.to_string(m_template.str());
+		m_template.replace_all("{{CODE}}", code);
+		m_template.replace_all("{{MESSAGE}}", get_message(code));
+		this->
+			set_code(code)
+			.set_body(m_template.str())
+			.clear_header()
+			.add_header("Content-type", "text/html");
+
+	}
+	catch (std::exception &e)
+	{
+		this->set_code(code).clear_header();
+	}
+	return *this;
 }
 
 std::string
