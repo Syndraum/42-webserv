@@ -6,7 +6,7 @@
 #    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/07/09 11:35:32 by mchardin         ###   ########.fr        #
+#    Updated: 2021/07/13 14:58:05 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								MethodLibrary.cpp \
 								Extension.cpp \
 								CsvReader.cpp \
+								RequestCGI.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}

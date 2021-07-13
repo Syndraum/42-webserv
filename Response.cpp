@@ -6,11 +6,18 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/02 15:41:38 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/13 16:43:56 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
+
+Response::Response(void) :
+_version("HTTP/1.1"),
+_code(200),
+_body(""),
+_request(*(new Request)) //leaks
+{}
 
 Response::Response(Request & request, int code) :
 _version("HTTP/1.1"),
