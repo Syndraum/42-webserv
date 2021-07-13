@@ -42,6 +42,6 @@ MethodGet::action(const Request & request, Response & response)
 	}
 	catch(const std::exception& e)
 	{
-		response.set_code(404).clear_header();
+		response.set_error(404);
 	}
 }
