@@ -22,6 +22,7 @@
 # include <fstream>
 # include "Reader.hpp"
 # include "StringPP.hpp"
+# include "Info.hpp"
 
 # include <iostream>
 
