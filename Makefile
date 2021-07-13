@@ -31,6 +31,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								MethodLibrary.cpp \
 								Extension.cpp \
 								CsvReader.cpp \
+								StringPP.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}
