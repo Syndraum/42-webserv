@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/02 15:58:24 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/13 14:23:13 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,14 +209,16 @@ Core::_handle_request_and_detect_close_connection()
 		}
 		catch (BuilderRequest::NoRequest &e)
 		{
+//			std::cout << "test NoRequest" << std::endl;
 			continue;
 		}
 		catch (Request::NoMethod &e)
 		{
-//			std::cout << "Client " << it->get_socket() << " disconnected" << std::endl;  
+//			std::cout << "test NoMethod" << std::endl;
+			std::cout << "Client " << it->get_socket() << " disconnected" << std::endl;  
 
-//			close( it->get_socket() );  
-//			_client.erase(it);  
+			close( it->get_socket() );  
+			_client.erase(it);  
 			break;
 		}
 		// std::cout << "parse_request: " <<  parse_ret << std::endl;

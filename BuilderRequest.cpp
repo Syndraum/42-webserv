@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:15 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/02 16:00:52 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/13 14:17:49 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ BuilderRequest::parse_request(ASocket & socket)
 			first_line(line);
 		}
 		else{
+			std::cout << "this isn't the first line" << std::endl;
 			if (!parse_headers(line))
 			{
 				socket.reset_buffer();
