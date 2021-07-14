@@ -50,9 +50,9 @@ URI::operator=(URI const & rhs)
 void
 URI::set_uri(const std::string & uri)
 {
-	size_t index = 0;
-	size_t begin = 0;
-	size_t query_begin = 0;
+	size_t index		= 0;
+	size_t begin		= 0;
+	size_t query_begin	= 0;
 
 	_content = uri;
 	index = _content.find("://", begin);
