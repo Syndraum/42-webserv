@@ -49,10 +49,11 @@ Response::add_header(std::string name, std::string content)
 	return *this;
 }
 
-void
+Response &
 Response::clear_header()
 {
 	_headers.clear();
+	return *this;
 }
 
 std::string
@@ -61,13 +62,14 @@ Response::get_response()
 	std::stringstream ss;
 
 	ss << _version << " " << _code << " " << get_message(_code) << "\r\n";
+	add_header("Content-Length", _body.length());
+	add_header("Server", Info::server_name() + "/" + Info::version() );
 	for (header_map::iterator it = _headers.begin(); it != _headers.end(); it++)
 	{
 		ss << it->first << ": " << it->second << "\r\n";
 	}
 	ss << "\r\n";
-	if (_body != "")
-		ss << _body;
+	ss << _body;
 	return ss.str();
 }
 
@@ -106,19 +108,19 @@ Response::set_code(int code)
 
 //cdai set_body
 Response &
-Response::set_body(const std::string & filename)
+Response::set_body_from_file(const std::string & filename)
 {
 	Reader	file_reader(filename);
 	file_reader.open();
 	file_reader.to_string(_body);
-
-	// std::to_string is c++11
-	std::stringstream ss;
-	ss << file_reader.get_length();
-	add_header("Content-Length", ss.str());
-
 	file_reader.close();
+	return *this;
+}
 
+Response &
+Response::set_body(const std::string & body)
+{
+	_body = body;
 	return *this;
 }
 
@@ -126,7 +128,35 @@ Response &
 Response::set_404(std::string & filename)
 {
 	_code = 404;
-	return set_body(filename);
+	return set_body_from_file(filename);
+}
+
+Response &
+Response::set_error(int code)
+{
+	Reader			file_reader("./config/error.html");
+	StringPP		m_template;
+	
+	try
+	{
+		file_reader.open();
+		file_reader.to_string(m_template.str());
+		m_template.replace_all("{{CODE}}", code);
+		m_template.replace_all("{{MESSAGE}}", get_message(code));
+		m_template.replace_all("{{SERVER_NAME}}", Info::server_name());
+		m_template.replace_all("{{VERSION}}", Info::version());
+		this->
+			set_code(code)
+			.set_body(m_template.str())
+			.clear_header()
+			.add_header("Content-type", "text/html");
+
+	}
+	catch (std::exception &e)
+	{
+		this->set_code(code).clear_header();
+	}
+	return *this;
 }
 
 std::string

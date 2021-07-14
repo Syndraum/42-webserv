@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/02 15:58:24 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/11 21:00:01 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,25 +52,28 @@ Core::start()
 	for (size_t i = 0; i < _servers.size(); i++)
 	{
 		_servers[i].start(_worker);
-		active_socket = _servers[i].get_active_socket();
-		_server_sockets.insert(
-			_server_sockets.begin(),
-			active_socket.begin(),
-			active_socket.end()
-		);
 	}
+	print();
 	while (true)
 	{
 
 		// value given to poll (nbFds)
 		_nb_fds = 0;
-		for (size_t i = 0; i < _server_sockets.size(); i++)
+		for (size_t i = 0; i < _servers.size(); i++)
 		{
-			fd = _server_sockets[i];
-			_fds[_nb_fds].fd = fd;
-			_fds[_nb_fds].events = POLLIN;
-			_fds[_nb_fds].revents = 0;
-			_nb_fds++;
+			Server & server = _servers[i];
+			for (Server::port_map::iterator it = server.get_server_socket().begin(); 
+				it != server.get_server_socket().end(); it++)
+			{
+				ServerSocket & server_socket = it->second;
+
+				fd = server_socket.get_socket();
+				_fds[_nb_fds].fd = fd;
+				_fds[_nb_fds].events = POLLIN;
+				_fds[_nb_fds].revents = 0;
+				server_socket.set_id(_nb_fds);
+				_nb_fds++;
+			}
 		}
 		for (size_t i = 0; i < _client.size(); i++)
 		{
@@ -78,6 +81,7 @@ Core::start()
 			_fds[_nb_fds].fd = fd;
 			_fds[_nb_fds].events = POLLOUT;
 			_fds[_nb_fds].revents = 0;
+			_client[i].set_id(_nb_fds);
 			_nb_fds++;
 		}
 		_nb_active = poll(_fds, _nb_fds, 60000);
@@ -146,24 +150,31 @@ Core::_accept_connection()
 	int new_socket = -1;
 	int one = 1;
 
-	for (size_t i = 0; i < _server_sockets.size(); i++)
+	for (size_t i = 0; i < _servers.size(); i++)
 	{
-		int fd = _server_sockets[i];
-
-		if (_fds[i].revents == _fds[i].events)
+		Server & server = _servers[i];
+		for (Server::port_map::iterator it = server.get_server_socket().begin(); 
+				it != server.get_server_socket().end(); it++)
 		{
-			_client.push_back(ClientSocket());
-			ClientSocket & cs = _client.back();
-			if ((new_socket = accept(fd, (struct sockaddr *)&cs.get_address() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
+			ServerSocket & server_socket = it->second;
+			int fd = server_socket.get_socket();
+
+			if (_fds[server_socket.get_id()].revents == _fds[server_socket.get_id()].events)
 			{
-				perror("accept failed");
-				exit(EXIT_FAILURE);
+				_client.push_back(ClientSocket(server));
+				ClientSocket & cs = _client.back();
+				if ((new_socket = accept(fd, (struct sockaddr *)&cs.get_address() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
+				{
+					perror("accept failed");
+					exit(EXIT_FAILURE);
+				}
+				setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
+				std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
+				cs.set_socket(new_socket);
+				std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
 			}
-			setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
-			std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
-			cs.set_socket(new_socket);
-			std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
 		}
+		
 	}
 }
 
@@ -172,28 +183,33 @@ Core::_handle_request_and_detect_close_connection()
 {
 	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
 	{
-//		std::cout << "test" << std::endl;
+		Request *	request	= &it->get_request();
+		Server &	server	= (*it).get_server();
+		Response	response(*request, 200);
 
-		// BuilderRequest	br(_methods);
-		Request * request = &it->get_request();
-		Response response(*request, 200);
-//		std::cout << "test" << std::endl;
-
+		// (*it).get_server().print();
 		//Check if it was for closing , and also read the 
 		//incoming message 
 		try{
 			_br.set_request(request);
 			_br.parse_request(*it);
-			// request = br.get_request();
-			// br.reset();
-//			std::cout << "path : " << request->get_path() << std::endl;
-//			std::cout << "request : " << request->get_method()->get_name() << std::endl;
-			if (request->get_path() == "/")
-				request->set_path("/index.html");
-			request->set_path("./webserviette_root" + request->get_path());
-			request->set_version("HTTP/1.1");
-
-			request->action(response);
+			request->set_path(request->get_path() + server.get_index(request->get_path()));
+			if (server.is_directory(*request))
+				if (!server.get_auto_index())
+					response.set_error(403);
+				else
+				{
+					response
+						.set_code(200)
+						.set_body(server.get_index_page(*request))
+						.add_header("Content-type", "text/html");
+				}
+			else
+			{
+				request->set_path(server.get_full_path(request->get_path()));
+				// std::cout << "PATH : " << request->get_path() << std::endl;
+				request->action(response);
+			}
 		}
 		catch (BuilderRequest::BadRequest &e)
 		{
@@ -215,28 +231,16 @@ Core::_handle_request_and_detect_close_connection()
 		{
 //			std::cout << "Client " << it->get_socket() << " disconnected" << std::endl;  
 
-//			close( it->get_socket() );  
-//			_client.erase(it);  
+//			close( it->get_socket() );
+//			_client.erase(it);
 			break;
 		}
-		// std::cout << "parse_request: " <<  parse_ret << std::endl;
-
-		// std::cout << "method: " << request.get_method() << std::endl;
-
-		//if (parse_ret == OK)
-		//{
-			// std::string ROOT = "./webserviette_root";
-			// std::string filename = ROOT + request.get_path();
-
-		// delete request;
-		// request->reset();
 		std::cout << "write in Socket: " << it->get_socket() << std::endl;
 		response.send_response(it->get_socket());
 
 		close( it->get_socket() );  
 		_client.erase(it);  
 		break;
-		//}
 	}
 }
 
@@ -244,9 +248,18 @@ void
 Core::_detect_reset_server_poll_fd()
 {
 	if (!_client.size())
-		for (size_t i = 0; i < _server_sockets.size(); i++)
-			if (_fds[i].revents & POLLOUT || _fds[i].revents & POLLIN)
-				_fds[i].revents = 0;
+	{
+		for (size_t i = 0; i < _servers.size(); i++)
+		{
+			Server & server = _servers[i];
+			for (Server::port_map::iterator it = server.get_server_socket().begin(); 
+					it != server.get_server_socket().end(); it++)
+			{
+				ServerSocket & server_socket = it->second;
+				_fds[server_socket.get_id()].revents = 0;
+			}
+		}
+	}
 }
 
 void	Core::_cdai_dirty_function()

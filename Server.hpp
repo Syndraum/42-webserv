@@ -26,6 +26,11 @@
 # include <algorithm>
 # include "ServerSocket.hpp"
 # include "CGI.hpp"
+# include <sys/types.h>
+# include <dirent.h>
+# include <set>
+# include <sstream>
+# include "Request.hpp"
 
 class CGI;
 
@@ -39,8 +44,6 @@ class Server
 
 	private:
 
-		std::vector<int>					_active_port;
-		std::vector<int>					_active_socket;
 		std::string							_name;
 		port_map							_server_sockets;
 		std::string							_root;
@@ -63,14 +66,20 @@ class Server
 		Server &							add_CGI(std::string name, CGI content);
 		void								start(int const worker);
 
+		port_map &							get_server_socket();
 		ServerSocket const &				get_server_socket(int port) const;
-		std::vector<int> const &			get_active_socket() const;
+		const bool	&						get_auto_index() const;
+		const std::string &					get_root() const;
+		std::string 						get_index(const std::string &);
+		std::string							get_full_path(const std::string & uri);
+		std::string							get_index_page(const Request & uri);
 
 		Server &							set_name(std::string const & name);
 		Server &							set_root(std::string const & root);
 		Server &							set_auto_index(bool const auto_index);
 		Server &							set_client_max_body_size(size_t const limit);
 		Server &							set_path_error_page(std::string const & path);
+		bool								is_directory(const Request &);
 		void								print() const;
 
 };

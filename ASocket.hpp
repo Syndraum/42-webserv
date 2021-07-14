@@ -29,6 +29,7 @@ class ASocket
 		int						_socket;
 		sockaddr_in				_address;
 		char					_buffer[BUFFER_SIZE];
+		int						_id;
 
 	public:
 		
@@ -40,6 +41,8 @@ class ASocket
 		const sockaddr_in &		get_address(void) const;
 		void					set_address(const sockaddr_in & Address);
 		int						get_next_line(std::string & str);
+		int						get_id() const;
+		void					set_id(int id);
 		void					reset_buffer(void);
 };
 
