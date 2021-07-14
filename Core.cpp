@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/13 14:23:13 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/14 16:58:32 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,13 +175,14 @@ Core::_handle_request_and_detect_close_connection()
 //		std::cout << "test" << std::endl;
 
 		// BuilderRequest	br(_methods);
-		Request * request = &it->get_request();
+		Request * request = &(it->get_request());
 		Response response(*request, 200);
 //		std::cout << "test" << std::endl;
 
 		//Check if it was for closing , and also read the 
 		//incoming message 
 		try{
+//			std::cout << "_is_first_line: " << request->get_first_line() << std::endl;
 			_br.set_request(request);
 			_br.parse_request(*it);
 			// request = br.get_request();

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:14:07 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/01 15:21:21 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/14 18:12:32 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ ClientSocket::operator=(ClientSocket const & rhs)
 {
 	if (&rhs != this)
 		this->_socket = rhs._socket;
+	ASocket::operator=(rhs);
+	_request = rhs._request;
 	return *this;
 }
 

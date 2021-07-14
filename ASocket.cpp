@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/02 15:35:36 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/14 18:06:23 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,22 @@ ASocket::ASocket(void)
 	reset_buffer();
 }
 
-ASocket::~ASocket(void){}
+ASocket::ASocket(ASocket const & rhs)
+{
+	*this = rhs;
+}
+
+ASocket::~ASocket(void)
+{}
+
+ASocket const & ASocket::operator=(ASocket const & rhs)
+{
+	_socket = rhs._socket;
+	_address = rhs._address;
+	for (int i = 0; i < BUFFER_SIZE; i++)
+		_buffer[i] = rhs._buffer[i];
+	return *this;
+}
 
 int
 ASocket::get_socket(void) const

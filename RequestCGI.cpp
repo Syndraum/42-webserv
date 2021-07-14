@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 15:14:02 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/13 16:45:39 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/14 15:37:24 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,13 @@ RequestCGI::operator=(RequestCGI const &rhs)
 RequestCGI &
 RequestCGI::add_env(std::string key, std::string value)
 {
-	_env_cgi.insert(std::pair<std::string, std::string>(key, value));
+	_env_cgi[key] = value;
 	return (*this);
+}
+
+void RequestCGI::send(void)
+{
+	_cgi.start();
 }
 
 std::map<std::string, std::string>
