@@ -31,10 +31,8 @@ int
 BuilderRequest::add_method(std::string line)
 {
 	int ret = line.find(' ');
-//	std::cout << "ret: " << ret << std::endl;
-	std::string name = line.substr(0, ret);
 
-//	std::cout << "name: " << name << std::endl;
+	std::string name = line.substr(0, ret);
 	_request->set_method(_methods->get_method( name));
 	if (!_request->get_method())
 		throw MethodNotImplemented();
@@ -45,29 +43,34 @@ int
 BuilderRequest::add_path(std::string line)
 {
 	size_t		len = line.find(' ');
+	std::string	tmp;
+  
 	if (len == std::string::npos)
 		throw BadRequest();
-	_request->set_path(line.substr(0, len));
-	// check characters
+	tmp = line.substr(0, len);
+	_request->set_path(tmp);
+	_request->set_uri(tmp);
 	return(len + 1);
 }
 
 int
 BuilderRequest::add_version(std::string line)
 {
-	if (line.compare(0, 8, VERSION))
+	if (line.compare(0, 8, Info::http_revision))
 		throw BadHttpVersion();
-	_request->set_version(VERSION);
+	_request->set_version(Info::http_revision);
 	return (8);
 }
 
 void
 BuilderRequest::first_line(std::string line)
 {
+	int j = 0;
+
 	_request->set_first_line(false);
 	if (line[0] == '\0')
 		throw BadRequest();
-	int	j = add_method(line);
+	j = add_method(line);
 	j += add_path(&line[j]);
 	j += add_version(&line[j]);
 	if (line[j] != '\r')
@@ -91,7 +94,6 @@ void
 BuilderRequest::parse_request(ASocket & socket)
 {
 	std::string		line;
-	// bool			is_first_line = true;
 	int				gnl_ret = 1;
 
 	while( gnl_ret && (gnl_ret = socket.get_next_line(line)))

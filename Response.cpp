@@ -70,7 +70,7 @@ Response::get_response()
 
 	ss << _version << " " << _code << " " << get_message(_code) << "\r\n";
 	add_header("Content-Length", _body.length());
-	add_header("Server", Info::server_name() + "/" + Info::version() );
+	add_header("Server", Info::server_name + "/" + Info::version );
 	for (header_map::iterator it = _headers.begin(); it != _headers.end(); it++)
 	{
 		ss << it->first << ": " << it->second << "\r\n";
@@ -150,8 +150,8 @@ Response::set_error(int code)
 		file_reader.to_string(m_template.str());
 		m_template.replace_all("{{CODE}}", code);
 		m_template.replace_all("{{MESSAGE}}", get_message(code));
-		m_template.replace_all("{{SERVER_NAME}}", Info::server_name());
-		m_template.replace_all("{{VERSION}}", Info::version());
+		m_template.replace_all("{{SERVER_NAME}}", Info::server_name);
+		m_template.replace_all("{{VERSION}}", Info::version);
 		this->
 			set_code(code)
 			.set_body(m_template.str())
