@@ -13,12 +13,6 @@
 #ifndef REQUEST_HPP
 # define REQUEST_HPP
 
-# define GET 0
-# define POST 1
-# define DELETE 2
-
-# define VERSION "HTTP/1.1"
-
 # include <map>
 # include <string>
 # include "URI.hpp"
@@ -57,6 +51,7 @@ class Request
 
 		void										set_method(AMethod * rhs);
 		void										set_path(std::string const &rhs);
+		void										set_uri(std::string const &rhs);
 		void										set_version(std::string const &rhs);
 		void										set_headers(std::map<std::string, std::string> const &rhs);
 		void										add_header(std::pair<std::string, std::string> const &rhs);
