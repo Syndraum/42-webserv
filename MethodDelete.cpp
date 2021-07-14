@@ -23,7 +23,7 @@ MethodDelete::action(const Request & request, Response & response)
 {
 	if (0 != (std::remove(request.get_path().c_str())))
 	{
-		response.set_code(404).clear_header();
+		response.set_error(404);
 	}
 	else
 	{

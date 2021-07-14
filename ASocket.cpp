@@ -12,7 +12,7 @@
 
 #include "ASocket.hpp"
 
-ASocket::ASocket(void)
+ASocket::ASocket(void) : _id(-1)
 {
 	reset_buffer();
 }
@@ -57,6 +57,15 @@ ASocket::set_address(const sockaddr_in & Address)
 {
 	this->_address = Address;
 }
+
+int
+ASocket::get_id() const
+{ return (_id); }
+
+
+void
+ASocket::set_id(int id)
+{ _id = id; }
 
 int
 ASocket::get_next_line(std::string & str)

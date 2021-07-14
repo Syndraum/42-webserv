@@ -21,6 +21,7 @@
 
 # include <map>
 # include <string>
+# include "URI.hpp"
 
 class AMethod;
 class Response;
@@ -33,6 +34,7 @@ class Request
 		std::string									_version;
 		std::map<std::string, std::string>			_headers;
 		bool										_is_first_line;
+		URI											_uri;
 
 	public:
 		class NoMethod : public std::exception

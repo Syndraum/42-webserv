@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/09 12:29:42 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/10 11:36:23 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,13 @@ Server::start(int const worker)
 		ss.setup_socket();
 		ss.bind_socket();
 		ss.listen_socket(worker);
-		_active_port.push_back(ss.get_port());
-		_active_socket.push_back(ss.get_socket());
 	}
+}
+
+Server::port_map &
+Server::get_server_socket(void)
+{
+	return (_server_sockets);
 }
 
 ServerSocket const &
@@ -83,10 +87,72 @@ Server::get_server_socket(int port) const
 	return _server_sockets.at(port);
 }
 
-std::vector<int> const &
-Server::get_active_socket() const
+const bool &
+Server::get_auto_index() const
 {
-	return _active_socket;
+	return (_auto_index);
+}
+
+const std::string &
+Server::get_root() const
+{
+	return (_root);
+}
+
+std::string
+Server::get_index(const std::string & uri)
+{
+	std::string					path;
+	DIR *						directory;
+	struct dirent *				entry;
+	std::set<std::string>		files;
+
+	path = get_full_path(uri);
+	if ((directory = opendir(path.c_str())) != NULL)
+	{
+		while ((entry = readdir(directory)) != NULL)
+			files.insert(entry->d_name);
+	}
+	else
+		return ("");
+	closedir(directory);
+	for (std::list<std::string>::iterator it = _index.begin(); it != _index.end(); it++)
+	{
+		if (files.find(*it) != files.end())
+			return (*it);
+	}
+	return ("");
+}
+
+std::string
+Server::get_full_path(const std::string & uri)
+{
+	return (std::string (_root + uri));
+}
+
+std::string
+Server::get_index_page(const Request & request)
+{
+	std::stringstream ss;
+	std::string					path;
+	DIR *						directory;
+	struct dirent *				entry;
+
+	path = get_full_path(request.get_path());
+	ss << "<html>\n<head><title>Index of " << request.get_path() << "</title></head>\n<body>\n<h1>Index of " << request.get_path() << "</h1><hr><pre>\n";
+	if ((directory = opendir(path.c_str())) != NULL)
+	{
+		while ((entry = readdir(directory)) != NULL){
+			ss << "<a href=\"" << request.get_path();
+			// std::cout << "last : " << request.get_path()[request.get_path().length() - 1] << std::endl;
+			if (request.get_path()[request.get_path().length() - 1] != '/')
+				ss << "\\";
+			ss << entry->d_name << "\">" << entry->d_name << "</a>\n";
+		}
+	}
+	closedir (directory);
+	ss << "</pre><hr></body>\n</html>";
+	return (ss.str());
 }
 
 Server &
@@ -122,6 +188,18 @@ Server::set_path_error_page(std::string const & path)
 {
 	_path_error_page = path;
 	return(*this);
+}
+
+bool
+Server::is_directory(const Request & request)
+{
+	std::string	path =		get_full_path(request.get_path());
+	DIR *		directory;
+
+	if ((directory = opendir(path.c_str())) == NULL)
+		return (false);
+	closedir(directory);
+	return (true);
 }
 
 void

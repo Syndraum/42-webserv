@@ -21,6 +21,10 @@
 # include <unistd.h>
 # include <fstream>
 # include "Reader.hpp"
+# include "StringPP.hpp"
+# include "Info.hpp"
+
+# include <iostream>
 
 class Request;
 
@@ -43,7 +47,7 @@ class Response
 		std::string									_3xx__response(int code);
 		std::string									_4xx__response(int code);
 		std::string									_5xx__response(int code);
-								
+
 	public:
 		Response(void);
 		Response(Request &, int code = 200);
@@ -51,14 +55,24 @@ class Response
 		virtual ~Response(void);
 		Response &									operator=(Response const &rhs);
 
+		template <typename T>
+		Response &									add_header(std::string name, T content)
+		{
+			std::stringstream ss;
+
+			ss << content;
+			return (add_header(name, ss.str()));
+		}
 		Response &									add_header(std::string name, std::string content);
-		void										clear_header();
+		Response &									clear_header();
 		std::string									get_response();
 		void										send_response(int fd);
 		std::string									get_message(int code);
 		Response &									set_code(int code);
-		Response &									set_body(const std::string & filename);
+		Response &									set_body_from_file(const std::string & filename);
+		Response &									set_body(const std::string & body);
 		Response &									set_404(std::string & filename);
+		Response &									set_error(int code);
 };
 
 # include "Request.hpp"

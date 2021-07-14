@@ -17,7 +17,8 @@ _method(0),
 _path(),
 _version(),
 _headers(),
-_is_first_line(true)
+_is_first_line(true),
+_uri()
 {}
 
 Request::Request(Request const &rhs)
@@ -34,6 +35,8 @@ Request::operator=(Request const &rhs)
 	_path = rhs.get_path();
 	_version = rhs.get_version();
 	_headers = rhs.get_headers();
+	_is_first_line = rhs._is_first_line;
+	_uri = rhs._uri;
 	return (*this);
 }
 
@@ -67,7 +70,10 @@ Request::set_method(AMethod * rhs)
 
 void
 Request::set_path(std::string const &rhs)
-{ _path = rhs; }
+{ 
+	_path = rhs;
+	_uri.set_uri(rhs);
+}
 
 void
 Request::set_version(std::string const &rhs)
