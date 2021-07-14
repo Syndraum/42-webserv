@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:41 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/01 15:44:01 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/13 16:20:35 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ class Response
 		std::string									_5xx__response(int code);
 
 	public:
-
+		Response(void);
 		Response(Request &, int code = 200);
 		Response(Response const & src);
 		virtual ~Response(void);

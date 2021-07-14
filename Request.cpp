@@ -72,7 +72,12 @@ void
 Request::set_path(std::string const &rhs)
 { 
 	_path = rhs;
-	_uri.set_uri(rhs);
+}
+
+void
+Request::set_uri(std::string const & uri)
+{
+	_uri.set_uri(uri);
 }
 
 void

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:44:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/02 15:34:51 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/14 18:05:28 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ class ASocket
 	public:
 		
 		ASocket(void);
+		ASocket(ASocket const &);
 		virtual ~ASocket(void);
+		ASocket const &	operator=(ASocket const &);
 
 		int						get_socket(void) const;
 		void					set_socket(int socket);

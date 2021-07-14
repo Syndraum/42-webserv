@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/11 21:00:01 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/07/14 18:20:10 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,7 @@ Core::_handle_request_and_detect_close_connection()
 		//Check if it was for closing , and also read the 
 		//incoming message 
 		try{
+//			std::cout << "_is_first_line: " << request->get_first_line() << std::endl;
 			_br.set_request(request);
 			_br.parse_request(*it);
 			request->set_path(request->get_path() + server.get_index(request->get_path()));
@@ -225,14 +226,16 @@ Core::_handle_request_and_detect_close_connection()
 		}
 		catch (BuilderRequest::NoRequest &e)
 		{
+//			std::cout << "test NoRequest" << std::endl;
 			continue;
 		}
 		catch (Request::NoMethod &e)
 		{
-//			std::cout << "Client " << it->get_socket() << " disconnected" << std::endl;  
+//			std::cout << "test NoMethod" << std::endl;
+			std::cout << "Client " << it->get_socket() << " disconnected" << std::endl;  
 
-//			close( it->get_socket() );
-//			_client.erase(it);
+			close( it->get_socket() );  
+			_client.erase(it);  
 			break;
 		}
 		std::cout << "write in Socket: " << it->get_socket() << std::endl;

@@ -17,6 +17,7 @@
 # include "ASocket.hpp"
 # include <exception>
 # include "MethodLibrary.hpp"
+# include "Info.hpp"
 
 class BuilderRequest
 {

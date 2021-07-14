@@ -6,11 +6,18 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/02 15:41:38 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/14 17:42:44 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
+
+Response::Response(void) :
+_version("HTTP/1.1"),
+_code(200),
+_body(""),
+_request(*(new Request)) //leaks
+{}
 
 Response::Response(Request & request, int code) :
 _version("HTTP/1.1"),
@@ -63,7 +70,7 @@ Response::get_response()
 
 	ss << _version << " " << _code << " " << get_message(_code) << "\r\n";
 	add_header("Content-Length", _body.length());
-	add_header("Server", Info::server_name() + "/" + Info::version() );
+	add_header("Server", Info::server_name + "/" + Info::version );
 	for (header_map::iterator it = _headers.begin(); it != _headers.end(); it++)
 	{
 		ss << it->first << ": " << it->second << "\r\n";
@@ -143,8 +150,8 @@ Response::set_error(int code)
 		file_reader.to_string(m_template.str());
 		m_template.replace_all("{{CODE}}", code);
 		m_template.replace_all("{{MESSAGE}}", get_message(code));
-		m_template.replace_all("{{SERVER_NAME}}", Info::server_name());
-		m_template.replace_all("{{VERSION}}", Info::version());
+		m_template.replace_all("{{SERVER_NAME}}", Info::server_name);
+		m_template.replace_all("{{VERSION}}", Info::version);
 		this->
 			set_code(code)
 			.set_body(m_template.str())
