@@ -6,7 +6,7 @@
 #    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/07/14 18:20:26 by cdai             ###   ########.fr        #
+#    Updated: 2021/07/15 15:58:24 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								StringPP.cpp \
 								URI.cpp \
 								Info.cpp \
+								PollFDHandler.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}
