@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/09 12:05:00 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/15 16:37:15 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # include "MethodDelete.hpp"
 # include "MethodLibrary.hpp"
 # include "Extension.hpp"
-// cdai_temp
-# include <fstream>
+# include "PollFDHandler.hpp"
+
 
 class Core
 {
@@ -40,7 +40,7 @@ class Core
 		std::vector<int>					_server_sockets;
 		client_vector						_client;
 		int									_SIZE_SOCK_ADDR;
-		struct pollfd *						_fds;
+		std::vector<struct pollfd>			_fds;
 		int									_nb_fds;
 		MethodLibrary						_methods;
 		BuilderRequest						_br;
@@ -50,8 +50,6 @@ class Core
 		void								_handle_request_and_detect_close_connection();
 		void								_detect_reset_server_poll_fd();
 
-		void								_cdai_dirty_function(void); //temp but please keep it till the end;
-		std::string							_get_path(std::string);
 	public:
 
 		Core(void);

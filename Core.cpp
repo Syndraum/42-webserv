@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/14 18:20:10 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/15 17:46:25 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,55 +43,55 @@ Core::operator=(Core const & rhs)
 void
 Core::start()
 {
-	int fd;
+//	int fd;
 	std::vector<int> active_socket;
 
 	// this has to be something we can keep and update
-	_fds = new struct pollfd[10];
+//	_fds = new struct pollfd[10];
 
 	for (size_t i = 0; i < _servers.size(); i++)
 	{
 		_servers[i].start(_worker);
 	}
 	print();
+	_nb_fds = PollFDHandler::start(_fds, _servers, _client);
 	while (true)
 	{
-
-		// value given to poll (nbFds)
-		_nb_fds = 0;
-		for (size_t i = 0; i < _servers.size(); i++)
-		{
-			Server & server = _servers[i];
-			for (Server::port_map::iterator it = server.get_server_socket().begin(); 
-				it != server.get_server_socket().end(); it++)
-			{
-				ServerSocket & server_socket = it->second;
-
-				fd = server_socket.get_socket();
-				_fds[_nb_fds].fd = fd;
-				_fds[_nb_fds].events = POLLIN;
-				_fds[_nb_fds].revents = 0;
-				server_socket.set_id(_nb_fds);
-				_nb_fds++;
-			}
-		}
-		for (size_t i = 0; i < _client.size(); i++)
-		{
-			fd = _client[i].get_socket();
-			_fds[_nb_fds].fd = fd;
-			_fds[_nb_fds].events = POLLOUT;
-			_fds[_nb_fds].revents = 0;
-			_client[i].set_id(_nb_fds);
-			_nb_fds++;
-		}
-		_nb_active = poll(_fds, _nb_fds, 60000);
+//		_nb_fds = 0;
+//		for (size_t i = 0; i < _servers.size(); i++)
+//		{
+//			Server & server = _servers[i];
+//			for (Server::port_map::iterator it = server.get_server_socket().begin(); 
+//				it != server.get_server_socket().end(); it++)
+//			{
+//				ServerSocket & server_socket = it->second;
+//
+//				fd = server_socket.get_socket();
+//				_fds[_nb_fds].fd = fd;
+//				_fds[_nb_fds].events = POLLIN;
+//				_fds[_nb_fds].revents = 0;
+//				server_socket.set_id(_nb_fds);
+//				_nb_fds++;
+//			}
+//		}
+//		for (size_t i = 0; i < _client.size(); i++)
+//		{
+//			fd = _client[i].get_socket();
+//			_fds[_nb_fds].fd = fd;
+//			_fds[_nb_fds].events = POLLOUT;
+//			_fds[_nb_fds].revents = 0;
+//			_client[i].set_id(_nb_fds);
+//			_nb_fds++;
+//		}
+		_nb_active = poll(&(_fds.front()), _fds.size(), 60000);
+//		std::cout << "_nb_active: " << _nb_active << std::endl;
 		_accept_connection();
 
 		_handle_request_and_detect_close_connection();
 //		_cdai_dirty_function();
 
 		// detect and set serversocket from POLLIN/POLLOUT to 0
-		_detect_reset_server_poll_fd();
+//		_detect_reset_server_poll_fd();
 	}
 }
 
@@ -234,116 +234,37 @@ Core::_handle_request_and_detect_close_connection()
 //			std::cout << "test NoMethod" << std::endl;
 			std::cout << "Client " << it->get_socket() << " disconnected" << std::endl;  
 
+//PollFDHandler::reset_pfd(_fds);
 			close( it->get_socket() );  
 			_client.erase(it);  
+PollFDHandler::start(_fds, _servers, _client);
 			break;
 		}
 		std::cout << "write in Socket: " << it->get_socket() << std::endl;
 		response.send_response(it->get_socket());
 
+//PollFDHandler::reset_pfd(_fds);
 		close( it->get_socket() );  
 		_client.erase(it);  
+PollFDHandler::start(_fds, _servers, _client);
 		break;
 	}
 }
 
-void
-Core::_detect_reset_server_poll_fd()
-{
-	if (!_client.size())
-	{
-		for (size_t i = 0; i < _servers.size(); i++)
-		{
-			Server & server = _servers[i];
-			for (Server::port_map::iterator it = server.get_server_socket().begin(); 
-					it != server.get_server_socket().end(); it++)
-			{
-				ServerSocket & server_socket = it->second;
-				_fds[server_socket.get_id()].revents = 0;
-			}
-		}
-	}
-}
-
-void	Core::_cdai_dirty_function()
-{
-	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
-	{
-//		std::cout << "test" << std::endl;
-
-		int valread;
-		char buffer[1025];
-		Request request;
-		int fd = it->get_socket();
-
-		if ((valread = recv( fd , buffer, 1024, MSG_DONTWAIT)) == 0)  
-		//if ((valread = recv( fd , buffer, 1024, 0)) == 0)  
-		{
-			std::cout << "Host disconnected" << std::endl;  
-
-			close( fd );  
-			_client.erase(it);  
-			break;
-		}
-
-		else if(valread > 0)
-		{
-
-			// debug
-			buffer[valread] = '\0';
-			std::cout << buffer << std::endl;
-
-			// parse_request ?
-//			std::stringstream ss;
-//			ss << buffer;
-//			parse_request(ss, &request);
-
-			// get requested file path
-			std::string ROOT = "./webserviette_root";
-			std::string filename = ROOT + _get_path(buffer);
-
-			std::cout << filename << std::endl;
-			if (filename == ROOT + "/")
-				filename += "index.html";
-
-			// create and send response
-			Response response(it->get_request(), 200);
-			try
-			{
-				response.set_body(filename);
-			}
-			catch (std::exception & e)
-			{
-				std::cout << e.what() << std::endl;
-
-				filename = ROOT + "/404.html";
-				response.set_404(filename);
-			}
-
-			// need client socket
-			ClientSocket & cs = _client.back();
-			int clientSocket = cs.get_socket();
-
-			std::cout << "clientSocket: " << clientSocket << std::endl;
-			response.send_response(it->get_socket());
-
-			// message for debug, to remove later
-			std::cout << "Server still connected" << std::endl << std::endl;
-
-			//close( fd );  
-			//_client.erase(it);  
-			break;
-		}
-	}
-
-}
-
-std::string Core::_get_path(std::string buffer)
-{
-	std::string path;
-	size_t start = buffer.find("/");
-	size_t end = buffer.find(" HTTP");
-
-	path = buffer.substr(start, end - start);
-	return path;
-}
+//void
+//Core::_detect_reset_server_poll_fd()
+//{
+//	if (!_client.size())
+//	{
+//		for (size_t i = 0; i < _servers.size(); i++)
+//		{
+//			Server & server = _servers[i];
+//			for (Server::port_map::iterator it = server.get_server_socket().begin(); 
+//					it != server.get_server_socket().end(); it++)
+//			{
+//				ServerSocket & server_socket = it->second;
+//				_fds[server_socket.get_id()].revents = 0;
+//			}
+//		}
+//	}
+//}
