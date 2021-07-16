@@ -13,11 +13,13 @@
 #include "Request.hpp"
 
 Request::Request():
-_method(0),
-_path(),
-_version(),
-_headers(),
-_uri()
+	_method(0),
+	_path(),
+	_version(),
+	_headers(),
+	_uri(),
+	_header_lock(false),
+	_body()
 {}
 
 Request::Request(Request const &rhs)
@@ -33,8 +35,10 @@ Request::operator=(Request const &rhs)
 	_method = rhs.get_method();
 	_path = rhs.get_path();
 	_version = rhs.get_version();
-	_headers = rhs.get_headers();
+	_headers = rhs._headers;
 	_uri = rhs._uri;
+	_header_lock = rhs._header_lock;
+	_body = rhs._body;
 	return (*this);
 }
 
@@ -50,13 +54,15 @@ std::string const &
 Request::get_version() const
 { return (_version); }
 
-std::map<std::string, std::string> const &
-Request::get_headers() const
-{ return (_headers); }
-
 std::string const &
 Request::get_header(std::string const &key)
 { return (_headers[key]); }
+
+bool
+Request::get_header_lock() const
+{
+	return(_header_lock);
+}
 
 void
 Request::set_method(AMethod * rhs)
@@ -84,7 +90,18 @@ Request::set_headers(std::map<std::string, std::string> const &rhs)
 
 void
 Request::add_header(std::pair<std::string, std::string> const &rhs)
-{ _headers.insert(rhs); }
+{
+	if (!_header_lock)
+		_headers.insert(rhs);
+}
+
+void
+Request::set_header_lock(bool lock)
+{ _header_lock = lock; }
+
+void
+Request::lock_header()
+{ set_header_lock(true); }
 
 void
 Request::action(Response & response)
