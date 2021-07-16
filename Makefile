@@ -35,6 +35,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								StringPP.cpp \
 								URI.cpp \
 								Info.cpp \
+								HandlerRequest.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}

@@ -25,6 +25,7 @@
 # include "MethodLibrary.hpp"
 # include "Extension.hpp"
 # include "RequestCGI.hpp"
+# include "HandlerRequest.hpp"
 // cdai_temp
 # include <fstream>
 

@@ -186,29 +186,13 @@ Core::_handle_request_and_detect_close_connection()
 		Request *	request	= &it->get_request();
 		Server &	server	= (*it).get_server();
 		Response	response(*request, 200);
-		std::string		line;
-		int				gnl_ret = 1;
+		HandlerRequest hr(*request, server, _br, *it);
 
-		// (*it).get_server().print();
 		//Check if it was for closing , and also read the 
 		//incoming message 
 		try{
-//			std::cout << "_is_first_line: " << request->get_first_line() << std::endl;
-			_br.set_request(request);
-			while (gnl_ret && (gnl_ret = it->get_next_line(line)))
-			{
-				if (gnl_ret == -1)
-					break;
-				std::cout << "line: " << line << std::endl;
-				line += "\r";
-				_br.parse_request(line);
-				if (request->get_header_lock())
-				{
-					it->reset_buffer();
-					gnl_ret = 0;
-				}
-			}
-			if (gnl_ret == -1)
+			hr.parse();
+			if (!hr.is_complete())
 				continue;
 			request->set_path(request->get_path() + server.get_index(request->get_path()));
 			if (server.get_cgi_map().find("." + Extension::get_extension(request->get_path())) != server.get_cgi_map().end())

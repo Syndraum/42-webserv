@@ -14,7 +14,6 @@
 # define BUILDERREQUEST
 
 # include "Request.hpp"
-# include "ASocket.hpp"
 # include <exception>
 # include "MethodLibrary.hpp"
 # include "Info.hpp"

@@ -24,6 +24,8 @@ public:
 	virtual ~URI(void);
 	URI &	operator=(URI const &rhs);
 
+	const std::string &	get_path() const;
+
 	void	set_uri(const std::string &);
 	void	debug() const;
 private:

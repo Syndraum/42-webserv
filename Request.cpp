@@ -15,11 +15,12 @@
 Request::Request():
 	_method(0),
 	_path(),
+	_uri(),
 	_version(),
 	_headers(),
-	_uri(),
 	_header_lock(false),
-	_body()
+	_body(),
+	_body_lock()
 {}
 
 Request::Request(Request const &rhs)
@@ -34,11 +35,12 @@ Request::operator=(Request const &rhs)
 {
 	_method = rhs.get_method();
 	_path = rhs.get_path();
+	_uri = rhs._uri;
 	_version = rhs.get_version();
 	_headers = rhs._headers;
-	_uri = rhs._uri;
 	_header_lock = rhs._header_lock;
 	_body = rhs._body;
+	_body_lock = rhs._body_lock;
 	return (*this);
 }
 
@@ -60,9 +62,16 @@ Request::get_header(std::string const &key)
 
 bool
 Request::get_header_lock() const
-{
-	return(_header_lock);
+{ return (_header_lock);
 }
+
+const std::string &
+Request::get_body() const
+{ return (_body); }
+
+bool
+Request::get_body_lock() const
+{ return(_body_lock); }
 
 void
 Request::set_method(AMethod * rhs)
@@ -100,8 +109,23 @@ Request::set_header_lock(bool lock)
 { _header_lock = lock; }
 
 void
+Request::set_body(const std::string & body)
+{
+	if (!_body_lock)
+		_body= body;
+}
+
+void
+Request::set_body_lock(bool lock)
+{ _body_lock = lock; }
+
+void
 Request::lock_header()
 { set_header_lock(true); }
+
+void
+Request::lock_body()
+{ set_body_lock(true); }
 
 void
 Request::action(Response & response)
