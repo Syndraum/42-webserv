@@ -5,24 +5,31 @@
 # include "Server.hpp"
 # include "BuilderRequest.hpp"
 # include "ClientSocket.hpp"
+# include "HandlerResponse.hpp"
+# include "StrategyAccept.hpp"
+# include "StrategyError.hpp"
+# include "StrategyIndex.hpp"
 
 class HandlerRequest
 {
-	Request &			_request;
-	Server &			_server;
+	Request *			_request;
+	Server *			_server;
+	ClientSocket *		_client;
 	BuilderRequest &	_builder;
-	ClientSocket &		_socket;
+	HandlerResponse		_handler_response;
 
 	HandlerRequest(void);
 public:
 
-	HandlerRequest(Request &, Server &, BuilderRequest &, ClientSocket &);
+	HandlerRequest(BuilderRequest &);
 	HandlerRequest(HandlerRequest const & src);
 	virtual ~HandlerRequest(void);
 	HandlerRequest &	operator=(HandlerRequest const &rhs);
 
-	void	set_request(const Request &);
-	void	set_server(const Server &);
+	HandlerRequest &	set_request(Request *);
+	HandlerRequest &	set_server(Server *);
+	HandlerRequest &	set_client(ClientSocket *);
+	void	handle(std::vector<ClientSocket> &);
 	void	parse();
 	void	set_path();
 	bool	is_complete() const;

@@ -81,7 +81,7 @@ Response::get_response()
 }
 
 void
-Response::send_response(int fd)
+Response::send(int fd)
 {
 	std::string response = get_response();
 

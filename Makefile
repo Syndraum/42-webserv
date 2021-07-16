@@ -36,6 +36,10 @@ SRCS		=	$(addprefix $(PREFIX), \
 								URI.cpp \
 								Info.cpp \
 								HandlerRequest.cpp \
+								HandlerResponse.cpp \
+								StrategyAccept.cpp \
+								StrategyError.cpp \
+								StrategyIndex.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}

@@ -66,7 +66,7 @@ class Response
 		Response &									add_header(std::string name, std::string content);
 		Response &									clear_header();
 		std::string									get_response();
-		void										send_response(int fd);
+		void										send(int fd);
 		std::string									get_message(int code);
 		Response &									set_code(int code);
 		Response &									set_body_from_file(const std::string & filename);
