@@ -24,6 +24,7 @@
 # include "MethodDelete.hpp"
 # include "MethodLibrary.hpp"
 # include "Extension.hpp"
+# include "RequestCGI.hpp"
 // cdai_temp
 # include <fstream>
 

@@ -40,7 +40,7 @@ class BuilderRequest
 		BuilderRequest(MethodLibrary *);
 		virtual ~BuilderRequest(void);
 
-		void					parse_request(ASocket &);
+		void					parse_request(std::string &);
 		Request *				get_request() const;
 		void					set_request(Request *);
 		void					set_library(MethodLibrary *);
@@ -63,12 +63,6 @@ class BuilderRequest
 		{
 			virtual const char* what() const throw(){
 				return "Not Implemented";
-			}
-		};
-		class NoRequest : public std::exception
-		{
-			virtual const char* what() const throw(){
-				return "NoRequest";
 			}
 		};
 };

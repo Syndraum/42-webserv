@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/14 18:20:10 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/16 12:02:28 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,8 @@ Core::_handle_request_and_detect_close_connection()
 		Request *	request	= &it->get_request();
 		Server &	server	= (*it).get_server();
 		Response	response(*request, 200);
+		std::string		line;
+		int				gnl_ret = 1;
 
 		// (*it).get_server().print();
 		//Check if it was for closing , and also read the 
@@ -193,23 +195,45 @@ Core::_handle_request_and_detect_close_connection()
 		try{
 //			std::cout << "_is_first_line: " << request->get_first_line() << std::endl;
 			_br.set_request(request);
-			_br.parse_request(*it);
-			request->set_path(request->get_path() + server.get_index(request->get_path()));
-			if (server.is_directory(*request))
-				if (!server.get_auto_index())
-					response.set_error(403);
-				else
+			while (gnl_ret && (gnl_ret = it->get_next_line(line)))
+			{
+				if (gnl_ret == -1)
+					break;
+				std::cout << "line: " << line << std::endl;
+				line += "\r";
+				_br.parse_request(line);
+				if (request->get_header_lock())
 				{
-					response
-						.set_code(200)
-						.set_body(server.get_index_page(*request))
-						.add_header("Content-type", "text/html");
+					it->reset_buffer();
+					gnl_ret = 0;
 				}
+			}
+			if (gnl_ret == -1)
+				continue;
+			request->set_path(request->get_path() + server.get_index(request->get_path()));
+			if (server.get_cgi_map().find("." + Extension::get_extension(request->get_path())) != server.get_cgi_map().end())
+			{
+				// RequestCGI request_cgi(server.get_cgi_map()["." + Extension::get_extension(request->get_path())], );
+				response.set_error(418);
+			}
 			else
 			{
-				request->set_path(server.get_full_path(request->get_path()));
-				// std::cout << "PATH : " << request->get_path() << std::endl;
-				request->action(response);
+				if (server.is_directory(*request))
+					if (!server.get_auto_index())
+						response.set_error(403);
+					else
+					{
+						response
+							.set_code(200)
+							.set_body(server.get_index_page(*request))
+							.add_header("Content-type", "text/html");
+					}
+				else
+				{
+					request->set_path(server.get_full_path(request->get_path()));
+					// std::cout << "PATH : " << request->get_path() << std::endl;
+					request->action(response);
+				}
 			}
 		}
 		catch (BuilderRequest::BadRequest &e)
@@ -224,14 +248,9 @@ Core::_handle_request_and_detect_close_connection()
 		{
 			response.set_code(501).clear_header();
 		}
-		catch (BuilderRequest::NoRequest &e)
-		{
-//			std::cout << "test NoRequest" << std::endl;
-			continue;
-		}
 		catch (Request::NoMethod &e)
 		{
-//			std::cout << "test NoMethod" << std::endl;
+			// std::cout << "test NoMethod" << std::endl;
 			std::cout << "Client " << it->get_socket() << " disconnected" << std::endl;  
 
 			close( it->get_socket() );  
@@ -263,87 +282,4 @@ Core::_detect_reset_server_poll_fd()
 			}
 		}
 	}
-}
-
-void	Core::_cdai_dirty_function()
-{
-	for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
-	{
-//		std::cout << "test" << std::endl;
-
-		int valread;
-		char buffer[1025];
-		Request request;
-		int fd = it->get_socket();
-
-		if ((valread = recv( fd , buffer, 1024, MSG_DONTWAIT)) == 0)  
-		//if ((valread = recv( fd , buffer, 1024, 0)) == 0)  
-		{
-			std::cout << "Host disconnected" << std::endl;  
-
-			close( fd );  
-			_client.erase(it);  
-			break;
-		}
-
-		else if(valread > 0)
-		{
-
-			// debug
-			buffer[valread] = '\0';
-			std::cout << buffer << std::endl;
-
-			// parse_request ?
-//			std::stringstream ss;
-//			ss << buffer;
-//			parse_request(ss, &request);
-
-			// get requested file path
-			std::string ROOT = "./webserviette_root";
-			std::string filename = ROOT + _get_path(buffer);
-
-			std::cout << filename << std::endl;
-			if (filename == ROOT + "/")
-				filename += "index.html";
-
-			// create and send response
-			Response response(it->get_request(), 200);
-			try
-			{
-				response.set_body(filename);
-			}
-			catch (std::exception & e)
-			{
-				std::cout << e.what() << std::endl;
-
-				filename = ROOT + "/404.html";
-				response.set_404(filename);
-			}
-
-			// need client socket
-			ClientSocket & cs = _client.back();
-			int clientSocket = cs.get_socket();
-
-			std::cout << "clientSocket: " << clientSocket << std::endl;
-			response.send_response(it->get_socket());
-
-			// message for debug, to remove later
-			std::cout << "Server still connected" << std::endl << std::endl;
-
-			//close( fd );  
-			//_client.erase(it);  
-			break;
-		}
-	}
-
-}
-
-std::string Core::_get_path(std::string buffer)
-{
-	std::string path;
-	size_t start = buffer.find("/");
-	size_t end = buffer.find(" HTTP");
-
-	path = buffer.substr(start, end - start);
-	return path;
 }

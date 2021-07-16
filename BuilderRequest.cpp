@@ -67,7 +67,7 @@ BuilderRequest::_first_line(std::string line)
 {
 	int j = 0;
 
-	_request->set_first_line(false);
+
 	if (line[0] == '\0')
 		throw BadRequest();
 	j = _add_method(line);
@@ -83,39 +83,20 @@ BuilderRequest::_parse_headers(std::string line)
 	size_t		len = line.find(": ");
 
 	if (line.length() == 1 && line[0] == '\r')
-		return false;
-	if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
+		_request->set_header_lock(true);
+	else if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
 		throw BadRequest();
 	_request->add_header(std::pair<std::string, std::string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
 	return (true);
 }
 
 void
-BuilderRequest::parse_request(ASocket & socket)
+BuilderRequest::parse_request(std::string & line)
 {
-	std::string		line;
-	int				gnl_ret = 1;
-
-	while( gnl_ret && (gnl_ret = socket.get_next_line(line)))
-	{
-		if (gnl_ret == -1)
-			throw NoRequest();
-//		std::cout << "gnl_ret: " << gnl_ret << std::endl;
-		std::cout << "line: " << line << std::endl;
-
-		line += "\r"; // Maybe, we can remote this line ? (from cdai)
-		//check printable characters
-		if (is_first_line())
-			_first_line(line);
-		else{
-			std::cout << "this isn't the first line" << std::endl;
-			if (!_parse_headers(line))
-			{
-				socket.reset_buffer();
-				gnl_ret = 0;
-			}
-		}
-	}
+	if (is_first_line())
+		_first_line(line);
+	else if (!(_request->get_header_lock()))
+		_parse_headers(line);
 }
 
 Request *
