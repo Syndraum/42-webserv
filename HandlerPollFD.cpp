@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:58:45 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/16 20:33:24 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/16 20:38:43 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void HandlerPollFD::init(std::vector<Server> & servers)
 
 			fd = server_socket.get_socket();
 			pfd = pollfd_init(fd, POLLIN);
-			server_socket.set_id(nb_pfd);
+server_socket.set_id(nb_pfd); // should not be here
 			_pfd.push_back(pfd);
 			nb_pfd++;
 		}
