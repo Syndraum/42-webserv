@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/16 18:14:32 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/16 19:53:38 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,9 @@ class Core
 		HandlerPollFD						_pfdh;
 		std::vector<Server>					_servers;
 		int									_worker;
-		int									_nb_active;
 		std::vector<int>					_server_sockets;
 		client_vector						_client;
 		int									_SIZE_SOCK_ADDR;
-		std::vector<struct pollfd>			_fds;
 		int									_nb_fds;
 		MethodLibrary						_methods;
 		BuilderRequest						_br;

@@ -6,16 +6,15 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/16 19:44:52 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/16 20:03:14 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Core.hpp"
 
 Core::Core(void) :
-_worker(3),
+_worker(3)
 //_maxfd(-1),
-_nb_active(0)
 {
 	_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
 	_methods
@@ -43,12 +42,7 @@ Core::operator=(Core const & rhs)
 void
 Core::start()
 {
-//	int fd;
 	std::vector<int> active_socket;
-
-	// this has to be something we can keep and update
-//	_fds = new struct pollfd[10];
-
 	try{
 
 		for (size_t i = 0; i < _servers.size(); i++)
@@ -63,51 +57,13 @@ Core::start()
 
 		return ;
 	}
-	print();
-
-	//_nb_fds = HandlerPollFD::start(_fds, _servers, _client);
-	_nb_fds = _pfdh.init(_servers);
-
-//	_fds = _pfdh.get_all_pfd();
-
-
+print();
+	_pfdh.init(_servers);
 	while (true)
 	{
-//		_nb_fds = 0;
-//		for (size_t i = 0; i < _servers.size(); i++)
-//		{
-//			Server & server = _servers[i];
-//			for (Server::port_map::iterator it = server.get_server_socket().begin(); 
-//				it != server.get_server_socket().end(); it++)
-//			{
-//				ServerSocket & server_socket = it->second;
-//
-//				fd = server_socket.get_socket();
-//				_fds[_nb_fds].fd = fd;
-//				_fds[_nb_fds].events = POLLIN;
-//				_fds[_nb_fds].revents = 0;
-//				server_socket.set_id(_nb_fds);
-//				_nb_fds++;
-//			}
-//		}
-//		for (size_t i = 0; i < _client.size(); i++)
-//		{
-//			fd = _client[i].get_socket();
-//			_fds[_nb_fds].fd = fd;
-//			_fds[_nb_fds].events = POLLOUT;
-//			_fds[_nb_fds].revents = 0;
-//			_client[i].set_id(_nb_fds);
-//			_nb_fds++;
-//		}
-//		_nb_active = poll(&(_fds.front()), _fds.size(), 60000);
-		_nb_active = poll(&(_pfdh.get_all_pfd().front()), _pfdh.get_all_pfd().size(), 60000);
-//		std::cout << "_nb_active: " << _nb_active << std::endl;
+		poll(&(_pfdh.get_all_pfd().front()), _pfdh.get_all_pfd().size(), 60000);
 		_accept_connection();
-
 		_handle_request_and_detect_close_connection();
-
-		// detect and set serversocket from POLLIN/POLLOUT to 0
-//		_detect_reset_server_poll_fd();
 	}
 }
 
@@ -175,7 +131,6 @@ Core::_accept_connection()
 			ServerSocket & server_socket = it->second;
 			int fd = server_socket.get_socket();
 
-//			if (_fds[server_socket.get_id()].revents == _fds[server_socket.get_id()].events)
 			if (_pfdh.get_all_pfd()[server_socket.get_id()].revents == _pfdh.get_all_pfd()[server_socket.get_id()].events)
 			{
 				_client.push_back(ClientSocket(server));
@@ -192,7 +147,6 @@ Core::_accept_connection()
 
 
 				_pfdh.add_clients_pfd(new_socket, POLLOUT);
-//				_fds = _pfdh.get_all_pfd();
 			}
 		}
 		
@@ -258,7 +212,6 @@ Core::_handle_request_and_detect_close_connection()
 			_pfdh.erase(it->get_socket());
 			close( it->get_socket() );  
 			_client.erase(it);  
-//HandlerPollFD::start(_fds, _servers, _client);
 			break;
 		}
 		std::cout << "write in Socket: " << it->get_socket() << std::endl;
@@ -267,25 +220,6 @@ Core::_handle_request_and_detect_close_connection()
 		_pfdh.erase(it->get_socket());
 		close( it->get_socket() );  
 		_client.erase(it);  
-//HandlerPollFD::start(_fds, _servers, _client);
 		break;
 	}
 }
-
-//void
-//Core::_detect_reset_server_poll_fd()
-//{
-//	if (!_client.size())
-//	{
-//		for (size_t i = 0; i < _servers.size(); i++)
-//		{
-//			Server & server = _servers[i];
-//			for (Server::port_map::iterator it = server.get_server_socket().begin(); 
-//					it != server.get_server_socket().end(); it++)
-//			{
-//				ServerSocket & server_socket = it->second;
-//				_fds[server_socket.get_id()].revents = 0;
-//			}
-//		}
-//	}
-//}
