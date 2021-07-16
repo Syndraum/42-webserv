@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/15 16:37:15 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/16 18:14:32 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include "MethodDelete.hpp"
 # include "MethodLibrary.hpp"
 # include "Extension.hpp"
-# include "PollFDHandler.hpp"
+# include "HandlerPollFD.hpp"
 
 
 class Core
@@ -34,6 +34,7 @@ class Core
 
 	private:
 
+		HandlerPollFD						_pfdh;
 		std::vector<Server>					_servers;
 		int									_worker;
 		int									_nb_active;

@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/15 17:46:25 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/16 19:44:52 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,28 @@ Core::start()
 	// this has to be something we can keep and update
 //	_fds = new struct pollfd[10];
 
-	for (size_t i = 0; i < _servers.size(); i++)
+	try{
+
+		for (size_t i = 0; i < _servers.size(); i++)
+		{
+			_servers[i].start(_worker);
+		}
+	}
+	catch(std::exception & e)
 	{
-		_servers[i].start(_worker);
+		std::cout << e.what() << std::endl;
+		std::cout << "test" << std::endl;
+
+		return ;
 	}
 	print();
-	_nb_fds = PollFDHandler::start(_fds, _servers, _client);
+
+	//_nb_fds = HandlerPollFD::start(_fds, _servers, _client);
+	_nb_fds = _pfdh.init(_servers);
+
+//	_fds = _pfdh.get_all_pfd();
+
+
 	while (true)
 	{
 //		_nb_fds = 0;
@@ -83,12 +99,12 @@ Core::start()
 //			_client[i].set_id(_nb_fds);
 //			_nb_fds++;
 //		}
-		_nb_active = poll(&(_fds.front()), _fds.size(), 60000);
+//		_nb_active = poll(&(_fds.front()), _fds.size(), 60000);
+		_nb_active = poll(&(_pfdh.get_all_pfd().front()), _pfdh.get_all_pfd().size(), 60000);
 //		std::cout << "_nb_active: " << _nb_active << std::endl;
 		_accept_connection();
 
 		_handle_request_and_detect_close_connection();
-//		_cdai_dirty_function();
 
 		// detect and set serversocket from POLLIN/POLLOUT to 0
 //		_detect_reset_server_poll_fd();
@@ -159,7 +175,8 @@ Core::_accept_connection()
 			ServerSocket & server_socket = it->second;
 			int fd = server_socket.get_socket();
 
-			if (_fds[server_socket.get_id()].revents == _fds[server_socket.get_id()].events)
+//			if (_fds[server_socket.get_id()].revents == _fds[server_socket.get_id()].events)
+			if (_pfdh.get_all_pfd()[server_socket.get_id()].revents == _pfdh.get_all_pfd()[server_socket.get_id()].events)
 			{
 				_client.push_back(ClientSocket(server));
 				ClientSocket & cs = _client.back();
@@ -172,6 +189,10 @@ Core::_accept_connection()
 				std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
 				cs.set_socket(new_socket);
 				std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
+
+
+				_pfdh.add_clients_pfd(new_socket, POLLOUT);
+//				_fds = _pfdh.get_all_pfd();
 			}
 		}
 		
@@ -234,19 +255,19 @@ Core::_handle_request_and_detect_close_connection()
 //			std::cout << "test NoMethod" << std::endl;
 			std::cout << "Client " << it->get_socket() << " disconnected" << std::endl;  
 
-//PollFDHandler::reset_pfd(_fds);
+			_pfdh.erase(it->get_socket());
 			close( it->get_socket() );  
 			_client.erase(it);  
-PollFDHandler::start(_fds, _servers, _client);
+//HandlerPollFD::start(_fds, _servers, _client);
 			break;
 		}
 		std::cout << "write in Socket: " << it->get_socket() << std::endl;
 		response.send_response(it->get_socket());
 
-//PollFDHandler::reset_pfd(_fds);
+		_pfdh.erase(it->get_socket());
 		close( it->get_socket() );  
 		_client.erase(it);  
-PollFDHandler::start(_fds, _servers, _client);
+//HandlerPollFD::start(_fds, _servers, _client);
 		break;
 	}
 }
