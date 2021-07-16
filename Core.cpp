@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/16 20:03:14 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/16 20:34:38 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ print();
 	_pfdh.init(_servers);
 	while (true)
 	{
-		poll(&(_pfdh.get_all_pfd().front()), _pfdh.get_all_pfd().size(), 60000);
+		poll(&(_pfdh.get_pfd().front()), _pfdh.get_pfd().size(), 60000);
 		_accept_connection();
 		_handle_request_and_detect_close_connection();
 	}
@@ -131,7 +131,7 @@ Core::_accept_connection()
 			ServerSocket & server_socket = it->second;
 			int fd = server_socket.get_socket();
 
-			if (_pfdh.get_all_pfd()[server_socket.get_id()].revents == _pfdh.get_all_pfd()[server_socket.get_id()].events)
+			if (_pfdh.get_pfd()[server_socket.get_id()].revents == _pfdh.get_pfd()[server_socket.get_id()].events)
 			{
 				_client.push_back(ClientSocket(server));
 				ClientSocket & cs = _client.back();
