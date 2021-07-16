@@ -17,7 +17,6 @@ _method(0),
 _path(),
 _version(),
 _headers(),
-_is_first_line(true),
 _uri()
 {}
 
@@ -35,7 +34,6 @@ Request::operator=(Request const &rhs)
 	_path = rhs.get_path();
 	_version = rhs.get_version();
 	_headers = rhs.get_headers();
-	_is_first_line = rhs._is_first_line;
 	_uri = rhs._uri;
 	return (*this);
 }
@@ -59,10 +57,6 @@ Request::get_headers() const
 std::string const &
 Request::get_header(std::string const &key)
 { return (_headers[key]); }
-
-bool
-Request::get_first_line() const
-{ return (_is_first_line); }
 
 void
 Request::set_method(AMethod * rhs)
@@ -93,10 +87,6 @@ Request::add_header(std::pair<std::string, std::string> const &rhs)
 { _headers.insert(rhs); }
 
 void
-Request::set_first_line(bool last_line)
-{ _is_first_line = last_line; }
-
-void
 Request::action(Response & response)
 {
 	if (!_method) //if method == NULL
@@ -111,7 +101,6 @@ Request::reset()
 	_path = "";
 	_version = "";
 	_headers.clear();
-	_is_first_line  = true;
 }
 
 //void

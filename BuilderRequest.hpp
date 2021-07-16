@@ -29,21 +29,23 @@ class BuilderRequest
 		BuilderRequest(BuilderRequest const & src);
 		BuilderRequest &		operator=(BuilderRequest const &rhs);
 
+		void					_first_line(std::string line);
+		int						_add_method(std::string line);
+		int						_add_path(std::string line);
+		int						_add_version(std::string line);
+		bool					_parse_headers(std::string line);
 	public:
 
 		BuilderRequest(void);
 		BuilderRequest(MethodLibrary *);
 		virtual ~BuilderRequest(void);
 
-		int						add_method(std::string line);
-		int						add_path(std::string line);
-		int						add_version(std::string line);
-		void					first_line(std::string line);
-		bool					parse_headers(std::string line);
 		void					parse_request(ASocket &);
 		Request *				get_request() const;
 		void					set_request(Request *);
 		void					set_library(MethodLibrary *);
+
+		bool					is_first_line() const;
 
 		class BadRequest : public std::exception
 		{
