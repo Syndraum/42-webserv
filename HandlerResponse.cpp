@@ -37,4 +37,5 @@ HandlerResponse::send(int fd)
 	if (_response == 0)
 		throw std::exception();
 	_response->send(fd);
+	delete _response;
 }
