@@ -48,8 +48,28 @@ URI::operator=(URI const & rhs)
 }
 
 const std::string &
+URI::get_scheme() const
+{ return (_scheme); }
+
+const std::string &
+URI::get_server_name() const
+{ return (_server_name); }
+
+const std::string &
+URI::get_port() const
+{ return (_port); }
+
+const std::string &
 URI::get_path() const
 { return (_path); }
+
+const std::string &
+URI::get_extra_path() const
+{ return (_extra_path); }
+
+const std::string &
+URI::get_query_string() const
+{ return (_query_string); }
 
 void
 URI::set_uri(const std::string & uri)
