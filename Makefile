@@ -40,6 +40,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								StrategyAccept.cpp \
 								StrategyError.cpp \
 								StrategyIndex.cpp \
+								Message.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}

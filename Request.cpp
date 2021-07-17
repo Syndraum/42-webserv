@@ -13,14 +13,11 @@
 #include "Request.hpp"
 
 Request::Request():
+	Message(),
 	_method(0),
 	_path(),
 	_uri(),
-	_version(),
-	_headers(),
-	_header_lock(false),
-	_body(),
-	_body_lock()
+	_version()
 {}
 
 Request::Request(Request const &rhs)
@@ -33,14 +30,11 @@ Request::~Request() {}
 Request const &
 Request::operator=(Request const &rhs)
 {
+	Message::operator=(rhs);
 	_method = rhs.get_method();
 	_path = rhs.get_path();
 	_uri = rhs._uri;
 	_version = rhs.get_version();
-	_headers = rhs._headers;
-	_header_lock = rhs._header_lock;
-	_body = rhs._body;
-	_body_lock = rhs._body_lock;
 	return (*this);
 }
 
@@ -55,23 +49,6 @@ Request::get_path() const
 std::string const &
 Request::get_version() const
 { return (_version); }
-
-std::string const &
-Request::get_header(std::string const &key)
-{ return (_headers[key]); }
-
-bool
-Request::get_header_lock() const
-{ return (_header_lock);
-}
-
-const std::string &
-Request::get_body() const
-{ return (_body); }
-
-bool
-Request::get_body_lock() const
-{ return(_body_lock); }
 
 void
 Request::set_method(AMethod * rhs)
@@ -92,40 +69,6 @@ Request::set_uri(std::string const & uri)
 void
 Request::set_version(std::string const &rhs)
 { _version = rhs; }
-
-void
-Request::set_headers(std::map<std::string, std::string> const &rhs)
-{ _headers = rhs; }
-
-void
-Request::add_header(std::pair<std::string, std::string> const &rhs)
-{
-	if (!_header_lock)
-		_headers.insert(rhs);
-}
-
-void
-Request::set_header_lock(bool lock)
-{ _header_lock = lock; }
-
-void
-Request::set_body(const std::string & body)
-{
-	if (!_body_lock)
-		_body= body;
-}
-
-void
-Request::set_body_lock(bool lock)
-{ _body_lock = lock; }
-
-void
-Request::lock_header()
-{ set_header_lock(true); }
-
-void
-Request::lock_body()
-{ set_body_lock(true); }
 
 void
 Request::action(Response & response)

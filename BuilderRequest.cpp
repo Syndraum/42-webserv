@@ -88,7 +88,7 @@ BuilderRequest::_parse_headers(std::string line)
 	}
 	else if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
 		throw BadRequest();
-	_request->add_header(std::pair<std::string, std::string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
+	_request->add_header(line.substr(0, len), line.substr(len + 2, line.length() - len - 3));
 	return (true);
 }
 
