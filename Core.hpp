@@ -17,14 +17,10 @@
 # include <vector>
 # include "ClientSocket.hpp"
 # include <poll.h>
-# include "Response.hpp"
-# include "Request.hpp"
-# include "BuilderRequest.hpp"
 # include "MethodGet.hpp"
 # include "MethodDelete.hpp"
 # include "MethodLibrary.hpp"
 # include "Extension.hpp"
-# include "RequestCGI.hpp"
 # include "HandlerRequest.hpp"
 // cdai_temp
 # include <fstream>
@@ -49,7 +45,6 @@ class Core
 		Extension *							_extension;
 
 		void								_accept_connection();
-		void								_handle_request_and_detect_close_connection();
 		void								_detect_reset_server_poll_fd();
 
 		void								_cdai_dirty_function(void); //temp but please keep it till the end;

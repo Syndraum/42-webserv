@@ -63,6 +63,26 @@ HandlerRequest::handle(std::vector<ClientSocket> & map)
 		;
 		try{
 			parse();
+			if (!is_complete())
+				continue;
+			_request->set_path(_request->get_path() + _server->get_index(_request->get_path()));
+			if (_server->get_cgi_map().find("." + Extension::get_extension(_request->get_path())) != _server->get_cgi_map().end())
+			{
+				_handler_response.set_strategy(new StrategyError(418));
+			}
+			else
+			{
+				if (_server->is_directory(*_request))
+				{
+					if (!_server->get_auto_index())
+						_handler_response.set_strategy(new StrategyError(403));
+					else
+						_handler_response.set_strategy(new StrategyIndex());
+				}
+				else
+					_handler_response.set_strategy(new StrategyAccept());
+			}
+			
 		}
 		catch (BuilderRequest::BadRequest &e)
 		{
@@ -75,16 +95,6 @@ HandlerRequest::handle(std::vector<ClientSocket> & map)
 		catch (BuilderRequest::MethodNotImplemented &e)
 		{
 			_handler_response.set_strategy(new StrategyError(501));
-		}
-		if (!is_complete())
-			continue;
-		_request->set_path(_request->get_path() + _server->get_index(_request->get_path()));
-		if (_server->is_directory(*_request)){
-			_handler_response.set_strategy(new StrategyError(418));
-		}
-		else
-		{
-			_handler_response.set_strategy(new StrategyAccept());
 		}
 		_handler_response.do_strategy(*_server, *_request);
 		_handler_response.send(it->get_socket());

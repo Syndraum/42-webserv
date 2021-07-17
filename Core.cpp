@@ -43,8 +43,9 @@ Core::operator=(Core const & rhs)
 void
 Core::start()
 {
-	int fd;
-	std::vector<int> active_socket;
+	int					fd;
+	std::vector<int>	active_socket;
+	HandlerRequest		hr(_br);
 
 	// this has to be something we can keep and update
 	_fds = new struct pollfd[10];
@@ -87,8 +88,7 @@ Core::start()
 		_nb_active = poll(_fds, _nb_fds, 60000);
 		_accept_connection();
 
-		_handle_request_and_detect_close_connection();
-//		_cdai_dirty_function();
+		hr.handle(_client);
 
 		// detect and set serversocket from POLLIN/POLLOUT to 0
 		_detect_reset_server_poll_fd();
@@ -176,84 +176,6 @@ Core::_accept_connection()
 		}
 		
 	}
-}
-
-void
-Core::_handle_request_and_detect_close_connection()
-{
-	HandlerRequest hr(_br);
-	hr.handle(_client);
-	// for (client_vector::iterator it = _client.begin(); it != _client.end(); it++)
-	// {
-	// 	Request *	request	= &it->get_request();
-	// 	Server &	server	= (*it).get_server();
-	// 	// Response	response(*request, 200);
-
-	// 	//Check if it was for closing , and also read the 
-	// 	//incoming message 
-	// 	hr
-	// 		.set_client(it.base())
-	// 		.set_request(&it->get_request())
-	// 		.set_server(&it->get_server())
-	// 	;
-	// 	try{
-	// 		hr.parse();
-	// 		if (!hr.is_complete())
-	// 			continue;
-	// 		request->set_path(request->get_path() + server.get_index(request->get_path()));
-	// 		if (server.get_cgi_map().find("." + Extension::get_extension(request->get_path())) != server.get_cgi_map().end())
-	// 		{
-	// 			// RequestCGI request_cgi(server.get_cgi_map()["." + Extension::get_extension(request->get_path())], );
-	// 			// response.set_error(418);
-	// 		}
-	// 		else
-	// 		{
-	// 			if (server.is_directory(*request))
-	// 				if (!server.get_auto_index())
-	// 					response.set_error(403);
-	// 				else
-	// 				{
-	// 					response
-	// 						.set_code(200)
-	// 						.set_body(server.get_index_page(*request))
-	// 						.add_header("Content-type", "text/html");
-	// 				}
-	// 			else
-	// 			{
-	// 				request->set_path(server.get_full_path(request->get_path()));
-	// 				// std::cout << "PATH : " << request->get_path() << std::endl;
-	// 				request->action(response);
-	// 			}
-	// 		}
-	// 	}
-	// 	catch (BuilderRequest::BadRequest &e)
-	// 	{
-	// 		response.set_code(400).clear_header();
-	// 	}
-	// 	catch (BuilderRequest::BadHttpVersion &e)
-	// 	{
-	// 		response.set_code(505).clear_header();
-	// 	}
-	// 	catch (BuilderRequest::MethodNotImplemented &e)
-	// 	{
-	// 		response.set_code(501).clear_header();
-	// 	}
-	// 	catch (Request::NoMethod &e)
-	// 	{
-	// 		// std::cout << "test NoMethod" << std::endl;
-	// 		std::cout << "Client " << it->get_socket() << " disconnected" << std::endl;  
-
-	// 		close( it->get_socket() );  
-	// 		_client.erase(it);  
-	// 		break;
-	// 	}
-	// 	std::cout << "write in Socket: " << it->get_socket() << std::endl;
-	// 	response.send_response(it->get_socket());
-
-	// 	close( it->get_socket() );  
-	// 	_client.erase(it);  
-	// 	break;
-	// }
 }
 
 void
