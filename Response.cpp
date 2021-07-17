@@ -13,16 +13,16 @@
 #include "Response.hpp"
 
 Response::Response(void) :
+Message(),
 _version("HTTP/1.1"),
 _code(200),
-_body(""),
 _request(*(new Request)) //leaks
 {}
 
 Response::Response(Request & request, int code) :
+Message(),
 _version("HTTP/1.1"),
 _code(code),
-_body(""),
 _request(request)
 {}
 
@@ -49,19 +49,19 @@ Response::operator=(Response const & rhs)
 	return *this;
 }
 
-Response &
-Response::add_header(std::string name, std::string content)
-{
-	_headers.insert(std::pair<std::string, std::string>(name, content));
-	return *this;
-}
+// Response &
+// Response::add_header(std::string name, std::string content)
+// {
+// 	_headers.insert(std::pair<std::string, std::string>(name, content));
+// 	return *this;
+// }
 
-Response &
-Response::clear_header()
-{
-	_headers.clear();
-	return *this;
-}
+// Response &
+// Response::clear_header()
+// {
+// 	_headers.clear();
+// 	return *this;
+// }
 
 std::string
 Response::get_response()
@@ -113,7 +113,6 @@ Response::set_code(int code)
 	return *this;
 }
 
-//cdai set_body
 Response &
 Response::set_body_from_file(const std::string & filename)
 {
@@ -124,19 +123,19 @@ Response::set_body_from_file(const std::string & filename)
 	return *this;
 }
 
-Response &
-Response::set_body(const std::string & body)
-{
-	_body = body;
-	return *this;
-}
+// Response &
+// Response::set_body(const std::string & body)
+// {
+// 	_body = body;
+// 	return *this;
+// }
 
-Response &
-Response::set_404(std::string & filename)
-{
-	_code = 404;
-	return set_body_from_file(filename);
-}
+// Response &
+// Response::set_404(std::string & filename)
+// {
+// 	_code = 404;
+// 	return set_body_from_file(filename);
+// }
 
 Response &
 Response::set_error(int code)
@@ -152,8 +151,7 @@ Response::set_error(int code)
 		m_template.replace_all("{{MESSAGE}}", get_message(code));
 		m_template.replace_all("{{SERVER_NAME}}", Info::server_name);
 		m_template.replace_all("{{VERSION}}", Info::version);
-		this->
-			set_code(code)
+		this->set_code(code)
 			.set_body(m_template.str())
 			.clear_header()
 			.add_header("Content-type", "text/html");

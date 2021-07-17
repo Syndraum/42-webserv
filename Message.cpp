@@ -50,22 +50,23 @@ Message::add_header(const std::string & name, const std::string & content)
 	return *this;
 }
 
-// void
-// Message::add_header(std::pair<std::string, std::string> const &rhs)
-// {
-// 	if (!_header_lock)
-// 		_headers.insert(rhs);
-// }
+Message &
+Message::clear_header()
+{
+	_headers.clear();
+	return *this;
+}
 
 void
 Message::set_header_lock(bool lock)
 { _header_lock = lock; }
 
-void
+Message &
 Message::set_body(const std::string & body)
 {
 	if (!_body_lock)
 		_body= body;
+	return *this;
 }
 
 void

@@ -13,9 +13,7 @@
 #ifndef RESPONSE
 # define RESPONSE
 
-# include <string>
-# include <map>
-# include <utility>
+# include "Message.hpp"
 # include <sstream>
 
 # include <unistd.h>
@@ -28,7 +26,7 @@
 
 class Request;
 
-class Response
+class Response : public Message
 {
 	public:
 
@@ -38,8 +36,6 @@ class Response
 
 		std::string									_version;
 		int											_code;
-		header_map									_headers;
-		std::string									_body;
 		Request &									_request;
 	
 		std::string									_1xx__response(int code);
@@ -55,23 +51,11 @@ class Response
 		virtual ~Response(void);
 		Response &									operator=(Response const &rhs);
 
-		template <typename T>
-		Response &									add_header(std::string name, T content)
-		{
-			std::stringstream ss;
-
-			ss << content;
-			return (add_header(name, ss.str()));
-		}
-		Response &									add_header(std::string name, std::string content);
-		Response &									clear_header();
 		std::string									get_response();
 		void										send(int fd);
 		std::string									get_message(int code);
 		Response &									set_code(int code);
 		Response &									set_body_from_file(const std::string & filename);
-		Response &									set_body(const std::string & body);
-		Response &									set_404(std::string & filename);
 		Response &									set_error(int code);
 };
 

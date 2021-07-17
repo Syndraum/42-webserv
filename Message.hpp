@@ -3,6 +3,7 @@
 
 # include <map>
 # include <string>
+# include <sstream>
 
 class Message
 {
@@ -22,9 +23,18 @@ public:
 	bool									get_header_lock() const;
 	const std::string &						get_body() const;
 	bool									get_body_lock() const;
+	template <typename T>
+	Message &								add_header(std::string name, T content)
+	{
+		std::stringstream ss;
+
+		ss << content;
+		return (add_header(name, ss.str()));
+	}
 	Message &								add_header(const std::string & , const std::string &);
+	Message &								clear_header();
 	void									set_header_lock(bool);
-	void									set_body(const std::string &);
+	Message &								set_body(const std::string &);
 	void									set_body_lock(bool);
 	void									lock_header();
 	void									lock_body();
