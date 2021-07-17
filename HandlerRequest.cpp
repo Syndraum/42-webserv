@@ -98,6 +98,7 @@ HandlerRequest::handle(std::vector<ClientSocket> & map)
 		}
 		_handler_response.do_strategy(*_server, *_request);
 		_handler_response.send(it->get_socket());
+		_request->reset();
 		close( it->get_socket() );  
 		map.erase(it);  
 		break;

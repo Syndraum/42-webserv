@@ -12,21 +12,13 @@
 
 #include "Response.hpp"
 
-Response::Response(void) :
+Response::Response(int code) :
 Message(),
-_version("HTTP/1.1"),
-_code(200),
-_request(*(new Request)) //leaks
+_version(Info::http_revision),
+_code(code)
 {}
 
-Response::Response(Request & request, int code) :
-Message(),
-_version("HTTP/1.1"),
-_code(code),
-_request(request)
-{}
-
-Response::Response(Response const & src) : _request(src._request)
+Response::Response(Response const & src)
 {
 	*this = src;
 }
@@ -44,24 +36,9 @@ Response::operator=(Response const & rhs)
 		this->_code = rhs._code;
 		this->_headers = rhs._headers;
 		this->_body = rhs._body;
-		this->_request = rhs._request;
 	}
 	return *this;
 }
-
-// Response &
-// Response::add_header(std::string name, std::string content)
-// {
-// 	_headers.insert(std::pair<std::string, std::string>(name, content));
-// 	return *this;
-// }
-
-// Response &
-// Response::clear_header()
-// {
-// 	_headers.clear();
-// 	return *this;
-// }
 
 std::string
 Response::get_response()
@@ -86,7 +63,6 @@ Response::send(int fd)
 	std::string response = get_response();
 
 	write(fd, response.data(), response.size());
-	_request.reset();
 }
 
 std::string
@@ -122,20 +98,6 @@ Response::set_body_from_file(const std::string & filename)
 	file_reader.close();
 	return *this;
 }
-
-// Response &
-// Response::set_body(const std::string & body)
-// {
-// 	_body = body;
-// 	return *this;
-// }
-
-// Response &
-// Response::set_404(std::string & filename)
-// {
-// 	_code = 404;
-// 	return set_body_from_file(filename);
-// }
 
 Response &
 Response::set_error(int code)

@@ -36,8 +36,7 @@ class Response : public Message
 
 		std::string									_version;
 		int											_code;
-		Request &									_request;
-	
+
 		std::string									_1xx__response(int code);
 		std::string									_2xx__response(int code);
 		std::string									_3xx__response(int code);
@@ -45,8 +44,7 @@ class Response : public Message
 		std::string									_5xx__response(int code);
 
 	public:
-		Response(void);
-		Response(Request &, int code = 200);
+		Response(int code = 200);
 		Response(Response const & src);
 		virtual ~Response(void);
 		Response &									operator=(Response const &rhs);
