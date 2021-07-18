@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BuilderRequest.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:20 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/02 16:00:18 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/17 22:12:54 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class BuilderRequest
 		int						_add_method(std::string line);
 		int						_add_path(std::string line);
 		int						_add_version(std::string line);
-		bool					_parse_headers(std::string line);
+		void					_parse_headers(std::string line);
 	public:
 
 		BuilderRequest(void);
