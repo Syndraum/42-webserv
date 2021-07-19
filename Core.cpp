@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/19 17:34:48 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/07/19 23:21:09 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ Core::operator=(Core const & rhs)
 void
 Core::start()
 {
-	HandlerRequest hr(_br);
+	HandlerRequest		hr(_br);
 	std::vector<int>	active_socket;
+	WatcherPollFD		wpfd;
 	try{
 
 		for (size_t i = 0; i < _servers.size(); i++)
@@ -62,8 +63,10 @@ print();
 	_pfdh.init(_servers);
 	while (true)
 	{
-		poll(&(_pfdh.get_pfd().front()), _pfdh.get_pfd().size(), 60000);
-		_accept_connection();
+//		poll(&(_pfdh.get_pfd().front()), _pfdh.get_pfd().size(), 60000);
+		_pfdh.watch();
+		_pfdh.accept_connection(_servers, _client);
+//		_accept_connection();
 
 		client_vector::iterator client = hr.handle(_client);
 		if (client != _client.end())
@@ -123,7 +126,7 @@ Core::print() const
 void
 Core::remove_client(client_vector::iterator it)
 {
-	_pfdh.erase(it->get_socket());
+	_pfdh.erase();
 	close(it->get_socket());
 	_client.erase(it);
 }

@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/19 17:32:46 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/07/19 21:47:57 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@
 # include "Extension.hpp"
 # include "HandlerRequest.hpp"
 # include "HandlerPollFD.hpp"
+# include "WatcherPollFD.hpp"
 
+//class WatcherPollFD;
 
 class Core
 {
@@ -33,6 +35,7 @@ class Core
 	private:
 
 		HandlerPollFD						_pfdh;
+		WatcherPollFD						_wpfd;
 		std::vector<Server>					_servers;
 		int									_worker;
 		std::vector<int>					_server_sockets;

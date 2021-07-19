@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerPollFD.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:58:45 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/19 17:35:37 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/07/19 23:22:32 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "HandlerPollFD.hpp"
 
 HandlerPollFD::HandlerPollFD(void)
-{}
+{
+	_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
+}
 
 HandlerPollFD::HandlerPollFD(HandlerPollFD & rhs)
 {
@@ -39,14 +41,27 @@ struct pollfd	HandlerPollFD::pollfd_init(int fd, short event)
 	return (pfd);
 }
 
-HandlerPollFD::pollfd_vector & HandlerPollFD::get_pfd(void)
+HandlerPollFD::pollfd_vector &
+HandlerPollFD::get_pfd(void)
 {
 	return _pfd;
 }
 
-void	HandlerPollFD::set_pfd(HandlerPollFD::pollfd_vector & pfd)
+void
+HandlerPollFD::set_pfd(HandlerPollFD::pollfd_vector & pfd)
 {
 	_pfd = pfd;
+}
+
+int
+HandlerPollFD::get_nb_listener(void)
+{
+	return _nb_listener;
+}
+
+void	HandlerPollFD::set_nb_listener(int nb_listener)
+{
+	_nb_listener = nb_listener;
 }
 
 void	HandlerPollFD::add_clients_pfd(int fd, short event)
@@ -60,7 +75,7 @@ void HandlerPollFD::init(std::vector<Server> & servers)
 {
 	int fd;
 	struct pollfd pfd;
-	int nb_pfd = 0;
+	int server_id = 0;
 
 	for (size_t i = 0; i < servers.size(); i++)
 	{
@@ -72,21 +87,76 @@ void HandlerPollFD::init(std::vector<Server> & servers)
 
 			fd = server_socket.get_socket();
 			pfd = pollfd_init(fd, POLLIN);
-server_socket.set_id(nb_pfd); // should not be here
+server_socket.set_id(server_id); // should not be here
 			_pfd.push_back(pfd);
-			nb_pfd++;
+			server_id++;
 		}
 	}
+	_nb_listener = server_id;
 }
 
-void	HandlerPollFD::erase(int fd)
+void	HandlerPollFD::erase(void)
 {
 	for (pollfd_vector::iterator it = _pfd.begin(); it != _pfd.end(); it++)
 	{
-		if (it->fd == fd)
+		if (it->revents == POLLOUT)
 		{
 			_pfd.erase(it);
 			return ;
 		}
 	}
+}
+
+int
+HandlerPollFD::watch(void)
+{
+	return (poll(&(_pfd.front()), _pfd.size(), 60000));
+}
+
+void
+HandlerPollFD::accept_connection(std::vector<Server> & servers, std::vector<ClientSocket> & clients)
+{
+	for (size_t i = 0; i < servers.size(); i++)
+	{
+		Server & server = servers[i];
+		for (
+			Server::port_map::iterator it = server.get_server_socket().begin();
+			it != server.get_server_socket().end();
+			it++
+		)
+		{
+			ServerSocket & server_socket = it->second;
+			int fd = server_socket.get_socket();
+
+			if (
+				_pfd[server_socket.get_id()].events == POLLIN &&
+				_pfd[server_socket.get_id()].revents == _pfd[server_socket.get_id()].events
+			)
+			{
+				clients.push_back(ClientSocket(server));
+				int new_socket = _get_client_socket(clients, fd);
+
+				add_clients_pfd(new_socket, POLLOUT);
+			}
+		}
+	}
+}
+
+int
+HandlerPollFD::_get_client_socket(std::vector<ClientSocket> & clients, int fd)
+{
+	int new_socket = -1;
+	int one = 1;
+	ClientSocket & cs = clients.back();
+
+	if ((new_socket = accept(fd, (struct sockaddr *)&cs.get_address() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
+	{
+		perror("accept failed");
+		exit(EXIT_FAILURE);
+	}
+	setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
+	std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
+	cs.set_socket(new_socket);
+	std::cout << "Adding to list of sockets as " << clients.size() << std::endl;
+	return (new_socket);
 }
