@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/16 19:53:38 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/16 20:49:59 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ class Core
 		std::vector<int>					_server_sockets;
 		client_vector						_client;
 		int									_SIZE_SOCK_ADDR;
-		int									_nb_fds;
 		MethodLibrary						_methods;
 		BuilderRequest						_br;
 		Extension *							_extension;
