@@ -36,6 +36,7 @@ Server::operator=(Server const & rhs)
 		_auto_index = rhs._auto_index;
 		_client_max_body_size = rhs._client_max_body_size;
 		_path_error_page = rhs._path_error_page;
+		_CGI_map = rhs._CGI_map;
 	}
 	return *this;
 }
@@ -153,6 +154,12 @@ Server::get_index_page(const Request & request)
 	closedir (directory);
 	ss << "</pre><hr></body>\n</html>";
 	return (ss.str());
+}
+
+Server::cgi_map &
+Server::get_cgi_map()
+{
+	return (_CGI_map);
 }
 
 Server &

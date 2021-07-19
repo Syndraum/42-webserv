@@ -13,22 +13,19 @@
 #ifndef REQUEST_HPP
 # define REQUEST_HPP
 
-# include <map>
-# include <string>
+# include "Message.hpp"
 # include "URI.hpp"
 
 class AMethod;
 class Response;
 
-class Request
+class Request : public Message
 {
 	private:
 		AMethod	*									_method;
 		std::string									_path;
-		std::string									_version;
-		std::map<std::string, std::string>			_headers;
-		bool										_is_first_line;
 		URI											_uri;
+		std::string									_version;
 
 	public:
 		class NoMethod : public std::exception
@@ -44,18 +41,13 @@ class Request
 
 		AMethod *									get_method() const;
 		std::string const &							get_path() const;
+		URI &										get_uri();
 		std::string const &							get_version() const;
-		std::map<std::string, std::string> const &	get_headers() const;
-		std::string const &							get_header(std::string const &key);
-		bool										get_first_line() const;
 
 		void										set_method(AMethod * rhs);
 		void										set_path(std::string const &rhs);
 		void										set_uri(std::string const &rhs);
 		void										set_version(std::string const &rhs);
-		void										set_headers(std::map<std::string, std::string> const &rhs);
-		void										add_header(std::pair<std::string, std::string> const &rhs);
-		void										set_first_line(bool);
 
 		void										action(Response &);
 		void										reset();

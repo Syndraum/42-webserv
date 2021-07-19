@@ -13,12 +13,11 @@
 #include "Request.hpp"
 
 Request::Request():
-_method(0),
-_path(),
-_version(),
-_headers(),
-_is_first_line(true),
-_uri()
+	Message(),
+	_method(0),
+	_path(),
+	_uri(),
+	_version()
 {}
 
 Request::Request(Request const &rhs)
@@ -31,12 +30,11 @@ Request::~Request() {}
 Request const &
 Request::operator=(Request const &rhs)
 {
+	Message::operator=(rhs);
 	_method = rhs.get_method();
 	_path = rhs.get_path();
-	_version = rhs.get_version();
-	_headers = rhs.get_headers();
-	_is_first_line = rhs._is_first_line;
 	_uri = rhs._uri;
+	_version = rhs.get_version();
 	return (*this);
 }
 
@@ -51,18 +49,6 @@ Request::get_path() const
 std::string const &
 Request::get_version() const
 { return (_version); }
-
-std::map<std::string, std::string> const &
-Request::get_headers() const
-{ return (_headers); }
-
-std::string const &
-Request::get_header(std::string const &key)
-{ return (_headers[key]); }
-
-bool
-Request::get_first_line() const
-{ return (_is_first_line); }
 
 void
 Request::set_method(AMethod * rhs)
@@ -85,18 +71,6 @@ Request::set_version(std::string const &rhs)
 { _version = rhs; }
 
 void
-Request::set_headers(std::map<std::string, std::string> const &rhs)
-{ _headers = rhs; }
-
-void
-Request::add_header(std::pair<std::string, std::string> const &rhs)
-{ _headers.insert(rhs); }
-
-void
-Request::set_first_line(bool last_line)
-{ _is_first_line = last_line; }
-
-void
 Request::action(Response & response)
 {
 	if (!_method) //if method == NULL
@@ -111,7 +85,6 @@ Request::reset()
 	_path = "";
 	_version = "";
 	_headers.clear();
-	_is_first_line  = true;
 }
 
 //void

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BuilderRequest.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:15 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/13 14:17:49 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/17 22:11:45 by roalvare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ BuilderRequest::~BuilderRequest(void)
 }
 
 int
-BuilderRequest::add_method(std::string line)
+BuilderRequest::_add_method(std::string line)
 {
 	int ret = line.find(' ');
 
@@ -40,7 +40,7 @@ BuilderRequest::add_method(std::string line)
 }
 
 int
-BuilderRequest::add_path(std::string line)
+BuilderRequest::_add_path(std::string line)
 {
 	size_t		len = line.find(' ');
 	std::string	tmp;
@@ -54,7 +54,7 @@ BuilderRequest::add_path(std::string line)
 }
 
 int
-BuilderRequest::add_version(std::string line)
+BuilderRequest::_add_version(std::string line)
 {
 	if (line.compare(0, 8, Info::http_revision))
 		throw BadHttpVersion();
@@ -63,61 +63,41 @@ BuilderRequest::add_version(std::string line)
 }
 
 void
-BuilderRequest::first_line(std::string line)
+BuilderRequest::_first_line(std::string line)
 {
 	int j = 0;
 
-	_request->set_first_line(false);
+
 	if (line[0] == '\0')
 		throw BadRequest();
-	j = add_method(line);
-	j += add_path(&line[j]);
-	j += add_version(&line[j]);
+	j = _add_method(line);
+	j += _add_path(&line[j]);
+	j += _add_version(&line[j]);
 	if (line[j] != '\r')
 		throw BadRequest();
 }
 
-bool
-BuilderRequest::parse_headers(std::string line)
+void
+BuilderRequest::_parse_headers(std::string line)
 {
 	size_t		len = line.find(": ");
 
-	if (line.length() == 1 && line[0] == '\r')
-		return false;
-	if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
+	if (line.length() == 1 && line[0] == '\r'){
+		_request->set_header_lock(true);
+		_request->set_body_lock(true); // TEMPORARY
+	}
+	else if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
 		throw BadRequest();
-	_request->add_header(std::pair<std::string, std::string>(line.substr(0, len), line.substr(len + 2, line.length() - len - 3)));
-	return (true);
+	_request->add_header(line.substr(0, len), line.substr(len + 2, line.length() - len - 3));
 }
 
 void
-BuilderRequest::parse_request(ASocket & socket)
+BuilderRequest::parse_request(std::string & line)
 {
-	std::string		line;
-	int				gnl_ret = 1;
-
-	while( gnl_ret && (gnl_ret = socket.get_next_line(line)))
-	{
-		if (gnl_ret == -1)
-			throw NoRequest();
-//		std::cout << "gnl_ret: " << gnl_ret << std::endl;
-		std::cout << "line: " << line << std::endl;
-
-		line += "\r"; // Maybe, we can remote this line ? (from cdai)
-		//check printable characters
-		if (_request->get_first_line())
-		{
-			first_line(line);
-		}
-		else{
-			std::cout << "this isn't the first line" << std::endl;
-			if (!parse_headers(line))
-			{
-				socket.reset_buffer();
-				gnl_ret = 0;
-			}
-		}
-	}
+	if (is_first_line())
+		_first_line(line);
+	else if (!(_request->get_header_lock()))
+		_parse_headers(line);
 }
 
 Request *
@@ -140,4 +120,16 @@ BuilderRequest::set_library(MethodLibrary * library)
 	if (!library)
 		throw std::exception();
 	_methods = library;
+}
+
+bool
+BuilderRequest::is_first_line() const
+{
+	if (_request->get_method() == 0)
+		return true;
+	if (_request->get_path() == "")
+		return true;
+	if (_request->get_version() == "")
+		return true;
+	return false;
 }

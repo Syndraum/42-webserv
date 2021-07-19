@@ -12,21 +12,13 @@
 
 #include "Response.hpp"
 
-Response::Response(void) :
-_version("HTTP/1.1"),
-_code(200),
-_body(""),
-_request(*(new Request)) //leaks
+Response::Response(int code) :
+Message(),
+_version(Info::http_revision),
+_code(code)
 {}
 
-Response::Response(Request & request, int code) :
-_version("HTTP/1.1"),
-_code(code),
-_body(""),
-_request(request)
-{}
-
-Response::Response(Response const & src) : _request(src._request)
+Response::Response(Response const & src)
 {
 	*this = src;
 }
@@ -44,22 +36,7 @@ Response::operator=(Response const & rhs)
 		this->_code = rhs._code;
 		this->_headers = rhs._headers;
 		this->_body = rhs._body;
-		this->_request = rhs._request;
 	}
-	return *this;
-}
-
-Response &
-Response::add_header(std::string name, std::string content)
-{
-	_headers.insert(std::pair<std::string, std::string>(name, content));
-	return *this;
-}
-
-Response &
-Response::clear_header()
-{
-	_headers.clear();
 	return *this;
 }
 
@@ -81,12 +58,11 @@ Response::get_response()
 }
 
 void
-Response::send_response(int fd)
+Response::send(int fd)
 {
 	std::string response = get_response();
 
 	write(fd, response.data(), response.size());
-	_request.reset();
 }
 
 std::string
@@ -113,7 +89,6 @@ Response::set_code(int code)
 	return *this;
 }
 
-//cdai set_body
 Response &
 Response::set_body_from_file(const std::string & filename)
 {
@@ -122,20 +97,6 @@ Response::set_body_from_file(const std::string & filename)
 	file_reader.to_string(_body);
 	file_reader.close();
 	return *this;
-}
-
-Response &
-Response::set_body(const std::string & body)
-{
-	_body = body;
-	return *this;
-}
-
-Response &
-Response::set_404(std::string & filename)
-{
-	_code = 404;
-	return set_body_from_file(filename);
 }
 
 Response &
@@ -152,8 +113,7 @@ Response::set_error(int code)
 		m_template.replace_all("{{MESSAGE}}", get_message(code));
 		m_template.replace_all("{{SERVER_NAME}}", Info::server_name);
 		m_template.replace_all("{{VERSION}}", Info::version);
-		this->
-			set_code(code)
+		this->set_code(code)
 			.set_body(m_template.str())
 			.clear_header()
 			.add_header("Content-type", "text/html");
