@@ -18,8 +18,11 @@ class HandlerRequest
 	BuilderRequest &	_builder;
 	HandlerResponse		_handler_response;
 
+
 	HandlerRequest(void);
 public:
+	typedef std::vector<ClientSocket>	clients;
+	typedef clients::iterator		clients_iterator;
 
 	HandlerRequest(BuilderRequest &);
 	HandlerRequest(HandlerRequest const & src);
@@ -29,10 +32,10 @@ public:
 	HandlerRequest &	set_request(Request *);
 	HandlerRequest &	set_server(Server *);
 	HandlerRequest &	set_client(ClientSocket *);
-	void	handle(std::vector<ClientSocket> &);
-	void	parse();
-	void	set_path();
-	bool	is_complete() const;
+	clients_iterator	handle(clients &);
+	void				parse();
+	void				set_path();
+	bool				is_complete() const;
 
 };
 
