@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:15 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/17 22:11:45 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/07/20 17:08:01 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ BuilderRequest::_parse_headers(std::string line)
 
 	if (line.length() == 1 && line[0] == '\r'){
 		_request->set_header_lock(true);
-		_request->set_body_lock(true); // TEMPORARY
+//		_request->set_body_lock(true); // TEMPORARY
 	}
 	else if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
 		throw BadRequest();

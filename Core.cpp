@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/20 12:09:56 by user42           ###   ########.fr       */
+/*   Updated: 2021/07/20 15:52:14 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ _worker(3)
 	_methods
 		.add_method(new MethodGet())
 		.add_method(new MethodDelete())
+		.add_method(new MethodPost())
 		;
 	_br.set_library(&_methods);
 }

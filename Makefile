@@ -6,7 +6,7 @@
 #    By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/07/19 23:24:01 by cdai             ###   ########.fr        #
+#    Updated: 2021/07/20 16:07:09 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRCS		=	$(addprefix $(PREFIX), \
 								AMethod.cpp \
 								MethodGet.cpp \
 								MethodDelete.cpp \
+								MethodPost.cpp \
 								MethodLibrary.cpp \
 								Extension.cpp \
 								CsvReader.cpp \

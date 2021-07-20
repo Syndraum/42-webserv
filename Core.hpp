@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/20 12:09:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/07/20 16:07:45 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <poll.h>
 # include "MethodGet.hpp"
 # include "MethodDelete.hpp"
+# include "MethodPost.hpp"
 # include "MethodLibrary.hpp"
 # include "Extension.hpp"
 # include "HandlerRequest.hpp"

@@ -120,16 +120,18 @@ HandlerRequest::parse()
 		_builder.parse_request(line);
 		if (_request->get_header_lock())
 		{
-			if (_request->get_header("Content_length") == "")
+			if (_request->get_header("Content-Length") == "")
 			{
-				std::cout << "No Content-length" << std::endl;
+				std::cout << "No Content-Length" << std::endl;
+				//std::cout << "_buffer: " << _buffer << std::endl;
 			}
 			else
 			{
-				std::cout << "Content-length" << _request->get_header("Content-length") << std::endl;
+				std::cout << "Content-Length : " << _request->get_header("Content-Length") << std::endl;
 
-				_client->read_body(_request, std::atoi(_request->header("Content-length")));
+				_client->read_body(line, std::atoi(_request->get_header("Content-Length").c_str()));
 			}
+			_request->set_body_lock(true);
 			_client->reset_buffer();
 			gnl_ret = 0;
 		}
