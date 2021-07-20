@@ -123,6 +123,7 @@ HandlerRequest::parse()
 			if (_request->get_header("Content-Length") == "")
 			{
 				std::cout << "No Content-Length" << std::endl;
+				_client->read_until_end();
 				//std::cout << "_buffer: " << _buffer << std::endl;
 			}
 			else

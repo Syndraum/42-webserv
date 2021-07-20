@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/20 16:49:19 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/20 17:17:43 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,4 +136,13 @@ ASocket::read_body(std::string & line, int content_length)
 	buffer[ret] = 0;
 	line = line + buffer;
 	std::cout << "body: " << line << std::endl;
+}
+
+void
+ASocket::read_until_end(void)
+{
+	std::string temp;
+	get_next_line(temp);
+
+	std::cout << "temp: " << temp << std::endl;
 }
