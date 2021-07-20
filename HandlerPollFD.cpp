@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:58:45 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/19 23:22:32 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/20 12:27:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,25 +53,16 @@ HandlerPollFD::set_pfd(HandlerPollFD::pollfd_vector & pfd)
 	_pfd = pfd;
 }
 
-int
-HandlerPollFD::get_nb_listener(void)
-{
-	return _nb_listener;
-}
-
-void	HandlerPollFD::set_nb_listener(int nb_listener)
-{
-	_nb_listener = nb_listener;
-}
-
-void	HandlerPollFD::add_clients_pfd(int fd, short event)
+void
+HandlerPollFD::_add_clients_pfd(int fd, short event)
 {
 	struct pollfd pfd = pollfd_init(fd, event);
 	_pfd.push_back(pfd);
 }
 
 
-void HandlerPollFD::init(std::vector<Server> & servers)
+void
+HandlerPollFD::init(std::vector<Server> & servers)
 {
 	int fd;
 	struct pollfd pfd;
@@ -92,19 +83,17 @@ server_socket.set_id(server_id); // should not be here
 			server_id++;
 		}
 	}
-	_nb_listener = server_id;
 }
 
-void	HandlerPollFD::erase(void)
+void
+HandlerPollFD::erase(void)
 {
 	for (pollfd_vector::iterator it = _pfd.begin(); it != _pfd.end(); it++)
-	{
 		if (it->revents == POLLOUT)
 		{
 			_pfd.erase(it);
 			return ;
 		}
-	}
 }
 
 int
@@ -129,14 +118,11 @@ HandlerPollFD::accept_connection(std::vector<Server> & servers, std::vector<Clie
 			int fd = server_socket.get_socket();
 
 			if (
-				_pfd[server_socket.get_id()].events == POLLIN &&
-				_pfd[server_socket.get_id()].revents == _pfd[server_socket.get_id()].events
+				_pfd[server_socket.get_id()].revents == POLLIN
 			)
 			{
 				clients.push_back(ClientSocket(server));
-				int new_socket = _get_client_socket(clients, fd);
-
-				add_clients_pfd(new_socket, POLLOUT);
+				_get_client_socket(clients, fd);
 			}
 		}
 	}
@@ -145,7 +131,7 @@ HandlerPollFD::accept_connection(std::vector<Server> & servers, std::vector<Clie
 int
 HandlerPollFD::_get_client_socket(std::vector<ClientSocket> & clients, int fd)
 {
-	int new_socket = -1;
+	int new_socket;
 	int one = 1;
 	ClientSocket & cs = clients.back();
 
@@ -158,5 +144,6 @@ HandlerPollFD::_get_client_socket(std::vector<ClientSocket> & clients, int fd)
 	std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
 	cs.set_socket(new_socket);
 	std::cout << "Adding to list of sockets as " << clients.size() << std::endl;
+	_add_clients_pfd(new_socket, POLLOUT);
 	return (new_socket);
 }
