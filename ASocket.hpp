@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:44:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/14 18:05:28 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/20 15:41:45 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ class ASocket
 		int						get_id() const;
 		void					set_id(int id);
 		void					reset_buffer(void);
+		void					read_body(std::string &, int);
 };
 
 #endif
