@@ -23,6 +23,7 @@ public:
 	virtual ~Message(void);
 	Message &	operator=(Message const &rhs);
 
+	map const &									get_headers() const;
 	std::string const &						get_header(std::string const &key);
 	bool									get_header_lock() const;
 	const std::string &						get_body() const;

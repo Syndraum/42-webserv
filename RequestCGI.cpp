@@ -28,5 +28,5 @@ RequestCGI::operator=(RequestCGI const &rhs)
 
 void RequestCGI::send(void)
 {
-	_cgi.start();
+	_cgi.start(*this);
 }

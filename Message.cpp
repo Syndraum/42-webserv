@@ -26,14 +26,17 @@ Message &	Message::operator=(Message const & rhs)
 	return *this;
 }
 
+const Message::map &
+Message::get_headers() const
+{ return (_headers); }
+
 std::string const &
 Message::get_header(std::string const &key)
 { return (_headers[key]); }
 
 bool
 Message::get_header_lock() const
-{ return (_header_lock);
-}
+{ return (_header_lock); }
 
 const std::string &
 Message::get_body() const

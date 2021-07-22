@@ -26,6 +26,7 @@ public:
 		return (m_string);
 	}
 	std::string &	replace_all(const std::string & search, const std::string & replace);
+	char *			string_copy() const;
 
 };
 

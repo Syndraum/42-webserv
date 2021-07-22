@@ -12,8 +12,8 @@ class StrategyCGI : public IResponseStrategy
 	RequestCGI	_request;
 
 	StrategyCGI(void);
-public:
 
+public:
 	StrategyCGI(CGI &);
 	StrategyCGI(StrategyCGI const & src);
 	virtual ~StrategyCGI(void);

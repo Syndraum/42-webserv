@@ -36,6 +36,7 @@ StrategyCGI::create(Server & server, Request & request)
 
 	this->_prepare(server, request);
 	_request.debug();
+	_request.send();
 	response = new Response();
 	response->set_error(418);
 	return (response);
@@ -59,6 +60,7 @@ StrategyCGI::_prepare(Server & server, Request & request)
 	_request.add_header("REMOTE_HOST", "");
 	_request.add_header("REQUEST_METHOD", request.get_method()->get_name());
 	_request.add_header("SCRIPT_NAME", request.get_uri().get_path());
+	_request.add_header("SCRIPT_FILENAME", server.get_full_path(request.get_uri().get_path())); //PHP
 	_request.add_header("SERVER_NAME", "0.0.0.0"); // TMP
 	_request.add_header("SERVER_PORT", 8081);
 	_request.add_header("SERVER_PROTOCOL", Info::http_revision);

@@ -45,3 +45,16 @@ StringPP::replace_all(const std::string & search, const std::string & replace)
 	}
 	return (m_string);
 }
+
+char *
+StringPP::string_copy() const
+{
+	size_t i = -1;
+
+	char * ret = new char[m_string.length() + 1];
+
+	while(++i < m_string.length())
+		ret[i] = m_string[i];
+	ret[i] = 0;
+	return (ret);
+}
