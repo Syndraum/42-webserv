@@ -72,6 +72,7 @@ HandlerRequest::handle(clients & vector)
 			}
 			else
 			{
+			//liste des CGI gérés
 				if (_server->is_directory(*_request))
 				{
 					if (!_server->get_auto_index())
