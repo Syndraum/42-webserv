@@ -68,7 +68,7 @@ HandlerRequest::handle(std::vector<ClientSocket> & map)
 			_request->set_path(_request->get_path() + _server->get_index(_request->get_path()));
 			if (_server->get_cgi_map().find("." + Extension::get_extension(_request->get_path())) != _server->get_cgi_map().end())
 			{
-				_handler_response.set_strategy(new StrategyError(418));
+				_handler_response.set_strategy(new StrategyCGI(_server->get_cgi_map()["." + Extension::get_extension(_request->get_path())]));
 			}
 			else
 			{

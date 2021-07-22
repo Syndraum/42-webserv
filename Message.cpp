@@ -57,6 +57,14 @@ Message::clear_header()
 	return *this;
 }
 
+bool
+Message::has_header(const std::string & key)
+{
+	if (_headers.find(key) == _headers.end())
+		return (false);
+	return (true);
+}
+
 void
 Message::set_header_lock(bool lock)
 { _header_lock = lock; }
@@ -80,3 +88,17 @@ Message::lock_header()
 void
 Message::lock_body()
 { set_body_lock(true); }
+
+void
+Message::debug()
+{
+	for (map::iterator it = _headers.begin(); it != _headers.end(); it++)
+	{
+		std::cout << "[" << it->first << "] " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	if (_body == "")
+		std::cout << "empty body" << std::endl;
+	else
+		std::cout << _body << std::endl;
+}

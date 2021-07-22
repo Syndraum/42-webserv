@@ -5,10 +5,14 @@
 # include <string>
 # include <sstream>
 
+# include <iostream> // TMP
+
 class Message
 {
+public:
+	typedef	std::map<std::string, std::string>	map;
 protected:
-	std::map<std::string, std::string>		_headers;
+	map										_headers;
 	bool									_header_lock;
 	std::string								_body;
 	bool									_body_lock;
@@ -33,11 +37,14 @@ public:
 	}
 	Message &								add_header(const std::string & , const std::string &);
 	Message &								clear_header();
+	bool									has_header(const std::string &);
 	void									set_header_lock(bool);
 	Message &								set_body(const std::string &);
 	void									set_body_lock(bool);
 	void									lock_header();
 	void									lock_body();
+
+	void	debug();
 
 };
 

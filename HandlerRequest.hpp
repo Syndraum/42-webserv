@@ -9,6 +9,7 @@
 # include "StrategyAccept.hpp"
 # include "StrategyError.hpp"
 # include "StrategyIndex.hpp"
+# include "StrategyCGI.hpp"
 
 class HandlerRequest
 {

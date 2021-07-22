@@ -15,29 +15,22 @@
 
 # include <string>
 # include <map>
-# include "Response.hpp"
+# include "Message.hpp"
 # include "CGI.hpp"
 
-class RequestCGI
+class RequestCGI : public Message
 {
 	private:
-		std::map<std::string, std::string>	_env_cgi;
 		CGI &								_cgi;
-		Response							_response;
 		RequestCGI(void);
 
 	public:
-		RequestCGI(CGI & cgi, std::map<std::string, std::string> & glob_env);
+		RequestCGI(CGI & cgi);
 		~RequestCGI(void);
 		RequestCGI const &					operator=(RequestCGI const &rhs);
 
 
 		void								send(void);
-		RequestCGI &						add_env(std::string key, std::string value);
-
-		std::map<std::string, std::string>	get_env_cgi(void) const;
-		CGI &								get_CGI(void) const;
-		Response							get_response(void) const;
 };
 
 #endif
