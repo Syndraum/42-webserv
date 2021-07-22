@@ -68,11 +68,12 @@ HandlerRequest::handle(clients & vector)
 			_request->set_path(_request->get_path() + _server->get_index(_request->get_path()));
 			if (_server->get_cgi_map().find("." + Extension::get_extension(_request->get_path())) != _server->get_cgi_map().end())
 			{
-				_handler_response.set_strategy(new StrategyError(418));
+				std::cout << "get_path() : " << _request->get_path() << std::endl;
+//				_handler_response.set_strategy(new StrategyError(418));
+				_handler_response.set_strategy(new StrategyCGI());
 			}
 			else
 			{
-			//liste des CGI gérés
 				if (_server->is_directory(*_request))
 				{
 					if (!_server->get_auto_index())
@@ -132,6 +133,7 @@ HandlerRequest::parse()
 				std::cout << "Content-Length : " << _request->get_header("Content-Length") << std::endl;
 
 				_client->read_body(line, std::atoi(_request->get_header("Content-Length").c_str()));
+				_request->set_body(line);
 			}
 			_request->set_body_lock(true);
 			_client->reset_buffer();

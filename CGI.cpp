@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/09 14:59:23 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/22 18:48:20 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ CGI::~CGI(void)
 {
 	if (_env)
 		str_table_delete(_env);
+}
+
+std::string &
+CGI::get_exec_name(void)
+{
+	return (_exec_name);
 }
 
 void
@@ -70,6 +76,24 @@ CGI::string_copy(std::string str) const
 	return (ret);
 }
 
+char**
+CGI::create_env(void)
+{
+	char** result;
+	int i = 0;
+
+
+	result = new char*[_cgi_env.size() + 1];
+	for (env_map::iterator it = _cgi_env.begin(); it != _cgi_env.end(); it++)
+	{
+		std::string temp = it->first + "=" + it->second;
+		result[i] = strdup(temp.c_str());
+		i++;
+	}
+	result[i] = NULL;
+	return (result);
+}
+
 char **
 CGI::join_env(env_map glob_env, env_map my_env)
 {
@@ -105,6 +129,8 @@ CGI::start()
 	int			pipe_out[2];
 	int			pipe_err[2];
 
+	print();
+	std::cout << "search core dump" << std::endl;
 	if (pipe(pipe_out) < 0 || pipe(pipe_err) < 0
 	|| dup2(pipe_out[1], 1) < 0 || dup2(pipe_err[1], 2) < 0)
 		throw (std::exception()); // specify
@@ -112,8 +138,9 @@ CGI::start()
 		throw (std::exception()); // specify
 	else if (!pid)
 	{
-		if (execle(_exec_name.c_str(), _arg, _env) < 0)
-			throw (std::exception()); // specify
+		_env = create_env();
+//		if (execle(_exec_name.c_str(), _arg, _env) < 0)
+//			throw (std::exception()); // specify
 		_exit(0);
 	}
 	else
@@ -131,10 +158,15 @@ CGI::start()
 void
 CGI::print() const
 {
-	std::cerr << "exec name : " << _exec_name << std::endl;
-	std::cerr << "CGI params : " << std::endl;
+	std::cout << "exec name : " << _exec_name << std::endl;
+	std::cout << "_arg : " << _arg << std::endl;
+
+//	int i = -1;
+//	while (_env[++i])
+//		std::cerr << "_envi[i]: " << _env[i] << std::endl;
+	std::cout << "CGI params : " << std::endl;
 	for (env_map::const_iterator it = _cgi_env.begin(); it != _cgi_env.end(); it++)
 	{
-		std::cerr << it->first << " = " << it->second << std::endl;
+		std::cout << it->first << " = " << it->second << std::endl;
 	}
 }

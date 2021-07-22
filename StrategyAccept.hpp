@@ -2,6 +2,7 @@
 # define STRATEGYACCEPT
 
 # include "IResponseStrategy.hpp"
+# include "CGI.hpp"
 
 class StrategyAccept : public IResponseStrategy
 {
