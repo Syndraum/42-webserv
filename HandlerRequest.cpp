@@ -111,7 +111,7 @@ HandlerRequest::parse()
 	int				gnl_ret = 1;
 	
 	_builder.set_request(_request);
-	while (gnl_ret && (gnl_ret = _client->get_next_line(line)))
+	while (gnl_ret && (gnl_ret = _client->get_reader().get_next_line(line)))
 	{
 		if (gnl_ret == -1)
 			return ;
@@ -123,17 +123,17 @@ HandlerRequest::parse()
 			if (_request->get_header("Content-Length") == "")
 			{
 				std::cout << "No Content-Length" << std::endl;
-				_client->read_until_end();
+				_client->get_reader().read_until_end();
 				//std::cout << "_buffer: " << _buffer << std::endl;
 			}
 			else
 			{
 				std::cout << "Content-Length : " << _request->get_header("Content-Length") << std::endl;
 
-				_client->read_body(line, std::atoi(_request->get_header("Content-Length").c_str()));
+				_client->get_reader().read_body(line, std::atoi(_request->get_header("Content-Length").c_str()));
 			}
 			_request->set_body_lock(true);
-			_client->reset_buffer();
+			_client->get_reader()._reset_buffer();
 			gnl_ret = 0;
 		}
 	}

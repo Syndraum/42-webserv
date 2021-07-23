@@ -6,12 +6,12 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:06:02 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 12:30:34 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/23 17:11:25 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef READERFILEDESCRIPTOR
-#define READERFILEDESCRIPTOR
+#ifndef READER_FILE_DESCRIPTOR
+#define READER_FILE_DESCRIPTOR
 
 # include <sys/types.h>
 # include <sys/socket.h>
@@ -32,7 +32,7 @@ class ReaderFileDescriptor : public AReaderFileDescriptor
 		virtual ~ReaderFileDescriptor(void);
 		ReaderFileDescriptor const & operator=(ReaderFileDescriptor const &);
 
-		virtual int get_next_line(std::string & line);
+		virtual int _read(void);
 };
 
 #endif

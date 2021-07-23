@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 12:30:32 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/23 17:09:26 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ class AReaderFileDescriptor
 		char	_buffer[BUFFER_SIZE];
 
 		AReaderFileDescriptor(void);
-		void	_reset_buffer(void);
 
 
 	public:
@@ -39,7 +38,14 @@ class AReaderFileDescriptor
 		virtual ~AReaderFileDescriptor(void);
 		AReaderFileDescriptor const & operator=(AReaderFileDescriptor const &);
 
-		virtual int	get_next_line(std::string & line) = 0;
+		int			get_next_line(std::string & line);
+		void		read_body(std::string &, int);
+		void		read_until_end(void);
+		int			get_fd(void);
+		void		set_fd(int);
+		void		_reset_buffer(void);
+		virtual int	_read(void) = 0;
+
 };
 
 #endif
