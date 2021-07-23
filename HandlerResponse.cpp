@@ -26,9 +26,9 @@ HandlerResponse::set_strategy(IResponseStrategy * strategy)
 }
 
 void
-HandlerResponse::do_strategy(Server & server, Request & request)
+HandlerResponse::do_strategy(Client & client)
 {
-	_response = _strategy->create(server, request);
+	_response = _strategy->create(client);
 }
 
 void

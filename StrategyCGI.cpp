@@ -30,11 +30,11 @@ StrategyCGI &	StrategyCGI::operator=(StrategyCGI const & rhs)
 }
 
 Response *
-StrategyCGI::create(Server & server, Request & request)
+StrategyCGI::create(Client & client)
 {
 	Response * response = 0;
 
-	this->_prepare(server, request);
+	this->_prepare(client);
 	_request.debug();
 	_request.send();
 	response = new Response();
@@ -43,26 +43,31 @@ StrategyCGI::create(Server & server, Request & request)
 }
 
 void
-StrategyCGI::_prepare(Server & server, Request & request)
+StrategyCGI::_prepare(Client & client)
 {
-	_request.add_header("AUTH_TYPE", "");
-	if (request.get_body().length() != 0){
+	Request &	request_http	= client.get_request();
+	Server &	server			= client.get_server();
+
+	if (request_http.get_body().length() != 0){
 		_request.add_header("CONTENT_LENGTH", 0);
-		if (request.has_header("Content-Type"))
-			_request.add_header("CONTENT_TYPE", request.get_header("Content-Type"));
+		if (request_http.has_header("Content-Type"))
+			_request.add_header("CONTENT_TYPE", request_http.get_header("Content-Type"));
 	}
-	_request.add_header("GATEWAY_INTERFACE", Info::cgi_revision);
-	_request.add_header("PATH_INFO", request.get_uri().get_extra_path());
 	if (_request.get_header("PATH_INFO") != "")
-		_request.add_header("PATH_TRANSLATED", server.get_full_path(request.get_uri().get_extra_path()));
-	_request.add_header("QUERY_STRING", request.get_uri().get_query_string());
-	_request.add_header("REMOTE_ADDR", "0.0.0.0"); // TMP
-	_request.add_header("REMOTE_HOST", "");
-	_request.add_header("REQUEST_METHOD", request.get_method()->get_name());
-	_request.add_header("SCRIPT_NAME", request.get_uri().get_path());
-	_request.add_header("SCRIPT_FILENAME", server.get_full_path(request.get_uri().get_path())); //PHP
-	_request.add_header("SERVER_NAME", "0.0.0.0"); // TMP
-	_request.add_header("SERVER_PORT", 8081);
-	_request.add_header("SERVER_PROTOCOL", Info::http_revision);
-	_request.add_header("SERVER_SOFTWARE", Info::server_name + "/" + Info::version);
+		_request.add_header("PATH_TRANSLATED", server.get_full_path(request_http.get_uri().get_extra_path()));
+	_request
+		.add_header("AUTH_TYPE", "")
+		.add_header("GATEWAY_INTERFACE", Info::cgi_revision)
+		.add_header("PATH_INFO", request_http.get_uri().get_extra_path())
+		.add_header("QUERY_STRING", request_http.get_uri().get_query_string())
+		.add_header("REMOTE_ADDR", "0.0.0.0") // TMP
+		.add_header("REMOTE_HOST", "")
+		.add_header("REQUEST_METHOD", request_http.get_method()->get_name())
+		.add_header("SCRIPT_NAME", request_http.get_uri().get_path())
+		.add_header("SERVER_NAME", "0.0.0.0") // TMP
+		.add_header("SERVER_PORT", 8081)
+		.add_header("SERVER_PROTOCOL", Info::http_revision)
+		.add_header("SERVER_SOFTWARE", Info::server_name + "/" + Info::version)
+	;
+	_request.add_header("SCRIPT_FILENAME", server.get_full_path(request_http.get_uri().get_path())); //PHP
 }

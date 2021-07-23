@@ -20,9 +20,11 @@ StrategyAccept &	StrategyAccept::operator=(StrategyAccept const & rhs)
 }
 
 Response * 
-StrategyAccept::create(Server & server, Request & request)
+StrategyAccept::create(Client & client)
 {
-	Response * response = 0;
+	Response *	response	= 0;
+	Request &	request		= client.get_request();
+	Server &	server		= client.get_server();
 
 	response = new Response();
 	request.set_path(server.get_full_path(request.get_path()));

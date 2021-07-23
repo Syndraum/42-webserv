@@ -20,9 +20,12 @@ StrategyIndex &	StrategyIndex::operator=(StrategyIndex const & rhs)
 }
 
 Response * 
-StrategyIndex::create(Server & server, Request & request)
+StrategyIndex::create(Client & client)
 {
-	Response * response = 0;
+	Response *	response	= 0;
+	Request	&	request		= client.get_request();
+	Server &	server		= client.get_server();
+
 
 	response = new Response();
 	response

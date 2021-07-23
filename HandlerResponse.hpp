@@ -3,8 +3,7 @@
 
 # include "Response.hpp"
 # include "IResponseStrategy.hpp"
-# include "Server.hpp"
-# include "Request.hpp"
+# include "Client.hpp"
 # include <exception>
 
 class HandlerResponse
@@ -19,7 +18,7 @@ public:
 	HandlerResponse &	operator=(HandlerResponse const &rhs);
 
 	void	set_strategy(IResponseStrategy *);
-	void	do_strategy(Server &, Request &);
+	void	do_strategy(Client &);
 	void	send(int fd);
 
 private:

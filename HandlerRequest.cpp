@@ -98,7 +98,7 @@ HandlerRequest::handle(clients & vector)
 		{
 			_handler_response.set_strategy(new StrategyError(501));
 		}
-		_handler_response.do_strategy(get_server(), get_request());
+		_handler_response.do_strategy(*_client);
 		_handler_response.send(it->get_socket());
 		get_request().reset();
 		return (it);

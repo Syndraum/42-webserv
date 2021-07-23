@@ -22,12 +22,11 @@ StrategyError::operator=(StrategyError const & rhs)
 }
 
 Response * 
-StrategyError::create(Server & server, Request & request)
+StrategyError::create(Client & client)
 {
 	Response * response = 0;
 
-	(void)server;
-	(void)request;
+	(void)client;
 	response = new Response();
 	response->set_error(_code);
 	return (response);

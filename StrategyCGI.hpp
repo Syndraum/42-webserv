@@ -20,8 +20,8 @@ public:
 	StrategyCGI &	operator=(StrategyCGI const &rhs);
 
 private:
-	virtual Response *	create(Server &, Request &);
-	void				_prepare(Server &, Request &);
+	virtual Response *	create(Client &);
+	void				_prepare(Client &);
 
 };
 

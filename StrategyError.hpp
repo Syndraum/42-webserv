@@ -14,7 +14,7 @@ public:
 	StrategyError &	operator=(StrategyError const &rhs);
 
 private:
-	virtual Response * create(Server &, Request &);
+	virtual Response * create(Client &);
 };
 
 #endif
