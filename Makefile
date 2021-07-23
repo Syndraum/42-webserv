@@ -10,41 +10,74 @@
 #                                                                              #
 # **************************************************************************** #
 
-PREFIX		=	./
+PREFIX		=	./srcs/
 
-SRCS		=	$(addprefix $(PREFIX), \
-								main.cpp \
+SRCS_METHOD		= $(addprefix $(PREFIX)methods/, \
+								AMethod.cpp \
+								MethodDelete.cpp \
+								MethodGet.cpp \
+								MethodLibrary.cpp \
+								)
+
+SRCS_UTILS		= $(addprefix $(PREFIX)utils/, \
+								Info.cpp \
+								StringPP.cpp \
+								)
+
+SRCS_REQUEST	= $(addprefix $(PREFIX)request/, \
+								Request.cpp \
+								BuilderRequest.cpp \
+								HandlerRequest.cpp \
+								URI.cpp \
+								)
+
+SRCS_RESPONSE	= $(addprefix $(PREFIX)response/, \
+								Response.cpp \
+								HandlerResponse.cpp \
+								)
+
+SRCS_CGI		= $(addprefix $(PREFIX)cgi/, \
+								CGI.cpp \
+								RequestCGI.cpp \
+								)
+
+SRCS_CORE		= $(addprefix $(PREFIX)core/, \
+								Core.cpp \
+								BuilderCore.cpp \
 								Server.cpp \
 								ASocket.cpp \
 								ServerSocket.cpp \
 								ClientSocket.cpp \
-								Core.cpp \
-								CGI.cpp \
-								Response.cpp \
+								Client.cpp \
+								Message.cpp \
+								HandlerPollFD.cpp \
+								)
+
+SRCS_READER		= $(addprefix $(PREFIX)reader/, \
 								Reader.cpp \
-								Request.cpp \
-								BuilderRequest.cpp \
-								BuilderCore.cpp \
-								AMethod.cpp \
-								MethodGet.cpp \
-								MethodDelete.cpp \
-								MethodLibrary.cpp \
 								Extension.cpp \
 								CsvReader.cpp \
-								RequestCGI.cpp \
-								StringPP.cpp \
-								URI.cpp \
-								Info.cpp \
-								HandlerRequest.cpp \
-								HandlerResponse.cpp \
+								)
+
+SRCS_STRATEGY	= $(addprefix $(PREFIX)strategy/, \
 								StrategyAccept.cpp \
 								StrategyError.cpp \
 								StrategyIndex.cpp \
 								StrategyCGI.cpp \
-								Message.cpp \
-								Client.cpp \
-								HandlerPollFD.cpp \
 								)
+
+SRCS			=	$(SRCS_METHOD) \
+					$(SRCS_UTILS) \
+					$(SRCS_REQUEST) \
+					$(SRCS_RESPONSE) \
+					$(SRCS_CGI) \
+					$(SRCS_CORE) \
+					$(SRCS_READER) \
+					$(SRCS_STRATEGY) \
+					$(addprefix $(PREFIX), \
+								main.cpp \
+								)
+
 
 OBJS		=	${SRCS:.cpp=.o}
 
@@ -52,7 +85,7 @@ DEPS		=	${OBJS:.o=.d}
 
 CXX			=	clang++
 
-CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98 -g
+CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98 -g -I./includes
 
 NAME 		=	webserv
 
