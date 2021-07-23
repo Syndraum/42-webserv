@@ -49,7 +49,7 @@ class CGI
 		void										set_exec_name(std::string const & name);
 		void										add_CGI_param(std::string key, std::string value);
 
-		int											start(Message & request);
+		int											start(Message & request, const std::string & path);
 		void										print() const;
 		class MyError: public std::exception
 		{

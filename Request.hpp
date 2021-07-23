@@ -42,6 +42,7 @@ class Request : public Message
 		AMethod *									get_method() const;
 		std::string const &							get_path() const;
 		URI &										get_uri();
+		const URI &									get_uri() const;
 		std::string const &							get_version() const;
 
 		void										set_method(AMethod * rhs);

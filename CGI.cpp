@@ -100,7 +100,7 @@ CGI::join_env(env_map & my_env)
 }
 
 int
-CGI::start(Message & request)
+CGI::start(Message & request, const std::string & script_path)
 {
 	int			ret;
 	pid_t		pid;
@@ -117,7 +117,8 @@ CGI::start(Message & request)
 		throw (std::exception()); // specify
 	else if (!pid)
 	{
-		if (execle(_exec_name.c_str(), _exec_name.c_str(), NULL, env) < 0)
+		std::cout << "s_P : " << script_path.c_str() << std::endl;
+		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, env) < 0)
 			throw (std::exception()); // specify
 		_exit(0);
 	}

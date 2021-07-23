@@ -50,6 +50,10 @@ URI &
 Request::get_uri()
 { return (_uri); }
 
+const URI &
+Request::get_uri() const
+{ return (_uri); }
+
 std::string const &
 Request::get_version() const
 { return (_version); }

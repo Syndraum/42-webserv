@@ -53,3 +53,15 @@ Client::get_server()
 {
 	return (_server);
 }
+
+ServerSocket &
+Client::get_server_socket()
+{
+	return (_server_socket);
+}
+
+std::string
+Client::get_full_path() const
+{
+	return (_server.get_full_path(_request.get_uri().get_path()));
+}

@@ -24,6 +24,8 @@ public:
 	ClientSocket &	get_socket_stuct();
 	int				get_socket();
 	Server &		get_server();
+	ServerSocket &	get_server_socket();
+	std::string		get_full_path() const;
 private:
 
 };

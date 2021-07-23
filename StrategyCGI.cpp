@@ -36,7 +36,7 @@ StrategyCGI::create(Client & client)
 
 	this->_prepare(client);
 	_request.debug();
-	_request.send();
+	_request.send(client.get_full_path());
 	response = new Response();
 	response->set_error(418);
 	return (response);
@@ -48,6 +48,7 @@ StrategyCGI::_prepare(Client & client)
 	Request &	request_http	= client.get_request();
 	Server &	server			= client.get_server();
 
+	// (void)client;
 	if (request_http.get_body().length() != 0){
 		_request.add_header("CONTENT_LENGTH", 0);
 		if (request_http.has_header("Content-Type"))
@@ -65,7 +66,7 @@ StrategyCGI::_prepare(Client & client)
 		.add_header("REQUEST_METHOD", request_http.get_method()->get_name())
 		.add_header("SCRIPT_NAME", request_http.get_uri().get_path())
 		.add_header("SERVER_NAME", "0.0.0.0") // TMP
-		.add_header("SERVER_PORT", 8081)
+		.add_header("SERVER_PORT", client.get_server_socket().get_port())
 		.add_header("SERVER_PROTOCOL", Info::http_revision)
 		.add_header("SERVER_SOFTWARE", Info::server_name + "/" + Info::version)
 	;

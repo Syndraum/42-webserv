@@ -30,7 +30,7 @@ class RequestCGI : public Message
 		RequestCGI const &					operator=(RequestCGI const &rhs);
 
 
-		void								send(void);
+		void								send(const std::string &);
 };
 
 #endif
