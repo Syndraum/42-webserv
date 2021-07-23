@@ -6,7 +6,7 @@
 #    By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/07/20 16:07:09 by cdai             ###   ########.fr        #
+#    Updated: 2021/07/23 11:44:45 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,9 @@ SRCS		=	$(addprefix $(PREFIX), \
 								StrategyIndex.cpp \
 								Message.cpp \
 								HandlerPollFD.cpp \
+								AReaderFileDescriptor.cpp \
+								ReaderSocket.cpp \
+								ReaderFileDescriptor.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}
