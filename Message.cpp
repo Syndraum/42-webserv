@@ -26,14 +26,17 @@ Message &	Message::operator=(Message const & rhs)
 	return *this;
 }
 
+const Message::map &
+Message::get_headers() const
+{ return (_headers); }
+
 std::string const &
 Message::get_header(std::string const &key)
 { return (_headers[key]); }
 
 bool
 Message::get_header_lock() const
-{ return (_header_lock);
-}
+{ return (_header_lock); }
 
 const std::string &
 Message::get_body() const
@@ -55,6 +58,14 @@ Message::clear_header()
 {
 	_headers.clear();
 	return *this;
+}
+
+bool
+Message::has_header(const std::string & key)
+{
+	if (_headers.find(key) == _headers.end())
+		return (false);
+	return (true);
 }
 
 void
@@ -80,3 +91,17 @@ Message::lock_header()
 void
 Message::lock_body()
 { set_body_lock(true); }
+
+void
+Message::debug()
+{
+	for (map::iterator it = _headers.begin(); it != _headers.end(); it++)
+	{
+		std::cout << "[" << it->first << "] " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	if (_body == "")
+		std::cout << "empty body" << std::endl;
+	else
+		std::cout << _body << std::endl;
+}

@@ -13,14 +13,27 @@
 #include "CGI.hpp"
 
 CGI::CGI() :
-_arg(0),
-_env(0)
+_exec_name(),
+_cgi_env()
 {}
 
-CGI::~CGI(void)
+CGI::CGI(CGI const & src)
 {
-	if (_env)
-		str_table_delete(_env);
+	*this = src;
+}
+
+CGI::~CGI(void)
+{}
+
+CGI &
+CGI::operator=(CGI const &rhs)
+{
+	if (this != &rhs)
+	{
+		_exec_name = rhs._exec_name;
+		_cgi_env = rhs._cgi_env;
+	}
+	return (*this);
 }
 
 void
@@ -28,6 +41,7 @@ CGI::set_exec_name(std::string const & name)
 {
 	_exec_name = name;
 }
+
 void
 CGI::add_CGI_param(std::string key, std::string value)
 {
@@ -57,75 +71,68 @@ CGI::str_table_delete(char ** table) const
 	delete table;
 }
 
-char *
-CGI::string_copy(std::string str) const
-{
-	size_t i = -1;
-
-	char * ret = new char[str.length() + 1];
-
-	while(++i < str.length())
-		ret[i] = str[i];
-	ret[i] = 0;
-	return (ret);
-}
-
 char **
-CGI::join_env(env_map glob_env, env_map my_env)
+CGI::create_env(const env_map & map)
 {
 	int				j = 0;
-	std::string		tmp_str;
-	char **			ret;
+	StringPP		line;
+	char **			env;
 
-	env_map::iterator ite = glob_env.end();
-	env_map::iterator ite2 = _cgi_env.end();
-
-	for (env_map::iterator it = glob_env.begin(); it != ite; it++)
-		my_env[it->first] = it->second;
-	for (env_map::iterator it2 = _cgi_env.begin(); it2 != ite2; it2++)
-		my_env[it2->first] = it2->second;
-	ret = new char *[my_env.size() + 1];
-	env_map::iterator ite3 = my_env.end();
-
-	for (env_map::iterator it3 = my_env.begin(); it3 != ite3; it3++)
+	env = new char *[map.size() + 1];
+	env_map::const_iterator ite = map.end();
+	for (env_map::const_iterator it = map.begin(); it != ite; it++)
 	{
-		tmp_str = it3->first + "=" + it3->second;
-		ret[j] = string_copy(tmp_str);
+		line = it->first + "=" + it->second;
+		env[j] = line.string_copy();
 		j++;
 	}
-	ret[j] = 0;
-	return (ret);
+	env[j] = 0;
+	return (env);
+}
+
+void
+CGI::join_env(env_map & my_env)
+{
+	env_map::iterator ite = _cgi_env.end();
+
+	for (env_map::iterator it = _cgi_env.begin(); it != ite; it++)
+		my_env[it->first] = it->second;
 }
 
 int
-CGI::start()
+CGI::start(Message & request)
 {
 	int			ret;
-	pid_t		pid = fork();
-	int			pipe_out[2];
-	int			pipe_err[2];
+	pid_t		pid;
+	// int			pipe_out[2];
+	// int			pipe_err[2];
+	char **		env;
 
-	if (pipe(pipe_out) < 0 || pipe(pipe_err) < 0
-	|| dup2(pipe_out[1], 1) < 0 || dup2(pipe_err[1], 2) < 0)
-		throw (std::exception()); // specify
+	env = create_env(request.get_headers());
+	// if (pipe(pipe_out) < 0 || pipe(pipe_err) < 0
+	// || dup2(pipe_out[1], 1) < 0 || dup2(pipe_err[1], 2) < 0)
+		// throw (std::exception()); // specify
+	pid = fork();
 	if (pid < 0)
 		throw (std::exception()); // specify
 	else if (!pid)
 	{
-		if (execle(_exec_name.c_str(), _arg, _env) < 0)
+		if (execle(_exec_name.c_str(), _exec_name.c_str(), NULL, env) < 0)
 			throw (std::exception()); // specify
 		_exit(0);
 	}
 	else
 	{
 		waitpid(pid, &ret, 0);
-		if (ret)
-			throw (std::exception()); // specify
-		close(pipe_out[1]);
-		close(pipe_err[1]);
-		close(pipe_err[0]);
+		// if (ret)
+		// 	throw (std::exception()); // specify
+		// close(pipe_out[1]);
+		// close(pipe_err[1]);
+		// close(pipe_err[0]);
 	}
-	return (pipe_out[0]);
+	str_table_delete(env);
+	// return (pipe_out[0]);
+	return (1);
 }
 
 void

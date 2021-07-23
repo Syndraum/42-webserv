@@ -46,6 +46,10 @@ std::string const &
 Request::get_path() const
 { return (_path); }
 
+URI &
+Request::get_uri()
+{ return (_uri); }
+
 std::string const &
 Request::get_version() const
 { return (_version); }

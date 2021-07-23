@@ -6,7 +6,7 @@
 #    By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/07/23 17:10:48 by cdai             ###   ########.fr        #
+#    Updated: 2021/07/23 17:23:51 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,11 +41,13 @@ SRCS		=	$(addprefix $(PREFIX), \
 								StrategyAccept.cpp \
 								StrategyError.cpp \
 								StrategyIndex.cpp \
+								StrategyCGI.cpp \
 								Message.cpp \
 								HandlerPollFD.cpp \
 								AReaderFileDescriptor.cpp \
 								ReaderSocket.cpp \
 								ReaderFileDescriptor.cpp \
+								Client.cpp \
 								)
 
 OBJS		=	${SRCS:.cpp=.o}
