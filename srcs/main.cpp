@@ -18,7 +18,7 @@
 
 int		main(int argc, char *argv[])
 {
-	std::string path_config_file = "default.conf";
+	std::string path_config_file = "./config/default.conf";
 	
 	// Extension * ext = Extension::get_intance();
 	// std::cout << "TEST : " << ext->get_reader()["html"] << std::endl;
