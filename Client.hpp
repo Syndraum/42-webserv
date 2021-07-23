@@ -8,19 +8,21 @@
 class Client
 {
 	Request			_request;
+	ClientSocket	_socket;
 	Server &		_server;
-	ClientSocket &	_socket;
 
 	Client(void);
 public:
 
-	Client(Server &, ClientSocket &);
+	Client(Server &);
 	Client(Client const & src);
 	virtual ~Client(void);
 	Client &	operator=(Client const &rhs);
 
-	Request &	get_request();
-	Server &	get_server();
+	Request &		get_request();
+	ClientSocket &	get_socket_stuct();
+	int				get_socket();
+	Server &		get_server();
 private:
 
 };

@@ -53,11 +53,11 @@ HandlerRequest::set_client(ClientSocket * client)
 }
 
 void
-HandlerRequest::handle(std::vector<ClientSocket> & map)
+HandlerRequest::handle(std::vector<Client> & map)
 {
-	for (std::vector<ClientSocket>::iterator it = map.begin(); it != map.end(); it++)
+	for (std::vector<Client>::iterator it = map.begin(); it != map.end(); it++)
 	{
-		set_client(it.base())
+		set_client(&it->get_socket_stuct())
 		.set_request(&it->get_request())
 		.set_server(&it->get_server())
 		;

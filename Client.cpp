@@ -1,8 +1,8 @@
 #include "Client.hpp"
 
-Client::Client(Server & server, ClientSocket & socket) : _server(server), _socket(socket) {}
+Client::Client(Server & server) : _server(server) {}
 
-Client::Client(Client const & src) : _server(src._server), _socket(src._socket)
+Client::Client(Client const & src) : _server(src._server)
 {
 	*this = src;
 }
@@ -17,6 +17,7 @@ Client::operator=(Client const & rhs)
 {
 	if (this == &rhs)
 	{
+		_request = rhs._request;
 		_server = rhs._server;
 		_socket = rhs._socket;
 	}
@@ -27,6 +28,18 @@ Request &
 Client::get_request()
 {
 	return (_request);
+}
+
+ClientSocket &
+Client::get_socket_stuct()
+{
+	return (_socket);
+}
+
+int
+Client::get_socket()
+{
+	return (_socket.get_socket());
 }
 
 Server &

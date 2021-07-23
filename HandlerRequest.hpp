@@ -4,7 +4,7 @@
 # include "Request.hpp"
 # include "Server.hpp"
 # include "BuilderRequest.hpp"
-# include "ClientSocket.hpp"
+# include "Client.hpp"
 # include "HandlerResponse.hpp"
 # include "StrategyAccept.hpp"
 # include "StrategyError.hpp"
@@ -30,7 +30,7 @@ public:
 	HandlerRequest &	set_request(Request *);
 	HandlerRequest &	set_server(Server *);
 	HandlerRequest &	set_client(ClientSocket *);
-	void	handle(std::vector<ClientSocket> &);
+	void	handle(std::vector<Client> &);
 	void	parse();
 	void	set_path();
 	bool	is_complete() const;

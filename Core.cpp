@@ -82,7 +82,7 @@ Core::start()
 			_fds[_nb_fds].fd = fd;
 			_fds[_nb_fds].events = POLLOUT;
 			_fds[_nb_fds].revents = 0;
-			_client[i].set_id(_nb_fds);
+			_client[i].get_socket_stuct().set_id(_nb_fds);
 			_nb_fds++;
 		}
 		_nb_active = poll(_fds, _nb_fds, 60000);

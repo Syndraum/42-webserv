@@ -22,20 +22,13 @@
 class ClientSocket : public ASocket
 {
 	private:
-		
-		Request		_request;
-		Server &	_server;
 
-		ClientSocket(void);
 	public:
 
-		ClientSocket(Server &);
+		ClientSocket(void);
 		ClientSocket(ClientSocket const & src);
 		virtual ~ClientSocket(void);
 		ClientSocket &	operator=(ClientSocket const &rhs);
-
-		Request &	get_request();
-		Server &	get_server();
 };
 
 #endif

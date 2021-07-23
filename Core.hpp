@@ -15,7 +15,7 @@
 
 # include "Server.hpp"
 # include <vector>
-# include "ClientSocket.hpp"
+# include "Client.hpp"
 # include <poll.h>
 # include "MethodGet.hpp"
 # include "MethodDelete.hpp"
@@ -28,7 +28,7 @@
 class Core
 {
 	public:
-		typedef std::vector<ClientSocket>	client_vector;
+		typedef std::vector<Client>	client_vector;
 
 	private:
 
