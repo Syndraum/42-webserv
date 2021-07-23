@@ -10,11 +10,12 @@ class Client
 	Request			_request;
 	ClientSocket	_socket;
 	Server &		_server;
+	ServerSocket &	_server_socket;
 
 	Client(void);
 public:
 
-	Client(Server &);
+	Client(Server &, ServerSocket &);
 	Client(Client const & src);
 	virtual ~Client(void);
 	Client &	operator=(Client const &rhs);

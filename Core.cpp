@@ -145,7 +145,7 @@ Core::_accept_connection()
 
 			if (_pfdh.get_pfd()[server_socket.get_id()].revents == _pfdh.get_pfd()[server_socket.get_id()].events)
 			{
-				_client.push_back(Client(server));
+				_client.push_back(Client(server, server_socket));
 				Client & cs = _client.back();
 				if ((new_socket = accept(fd, (struct sockaddr *)&cs.get_socket_stuct().get_address() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
 				{
