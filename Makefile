@@ -78,6 +78,16 @@ SRCS			=	$(SRCS_METHOD) \
 								main.cpp \
 								)
 
+INCLUDE_DIR = ./includes
+
+INCLUDE_FLAG	=	-I$(INCLUDE_DIR)/methods \
+					-I$(INCLUDE_DIR)/utils \
+					-I$(INCLUDE_DIR)/request \
+					-I$(INCLUDE_DIR)/response \
+					-I$(INCLUDE_DIR)/cgi \
+					-I$(INCLUDE_DIR)/core \
+					-I$(INCLUDE_DIR)/reader \
+					-I$(INCLUDE_DIR)/strategy
 
 OBJS		=	${SRCS:.cpp=.o}
 
@@ -85,7 +95,7 @@ DEPS		=	${OBJS:.o=.d}
 
 CXX			=	clang++
 
-CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98 -g -I./includes
+CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98 -g $(INCLUDE_FLAG)
 
 NAME 		=	webserv
 
