@@ -52,10 +52,10 @@ HandlerRequest::set_client(ClientSocket * client)
 	return *this;
 }
 
-void
-HandlerRequest::handle(std::vector<Client> & map)
+HandlerRequest::clients_iterator
+HandlerRequest::handle(clients & vector)
 {
-	for (std::vector<Client>::iterator it = map.begin(); it != map.end(); it++)
+	for (clients_iterator it = vector.begin(); it != vector.end(); it++)
 	{
 		set_client(&it->get_socket_stuct())
 		.set_request(&it->get_request())
@@ -99,10 +99,9 @@ HandlerRequest::handle(std::vector<Client> & map)
 		_handler_response.do_strategy(*_server, *_request);
 		_handler_response.send(it->get_socket());
 		_request->reset();
-		close( it->get_socket() );  
-		map.erase(it);  
-		break;
+		return (it);
 	}
+	return (vector.end());
 }
 
 void 
