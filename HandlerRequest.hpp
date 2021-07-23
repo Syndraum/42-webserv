@@ -13,12 +13,9 @@
 
 class HandlerRequest
 {
-	Request *			_request;
-	Server *			_server;
-	ClientSocket *		_client;
+	Client *			_client;
 	BuilderRequest &	_builder;
 	HandlerResponse		_handler_response;
-
 
 	HandlerRequest(void);
 public:
@@ -30,9 +27,11 @@ public:
 	virtual ~HandlerRequest(void);
 	HandlerRequest &	operator=(HandlerRequest const &rhs);
 
-	HandlerRequest &	set_request(Request *);
-	HandlerRequest &	set_server(Server *);
-	HandlerRequest &	set_client(ClientSocket *);
+	HandlerRequest &	set_client(Client *);
+	Request &			get_request();
+	const Request &		get_request() const;
+	Server &			get_server();
+	ClientSocket &		get_client_socket();
 	clients_iterator	handle(clients &);
 	void				parse();
 	void				set_path();
