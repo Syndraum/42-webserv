@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 11:47:19 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/23 12:30:32 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,6 @@ class AReaderFileDescriptor
 		AReaderFileDescriptor const & operator=(AReaderFileDescriptor const &);
 
 		virtual int	get_next_line(std::string & line) = 0;
-}
+};
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:06:02 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 12:07:44 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/23 12:30:34 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,16 @@
 class ReaderFileDescriptor : public AReaderFileDescriptor
 {
 	private:
+		ReaderFileDescriptor(void);
 
 
 	public:
-		ReaderFileDescriptor(void);
+		ReaderFileDescriptor(int);
 		ReaderFileDescriptor(ReaderFileDescriptor const &);
 		virtual ~ReaderFileDescriptor(void);
 		ReaderFileDescriptor const & operator=(ReaderFileDescriptor const &);
 
 		virtual int get_next_line(std::string & line);
-}
+};
 
 #endif

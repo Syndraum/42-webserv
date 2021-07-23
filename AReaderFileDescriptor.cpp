@@ -6,11 +6,14 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 11:40:02 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/23 12:43:35 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AReaderFileDescriptor.hpp"
+
+AReaderFileDescriptor::AReaderFileDescriptor(void)
+{}
 
 AReaderFileDescriptor::AReaderFileDescriptor(int fd):
 _fd(fd)

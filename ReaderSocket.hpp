@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:15:52 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 12:06:04 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/23 12:31:53 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,6 @@ class ReaderSocket : public AReaderFileDescriptor
 		virtual int get_next_line(std::string & line);
 		void	read_body(std::string & line, int content_length);
 		void	read_until_end(void);
-}
+};
 
 #endif
