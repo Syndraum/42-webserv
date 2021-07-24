@@ -112,7 +112,7 @@ HandlerRequest::parse()
 	std::string		line;
 	int				gnl_ret = 1;
 	
-	_builder.set_request(&get_request());
+	_builder.set_message(&get_request());
 	while (gnl_ret && (gnl_ret = get_client_socket().get_next_line(line)))
 	{
 		if (gnl_ret == -1)

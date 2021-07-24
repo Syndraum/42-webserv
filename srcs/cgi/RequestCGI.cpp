@@ -28,5 +28,7 @@ RequestCGI::operator=(RequestCGI const &rhs)
 
 void RequestCGI::send(const std::string & script_path)
 {
-	_cgi.start(*this, script_path);
+	int fd = 0;
+
+	fd = _cgi.start(*this, script_path);
 }

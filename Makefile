@@ -51,6 +51,7 @@ SRCS_CORE		= $(addprefix $(PREFIX)core/, \
 								Client.cpp \
 								Message.cpp \
 								HandlerPollFD.cpp \
+								BuilderMessage.cpp \
 								)
 
 SRCS_READER		= $(addprefix $(PREFIX)reader/, \

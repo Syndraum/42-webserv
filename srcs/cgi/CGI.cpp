@@ -104,36 +104,37 @@ CGI::start(Message & request, const std::string & script_path)
 {
 	int			ret;
 	pid_t		pid;
-	// int			pipe_out[2];
-	// int			pipe_err[2];
+	int			pipe_out[2];
+	int			pipe_err[2];
 	char **		env;
 
 	env = create_env(request.get_headers());
-	// if (pipe(pipe_out) < 0 || pipe(pipe_err) < 0
-	// || dup2(pipe_out[1], 1) < 0 || dup2(pipe_err[1], 2) < 0)
-		// throw (std::exception()); // specify
+	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1)
+		throw (std::exception()); // specify
 	pid = fork();
 	if (pid < 0)
 		throw (std::exception()); // specify
 	else if (!pid)
 	{
-		std::cout << "s_P : " << script_path.c_str() << std::endl;
+		if (dup2(pipe_out[1], 1) == -1 || dup2(pipe_err[1], 2) == -1)
+			throw (std::exception()); // specify
+		close(pipe_out[0]);
+		close(pipe_err[0]);
 		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, env) < 0)
 			throw (std::exception()); // specify
 		_exit(0);
 	}
 	else
 	{
+		close(pipe_out[1]);
+		close(pipe_err[1]);
 		waitpid(pid, &ret, 0);
 		// if (ret)
 		// 	throw (std::exception()); // specify
-		// close(pipe_out[1]);
-		// close(pipe_err[1]);
-		// close(pipe_err[0]);
+		close(pipe_err[0]);
 	}
 	str_table_delete(env);
-	// return (pipe_out[0]);
-	return (1);
+	return (pipe_out[0]);
 }
 
 void
