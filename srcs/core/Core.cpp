@@ -40,6 +40,42 @@ Core::operator=(Core const & rhs)
 }
 
 void
+Core::init(int argc, char * argv[])
+{
+	std::string path_config_file = "./config/default.conf";
+
+	if (argc > 2)
+	{
+		std::cerr << "Error: too many arguments" << std::endl;
+		exit(2);
+	}
+	if (argc == 2)
+		path_config_file = argv[1];
+	
+	Reader reader(path_config_file);
+	try
+	{
+		reader.open();
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << "Error: Configuration file: " << path_config_file << " not found" << std::endl;
+		exit(1);
+	}
+	try
+	{
+		BuilderCore builder_core(reader.get_ifs(), this);
+		builder_core.parse_mime_type();
+		builder_core.print_debug();
+	}
+	catch(const std::exception& e)
+	{
+		// std::cerr << e.what() << '\n';
+		exit(3);
+	}
+}
+
+void
 Core::start()
 {
 	HandlerRequest hr(_br);

@@ -23,7 +23,9 @@
 # include "Extension.hpp"
 # include "HandlerRequest.hpp"
 # include "HandlerPollFD.hpp"
+# include "BuilderCore.hpp"
 
+class BuilderCore;
 
 class Core
 {
@@ -52,6 +54,7 @@ class Core
 		virtual ~Core(void);
 		Core &								operator=(Core const &rhs);
 
+		void								init(int argc, char * argv[]);
 		void								start();
 		void								add_server(Server & server);
 		Server &							add_server();
