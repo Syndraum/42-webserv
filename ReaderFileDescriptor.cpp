@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 12:06:55 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 17:12:18 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/24 18:31:38 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ ReaderFileDescriptor const & ReaderFileDescriptor::operator=(ReaderFileDescripto
 {
 	if (&rhs != this)
 	{
-		_fd = rhs._fd;
-		for (int i = 0; i < BUFFER_SIZE; i++)
-			_buffer[i] = rhs._buffer[i];
+		AReaderFileDescriptor::operator=(rhs);
 	}
 	return (*this);
 }
