@@ -42,7 +42,7 @@ Core::operator=(Core const & rhs)
 void
 Core::init(int argc, char * argv[])
 {
-	std::string path_config_file = "./config/default.conf";
+	std::string path_config_file = Info::path_config_file;
 
 	if (argc > 2)
 	{
