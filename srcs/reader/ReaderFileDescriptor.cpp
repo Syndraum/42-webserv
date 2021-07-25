@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 12:06:55 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/24 18:31:38 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/25 15:11:38 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ ReaderFileDescriptor const & ReaderFileDescriptor::operator=(ReaderFileDescripto
 int
 ReaderFileDescriptor::_read(void)
 {
+	std::cout << "readFD" << std::endl;
 	return (read(_fd, _buffer, BUFFER_SIZE - 1));
 }

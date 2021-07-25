@@ -6,7 +6,7 @@
 #    By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/07/24 18:56:06 by cdai             ###   ########.fr        #
+#    Updated: 2021/07/25 17:58:24 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ SRCS_RESPONSE	= $(addprefix $(PREFIX)response/, \
 SRCS_CGI		= $(addprefix $(PREFIX)cgi/, \
 								CGI.cpp \
 								RequestCGI.cpp \
+								HandlerResponseCGI.cpp \
 								)
 
 SRCS_CORE		= $(addprefix $(PREFIX)core/, \
@@ -129,7 +130,7 @@ fclean:
 re:			fclean all
 
 test:		all
-			$(PREFIX)$(NAME)
+			./$(NAME)
 
 valgrind:	all
 			valgrind $(PREFIX)$(NAME)

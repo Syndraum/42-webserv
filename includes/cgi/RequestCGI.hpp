@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 14:58:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/13 16:45:16 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/25 15:03:16 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class RequestCGI : public Message
 		RequestCGI const &					operator=(RequestCGI const &rhs);
 
 
-		void								send(const std::string &);
+		int									send(const std::string &);
 };
 
 #endif

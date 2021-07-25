@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/25 14:43:46 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/25 15:14:05 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,6 @@ CGI::start(Message & request, const std::string & script_path)
 
 	std::cout << "s_P : " << script_path.c_str() << std::endl;
 	env = create_env(request.get_headers());
-	// if (pipe(pipe_out) < 0 || pipe(pipe_err) < 0
-	// || dup2(pipe_out[1], 1) < 0 || dup2(pipe_err[1], 2) < 0)
 	if (pipe(pipe_out))
 		throw (std::exception()); // specify
 	pid = fork();
@@ -167,23 +165,13 @@ CGI::start(Message & request, const std::string & script_path)
 	{
 		close(pipe_out[1]);
 		waitpid(pid, &ret, 0);
-
-		char buffer[32];
-		int read_ret = read(pipe_out[0], buffer, 31);
-		buffer[read_ret] = 0;
-
-
-		std::cout << "buffer : " << buffer << std::endl;
-
-//		close(pipe_out[1]);
-		// if (ret)
-		// 	throw (std::exception()); // specify
-		// close(pipe_out[1]);
-		// close(pipe_err[1]);
-		// close(pipe_err[0]);
+//		char buffer[32];
+//		int read_ret = read(pipe_out[0], buffer, 31);
+//		buffer[read_ret] = 0;
+//		std::cout << "buffer : " << buffer << std::endl;
 	}
 	str_table_delete(env);
-//	return (pipe_out[0]);
+	return (pipe_out[0]);
 	return (1);
 }
 

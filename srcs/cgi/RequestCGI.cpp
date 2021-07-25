@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 15:14:02 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/14 15:37:24 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/25 17:59:20 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ RequestCGI::operator=(RequestCGI const &rhs)
 	return (*this);
 }
 
-void RequestCGI::send(const std::string & script_path)
+int RequestCGI::send(const std::string & script_path)
 {
-	_cgi.start(*this, script_path);
+	return (_cgi.start(*this, script_path));
 }
