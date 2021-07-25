@@ -6,44 +6,92 @@
 #    By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/07/20 16:07:09 by cdai             ###   ########.fr        #
+#    Updated: 2021/07/24 18:56:06 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-PREFIX		=	./
+PREFIX		=	./srcs/
 
-SRCS		=	$(addprefix $(PREFIX), \
-								main.cpp \
+SRCS_METHOD		= $(addprefix $(PREFIX)methods/, \
+								AMethod.cpp \
+								MethodDelete.cpp \
+								MethodGet.cpp \
+								MethodPost.cpp \
+								MethodLibrary.cpp \
+								)
+
+SRCS_UTILS		= $(addprefix $(PREFIX)utils/, \
+								Info.cpp \
+								StringPP.cpp \
+								)
+
+SRCS_REQUEST	= $(addprefix $(PREFIX)request/, \
+								Request.cpp \
+								BuilderRequest.cpp \
+								HandlerRequest.cpp \
+								URI.cpp \
+								)
+
+SRCS_RESPONSE	= $(addprefix $(PREFIX)response/, \
+								Response.cpp \
+								HandlerResponse.cpp \
+								)
+
+SRCS_CGI		= $(addprefix $(PREFIX)cgi/, \
+								CGI.cpp \
+								RequestCGI.cpp \
+								)
+
+SRCS_CORE		= $(addprefix $(PREFIX)core/, \
+								Core.cpp \
+								BuilderCore.cpp \
 								Server.cpp \
 								ASocket.cpp \
 								ServerSocket.cpp \
 								ClientSocket.cpp \
-								Core.cpp \
-								CGI.cpp \
-								Response.cpp \
-								Reader.cpp \
-								Request.cpp \
-								BuilderRequest.cpp \
-								BuilderCore.cpp \
-								AMethod.cpp \
-								MethodGet.cpp \
-								MethodDelete.cpp \
-								MethodPost.cpp \
-								MethodLibrary.cpp \
-								Extension.cpp \
-								CsvReader.cpp \
-								RequestCGI.cpp \
-								StringPP.cpp \
-								URI.cpp \
-								Info.cpp \
-								HandlerRequest.cpp \
-								HandlerResponse.cpp \
-								StrategyAccept.cpp \
-								StrategyError.cpp \
-								StrategyIndex.cpp \
+								Client.cpp \
 								Message.cpp \
 								HandlerPollFD.cpp \
 								)
+
+SRCS_READER		= $(addprefix $(PREFIX)reader/, \
+								Reader.cpp \
+								Extension.cpp \
+								CsvReader.cpp \
+								AReaderFileDescriptor.cpp \
+								ReaderFileDescriptor.cpp \
+								ReaderSocket.cpp \
+								)
+
+SRCS_STRATEGY	= $(addprefix $(PREFIX)strategy/, \
+								StrategyAccept.cpp \
+								StrategyError.cpp \
+								StrategyIndex.cpp \
+								StrategyCGI.cpp \
+								)
+
+SRCS			=	$(SRCS_METHOD) \
+					$(SRCS_UTILS) \
+					$(SRCS_REQUEST) \
+					$(SRCS_RESPONSE) \
+					$(SRCS_CGI) \
+					$(SRCS_CORE) \
+					$(SRCS_READER) \
+					$(SRCS_STRATEGY) \
+					$(addprefix $(PREFIX), \
+								main.cpp \
+								)
+
+INCLUDE_DIR = ./includes
+
+INCLUDE_FLAG	=	-I$(INCLUDE_DIR)/methods \
+					-I$(INCLUDE_DIR)/utils \
+					-I$(INCLUDE_DIR)/request \
+					-I$(INCLUDE_DIR)/response \
+					-I$(INCLUDE_DIR)/cgi \
+					-I$(INCLUDE_DIR)/core \
+					-I$(INCLUDE_DIR)/reader \
+					-I$(INCLUDE_DIR)/strategy
 
 OBJS		=	${SRCS:.cpp=.o}
 
@@ -51,7 +99,7 @@ DEPS		=	${OBJS:.o=.d}
 
 CXX			=	clang++
 
-CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98 -g
+CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98 -g $(INCLUDE_FLAG)
 
 NAME 		=	webserv
 
