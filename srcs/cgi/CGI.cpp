@@ -55,12 +55,14 @@ CGI::add_CGI_param(std::string key, std::string value)
 }
 
 size_t
-CGI::str_table_len(const char ** table) const
+CGI::str_table_len(char ** table) const
 {
 	size_t i = 0;
 	
-	while(table[i])
+	while(table[i]){
+		// std::cout << table[i] << std::endl;
 		i++;
+	}
 	return (i);
 }
 
@@ -90,40 +92,30 @@ CGI::string_copy(std::string str) const
 	return (ret);
 }
 
-char**
-CGI::create_env(void)
-{
-	char** result;
-	int i = 0;
-
-
-	result = new char*[_cgi_env.size() + 1];
-	for (env_map::iterator it = _cgi_env.begin(); it != _cgi_env.end(); it++)
-	{
-		std::string temp = it->first + "=" + it->second;
-		result[i] = strdup(temp.c_str());
-		i++;
-	}
-	result[i] = NULL;
-	return (result);
-}
-
 char **
 CGI::create_env(const env_map & map)
 {
-	int				j = 0;
-	StringPP		line;
-	char **			env;
+	char **		cursor	= Info::env;
+	char **		env;
+	StringPP	line;
+	int			i = 0;
 
-	env = new char *[map.size() + 1];
+	env = new char *[map.size() + str_table_len(Info::env) + 1];
+	while (*cursor != 0)
+	{
+		// std::cout << temp << std::endl;
+		env[i] = strdup(*cursor);
+		i++;
+		cursor++;
+	}
 	env_map::const_iterator ite = map.end();
 	for (env_map::const_iterator it = map.begin(); it != ite; it++)
 	{
 		line = it->first + "=" + it->second;
-		env[j] = line.string_copy();
-		j++;
+		env[i] = line.string_copy();
+		i++;
 	}
-	env[j] = 0;
+	env[i] = 0;
 	return (env);
 }
 
@@ -147,7 +139,7 @@ CGI::start(Message & request, const std::string & script_path)
 
 	std::cout << "s_P : " << script_path.c_str() << std::endl;
 	env = create_env(request.get_headers());
-	// print_env(Info::env);
+	// print_env(env);
 	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1)
 		throw (std::exception()); // specify
 	pid = fork();
@@ -169,6 +161,7 @@ CGI::start(Message & request, const std::string & script_path)
 		close(pipe_out[1]);
 		close(pipe_err[1]);
 		waitpid(pid, &ret, 0);
+		std::cout << "WAKE UP PHP" << std::endl;
 		// if (ret)
 		// 	throw (std::exception()); // specify
 		close(pipe_err[0]);
@@ -198,10 +191,10 @@ CGI::print_env(char ** env) const
 {
 	char ** cursor = env;
 
-	while (cursor)
+	std::cout << "len: " << str_table_len(env) << std::endl;
+	while (*cursor != 0)
 	{
 		std::cout << *cursor << std::endl;
 		cursor++;
 	}
-	
 }
