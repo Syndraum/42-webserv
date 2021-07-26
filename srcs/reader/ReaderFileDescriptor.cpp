@@ -36,6 +36,6 @@ ReaderFileDescriptor const & ReaderFileDescriptor::operator=(ReaderFileDescripto
 int
 ReaderFileDescriptor::_read(void)
 {
-	std::cout << "readFD" << std::endl;
+	// std::cout << "readFD" << std::endl;
 	return (read(_fd, _buffer, BUFFER_SIZE - 1));
 }

@@ -57,6 +57,7 @@ StrategyCGI::create(Client & client)
 	_handler.set_response(response);
 
 	_handler.parse();
+	response->debug();
 	return (response);
 }
 

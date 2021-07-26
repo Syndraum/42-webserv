@@ -56,13 +56,13 @@ HandlerResponseCGI::parse()
 		_parse_headers(line);
 		if (_response->get_header_lock())
 		{
-			if (_response->get_header("Content-Length") == "")
+			if (!_response->has_header("Content-Length"))
 			{
 				std::cout << "No Content-Length" << std::endl;
 				_reader.read_until_end(line);
 				//std::cout << "_buffer: " << _buffer << std::endl;
 				_response->set_body(line);
-				_response->add_header("Content-Length", line.size());
+				// _response->add_header("Content-Length", line.size());
 			}
 			else
 			{
@@ -70,7 +70,7 @@ HandlerResponseCGI::parse()
 
 				_reader.read_body(line, std::atoi(_response->get_header("Content-Length").c_str()));
 				_response->set_body(line);
-				_response->add_header("Content-Length", line.size());
+				// _response->add_header("Content-Length", line.size());
 			}
 			_response->set_body_lock(true);
 //			get_client_socket().get_reader()._reset_buffer();

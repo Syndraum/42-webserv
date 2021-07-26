@@ -70,7 +70,7 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 	{
 		temp += _buffer;
 		found = temp.find("\r\n");
-		std::cout << "temp: " << temp << std::endl;
+		// std::cout << "temp: " << temp << std::endl;
 //		std::cout << "found: " << found << std::endl;
 
 		if (ret == 0) //cdai, if the client close his socket, it send EOF
