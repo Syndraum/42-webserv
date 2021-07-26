@@ -12,10 +12,10 @@
 
 #include "Core.hpp"
 
-int		main(int argc, char *argv[])
+int		main(int argc, char *argv[], char *env[])
 {
 	Core core = Core();
 
-	core.init(argc, argv);
+	core.init(argc, argv, env);
 	core.start();
 }

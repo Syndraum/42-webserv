@@ -41,7 +41,7 @@ Core::operator=(Core const & rhs)
 }
 
 void
-Core::init(int argc, char * argv[])
+Core::init(int argc, char * argv[], char *env[])
 {
 	std::string path_config_file = Info::path_config_file;
 
@@ -74,6 +74,7 @@ Core::init(int argc, char * argv[])
 		// std::cerr << e.what() << '\n';
 		exit(3);
 	}
+	Info::env = env;
 }
 
 void

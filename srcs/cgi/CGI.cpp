@@ -147,6 +147,7 @@ CGI::start(Message & request, const std::string & script_path)
 
 	std::cout << "s_P : " << script_path.c_str() << std::endl;
 	env = create_env(request.get_headers());
+	// print_env(Info::env);
 	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1)
 		throw (std::exception()); // specify
 	pid = fork();
@@ -158,7 +159,7 @@ CGI::start(Message & request, const std::string & script_path)
 			throw (std::exception()); // specify
 		close(pipe_out[0]);
 		close(pipe_err[0]);
-		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, env) < 0)
+		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, Info::env) < 0)
 			throw (std::exception()); // specify
 		close(pipe_out[0]);
 		_exit(0);
@@ -190,4 +191,17 @@ CGI::print() const
 	{
 		std::cout << it->first << " = " << it->second << std::endl;
 	}
+}
+
+void
+CGI::print_env(char ** env) const
+{
+	char ** cursor = env;
+
+	while (cursor)
+	{
+		std::cout << *cursor << std::endl;
+		cursor++;
+	}
+	
 }

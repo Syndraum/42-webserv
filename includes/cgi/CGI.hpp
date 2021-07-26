@@ -22,6 +22,7 @@
 # include "Message.hpp"
 # include "StringPP.hpp"
 # include <cstring>
+# include "Info.hpp"
 
 class CGI
 {
@@ -54,6 +55,7 @@ class CGI
 
 		int											start(Message & request, const std::string & path);
 		void										print() const;
+		void										print_env(char **) const;
 		class MyError: public std::exception
 		{
 			virtual const char*	what() const throw(){
