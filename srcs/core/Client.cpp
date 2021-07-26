@@ -20,7 +20,7 @@ Client::~Client(void)
 Client &
 Client::operator=(Client const & rhs)
 {
-	if (this == &rhs)
+	if (this != &rhs)
 	{
 		_request = rhs._request;
 		_server = rhs._server;
@@ -37,7 +37,7 @@ Client::get_request()
 }
 
 ClientSocket &
-Client::get_socket_stuct()
+Client::get_socket_struct()
 {
 	return (_socket);
 }

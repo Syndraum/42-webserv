@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:49:36 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/19 16:06:07 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/24 18:50:20 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,33 +15,35 @@
 
 # include <vector>
 # include "Server.hpp"
+# include "Client.hpp"
 # include "ServerSocket.hpp"
-# include "poll.h"
+# include "ClientSocket.hpp"
+# include <poll.h>
 
 class HandlerPollFD
 {
 	public:
 		typedef std::vector<struct pollfd>	pollfd_vector;
 	private:
+		int				_SIZE_SOCK_ADDR;
 		pollfd_vector	_pfd;
 
-		
+		int				_get_client_socket(std::vector<Client> &, int);
+		void			_add_clients_pfd(int fd, short event);
 	public:
 		HandlerPollFD(void);
 		HandlerPollFD(HandlerPollFD &);
 		virtual ~HandlerPollFD(void);
-		HandlerPollFD & operator=(HandlerPollFD &);
+		HandlerPollFD &			operator=(HandlerPollFD &);
 
 		pollfd_vector &			get_pfd(void);
 		void					set_pfd(pollfd_vector &);
 
-
 		struct pollfd			pollfd_init(int fd, short event);
-		void					add_clients_pfd(int fd, short event);
 		void					init(std::vector<Server> & servers);
-
-
-		void					erase(int fd);
+		int						watch(void);
+		void					accept_connection(std::vector<Server> & servers, std::vector<Client> & clients);
+		void					erase(void);
 
 		
 

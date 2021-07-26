@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/09 14:59:23 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/25 15:14:05 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ CGI::operator=(CGI const &rhs)
 		_cgi_env = rhs._cgi_env;
 	}
 	return (*this);
+}
+
+std::string &
+CGI::get_exec_name(void)
+{
+	return (_exec_name);
 }
 
 void
@@ -69,6 +75,37 @@ CGI::str_table_delete(char ** table) const
 		i++;
 	}
 	delete table;
+}
+
+char *
+CGI::string_copy(std::string str) const
+{
+	size_t i = -1;
+
+	char * ret = new char[str.length() + 1];
+
+	while(++i < str.length())
+		ret[i] = str[i];
+	ret[i] = 0;
+	return (ret);
+}
+
+char**
+CGI::create_env(void)
+{
+	char** result;
+	int i = 0;
+
+
+	result = new char*[_cgi_env.size() + 1];
+	for (env_map::iterator it = _cgi_env.begin(); it != _cgi_env.end(); it++)
+	{
+		std::string temp = it->first + "=" + it->second;
+		result[i] = strdup(temp.c_str());
+		i++;
+	}
+	result[i] = NULL;
+	return (result);
 }
 
 char **
@@ -108,6 +145,7 @@ CGI::start(Message & request, const std::string & script_path)
 	int			pipe_err[2];
 	char **		env;
 
+	std::cout << "s_P : " << script_path.c_str() << std::endl;
 	env = create_env(request.get_headers());
 	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1)
 		throw (std::exception()); // specify
@@ -122,6 +160,7 @@ CGI::start(Message & request, const std::string & script_path)
 		close(pipe_err[0]);
 		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, env) < 0)
 			throw (std::exception()); // specify
+		close(pipe_out[0]);
 		_exit(0);
 	}
 	else
@@ -140,10 +179,15 @@ CGI::start(Message & request, const std::string & script_path)
 void
 CGI::print() const
 {
-	std::cerr << "exec name : " << _exec_name << std::endl;
-	std::cerr << "CGI params : " << std::endl;
+	std::cout << "exec name : " << _exec_name << std::endl;
+//	std::cout << "_arg : " << _arg << std::endl;
+
+//	int i = -1;
+//	while (_env[++i])
+//		std::cerr << "_envi[i]: " << _env[i] << std::endl;
+	std::cout << "CGI params : " << std::endl;
 	for (env_map::const_iterator it = _cgi_env.begin(); it != _cgi_env.end(); it++)
 	{
-		std::cerr << it->first << " = " << it->second << std::endl;
+		std::cout << it->first << " = " << it->second << std::endl;
 	}
 }

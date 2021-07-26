@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 16:13:49 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/09 14:58:34 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/25 14:26:53 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ class CGI
 		void										join_env(env_map &);
 		size_t										str_table_len(const char ** table) const;
 		void										str_table_delete(char ** table) const;
+		char *										string_copy(std::string str) const;
+		char**										create_env(void);
 
 	public:
 
@@ -46,6 +48,7 @@ class CGI
 		CGI &										operator=(CGI const &rhs);
 		virtual ~CGI(void);
 		
+		std::string &								get_exec_name(void);
 		void										set_exec_name(std::string const & name);
 		void										add_CGI_param(std::string key, std::string value);
 

@@ -54,7 +54,7 @@ HandlerRequest::get_server()
 ClientSocket &
 HandlerRequest::get_client_socket()
 {
-	return (_client->get_socket_stuct());
+	return (_client->get_socket_struct());
 }
 
 HandlerRequest::clients_iterator
@@ -113,7 +113,7 @@ HandlerRequest::parse()
 	int				gnl_ret = 1;
 	
 	_builder.set_message(&get_request());
-	while (gnl_ret && (gnl_ret = get_client_socket().get_next_line(line)))
+	while (gnl_ret && (gnl_ret = get_client_socket().get_reader().get_next_line(line)))
 	{
 		if (gnl_ret == -1)
 			return ;
@@ -122,7 +122,20 @@ HandlerRequest::parse()
 		_builder.parse_request(line);
 		if (get_request().get_header_lock())
 		{
-			get_client_socket().reset_buffer();
+			if (get_request().get_header("Content-Length") == "")
+			{
+				std::cout << "No Content-Length" << std::endl;
+				get_client_socket().get_reader().read_until_end(line);
+				//std::cout << "_buffer: " << _buffer << std::endl;
+			}
+			else
+			{
+				std::cout << "Content-Length : " << get_request().get_header("Content-Length") << std::endl;
+
+				get_client_socket().get_reader().read_body(line, std::atoi(get_request().get_header("Content-Length").c_str()));
+			}
+			get_request().set_body_lock(true);
+			get_client_socket().get_reader()._reset_buffer();
 			gnl_ret = 0;
 		}
 	}

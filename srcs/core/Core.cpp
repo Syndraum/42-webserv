@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/19 17:34:48 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/07/24 18:38:36 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ _worker(3)
 	_methods
 		.add_method(new MethodGet())
 		.add_method(new MethodDelete())
+		.add_method(new MethodPost())
 		;
 	_br.set_library(&_methods);
 }
@@ -78,7 +79,7 @@ Core::init(int argc, char * argv[])
 void
 Core::start()
 {
-	HandlerRequest hr(_br);
+	HandlerRequest		hr(_br);
 	std::vector<int>	active_socket;
 	try{
 
@@ -98,8 +99,10 @@ print();
 	_pfdh.init(_servers);
 	while (true)
 	{
-		poll(&(_pfdh.get_pfd().front()), _pfdh.get_pfd().size(), 60000);
-		_accept_connection();
+//		poll(&(_pfdh.get_pfd().front()), _pfdh.get_pfd().size(), 60000);
+		_pfdh.watch();
+		_pfdh.accept_connection(_servers, _client);
+//		_accept_connection();
 
 		client_vector::iterator client = hr.handle(_client);
 		if (client != _client.end())
@@ -159,45 +162,7 @@ Core::print() const
 void
 Core::remove_client(client_vector::iterator it)
 {
-	_pfdh.erase(it->get_socket());
+	_pfdh.erase();
 	close(it->get_socket());
 	_client.erase(it);
 }
-
-void
-Core::_accept_connection()
-{
-	int new_socket = -1;
-	int one = 1;
-
-	for (size_t i = 0; i < _servers.size(); i++)
-	{
-		Server & server = _servers[i];
-		for (Server::port_map::iterator it = server.get_server_socket().begin(); 
-				it != server.get_server_socket().end(); it++)
-		{
-			ServerSocket & server_socket = it->second;
-			int fd = server_socket.get_socket();
-
-			if (_pfdh.get_pfd()[server_socket.get_id()].revents == _pfdh.get_pfd()[server_socket.get_id()].events)
-			{
-				_client.push_back(Client(server, server_socket));
-				Client & cs = _client.back();
-				if ((new_socket = accept(fd, (struct sockaddr *)&cs.get_socket_stuct().get_address() , reinterpret_cast<socklen_t*>(&_SIZE_SOCK_ADDR))) < 0)
-				{
-					perror("accept failed");
-					exit(EXIT_FAILURE);
-				}
-				setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
-				std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
-				cs.get_socket_stuct().set_socket(new_socket);
-				std::cout << "Adding to list of sockets as " << _client.size() << std::endl;
-
-
-				_pfdh.add_clients_pfd(new_socket, POLLOUT);
-			}
-		}
-		
-	}
-}
-

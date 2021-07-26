@@ -36,9 +36,27 @@ StrategyCGI::create(Client & client)
 
 	this->_prepare(client);
 	_request.debug();
-	_request.send(client.get_full_path());
+	int std_out = _request.send(client.get_full_path());
+
+
+//	ReaderFileDescriptor reader(std_out);
+//	std::string line;
+//	reader.get_next_line(line);
+//	std::cout << "line : " << line << std::endl;
+//	reader.get_next_line(line);
+//	std::cout << "line : " << line << std::endl;
+//	reader.get_next_line(line);
+//	std::cout << "line : " << line << std::endl;
+
+
 	response = new Response();
-	response->set_error(418);
+//	response->set_error(418);
+	response->set_code(200);
+
+	HandlerResponseCGI _handler(std_out);
+	_handler.set_response(response);
+
+	_handler.parse();
 	return (response);
 }
 

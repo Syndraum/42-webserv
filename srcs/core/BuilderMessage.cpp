@@ -26,7 +26,7 @@ BuilderMessage::_parse_headers(std::string line)
 
 	if (line.length() == 1 && line[0] == '\r'){
 		_message->set_header_lock(true);
-		_message->set_body_lock(true); // TEMPORARY
+		// _message->set_body_lock(true); // TEMPORARY
 	}
 	else if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
 		throw BadRequest();

@@ -1,36 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RequestCGI.hpp                                     :+:      :+:    :+:   */
+/*   MethodPost.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/13 14:58:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/25 15:03:16 by cdai             ###   ########.fr       */
+/*   Created: 2021/07/20 16:03:22 by cdai              #+#    #+#             */
+/*   Updated: 2021/07/20 16:08:09 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REQUESTCGI_HPP
-# define REQUESTCGI_HPP
+#ifndef METHODPOST
+# define METHODPOST
 
-# include <string>
-# include <map>
-# include "Message.hpp"
-# include "CGI.hpp"
+#include "AMethod.hpp"
 
-class RequestCGI : public Message
+class MethodPost : public AMethod
 {
 	private:
-		CGI &								_cgi;
-		RequestCGI(void);
+
+		MethodPost &		operator=(MethodPost const &rhs);
+		MethodPost(MethodPost const & src);
 
 	public:
-		RequestCGI(CGI & cgi);
-		~RequestCGI(void);
-		RequestCGI const &					operator=(RequestCGI const &rhs);
 
+		MethodPost(void);
+		virtual ~MethodPost(void);
 
-		int									send(const std::string &);
+		virtual void		action(const Request &, Response &);
 };
 
 #endif
