@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/19 17:32:46 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/07/20 16:07:45 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@
 # include <poll.h>
 # include "MethodGet.hpp"
 # include "MethodDelete.hpp"
+# include "MethodPost.hpp"
 # include "MethodLibrary.hpp"
 # include "Extension.hpp"
 # include "HandlerRequest.hpp"
 # include "HandlerPollFD.hpp"
+# include "BuilderCore.hpp"
 
+class BuilderCore;
 
 class Core
 {
@@ -42,7 +45,6 @@ class Core
 		BuilderRequest						_br;
 		Extension *							_extension;
 
-		void								_accept_connection();
 		void								_detect_reset_server_poll_fd();
 
 	public:
@@ -52,6 +54,7 @@ class Core
 		virtual ~Core(void);
 		Core &								operator=(Core const &rhs);
 
+		void								init(int argc, char * argv[], char *env[]);
 		void								start();
 		void								add_server(Server & server);
 		Server &							add_server();

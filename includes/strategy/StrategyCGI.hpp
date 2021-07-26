@@ -5,6 +5,8 @@
 # include "RequestCGI.hpp"
 # include "CGI.hpp"
 # include "Info.hpp"
+# include "ReaderFileDescriptor.hpp"
+# include "HandlerResponseCGI.hpp"
 
 class StrategyCGI : public IResponseStrategy
 {

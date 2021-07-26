@@ -21,7 +21,7 @@ public:
 	Client &	operator=(Client const &rhs);
 
 	Request &		get_request();
-	ClientSocket &	get_socket_stuct();
+	ClientSocket &	get_socket_struct();
 	int				get_socket();
 	Server &		get_server();
 	ServerSocket &	get_server_socket();

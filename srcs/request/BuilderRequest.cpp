@@ -6,7 +6,7 @@
 /*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:15 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/17 22:11:45 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/07/20 17:08:01 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ _methods(methods)
 
 BuilderRequest::~BuilderRequest(void)
 {
-	delete _request;
+
 }
 
 int
@@ -77,41 +77,42 @@ BuilderRequest::_first_line(std::string line)
 		throw BadRequest();
 }
 
-void
-BuilderRequest::_parse_headers(std::string line)
-{
-	size_t		len = line.find(": ");
+// void
+// BuilderRequest::_parse_headers(std::string line)
+// {
+// 	size_t		len = line.find(": ");
 
-	if (line.length() == 1 && line[0] == '\r'){
-		_request->set_header_lock(true);
-		_request->set_body_lock(true); // TEMPORARY
-	}
-	else if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
-		throw BadRequest();
-	_request->add_header(line.substr(0, len), line.substr(len + 2, line.length() - len - 3));
-}
+// 	if (line.length() == 1 && line[0] == '\r'){
+// 		_request->set_header_lock(true);
+// 		// _request->set_body_lock(true); // TEMPORARY
+// 	}
+// 	else if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
+// 		throw BadRequest();
+// 	_request->add_header(line.substr(0, len), line.substr(len + 2, line.length() - len - 3));
+// }
 
 void
 BuilderRequest::parse_request(std::string & line)
 {
 	if (is_first_line())
 		_first_line(line);
-	else if (!(_request->get_header_lock()))
+	else if (!(_message->get_header_lock()))
 		_parse_headers(line);
 }
 
-Request *
-BuilderRequest::get_request() const
-{
-	return _request;
-}
+// Request *
+// BuilderRequest::get_request() const
+// {
+// 	return _request;
+// }
 
 void
-BuilderRequest::set_request(Request * request)
+BuilderRequest::set_message(Message * message)
 {
-	if (!request)
+	BuilderMessage::set_message(message);
+	_request = reinterpret_cast<Request *>(message);
+	if (!_request)
 		throw std::exception();
-	_request = request;
 }
 
 void

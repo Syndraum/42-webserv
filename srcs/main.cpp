@@ -11,48 +11,11 @@
 /* ************************************************************************** */
 
 #include "Core.hpp"
-#include "BuilderCore.hpp"
-#include "Reader.hpp"
-// #include "CsvReader.hpp"
-// #include "Extension.hpp"
 
-int		main(int argc, char *argv[])
+int		main(int argc, char *argv[], char *env[])
 {
-	std::string path_config_file = "./config/default.conf";
-	
-	// Extension * ext = Extension::get_intance();
-	// std::cout << "TEST : " << ext->get_reader()["html"] << std::endl;
-
-	if (argc > 2)
-	{
-		std::cerr << "Error: too many arguments" << std::endl;
-		return (2);
-	}
-	if (argc == 2)
-		path_config_file = argv[1];
-	
-	Reader reader(path_config_file);
-	try
-	{
-		reader.open();
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << "Error: Configuration file: " << path_config_file << " not found" << std::endl;
-		return (1);
-	}
 	Core core = Core();
-	try
-	{
-		BuilderCore builder_core(reader.get_ifs(), &core);
-		builder_core.parse_mime_type();
-		builder_core.print_debug();
-	}
-	catch(const std::exception& e)
-	{
-		// std::cerr << e.what() << '\n';
-		return (3);
-	}
 
+	core.init(argc, argv, env);
 	core.start();
 }

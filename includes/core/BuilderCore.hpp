@@ -16,6 +16,8 @@
 #include "Core.hpp"
 #include <locale>
 
+class Core;
+
 class BuilderCore
 {
 	private:

@@ -14,11 +14,12 @@
 # define BUILDERREQUEST
 
 # include "Request.hpp"
-# include <exception>
 # include "MethodLibrary.hpp"
+# include <exception>
 # include "Info.hpp"
+# include "BuilderMessage.hpp"
 
-class BuilderRequest
+class BuilderRequest : public BuilderMessage
 {
 	private:
 	
@@ -32,7 +33,7 @@ class BuilderRequest
 		int						_add_method(std::string line);
 		int						_add_path(std::string line);
 		int						_add_version(std::string line);
-		void					_parse_headers(std::string line);
+		// void					_parse_headers(std::string line);
 	public:
 
 		BuilderRequest(void);
@@ -40,8 +41,9 @@ class BuilderRequest
 		virtual ~BuilderRequest(void);
 
 		void					parse_request(std::string &);
-		Request *				get_request() const;
-		void					set_request(Request *);
+		virtual void			set_message(Message *);
+		// Request *				get_request() const;
+		// void					set_request(Request *);
 		void					set_library(MethodLibrary *);
 
 		bool					is_first_line() const;

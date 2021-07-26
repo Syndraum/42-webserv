@@ -1,32 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RequestCGI.cpp                                     :+:      :+:    :+:   */
+/*   ReaderSocket.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/13 15:14:02 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/25 17:59:20 by cdai             ###   ########.fr       */
+/*   Created: 2021/07/23 11:45:01 by cdai              #+#    #+#             */
+/*   Updated: 2021/07/24 18:28:02 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "RequestCGI.hpp"
+#include "ReaderSocket.hpp"
 
-RequestCGI::RequestCGI(CGI & cgi):
-_cgi(cgi)
+ReaderSocket::ReaderSocket(int fd):
+AReaderFileDescriptor(fd)
 {}
 
-RequestCGI::~RequestCGI(void)
-{}
-
-RequestCGI const &
-RequestCGI::operator=(RequestCGI const &rhs)
+ReaderSocket::ReaderSocket(ReaderSocket const & rhs)
 {
-	_cgi = rhs._cgi;
+	*this = rhs;
+}
+
+ReaderSocket::~ReaderSocket(void)
+{}
+
+ReaderSocket const & ReaderSocket::operator=(ReaderSocket const & rhs)
+{
+	if (&rhs != this)
+	{
+		AReaderFileDescriptor::operator=(rhs);
+	}
 	return (*this);
 }
 
-int RequestCGI::send(const std::string & script_path)
+int
+ReaderSocket::_read(void)
 {
-	return (_cgi.start(*this, script_path));
+	return (recv(_fd, _buffer, BUFFER_SIZE - 1, MSG_DONTWAIT));
 }

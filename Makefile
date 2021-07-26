@@ -6,7 +6,7 @@
 #    By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/07/19 16:54:33 by roalvare         ###   ########.fr        #
+#    Updated: 2021/07/25 17:58:24 by cdai             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRCS_METHOD		= $(addprefix $(PREFIX)methods/, \
 								AMethod.cpp \
 								MethodDelete.cpp \
 								MethodGet.cpp \
+								MethodPost.cpp \
 								MethodLibrary.cpp \
 								)
 
@@ -39,6 +40,7 @@ SRCS_RESPONSE	= $(addprefix $(PREFIX)response/, \
 SRCS_CGI		= $(addprefix $(PREFIX)cgi/, \
 								CGI.cpp \
 								RequestCGI.cpp \
+								HandlerResponseCGI.cpp \
 								)
 
 SRCS_CORE		= $(addprefix $(PREFIX)core/, \
@@ -51,12 +53,16 @@ SRCS_CORE		= $(addprefix $(PREFIX)core/, \
 								Client.cpp \
 								Message.cpp \
 								HandlerPollFD.cpp \
+								BuilderMessage.cpp \
 								)
 
 SRCS_READER		= $(addprefix $(PREFIX)reader/, \
 								Reader.cpp \
 								Extension.cpp \
 								CsvReader.cpp \
+								AReaderFileDescriptor.cpp \
+								ReaderFileDescriptor.cpp \
+								ReaderSocket.cpp \
 								)
 
 SRCS_STRATEGY	= $(addprefix $(PREFIX)strategy/, \
@@ -125,7 +131,7 @@ fclean:
 re:			fclean all
 
 test:		all
-			$(PREFIX)$(NAME)
+			./$(NAME)
 
 valgrind:	all
 			valgrind $(PREFIX)$(NAME)
