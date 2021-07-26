@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 17:10:16 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/26 13:38:06 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 	{
 		temp += _buffer;
 		found = temp.find("\r\n");
-//		std::cout << "temp: " << temp << std::endl;
+		std::cout << "temp: " << temp << std::endl;
 //		std::cout << "found: " << found << std::endl;
 
 		if (ret == 0) //cdai, if the client close his socket, it send EOF
@@ -84,7 +84,7 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 //			std::cout << "ASocket->_socket" << _socket << std::endl;
 			//ret = recv(_fd, _buffer, BUFFER_SIZE - 1, MSG_DONTWAIT);
 			ret = _read();
-//			std::cout << "ret" << ret << std::endl;
+//			std::cout << "ret: " << ret << std::endl;
 
 			// we cannot use ERRNO, so we don't know which kind of error it is
 			// if the socket is empty (when we already read EOF), recv send always -1
@@ -122,10 +122,9 @@ AReaderFileDescriptor::read_body(std::string & line, int content_length)
 }
 
 void
-AReaderFileDescriptor::read_until_end(void)
+AReaderFileDescriptor::read_until_end(std::string & line)
 {
-	std::string temp;
-	get_next_line(temp);
+	get_next_line(line);
 
 //	std::cout << "temp: " << temp << std::endl;
 }

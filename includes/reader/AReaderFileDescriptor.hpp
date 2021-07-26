@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 17:09:26 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/26 13:31:52 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ class AReaderFileDescriptor
 		virtual ~AReaderFileDescriptor(void);
 		AReaderFileDescriptor const & operator=(AReaderFileDescriptor const &);
 
-		int			get_next_line(std::string & line);
+		int			get_next_line(std::string &);
 		void		read_body(std::string &, int);
-		void		read_until_end(void);
+		void		read_until_end(std::string &);
 		int			get_fd(void);
 		void		set_fd(int);
 		void		_reset_buffer(void);

@@ -125,7 +125,7 @@ HandlerRequest::parse()
 			if (get_request().get_header("Content-Length") == "")
 			{
 				std::cout << "No Content-Length" << std::endl;
-				get_client_socket().get_reader().read_until_end();
+				get_client_socket().get_reader().read_until_end(line);
 				//std::cout << "_buffer: " << _buffer << std::endl;
 			}
 			else

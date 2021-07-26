@@ -6,7 +6,7 @@
 /*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:19:20 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/25 18:10:28 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/26 13:00:11 by cdai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ HandlerResponseCGI::parse()
 			if (_response->get_header("Content-Length") == "")
 			{
 				std::cout << "No Content-Length" << std::endl;
-				_reader.read_until_end();
+				_reader.read_until_end(line);
 				//std::cout << "_buffer: " << _buffer << std::endl;
 				_response->set_body(line);
 				_response->add_header("Content-Length", line.size());
