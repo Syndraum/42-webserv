@@ -128,14 +128,15 @@ CGI::join_env(env_map & my_env)
 		my_env[it->first] = it->second;
 }
 
-int
+Message *
 CGI::start(Message & request, const std::string & script_path)
 {
-	int			ret;
+	// int			ret;
 	pid_t		pid;
 	int			pipe_out[2];
 	int			pipe_err[2];
 	char **		env;
+	Message *	response;
 
 	std::cout << "s_P : " << script_path.c_str() << std::endl;
 	env = create_env(request.get_headers());
@@ -160,14 +161,15 @@ CGI::start(Message & request, const std::string & script_path)
 	{
 		close(pipe_out[1]);
 		close(pipe_err[1]);
-		waitpid(pid, &ret, 0);
-		std::cout << "WAKE UP PHP" << std::endl;
+		response = new Message();
+		_parse(pipe_out[0], *response);
+		// waitpid(pid, &ret, 0);
 		// if (ret)
 		// 	throw (std::exception()); // specify
 		close(pipe_err[0]);
 	}
 	str_table_delete(env);
-	return (pipe_out[0]);
+	return (response);
 }
 
 void
@@ -196,5 +198,47 @@ CGI::print_env(char ** env) const
 	{
 		std::cout << *cursor << std::endl;
 		cursor++;
+	}
+}
+
+void
+CGI::_parse(int fd, Message & response)
+{
+	ReaderFileDescriptor	reader(fd);
+	BuilderMessage			builder;
+	std::string		line;
+	int				gnl_ret = 1;
+	
+	builder.set_message(&response);
+//	_builder.set_request(&get_request());
+	while (gnl_ret && (gnl_ret = reader.get_next_line(line)))
+	{
+		if (gnl_ret == -1)
+			return ;
+		std::cout << "line: " << line << std::endl;
+		line += "\r";
+		builder._parse_headers(line);
+		if (response.get_header_lock())
+		{
+			if (!response.has_header("Content-Length"))
+			{
+				std::cout << "No Content-Length" << std::endl;
+				reader.read_until_end(line);
+				//std::cout << "_buffer: " << _buffer << std::endl;
+				response.set_body(line);
+				// _response->add_header("Content-Length", line.size());
+			}
+			else
+			{
+				std::cout << "Content-Length : " << response.get_header("Content-Length") << std::endl;
+
+				reader.read_body(line, std::atoi(response.get_header("Content-Length").c_str()));
+				response.set_body(line);
+				// _response->add_header("Content-Length", line.size());
+			}
+			response.set_body_lock(true);
+//			get_client_socket().get_reader()._reset_buffer();
+			gnl_ret = 0;
+		}
 	}
 }

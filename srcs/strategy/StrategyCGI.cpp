@@ -36,27 +36,19 @@ StrategyCGI::create(Client & client)
 
 	this->_prepare(client);
 	_request.debug();
-	int std_out = _request.send(client.get_full_path());
-
-
-//	ReaderFileDescriptor reader(std_out);
-//	std::string line;
-//	reader.get_next_line(line);
-//	std::cout << "line : " << line << std::endl;
-//	reader.get_next_line(line);
-//	std::cout << "line : " << line << std::endl;
-//	reader.get_next_line(line);
-//	std::cout << "line : " << line << std::endl;
-
+	Message * response_cgi = _request.send(client.get_full_path());
 
 	response = new Response();
 //	response->set_error(418);
 	response->set_code(200);
+	response->add_header("Content-Type", response_cgi->get_header("Content-type"));
+	response->set_body(response_cgi->get_body());
+	delete (response_cgi);
 
-	HandlerResponseCGI _handler(std_out);
-	_handler.set_response(response);
+	// HandlerResponseCGI _handler(std_out);
+	// _handler.set_response(response);
 
-	_handler.parse();
+	// _handler.parse();
 	response->debug();
 	return (response);
 }

@@ -23,6 +23,9 @@
 # include "StringPP.hpp"
 # include <cstring>
 # include "Info.hpp"
+# include "ReaderFileDescriptor.hpp"
+# include "BuilderMessage.hpp"
+# include <cstdlib>
 
 class CGI
 {
@@ -41,6 +44,7 @@ class CGI
 		void										str_table_delete(char ** table) const;
 		char *										string_copy(std::string str) const;
 		char**										create_env(void);
+		void										_parse(int fd, Message &);
 
 	public:
 
@@ -53,7 +57,7 @@ class CGI
 		void										set_exec_name(std::string const & name);
 		void										add_CGI_param(std::string key, std::string value);
 
-		int											start(Message & request, const std::string & path);
+		Message *									start(Message & request, const std::string & path);
 		void										print() const;
 		void										print_env(char **) const;
 		class MyError: public std::exception

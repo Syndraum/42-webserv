@@ -9,7 +9,6 @@ class BuilderMessage
 protected:
 	Message *	_message;
 
-	void					_parse_headers(std::string line);
 public:
 
 	BuilderMessage(void);
@@ -19,6 +18,7 @@ public:
 
 	Message *				get_message() const;
 	virtual void			set_message(Message *);
+	void					_parse_headers(std::string line);
 
 	class BadRequest : public std::exception
 	{
