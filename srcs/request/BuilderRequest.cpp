@@ -48,8 +48,8 @@ BuilderRequest::_add_path(std::string line)
 	if (len == std::string::npos)
 		throw BadRequest();
 	tmp = line.substr(0, len);
-	_request->set_path(tmp);
 	_request->set_uri(tmp);
+	_request->set_path(_request->get_uri().get_path());
 	return(len + 1);
 }
 
