@@ -24,7 +24,8 @@ public:
 	Message &	operator=(Message const &rhs);
 
 	map const &									get_headers() const;
-	std::string const &						get_header(std::string const &key);
+	std::string &							get_header(std::string const &key);
+	std::string const &						get_header(std::string const &key) const;
 	bool									get_header_lock() const;
 	const std::string &						get_body() const;
 	bool									get_body_lock() const;

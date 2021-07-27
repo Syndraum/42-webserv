@@ -30,9 +30,13 @@ const Message::map &
 Message::get_headers() const
 { return (_headers); }
 
-std::string const &
+std::string &
 Message::get_header(std::string const &key)
 { return (_headers[key]); }
+
+std::string const &
+Message::get_header(std::string const &key) const
+{ return (_headers.at(key)); }
 
 bool
 Message::get_header_lock() const

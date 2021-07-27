@@ -39,13 +39,38 @@ StrategyCGI::create(Client & client)
 	Message * response_cgi = _request.send(client.get_full_path());
 
 	response = new Response();
-//	response->set_error(418);
 	response->set_code(200);
+	if (response_cgi->has_header("Status"))
+		handle_status(*response_cgi, *response);
 	response->add_header("Content-Type", response_cgi->get_header("Content-type"));
 	response->set_body(response_cgi->get_body());
 	delete (response_cgi);
 	// response->debug();
 	return (response);
+}
+
+void
+StrategyCGI::handle_status(const Message & message, Response & response)
+{
+	std::string	status = message.get_header("Status");
+	size_t		pos;
+
+	if ((pos = status.find(" ", 0)) != std::string::npos)
+	{
+		try
+		{
+			response.set_code(std::atoi(status.substr(0, pos).c_str()));
+		}
+		catch(const std::exception& e)
+		{
+			response.set_error(500);
+		}
+	}
+	else
+	{
+		response.set_error(500);
+	}
+	
 }
 
 void
