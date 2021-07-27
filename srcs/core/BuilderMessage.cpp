@@ -2,7 +2,7 @@
 
 BuilderMessage::BuilderMessage(void) : _message(0) {}
 
-BuilderMessage::BuilderMessage(BuilderMessage const & src)
+BuilderMessage::BuilderMessage(BuilderMessage const & src) : _message(0)
 {
 	*this = src;
 }

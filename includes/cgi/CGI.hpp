@@ -23,9 +23,7 @@
 # include "StringPP.hpp"
 # include <cstring>
 # include "Info.hpp"
-# include "ReaderFileDescriptor.hpp"
-# include "BuilderMessage.hpp"
-# include <cstdlib>
+# include "HandlerResponseCGI.hpp"
 
 class CGI
 {
@@ -37,6 +35,7 @@ class CGI
 	
 		std::string									_exec_name;
 		env_map										_cgi_env;
+		HandlerResponseCGI							_handler;
 
 		char **										create_env(const env_map &);
 		void										join_env(env_map &);

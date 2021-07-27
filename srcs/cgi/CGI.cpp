@@ -14,10 +14,11 @@
 
 CGI::CGI() :
 _exec_name(),
-_cgi_env()
+_cgi_env(),
+_handler(1)
 {}
 
-CGI::CGI(CGI const & src)
+CGI::CGI(CGI const & src) : _handler(src._handler)
 {
 	*this = src;
 }
@@ -32,6 +33,7 @@ CGI::operator=(CGI const &rhs)
 	{
 		_exec_name = rhs._exec_name;
 		_cgi_env = rhs._cgi_env;
+		_handler = rhs._handler;
 	}
 	return (*this);
 }
@@ -59,10 +61,8 @@ CGI::str_table_len(char ** table) const
 {
 	size_t i = 0;
 	
-	while(table[i]){
-		// std::cout << table[i] << std::endl;
+	while(table[i])
 		i++;
-	}
 	return (i);
 }
 
@@ -103,7 +103,6 @@ CGI::create_env(const env_map & map)
 	env = new char *[map.size() + str_table_len(Info::env) + 1];
 	while (*cursor != 0)
 	{
-		// std::cout << temp << std::endl;
 		env[i] = strdup(*cursor);
 		i++;
 		cursor++;
@@ -131,14 +130,12 @@ CGI::join_env(env_map & my_env)
 Message *
 CGI::start(Message & request, const std::string & script_path)
 {
-	// int			ret;
 	pid_t		pid;
 	int			pipe_out[2];
 	int			pipe_err[2];
 	char **		env;
-	Message *	response;
 
-	std::cout << "s_P : " << script_path.c_str() << std::endl;
+	// std::cout << "SCRIPT_PATH : " << script_path.c_str() << std::endl;
 	env = create_env(request.get_headers());
 	// print_env(env);
 	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1)
@@ -161,15 +158,18 @@ CGI::start(Message & request, const std::string & script_path)
 	{
 		close(pipe_out[1]);
 		close(pipe_err[1]);
-		response = new Message();
-		_parse(pipe_out[0], *response);
+		_handler.set_fd(pipe_out[0]);
+		_handler.init();
+		_handler.parse();
+		// _parse(pipe_out[0], *response);
 		// waitpid(pid, &ret, 0);
 		// if (ret)
 		// 	throw (std::exception()); // specify
+		close(pipe_out[0]);
 		close(pipe_err[0]);
 	}
 	str_table_delete(env);
-	return (response);
+	return (_handler.get_response());
 }
 
 void

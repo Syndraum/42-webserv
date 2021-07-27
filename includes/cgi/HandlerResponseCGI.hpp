@@ -15,27 +15,30 @@
 
 # include <iostream>
 # include "ReaderFileDescriptor.hpp"
-# include "Response.hpp"
+# include "BuilderMessage.hpp"
+# include "Message.hpp"
 # include <cstdlib>
 
 class HandlerResponseCGI
 {
 	private:
-		ReaderFileDescriptor _reader;
-		Response *			 _response;
+		ReaderFileDescriptor	_reader;
+		BuilderMessage			_builder;
+		Message *				_response;
 		
 		HandlerResponseCGI(void);
 
-		void				_parse_headers(std::string line);
 	public:
 		HandlerResponseCGI(int);
 		HandlerResponseCGI(HandlerResponseCGI const &);
 		~HandlerResponseCGI(void);
 		HandlerResponseCGI & operator=(HandlerResponseCGI const &);
 
-		void	set_fd(int);
-		void	set_response(Response *);
-		void				parse(void);
+		void		set_fd(int);
+		Message *	get_response();
+		void		init();
+		void		clear();
+		void		parse();
 
 };
 

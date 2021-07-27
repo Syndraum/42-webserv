@@ -44,12 +44,7 @@ StrategyCGI::create(Client & client)
 	response->add_header("Content-Type", response_cgi->get_header("Content-type"));
 	response->set_body(response_cgi->get_body());
 	delete (response_cgi);
-
-	// HandlerResponseCGI _handler(std_out);
-	// _handler.set_response(response);
-
-	// _handler.parse();
-	response->debug();
+	// response->debug();
 	return (response);
 }
 
