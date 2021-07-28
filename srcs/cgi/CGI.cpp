@@ -149,7 +149,7 @@ CGI::start(Message & request, const std::string & script_path)
 			throw (std::exception()); // specify
 		close(pipe_out[0]);
 		close(pipe_err[0]);
-		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, Info::env) < 0)
+		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, env) < 0)
 			throw (std::exception()); // specify
 		close(pipe_out[0]);
 		_exit(0);

@@ -63,5 +63,7 @@ Client::get_server_socket()
 std::string
 Client::get_full_path() const
 {
-	return (_server.get_full_path(_request.get_uri().get_path()));
+	const URI & uri = _request.get_uri();
+
+	return (_server.get_full_path(uri.get_path()));
 }
