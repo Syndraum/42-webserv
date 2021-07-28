@@ -67,6 +67,8 @@ HandlerRequest::handle(clients & vector)
 			parse();
 			if (!is_complete())
 				continue;
+			std::cout << "============ REQUEST ===============" << std::endl;
+			get_request().debug();
 			get_request().set_path(get_request().get_path() + get_server().get_index(get_request().get_path()));
 			if (get_server().get_cgi_map().find("." + Extension::get_extension(get_request().get_path())) != get_server().get_cgi_map().end())
 			{
@@ -133,6 +135,7 @@ HandlerRequest::parse()
 				std::cout << "Content-Length : " << get_request().get_header("Content-Length") << std::endl;
 
 				get_client_socket().get_reader().read_body(line, std::atoi(get_request().get_header("Content-Length").c_str()));
+				get_request().set_body(line);
 			}
 			get_request().set_body_lock(true);
 			get_client_socket().get_reader()._reset_buffer();

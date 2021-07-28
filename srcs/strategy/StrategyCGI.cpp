@@ -35,6 +35,7 @@ StrategyCGI::create(Client & client)
 	Response * response = 0;
 
 	this->_prepare(client);
+	_request.set_body(client.get_request().get_body());
 	_request.debug();
 	Message * response_cgi = _request.send(client.get_full_path());
 

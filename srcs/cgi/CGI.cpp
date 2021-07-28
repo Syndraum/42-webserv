@@ -133,30 +133,34 @@ CGI::start(Message & request, const std::string & script_path)
 	pid_t		pid;
 	int			pipe_out[2];
 	int			pipe_err[2];
+	int			pipe_in[2];
 	char **		env;
 
 	// std::cout << "SCRIPT_PATH : " << script_path.c_str() << std::endl;
 	env = create_env(request.get_headers());
-	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1)
+	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1 || pipe(pipe_in) == -1)
 		throw (std::exception()); // specify
+	write(pipe_in[1], request.get_body().c_str(), request.get_body().length());
 	pid = fork();
 	if (pid < 0)
 		throw (std::exception()); // specify
 	else if (!pid)
 	{
-		if (dup2(pipe_out[1], 1) == -1 || dup2(pipe_err[1], 2) == -1)
+		if (dup2(pipe_out[1], 1) == -1 || dup2(pipe_err[1], 2) == -1 || dup2(pipe_in[0], 0) == -1)
 			throw (std::exception()); // specify
 		close(pipe_out[0]);
 		close(pipe_err[0]);
+		close(pipe_in[1]);
 		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, env) < 0)
 			throw (std::exception()); // specify
-		close(pipe_out[0]);
 		_exit(0);
 	}
 	else
 	{
 		close(pipe_out[1]);
 		close(pipe_err[1]);
+		close(pipe_in[0]);
+		std::cout << "body: "<< request.get_body() << std::endl;
 		_handler.set_fd(pipe_out[0]);
 		_handler.init();
 		_handler.parse();
@@ -166,6 +170,7 @@ CGI::start(Message & request, const std::string & script_path)
 		// 	throw (std::exception()); // specify
 		close(pipe_out[0]);
 		close(pipe_err[0]);
+		close(pipe_in[1]);
 	}
 	str_table_delete(env);
 	return (_handler.get_response());
