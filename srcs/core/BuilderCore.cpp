@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/09 14:39:37 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 01:07:10 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ _core(core)
 		if (!directive.compare("worker"))
 			parse_worker();
 		else if (!directive.compare("server"))
-			parse_server();
+			parse_server(core);
 		else if (_line[_idx] ==  ';')
 			unexpected_character_error(';');
 		else if (_line[_idx] ==  '}')
@@ -166,6 +166,31 @@ BuilderCore::parse_server_index(Server *server)
 		unexpected_character_error('}');
 	else
 		not_terminated_by_semicolon_error("index");
+}
+
+void
+BuilderCore::parse_server_allow_methods(Server *server, Core *core)
+{
+	std::string	allow_methods;
+
+	skip_whitespaces();
+	if (_line[_idx] == ';')
+		invalid_nb_arguments_error("allow_methods");
+	else if (_line[_idx] == '}')
+		unexpected_character_error('}');
+	while (_line[_idx] && _line[_idx] != ';' && _line[_idx] != '}')
+	{
+		allow_methods = next_word_skip();
+		server->add_method(core->get_method(allow_methods));
+	}
+	if (!_line[_idx])
+		unexpected_eof_error("\";\" or \"}\"");
+	else if (_line[_idx] == ';')
+		_idx++;
+	else if (_line[_idx] == '}')
+		unexpected_character_error('}');
+	else
+		not_terminated_by_semicolon_error("allow_methods");
 }
 
 void
@@ -368,7 +393,7 @@ BuilderCore::parse_server_extension(Server *server)
 }
 
 void
-BuilderCore::parse_server()
+BuilderCore::parse_server(Core *core)
 {
 	skip_whitespaces();
 	std::string	directive;
@@ -391,6 +416,8 @@ BuilderCore::parse_server()
 			parse_server_auto_index(&server);
 		else if (!directive.compare("index"))
 			parse_server_index(&server);
+		else if (!directive.compare("allow_methods"))
+			parse_server_allow_methods(&server, core);
 		else if (!directive.compare("client_max_body_size"))
 			parse_server_client_max_body_size(&server);
 		else if (!directive.compare("path_error_page"))

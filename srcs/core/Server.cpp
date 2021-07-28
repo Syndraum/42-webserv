@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/10 11:36:23 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/07/29 01:17:45 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,15 @@ Server &
 Server::add_index(std::string const &index)
 {
 	_index.push_back(index);
-	std::cerr << "INDEX LIST SIZE : " << _index.size() << std::endl;
+	std::cerr << "INDEX LIST SIZE : " << _index.size() << std::endl; //W
+	return(*this);
+}
+
+Server &
+Server::add_method(AMethod *method)
+{
+	if (!get_method(method->get_name())) //else error?
+		_methods.push_back(method);
 	return(*this);
 }
 
@@ -123,6 +131,17 @@ Server::get_index(const std::string & uri)
 			return (*it);
 	}
 	return ("");
+}
+
+AMethod *
+Server::get_method(const std::string &name) // TO TEST
+{
+	for (std::list<AMethod *>::iterator it = _methods.begin(); it != _methods.end(); it++)
+	{
+		if (name == (*it)->get_name())
+			return(*it);
+	}
+	return (0);
 }
 
 std::string

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ReaderSocket.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:15:52 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 17:06:59 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/28 18:51:51 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef READER_SOCKET
-#define READER_SOCKET
+#ifndef READER_SOCKET_HPP
+# define READER_SOCKET_HPP
 
 # include <sys/types.h>
 # include <sys/socket.h>

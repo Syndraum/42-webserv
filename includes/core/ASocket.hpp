@@ -6,12 +6,12 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:44:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 16:41:57 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/28 18:20:15 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ASOCKET
-#define ASOCKET
+#ifndef ASOCKET_HPP
+#define ASOCKET_HPP
 
 # include <sys/types.h>
 # include <sys/socket.h>

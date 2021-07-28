@@ -1,5 +1,5 @@
-#ifndef CSVREADER
-# define CSVREADER
+#ifndef CSV_READER_HPP
+# define CSV_READER_HPP
 
 # include "Reader.hpp"
 # include <vector>

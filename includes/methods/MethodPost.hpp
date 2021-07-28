@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   MethodPost.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 16:03:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/20 16:08:09 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/28 18:51:00 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef METHODPOST
-# define METHODPOST
+#ifndef METHOD_POST_HPP
+# define METHOD_POST_HPP
 
 #include "AMethod.hpp"
 

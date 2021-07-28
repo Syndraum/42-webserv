@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/09 14:39:23 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 01:00:45 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,12 @@ class BuilderCore
 		void			parse_server_path_error_page(Server *server);
 		void			parse_server_auto_index(Server *server);
 		void			parse_server_index(Server *server);
+		void			parse_server_allow_methods(Server *server, Core *core);
 		void			parse_server_client_max_body_size(Server *server);
 		void			parse_server_CGI_param(CGI *cgi);
 		void			parse_server_CGI_exec_name(CGI *cgi);
 		void			parse_server_extension(Server *server);
-		void			parse_server();
+		void			parse_server(Core *core);
 		void			parse_worker();
 		int				stoi_skip_number();
 		void			unexpected_character_error(char character);

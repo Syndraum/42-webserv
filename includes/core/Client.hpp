@@ -1,5 +1,5 @@
-#ifndef CLIENT
-# define CLIENT
+#ifndef CLIENT_HPP
+# define CLIENT_HPP
 
 # include "ClientSocket.hpp"
 # include "Server.hpp"
