@@ -55,6 +55,7 @@ class Response : public Message
 		Response &									set_code(int code);
 		Response &									set_body_from_file(const std::string & filename);
 		Response &									set_error(int code);
+		int											get_code() const;
 };
 
 # include "Request.hpp"

@@ -116,7 +116,7 @@ Response::set_error(int code)
 		this->set_code(code)
 			.set_body(m_template.str())
 			.clear_header()
-			.add_header("Content-type", "text/html");
+			.add_header("Content-Type", "text/html");
 
 	}
 	catch (std::exception &e)
@@ -124,6 +124,12 @@ Response::set_error(int code)
 		this->set_code(code).clear_header();
 	}
 	return *this;
+}
+
+int
+Response::get_code() const
+{
+	return (_code);
 }
 
 std::string

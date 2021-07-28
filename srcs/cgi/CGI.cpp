@@ -137,7 +137,6 @@ CGI::start(Message & request, const std::string & script_path)
 
 	// std::cout << "SCRIPT_PATH : " << script_path.c_str() << std::endl;
 	env = create_env(request.get_headers());
-	// print_env(env);
 	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1)
 		throw (std::exception()); // specify
 	pid = fork();

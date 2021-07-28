@@ -40,10 +40,10 @@ StrategyCGI::create(Client & client)
 
 	response = new Response();
 	response->set_code(200);
-	if (response_cgi->has_header("Status"))
-		handle_status(*response_cgi, *response);
 	response->add_header("Content-Type", response_cgi->get_header("Content-type"));
 	response->set_body(response_cgi->get_body());
+	if (response_cgi->has_header("Status"))
+		handle_status(*response_cgi, *response);
 	delete (response_cgi);
 	// response->debug();
 	return (response);
@@ -60,6 +60,9 @@ StrategyCGI::handle_status(const Message & message, Response & response)
 		try
 		{
 			response.set_code(std::atoi(status.substr(0, pos).c_str()));
+			if (response.get_code() >= 400){
+				response.set_error(response.get_code());
+			}
 		}
 		catch(const std::exception& e)
 		{
