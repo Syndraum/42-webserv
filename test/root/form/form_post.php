@@ -27,7 +27,6 @@
 
 		<h3>POST TEST</h3>
 		<div>
-			<?php var_dump($_POST); ?>
 			Email : <?php echo $_POST['email'] ?>
 			<br>
 			Login : <?php echo $_POST['login'] ?>

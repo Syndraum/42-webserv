@@ -83,8 +83,11 @@ StrategyCGI::_prepare(Client & client)
 	Request &	request_http	= client.get_request();
 	Server &	server			= client.get_server();
 
-	if (request_http.get_body().length() != 0){
+	if (request_http.get_body().length() == 0 || !request_http.has_header("Content-Length")){
 		_request.add_header("CONTENT_LENGTH", 0);
+	}
+	else {
+		_request.add_header("CONTENT_LENGTH", request_http.get_header("Content-Length"));
 		if (request_http.has_header("Content-Type"))
 			_request.add_header("CONTENT_TYPE", request_http.get_header("Content-Type"));
 	}

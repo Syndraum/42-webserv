@@ -136,11 +136,9 @@ CGI::start(Message & request, const std::string & script_path)
 	int			pipe_in[2];
 	char **		env;
 
-	// std::cout << "SCRIPT_PATH : " << script_path.c_str() << std::endl;
 	env = create_env(request.get_headers());
 	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1 || pipe(pipe_in) == -1)
 		throw (std::exception()); // specify
-	write(pipe_in[1], request.get_body().c_str(), request.get_body().length());
 	pid = fork();
 	if (pid < 0)
 		throw (std::exception()); // specify
@@ -160,14 +158,10 @@ CGI::start(Message & request, const std::string & script_path)
 		close(pipe_out[1]);
 		close(pipe_err[1]);
 		close(pipe_in[0]);
-		std::cout << "body: "<< request.get_body() << std::endl;
+		write(pipe_in[1], request.get_body().c_str(), request.get_body().length());
 		_handler.set_fd(pipe_out[0]);
 		_handler.init();
 		_handler.parse();
-		// _parse(pipe_out[0], *response);
-		// waitpid(pid, &ret, 0);
-		// if (ret)
-		// 	throw (std::exception()); // specify
 		close(pipe_out[0]);
 		close(pipe_err[0]);
 		close(pipe_in[1]);

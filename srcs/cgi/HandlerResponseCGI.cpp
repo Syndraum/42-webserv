@@ -80,7 +80,7 @@ HandlerResponseCGI::parse()
 	{
 		if (gnl_ret == -1)
 			return ;
-		std::cout << "line: " << line << std::endl;
+		std::cout << "CGI line: " << line << std::endl;
 		line += "\r";
 		_builder._parse_headers(line);
 		if (_response->get_header_lock())
