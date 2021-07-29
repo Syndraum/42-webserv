@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/29 01:07:10 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 17:45:03 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ _core(core)
 	while (_line[_idx])
 	{
 		directive = next_word_skip();
-		// std::cerr << "DIRECTIVE :\"" << directive << "\"" << std::endl;
 		if (!directive.compare("worker"))
 			parse_worker();
 		else if (!directive.compare("server"))
@@ -49,7 +48,7 @@ BuilderCore::next_word_skip()
 	skip_whitespaces();
 
 	size_t			len = _line.find_first_of(";{}# \n\r\t\v\f", _idx) - _idx;
-
+//check here if quotes
 	if (len == std::string::npos)
 		unexpected_eof_error("\";\" or \"}\"");
 	std::string		ret = _line.substr(_idx, len);
@@ -89,7 +88,7 @@ BuilderCore::skip_comments()
 }
 
 int
-BuilderCore::stoi_skip_number()
+BuilderCore::stoi_skip()
 {
 	int			ret;
 	int			i = 0;
@@ -111,25 +110,60 @@ BuilderCore::stoi_skip_number()
 	return (ret);
 }
 
-void
-BuilderCore::parse_server_port(Server *server)
+uint32_t
+BuilderCore::ip_to_int_skip(int first_number, int cursor)
 {
-	int	port;
+	int			i = 2;
+	uint32_t	ret = first_number << 24;
+	int			tmp;
+	_idx++;
+	while (i >= 0)
+	{
+		tmp = stoi_skip();
+		if (tmp < 0 || tmp > 255 || (_line[_idx] != '.' && i != 0))
+		{
+			_idx = cursor;
+			host_not_found_error(_line.substr(_idx, _line.find_first_of(";}# \n\r\t\v\f", _idx) - _idx));
+		}
+		ret += tmp << (i * 8);
+		i--;
+		_idx++;
+	}
+	return(ret);
+}
+
+void
+BuilderCore::parse_server_listen(Server *server)
+{
+	int			port = 80;
+	uint32_t	ip = 0;
+	int			cursor;
+
 	// std::cerr << &_line[_idx] << std::endl;
 	skip_whitespaces();
+	cursor = _idx;
 	if (_line[_idx] == ';')
 		invalid_nb_arguments_error("listen");
 	else if (_line[_idx] == '}')
 		unexpected_character_error('}');
 	while (_line[_idx] && _line[_idx] != ';' && _line[_idx] != '}')
 	{
-		port = stoi_skip_number();
+		port = stoi_skip();
 		if (port < 0)
+			host_not_found_error(_line.substr(_idx, _line.find_first_of(";}# \n\r\t\v\f", _idx) - _idx));
+		if (_line[_idx] == '.')
 		{
-			std::cerr << "Parsing Error : host not found in \"" << _line.substr(_idx, _line.find_first_of(";}# \n\r\t\v\f", _idx) - _idx) << "\" of the \"listen\" directive"  << " on line " << line_count() << std::endl;
-			throw (ParsingError());
+			ip = ip_to_int_skip(port, cursor);
+			if (_line[_idx] == ':')
+			{
+				port = stoi_skip();
+				if (port < 0)
+					host_not_found_error(_line.substr(_idx, _line.find_first_of(";}# \n\r\t\v\f", _idx) - _idx));
+			}
+			else
+				port = 8080;
 		}
-		server->add_port(port);
+		server->add_listen(port, ip);
 		skip_whitespaces();
 	}
 	if (!_line[_idx])
@@ -172,6 +206,7 @@ void
 BuilderCore::parse_server_allow_methods(Server *server, Core *core)
 {
 	std::string	allow_methods;
+	AMethod *	tmp;
 
 	skip_whitespaces();
 	if (_line[_idx] == ';')
@@ -181,7 +216,14 @@ BuilderCore::parse_server_allow_methods(Server *server, Core *core)
 	while (_line[_idx] && _line[_idx] != ';' && _line[_idx] != '}')
 	{
 		allow_methods = next_word_skip();
-		server->add_method(core->get_method(allow_methods));
+		tmp = core->get_method(allow_methods);
+		if (tmp)
+			server->add_method(tmp);
+		else
+		{
+			std::cerr << "Parsing Error : unimplemented method \"" << allow_methods << "\" in the \"allow_methods\" directive on line " << line_count() << std::endl;
+			throw(ParsingError());
+		}
 	}
 	if (!_line[_idx])
 		unexpected_eof_error("\";\" or \"}\"");
@@ -267,7 +309,7 @@ BuilderCore::parse_server_auto_index(Server *server)
 		unexpected_character_error('}');
 	else if (arg != "")
 	{
-		std::cerr << "Parsing Error : invalid value \"" << arg << "\" in \"autoindex\" directive, it must be \"on\" or \"off\"" << " on line " << line_count() << std::endl;
+		std::cerr << "Parsing Error : invalid value \"" << arg << "\" in \"autoindex\" directive, it must be \"on\" or \"off\" on line " << line_count() << std::endl;
 		throw (ParsingError());
 	}
 	skip_whitespaces();
@@ -290,15 +332,15 @@ BuilderCore::parse_server_client_max_body_size(Server *server)
 		invalid_nb_arguments_error("client_max_body_size");
 	else if (_line[_idx] == '}')
 		unexpected_character_error('}');
-	ret = stoi_skip_number();
+	ret = stoi_skip();
 	if (ret < 0)
 	{
-		std::cerr << "Parsing Error : \"client_max_body_size\" directive invalid value"  << " on line " << line_count() << std::endl;
+		std::cerr << "Parsing Error : \"client_max_body_size\" directive invalid value on line " << line_count() << std::endl;
 		throw (ParsingError());
 	}
 	client_max_body_size = ret;
 	if (_line[_idx] == 'k' || _line[_idx] == 'K')
-		client_max_body_size *= 1000;
+		client_max_body_size *= 1000; //bitshift?
 	else if (_line[_idx] == 'm' || _line[_idx] == 'M')
 		client_max_body_size *= 1000000;
 	else if (_line[_idx] == 'g' || _line[_idx] == 'G')
@@ -309,7 +351,7 @@ BuilderCore::parse_server_client_max_body_size(Server *server)
 		unexpected_eof_error("\";\" or \"}\"");
 	else
 	{
-		std::cerr << "Parsing Error : \"client_max_body_size\" directive invalid value"  << " on line " << line_count() << std::endl;
+		std::cerr << "Parsing Error : \"client_max_body_size\" directive invalid value on line " << line_count() << std::endl;
 		throw (ParsingError());
 	}
 	_idx++;
@@ -407,7 +449,7 @@ BuilderCore::parse_server(Core *core)
 		// std::cerr << "directive : " << directive << " " << directive.length() << std::endl;
 		// std::cerr << _idx - directive.length() << " " << directive.length() << std::endl;
 		if (!directive.compare("listen"))
-			parse_server_port(&server);
+			parse_server_listen(&server);
 		else if (!directive.compare("server_name"))
 			parse_server_name(&server);
 		else if (!directive.compare("root"))
@@ -444,7 +486,7 @@ BuilderCore::parse_worker()
 		invalid_nb_arguments_error("worker");
 	else if (_line[_idx] == '}')
 		unexpected_character_error('}');
-	int	worker = stoi_skip_number();
+	int	worker = stoi_skip();
 	if (worker < 0)
 	{
 		std::cerr << "Parsing Error : invalid number \"" << _line.substr(_idx, _line.find_first_of(";}# \n\r\t\v\f", _idx) - _idx) << "\""  << " on line " << line_count() << std::endl;
@@ -516,5 +558,12 @@ void
 BuilderCore::no_opening_bracket_error(std::string directive)
 {
 	std::cerr << "Parsing Error : directive " << directive << " has no opening \"{\""  << " on line " << line_count() << std::endl;
+	throw(ParsingError());
+}
+
+void
+BuilderCore::host_not_found_error(std::string argument)
+{
+	std::cerr << "Parsing Error : host not found in \"" << argument << "\" of the \"listen\" directive"  << " on line " << line_count() << std::endl;
 	throw(ParsingError());
 }

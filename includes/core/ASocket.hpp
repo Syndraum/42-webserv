@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:44:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/28 18:20:15 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 16:52:26 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ class ASocket
 		sockaddr_in				_address;
 		int						_id;
 		ReaderSocket			_reader;
-
 
 		void					set_reader(ReaderSocket &);
 	public:

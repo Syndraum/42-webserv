@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/29 01:17:45 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 17:45:39 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,13 @@ Server &
 Server::add_port(int const port)
 {
 	_server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port)));
+	return(*this);
+}
+
+Server &
+Server::add_listen(int const port, uint32_t const ip)
+{
+	_server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port, ip)));
 	return(*this);
 }
 
@@ -249,5 +256,10 @@ Server::print() const
 	for (std::list<std::string>::const_iterator it2 = _index.begin(); it2 != _index.end(); it2++)
 	{
 		std::cout << "\"" << *it2 << "\"" << std::endl;
+	}
+	std::cout << "AUTHORISED METHODS : " << std::endl;
+	for (std::list<AMethod*>::const_iterator it3 = _methods.begin(); it3 != _methods.end(); it3++)
+	{
+		std::cout << "\"" << (*it3)->get_name() << "\"" << std::endl;
 	}
 }
