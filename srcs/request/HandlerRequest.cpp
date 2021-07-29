@@ -64,15 +64,14 @@ HandlerRequest::handle(clients & vector)
 	{
 		set_client(&(*it));
 		try{
-			parse();
+			this->parse();
 			if (!is_complete())
 				continue;
-			std::cout << "============ REQUEST ===============" << std::endl;
-			get_request().debug();
-			get_request().set_path(get_request().get_path() + get_server().get_index(get_request().get_path()));
-			if (get_server().get_cgi_map().find("." + Extension::get_extension(get_request().get_path())) != get_server().get_cgi_map().end())
+			this->set_index();
+			std::string extension = Extension::get_extension(get_request().get_path());
+			if (get_server().has_cgi(extension))
 			{
-				_handler_response.set_strategy(new StrategyCGI(get_server().get_cgi_map()["." + Extension::get_extension(get_request().get_path())]));
+				_handler_response.set_strategy(new StrategyCGI(get_server().get_cgi(extension)));
 			}
 			else
 			{
@@ -145,10 +144,13 @@ HandlerRequest::parse()
 }
 
 void
-HandlerRequest::set_path()
+HandlerRequest::set_index()
 {
-	// std::string relative_path;
-	get_request().set_path(get_request().get_path() + get_server().get_index(get_request().get_path()));
+	Request &	request	= get_request();
+	Server	&	server = get_server();
+	std::string	actual_path	= request.get_path();
+
+	request.set_path(actual_path + server.get_index(actual_path));
 }
 
 bool

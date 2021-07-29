@@ -34,7 +34,7 @@ public:
 	ClientSocket &		get_client_socket();
 	clients_iterator	handle(clients &);
 	void				parse();
-	void				set_path();
+	void				set_index();
 	bool				is_complete() const;
 
 };

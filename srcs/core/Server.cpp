@@ -156,10 +156,18 @@ Server::get_index_page(const Request & request)
 	return (ss.str());
 }
 
-Server::cgi_map &
-Server::get_cgi_map()
+CGI &
+Server::get_cgi(const std::string & key)
 {
-	return (_CGI_map);
+	return (_CGI_map.at("." + key));
+}
+
+bool
+Server::has_cgi(const std::string & extension)
+{
+	if (_CGI_map.find("." + extension) == _CGI_map.end())
+		return false;
+	return true;
 }
 
 Server &
