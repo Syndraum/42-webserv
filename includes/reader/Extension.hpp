@@ -1,5 +1,5 @@
-#ifndef EXTENSION
-# define EXTENSION
+#ifndef EXTENSION_HPP
+# define EXTENSION_HPP
 
 # include <string>
 # include <exception>

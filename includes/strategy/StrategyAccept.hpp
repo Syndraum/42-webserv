@@ -1,5 +1,5 @@
-#ifndef STRATEGYACCEPT
-# define STRATEGYACCEPT
+#ifndef STRATEGY_ACCEPT_HPP
+# define STRATEGY_ACCEPT_HPP
 
 # include "IResponseStrategy.hpp"
 # include "CGI.hpp"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/24 18:38:36 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/29 01:06:15 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,4 +166,10 @@ Core::remove_client(client_vector::iterator it)
 	_pfdh.erase();
 	close(it->get_socket());
 	_client.erase(it);
+}
+
+AMethod *
+Core::get_method(std::string const & name) const
+{
+	return (_methods.get_method(name));
 }

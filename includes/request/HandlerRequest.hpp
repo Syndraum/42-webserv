@@ -1,5 +1,5 @@
-#ifndef HANDLERREQUEST
-# define HANDLERREQUEST
+#ifndef HANDLER_REQUEST_HPP
+# define HANDLER_REQUEST_HPP
 
 # include "Request.hpp"
 # include "Server.hpp"

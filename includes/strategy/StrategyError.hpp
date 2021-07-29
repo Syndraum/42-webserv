@@ -1,5 +1,5 @@
-#ifndef STRATEGYERROR
-# define STRATEGYERROR
+#ifndef STRATEGY_ERROR_HPP
+# define STRATEGY_ERROR_HPP
 
 # include "IResponseStrategy.hpp"
 

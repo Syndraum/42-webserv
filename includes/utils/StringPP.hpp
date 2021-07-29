@@ -1,5 +1,5 @@
-#ifndef STRINGPP
-# define STRINGPP
+#ifndef STRING_PP_HPP
+# define STRING_PP_HPP
 
 #include <string>
 #include <sstream>

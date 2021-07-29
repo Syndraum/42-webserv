@@ -6,12 +6,12 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:48:57 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:48:58 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/28 18:50:24 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef AMETHOD
-# define AMETHOD
+#ifndef AMETHOD_HPP
+# define AMETHOD_HPP
 
 # include <string>
 # include "Response.hpp"

@@ -1,5 +1,5 @@
-#ifndef HANDLERRESPONSE
-# define HANDLERRESPONSE
+#ifndef HANDLER_RESPONSE_HPP
+# define HANDLER_RESPONSE_HPP
 
 # include "Response.hpp"
 # include "IResponseStrategy.hpp"

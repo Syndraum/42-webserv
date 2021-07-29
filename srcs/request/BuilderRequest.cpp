@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BuilderRequest.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:15 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/20 17:08:01 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/29 01:44:36 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ BuilderRequest::_add_method(std::string line)
 	int ret = line.find(' ');
 
 	std::string name = line.substr(0, ret);
-	_request->set_method(_methods->get_method( name));
+	_request->set_method(_methods->get_method(name));
 	if (!_request->get_method())
 		throw MethodNotImplemented();
+	 //should check here if not allowed
 	return (ret + 1);
 }
 

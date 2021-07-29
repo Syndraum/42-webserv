@@ -1,5 +1,5 @@
-#ifndef INFO
-# define INFO
+#ifndef INFO_HPP
+# define INFO_HPP
 
 # include <string>
 

@@ -1,5 +1,5 @@
-#ifndef STRATEGYINDEX
-# define STRATEGYINDEX
+#ifndef STRATEGY_INDEX_HPP
+# define STRATEGY_INDEX_HPP
 
 # include "IResponseStrategy.hpp"
 

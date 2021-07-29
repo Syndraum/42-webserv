@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Core.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/20 16:07:45 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/28 18:21:38 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CORE
-# define CORE
+#ifndef CORE_HPP
+# define CORE_HPP
 
 # include "Server.hpp"
 # include <vector>

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   RequestCGI.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 14:58:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/25 15:03:16 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/28 18:20:39 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REQUESTCGI_HPP
-# define REQUESTCGI_HPP
+#ifndef REQUEST_CGI_HPP
+# define REQUEST_CGI_HPP
 
 # include <string>
 # include <map>

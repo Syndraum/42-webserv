@@ -1,5 +1,5 @@
-#ifndef BUILDERMESSAGE
-# define BUILDERMESSAGE
+#ifndef BUILDER_MESSAGE_HPP
+# define BUILDER_MESSAGE_HPP
 
 # include "Message.hpp"
 # include <exception>

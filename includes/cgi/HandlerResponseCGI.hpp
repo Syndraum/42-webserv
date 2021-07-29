@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerResponseCGI.hpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:19:18 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/25 18:06:27 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/28 18:20:43 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HANDLER_RESPONSE_CGI
-# define HANDLER_RESPONSE_CGI
+#ifndef HANDLER_RESPONSE_CGI_HPP
+# define HANDLER_RESPONSE_CGI_HPP
 
 # include <iostream>
 # include "ReaderFileDescriptor.hpp"

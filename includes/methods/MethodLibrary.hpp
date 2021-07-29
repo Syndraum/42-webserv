@@ -6,12 +6,12 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:31 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:50:32 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/28 18:50:52 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef METHODLIBRARY
-# define METHODLIBRARY
+#ifndef METHOD_LIBRARY_HPP
+# define METHOD_LIBRARY_HPP
 
 # include <vector>
 # include "AMethod.hpp"

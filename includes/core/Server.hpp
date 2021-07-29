@@ -6,12 +6,12 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/09 12:02:14 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 16:49:48 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER
-# define SERVER
+#ifndef SERVER_HPP
+# define SERVER_HPP
 
 # include <vector>
 # include <map>
@@ -31,6 +31,7 @@
 # include <set>
 # include <sstream>
 # include "Request.hpp"
+# include "AMethod.hpp"
 
 class CGI;
 
@@ -48,6 +49,7 @@ class Server
 		port_map							_server_sockets;
 		std::string							_root;
 		std::list<std::string>				_index;
+		std::list<AMethod *>				_methods;
 		bool								_auto_index;
 		size_t								_client_max_body_size;
 		std::string							_path_error_page;
@@ -62,7 +64,9 @@ class Server
 		Server &							operator=(Server const &rhs);
 
 		Server &							add_port(int const port);
+		Server &							add_listen(int const port, uint32_t const address);
 		Server &							add_index(std::string const & index);
+		Server &							add_method(AMethod *method);
 		Server &							add_CGI(std::string name, CGI content);
 		void								start(int const worker);
 
@@ -71,6 +75,7 @@ class Server
 		const bool	&						get_auto_index() const;
 		const std::string &					get_root() const;
 		std::string 						get_index(const std::string &);
+		AMethod *	 						get_method(const std::string &);
 		std::string							get_full_path(const std::string & uri);
 		std::string							get_index_page(const Request & uri);
 		CGI &								get_cgi(const std::string &);

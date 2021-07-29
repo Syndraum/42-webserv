@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   BuilderRequest.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:20 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/17 22:12:54 by roalvare         ###   ########.fr       */
+/*   Updated: 2021/07/28 18:52:03 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILDERREQUEST
-# define BUILDERREQUEST
+#ifndef BUILDER_REQUEST_HPP
+# define BUILDER_REQUEST_HPP
 
 # include "Request.hpp"
 # include "MethodLibrary.hpp"

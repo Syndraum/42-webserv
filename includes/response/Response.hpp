@@ -6,12 +6,12 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:41 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/13 16:20:35 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/28 18:53:09 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RESPONSE
-# define RESPONSE
+#ifndef RESPONSE_HPP
+# define RESPONSE_HPP
 
 # include "Message.hpp"
 # include <sstream>
