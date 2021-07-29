@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/09 14:39:23 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 17:09:50 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,31 @@ class BuilderCore
 		void			skip_whitespaces();
 		void			skip_comments();
 		int				line_count();
-		void			parse_server_port(Server *server);
+		uint32_t		ip_to_int_skip(int first_nb, int cursor);
+		void			parse_server_listen(Server *server);
 		void			parse_server_name(Server *server);
 		void			parse_server_root(Server *server);
 		void			parse_server_path_error_page(Server *server);
 		void			parse_server_auto_index(Server *server);
 		void			parse_server_index(Server *server);
+		void			parse_server_allow_methods(Server *server, Core *core);
 		void			parse_server_client_max_body_size(Server *server);
 		void			parse_server_CGI_param(CGI *cgi);
 		void			parse_server_CGI_exec_name(CGI *cgi);
 		void			parse_server_extension(Server *server);
-		void			parse_server();
+		void			parse_server(Core *core);
 		void			parse_worker();
-		int				stoi_skip_number();
+		int				stoi_skip();
 		void			unexpected_character_error(char character);
 		void			unexpected_eof_error(std::string expectation);
 		void			invalid_nb_arguments_error(std::string directive);
 		void			unknown_directive_error(std::string directive);
 		void			not_terminated_by_semicolon_error(std::string directive);
 		void			no_opening_bracket_error(std::string directive);
+		void			host_not_found_error(std::string argument);
+
 	public:
-	
+
 		BuilderCore(std::istream &fd, Core *core);
 		~BuilderCore();
 		void			print_debug() const; //tmp
@@ -65,6 +69,5 @@ class BuilderCore
 			}
 		};
 };
-
 
 #endif

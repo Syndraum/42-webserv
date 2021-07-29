@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ReaderFileDescriptor.hpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:06:02 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/23 17:11:25 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/28 18:51:46 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef READER_FILE_DESCRIPTOR
-#define READER_FILE_DESCRIPTOR
+#ifndef READER_FILE_DESCRIPTOR_HPP
+# define READER_FILE_DESCRIPTOR_HPP
 
 # include <sys/types.h>
 # include <sys/socket.h>

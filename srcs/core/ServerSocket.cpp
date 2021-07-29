@@ -6,14 +6,22 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:14:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/01 15:33:54 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 17:25:32 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerSocket.hpp"
 
 ServerSocket::ServerSocket(int port) :
-_port(port)
+_port(port),
+_ip(0)
+{
+	_socket = -1;
+}
+
+ServerSocket::ServerSocket(int port, uint32_t ip) :
+_port(port),
+_ip(ip)
 {
 	_socket = -1;
 }
@@ -35,6 +43,7 @@ ServerSocket::operator=(ServerSocket const & rhs)
 		this->_port = rhs._port;
 		this->_socket = rhs._socket;
 		this->_address = rhs._address;
+		this->_ip = rhs._ip;
 	}
 	return *this;
 }
@@ -88,5 +97,6 @@ ServerSocket::print() const
 {
 	std::cout << " adress : " << this << "\n";
 	std::cout << " port : " << _port << "\n";
+	std::cout << " ip : " << _ip << "\n";
 	std::cout << " fd : " << _socket << "\n";
 }

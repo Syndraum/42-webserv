@@ -6,12 +6,12 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:50:41 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/28 18:51:39 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef READER
-# define READER
+#ifndef READER_HPP
+# define READER_HPP
 
 # include <string>
 # include <fstream>

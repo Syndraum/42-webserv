@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   AReaderFileDescriptor.hpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/26 13:31:52 by cdai             ###   ########.fr       */
+/*   Updated: 2021/07/28 18:51:12 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef AREADER_FILE_DESCRIPTOR
-#define AREADER_FILE_DESCRIPTOR
+#ifndef AREADER_FILE_DESCRIPTOR_HPP
+# define AREADER_FILE_DESCRIPTOR_HPP
 
 # include <sys/types.h>
 # include <sys/socket.h>

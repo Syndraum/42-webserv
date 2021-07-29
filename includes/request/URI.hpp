@@ -1,5 +1,5 @@
-#ifndef URI_H
-# define URI_H
+#ifndef URI_HPP
+# define URI_HPP
 
 #include <string>
 

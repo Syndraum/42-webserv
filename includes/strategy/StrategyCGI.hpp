@@ -1,5 +1,5 @@
-#ifndef STRATEGYCGI
-# define STRATEGYCGI
+#ifndef STRATEGY_CGI_HPP
+# define STRATEGY_CGI_HPP
 
 # include "IResponseStrategy.hpp"
 # include "RequestCGI.hpp"

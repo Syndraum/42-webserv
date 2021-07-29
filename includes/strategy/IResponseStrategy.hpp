@@ -1,5 +1,5 @@
-#ifndef IRESPONSESTRATEGY
-# define IRESPONSESTRATEGY
+#ifndef IRESPONSE_STRATEGY_HPP
+# define IRESPONSE_STRATEGY_HPP
 
 # include "Client.hpp"
 # include "Response.hpp"

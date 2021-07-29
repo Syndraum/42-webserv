@@ -6,12 +6,12 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:16 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:50:17 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/28 18:50:35 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef METHODDELETE
-# define METHODDELETE
+#ifndef METHOD_DELETE_HPP
+# define METHOD_DELETE_HPP
 
 #include "AMethod.hpp"
 

@@ -6,12 +6,12 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:56 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/07 11:38:08 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/28 18:21:18 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLIENTSOCKET
-# define CLIENTSOCKET
+#ifndef CLIENT_SOCKET_HPP
+# define CLIENT_SOCKET_HPP
 
 # include <sys/socket.h>
 # include <netinet/in.h>
