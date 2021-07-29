@@ -70,9 +70,7 @@ HandlerRequest::handle(clients & vector)
 			this->set_index();
 			std::string extension = Extension::get_extension(get_request().get_path());
 			if (get_server().has_cgi(extension))
-			{
 				_handler_response.set_strategy(new StrategyCGI(get_server().get_cgi(extension)));
-			}
 			else
 			{
 				if (get_server().is_directory(get_request()))
@@ -118,21 +116,20 @@ HandlerRequest::parse()
 	{
 		if (gnl_ret == -1)
 			return ;
-		std::cout << "line: " << line << std::endl;
+		// std::cout << "line: " << line << std::endl;
 		line += "\r";
 		_builder.parse_request(line);
 		if (get_request().get_header_lock())
 		{
 			if (!get_request().has_header("Content-Length"))
 			{
-				std::cout << "No Content-Length" << std::endl;
+				// std::cout << "No Content-Length" << std::endl;
 				get_client_socket().get_reader().read_until_end(line);
 				//std::cout << "_buffer: " << _buffer << std::endl;
 			}
 			else
 			{
-				std::cout << "Content-Length : " << get_request().get_header("Content-Length") << std::endl;
-
+				// std::cout << "Content-Length : " << get_request().get_header("Content-Length") << std::endl;
 				get_client_socket().get_reader().read_body(line, std::atoi(get_request().get_header("Content-Length").c_str()));
 				get_request().set_body(line);
 			}

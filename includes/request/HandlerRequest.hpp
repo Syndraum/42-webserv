@@ -37,6 +37,7 @@ public:
 	void				set_index();
 	bool				is_complete() const;
 
+
 };
 
 #endif
