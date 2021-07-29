@@ -49,7 +49,7 @@ ServerSocket::setup_socket()
 	_address.sin_family = AF_INET;
 	_address.sin_addr.s_addr = INADDR_ANY;
 	_address.sin_port = htons( _port );
-	setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
+	setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &one, sizeof(int));
 }
 
 void
