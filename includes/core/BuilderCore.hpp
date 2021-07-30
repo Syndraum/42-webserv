@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/29 17:09:50 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/30 16:06:02 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ class BuilderCore
 		std::string		_error_msg;
 
 		std::string		next_word_skip();
-		void			skip_whitespaces();
+		int				skip_whitespaces();
 		void			skip_comments();
 		int				line_count();
-		uint32_t		ip_to_int_skip(int first_nb, int cursor);
+		std::string		check_return_ip(int first_nb, int cursor);
 		void			parse_server_listen(Server *server);
 		void			parse_server_name(Server *server);
 		void			parse_server_root(Server *server);
@@ -43,6 +43,7 @@ class BuilderCore
 		void			parse_server_CGI_param(CGI *cgi);
 		void			parse_server_CGI_exec_name(CGI *cgi);
 		void			parse_server_extension(Server *server);
+		void			parse_server_return(Server *server);
 		void			parse_server(Core *core);
 		void			parse_worker();
 		int				stoi_skip();

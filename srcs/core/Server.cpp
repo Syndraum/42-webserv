@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/29 17:45:39 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/30 17:03:33 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,16 @@ Server::add_port(int const port)
 }
 
 Server &
-Server::add_listen(int const port, uint32_t const ip)
+Server::add_listen(int const port, std::string const ip)
 {
 	_server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port, ip)));
+	return(*this);
+}
+
+Server &
+Server::add_return(int const code, std::string const uri)
+{
+	_return_map.insert(std::pair<int, std::string>(code, uri));
 	return(*this);
 }
 
@@ -251,15 +258,33 @@ Server::print() const
 	}
 	if (_server_sockets.size() == 0)
 		std::cout << "no port found" << std::endl;
-	std::cout << "Auto Index : "<< _auto_index << std::endl;
-	std::cout << "INDEX LIST SIZE : " << _index.size() << std::endl;
-	for (std::list<std::string>::const_iterator it2 = _index.begin(); it2 != _index.end(); it2++)
+	std::cout << "Auto Index : " << (_auto_index ? "on":"off") << std::endl;
+	if (_index.size())
 	{
-		std::cout << "\"" << *it2 << "\"" << std::endl;
+		std::cout << "Index list : ";
+		for (std::list<std::string>::const_iterator it2 = _index.begin(); it2 != _index.end(); it2++)
+		{
+			std::cout << "  \"" << *it2 << "\" ";
+		}
+		std::cout << std::endl;
 	}
-	std::cout << "AUTHORISED METHODS : " << std::endl;
-	for (std::list<AMethod*>::const_iterator it3 = _methods.begin(); it3 != _methods.end(); it3++)
+	if (_methods.size())
 	{
-		std::cout << "\"" << (*it3)->get_name() << "\"" << std::endl;
+		std::cout << "Authorised Methods : ";
+		for (std::list<AMethod*>::const_iterator it3 = _methods.begin(); it3 != _methods.end(); it3++)
+		{
+			std::cout << "\"" << (*it3)->get_name() << "\" ";
+		}
+		std::cout << std::endl;
 	}
+	if (_return_map.size())
+	{
+		std::cout << "Returns : " << std::endl;
+		for (return_map::const_iterator it4 = _return_map.begin(); it4 != _return_map.end(); it4++)
+		{
+			std::cout << " - " << it4->first << " : \"" << it4->second << "\"" << std::endl;
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
 }
