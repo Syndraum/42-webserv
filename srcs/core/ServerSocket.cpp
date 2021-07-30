@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:14:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/29 17:25:32 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 18:54:07 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 ServerSocket::ServerSocket(int port) :
 _port(port),
-_ip(0)
+_ip("0.0.0.0")
 {
 	_socket = -1;
 }
 
-ServerSocket::ServerSocket(int port, uint32_t ip) :
+ServerSocket::ServerSocket(int port, std::string ip) :
 _port(port),
 _ip(ip)
 {
