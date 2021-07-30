@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/29 17:09:50 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 18:50:37 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class BuilderCore
 		void			skip_whitespaces();
 		void			skip_comments();
 		int				line_count();
-		uint32_t		ip_to_int_skip(int first_nb, int cursor);
+		std::string		check_return_ip(int first_nb, int cursor);
 		void			parse_server_listen(Server *server);
 		void			parse_server_name(Server *server);
 		void			parse_server_root(Server *server);

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/29 17:45:39 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 18:51:43 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ Server::add_port(int const port)
 }
 
 Server &
-Server::add_listen(int const port, uint32_t const ip)
+Server::add_listen(int const port, std::string const ip)
 {
 	_server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port, ip)));
 	return(*this);

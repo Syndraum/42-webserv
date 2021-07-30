@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/29 16:49:48 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 18:51:43 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ class Server
 		Server &							operator=(Server const &rhs);
 
 		Server &							add_port(int const port);
-		Server &							add_listen(int const port, uint32_t const address);
+		Server &							add_listen(int const port, std::string const address);
 		Server &							add_index(std::string const & index);
 		Server &							add_method(AMethod *method);
 		Server &							add_CGI(std::string name, CGI content);

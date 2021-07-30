@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/29 17:45:03 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/30 15:02:10 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,12 +110,18 @@ BuilderCore::stoi_skip()
 	return (ret);
 }
 
-uint32_t
-BuilderCore::ip_to_int_skip(int first_number, int cursor)
+std::string
+BuilderCore::check_return_ip(int first_number, int cursor)
 {
 	int			i = 2;
-	uint32_t	ret = first_number << 24;
 	int			tmp;
+	std::string	ret;
+
+	if (first_number < 0 || first_number > 255)
+	{
+		_idx = cursor;
+		host_not_found_error(_line.substr(_idx, _line.find_first_of(";}# \n\r\t\v\f", _idx) - _idx));
+	}
 	_idx++;
 	while (i >= 0)
 	{
@@ -125,18 +131,17 @@ BuilderCore::ip_to_int_skip(int first_number, int cursor)
 			_idx = cursor;
 			host_not_found_error(_line.substr(_idx, _line.find_first_of(";}# \n\r\t\v\f", _idx) - _idx));
 		}
-		ret += tmp << (i * 8);
 		i--;
 		_idx++;
 	}
-	return(ret);
+	return(_line.substr(cursor, _idx - cursor - 1));
 }
 
 void
 BuilderCore::parse_server_listen(Server *server)
 {
 	int			port = 80;
-	uint32_t	ip = 0;
+	std::string	ip = "0.0.0.0";
 	int			cursor;
 
 	// std::cerr << &_line[_idx] << std::endl;
@@ -153,7 +158,7 @@ BuilderCore::parse_server_listen(Server *server)
 			host_not_found_error(_line.substr(_idx, _line.find_first_of(";}# \n\r\t\v\f", _idx) - _idx));
 		if (_line[_idx] == '.')
 		{
-			ip = ip_to_int_skip(port, cursor);
+			ip = check_return_ip(port, cursor);
 			if (_line[_idx] == ':')
 			{
 				port = stoi_skip();
@@ -340,11 +345,11 @@ BuilderCore::parse_server_client_max_body_size(Server *server)
 	}
 	client_max_body_size = ret;
 	if (_line[_idx] == 'k' || _line[_idx] == 'K')
-		client_max_body_size *= 1000; //bitshift?
+		client_max_body_size = client_max_body_size << 10; //bitshift?
 	else if (_line[_idx] == 'm' || _line[_idx] == 'M')
-		client_max_body_size *= 1000000;
+		client_max_body_size = client_max_body_size << 20;
 	else if (_line[_idx] == 'g' || _line[_idx] == 'G')
-		client_max_body_size *= 1000000000;
+		client_max_body_size= client_max_body_size << 30;
 	else if (_line.find_first_of(";}# \n\r\t\v\f", _idx) == _idx)
 		_idx--;
 	else if (!_line[_idx])
