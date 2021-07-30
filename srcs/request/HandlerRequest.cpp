@@ -58,15 +58,16 @@ HandlerRequest::get_client_socket()
 }
 
 HandlerRequest::clients_iterator
-HandlerRequest::handle(clients & vector)
+HandlerRequest::handle(clients & v_clients, servers & v_servers)
 {
-	for (clients_iterator it = vector.begin(); it != vector.end(); it++)
+	for (clients_iterator it = v_clients.begin(); it != v_clients.end(); it++)
 	{
 		set_client(&(*it));
 		try{
 			this->parse();
 			if (!is_complete())
 				continue;
+			this->check_host(v_servers);
 			this->set_index();
 			std::string extension = Extension::get_extension(get_request().get_path());
 			if (get_server().has_cgi(extension))
@@ -102,7 +103,7 @@ HandlerRequest::handle(clients & vector)
 		get_request().reset();
 		return (it);
 	}
-	return (vector.end());
+	return (v_clients.end());
 }
 
 void 
@@ -154,4 +155,31 @@ bool
 HandlerRequest::is_complete() const
 {
 	return (get_request().get_header_lock() && get_request().get_body_lock());
+}
+
+void
+HandlerRequest::check_host(servers & vector)
+{
+	Request &	request	= get_request();
+	int	port	= _client->get_server_socket().get_port();
+	std::string	host;
+
+	if (request.has_header("Host"))
+	{
+		host = request.get_header("Host");
+		if (host != get_server().get_name())
+		{
+			servers::iterator ite = vector.end();
+		
+			for (servers::iterator it = ++(vector.begin()); it != ite; it++)
+			{
+				if ((*it).get_name() == host && (*it).has_port(port))
+				{
+					_client->set_server(*it);
+					_client->set_server_socket(it->get_server_socket(port));
+					break;
+				}
+			}
+		}
+	}
 }

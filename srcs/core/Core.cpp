@@ -105,7 +105,7 @@ print();
 		_pfdh.accept_connection(_servers, _client);
 //		_accept_connection();
 
-		client_vector::iterator client = hr.handle(_client);
+		client_vector::iterator client = hr.handle(_client, _servers);
 		if (client != _client.end())
 			remove_client(client);
 	}

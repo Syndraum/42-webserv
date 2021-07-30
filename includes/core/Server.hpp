@@ -70,6 +70,7 @@ class Server
 		Server &							add_CGI(std::string name, CGI content);
 		void								start(int const worker);
 
+		const std::string &					get_name() const;
 		port_map &							get_map_socket();
 		const port_map &					get_map_socket() const;
 		ServerSocket &						get_server_socket(int port);
@@ -82,6 +83,7 @@ class Server
 		std::string							get_index_page(const Request & uri);
 		CGI &								get_cgi(const std::string &);
 		bool								has_cgi(const std::string &);
+		bool								has_port(int port);
 
 		Server &							set_name(std::string const & name);
 		Server &							set_root(std::string const & root);

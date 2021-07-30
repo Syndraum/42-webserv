@@ -99,6 +99,12 @@ Server::start(int const worker)
 	}
 }
 
+const std::string &
+Server::get_name() const
+{
+	return (_name);
+}
+
 Server::port_map &
 Server::get_map_socket(void)
 {
@@ -109,6 +115,12 @@ const Server::port_map &
 Server::get_map_socket(void) const
 {
 	return (_server_sockets);
+}
+
+ServerSocket &
+Server::get_server_socket(int port)
+{
+	return _server_sockets.at(port);
 }
 
 ServerSocket const &
@@ -206,6 +218,14 @@ bool
 Server::has_cgi(const std::string & extension)
 {
 	if (_CGI_map.find("." + extension) == _CGI_map.end())
+		return false;
+	return true;
+}
+
+bool
+Server::has_port(int port)
+{
+	if (_server_sockets.find(port) == _server_sockets.end())
 		return false;
 	return true;
 }

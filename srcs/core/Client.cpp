@@ -67,3 +67,15 @@ Client::get_full_path() const
 
 	return (_server.get_full_path(uri.get_path()));
 }
+
+void
+Client::set_server(Server & server)
+{
+	_server = server;
+}
+
+void
+Client::set_server_socket(ServerSocket & server_socket)
+{
+	_server_socket = server_socket;
+}

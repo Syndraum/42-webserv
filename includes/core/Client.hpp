@@ -26,6 +26,8 @@ public:
 	Server &		get_server();
 	ServerSocket &	get_server_socket();
 	std::string		get_full_path() const;
+	void			set_server(Server &);
+	void			set_server_socket(ServerSocket &);
 private:
 
 };
