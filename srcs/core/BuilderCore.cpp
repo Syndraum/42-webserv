@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/30 17:44:49 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/30 19:58:55 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,10 +156,10 @@ BuilderCore::parse_server_listen(Server *server)
 	{
 		cursor = _idx;
 		port = stoi_skip();
-		if (port < 0 || (!skip_whitespaces() && _line[_idx] != ';'))
+		if (port < 0 || (!skip_whitespaces() && _line[_idx] != ';' && _line[_idx] != '.'))
 		{
 			_idx = cursor;
-			host_not_found_error(next_word_skip());
+			host_not_found_error(next_word_skip()); //
 		}
 		if (_line[_idx] == '.')
 		{
