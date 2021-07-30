@@ -160,9 +160,10 @@ HandlerRequest::is_complete() const
 void
 HandlerRequest::check_host(servers & vector)
 {
-	Request &	request	= get_request();
-	int	port	= _client->get_server_socket().get_port();
-	std::string	host;
+	Request &		request			= get_request();
+	ServerSocket &	server_socket	= _client->get_server_socket();
+	int				port			= server_socket.get_port();
+	std::string		host;
 
 	if (request.has_header("Host"))
 	{
@@ -175,8 +176,8 @@ HandlerRequest::check_host(servers & vector)
 			{
 				if ((*it).get_name() == host && (*it).has_port(port))
 				{
-					_client->set_server(*it);
-					_client->set_server_socket(it->get_server_socket(port));
+					_client->set_server(&(*it));
+					_client->set_server_socket(&(it->get_server_socket(port)));
 					break;
 				}
 			}

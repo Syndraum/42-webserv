@@ -108,6 +108,7 @@ print();
 		client_vector::iterator client = hr.handle(_client, _servers);
 		if (client != _client.end())
 			remove_client(client);
+		// _pfdh.reset_server();
 	}
 }
 
@@ -185,6 +186,7 @@ Core::remove_client(client_vector::iterator it)
 	_pfdh.erase();
 	close(it->get_socket());
 	_client.erase(it);
+	std::cout << "Disconnected" << std::endl;
 }
 
 AMethod *

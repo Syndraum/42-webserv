@@ -134,6 +134,16 @@ HandlerPollFD::accept_connection(std::vector<Server> & servers, std::vector<Clie
 	}
 }
 
+void
+HandlerPollFD::reset_server(void)
+{
+	for (pollfd_vector::iterator it = _pfd.begin(); it != _pfd.end(); it++)
+	{
+		if (it->events == POLLIN)
+			it->revents = 0;
+	}
+}
+
 int
 HandlerPollFD::_get_client_socket(std::vector<Client> & clients, int fd)
 {
