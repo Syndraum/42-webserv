@@ -149,6 +149,25 @@ Core::set_extension(Extension * extension)
 	_extension = extension;
 }
 
+bool
+Core::has_host_port(const std::string & ip, int port) const
+{
+	for (size_t i = 0; i < _servers.size(); i++)
+	{
+		const Server & server = _servers[i];
+
+		for (Server::port_map::const_iterator it = server.get_map_socket().begin();
+			it != server.get_map_socket().end(); it++)
+		{
+			const ServerSocket & server_socket = it->second;
+
+			if (server_socket.get_port() == port && ip == "127.0.0.1")
+				return true;
+		}
+	}
+	return false;
+}
+
 void
 Core::print() const
 {

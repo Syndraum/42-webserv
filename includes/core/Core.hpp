@@ -64,6 +64,7 @@ class Core
 		Core &								set_worker(int);
 		int									get_worker(void) const;
 		void								set_extension(Extension * extensoin);
+		bool								has_host_port(const std::string &, int) const;
 
 		void								remove_client(client_vector::iterator);
 		// CsvReader &							get_csv_reader();

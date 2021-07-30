@@ -20,6 +20,9 @@
 # include <iostream>
 # include <cerrno>
 # include <cstring>
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
 
 class ServerSocket : public ASocket
 {
@@ -27,6 +30,7 @@ class ServerSocket : public ASocket
 
 		int				_port;
 		int				_ip;
+		bool			_active;
 		
 	public:
 	
@@ -42,6 +46,8 @@ class ServerSocket : public ASocket
 
 		ServerSocket *	set_port(int port);
 		int				get_port() const;
+		ServerSocket *	set_active(bool);
+		bool			get_active() const;
 		void			print() const;
 };
 

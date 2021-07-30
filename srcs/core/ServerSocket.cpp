@@ -14,14 +14,16 @@
 
 ServerSocket::ServerSocket(int port) :
 _port(port),
-_ip(0)
+_ip(0),
+_active(true)
 {
 	_socket = -1;
 }
 
 ServerSocket::ServerSocket(int port, uint32_t ip) :
 _port(port),
-_ip(ip)
+_ip(ip),
+_active(true)
 {
 	_socket = -1;
 }
@@ -44,6 +46,7 @@ ServerSocket::operator=(ServerSocket const & rhs)
 		this->_socket = rhs._socket;
 		this->_address = rhs._address;
 		this->_ip = rhs._ip;
+		this->_active = rhs._active;
 	}
 	return *this;
 }
@@ -52,11 +55,12 @@ void
 ServerSocket::setup_socket()
 {
 	int one = 1;
+
 	_socket = socket(AF_INET , SOCK_STREAM | SOCK_NONBLOCK , 0);
 	if (_socket == -1)
 		throw "Socket error";
 	_address.sin_family = AF_INET;
-	_address.sin_addr.s_addr = INADDR_ANY;
+	_address.sin_addr.s_addr = inet_addr("127.0.0.1");
 	_address.sin_port = htons( _port );
 	setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &one, sizeof(int));
 }
@@ -92,11 +96,25 @@ ServerSocket::get_port() const
 	return (_port);
 }
 
+ServerSocket *
+ServerSocket::set_active(bool active)
+{
+	_active = active;
+	return this;
+}
+
+bool
+ServerSocket::get_active() const
+{
+	return (_active);
+}
+
 void
 ServerSocket::print() const
 {
 	std::cout << " adress : " << this << "\n";
 	std::cout << " port : " << _port << "\n";
 	std::cout << " ip : " << _ip << "\n";
+	std::cout << " active : " << std::boolalpha << _active << "\n";
 	std::cout << " fd : " << _socket << "\n";
 }

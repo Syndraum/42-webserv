@@ -49,9 +49,14 @@ Server::add_port(int const port)
 }
 
 Server &
-Server::add_listen(int const port, uint32_t const ip)
+Server::add_listen(int const port, uint32_t const ip, bool active)
 {
-	_server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port, ip)));
+	std::pair<port_map::iterator, bool>	pair;
+	port_map::iterator					it;
+
+	pair = _server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port, ip)));
+	it = pair.first;
+	it->second.set_active(active);
 	return(*this);
 }
 
@@ -85,14 +90,23 @@ Server::start(int const worker)
 	{
 		ServerSocket & ss = it->second;
 
-		ss.setup_socket();
-		ss.bind_socket();
-		ss.listen_socket(worker);
+		if (ss.get_active())
+		{
+			ss.setup_socket();
+			ss.bind_socket();
+			ss.listen_socket(worker);
+		}
 	}
 }
 
 Server::port_map &
-Server::get_server_socket(void)
+Server::get_map_socket(void)
+{
+	return (_server_sockets);
+}
+
+const Server::port_map &
+Server::get_map_socket(void) const
 {
 	return (_server_sockets);
 }

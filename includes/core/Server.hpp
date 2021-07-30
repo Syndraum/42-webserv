@@ -64,14 +64,16 @@ class Server
 		Server &							operator=(Server const &rhs);
 
 		Server &							add_port(int const port);
-		Server &							add_listen(int const port, uint32_t const address);
+		Server &							add_listen(int const port, uint32_t const address, bool = true);
 		Server &							add_index(std::string const & index);
 		Server &							add_method(AMethod *method);
 		Server &							add_CGI(std::string name, CGI content);
 		void								start(int const worker);
 
-		port_map &							get_server_socket();
-		ServerSocket const &				get_server_socket(int port) const;
+		port_map &							get_map_socket();
+		const port_map &					get_map_socket() const;
+		ServerSocket &						get_server_socket(int port);
+		const ServerSocket &				get_server_socket(int port) const;
 		const bool	&						get_auto_index() const;
 		const std::string &					get_root() const;
 		std::string 						get_index(const std::string &);
