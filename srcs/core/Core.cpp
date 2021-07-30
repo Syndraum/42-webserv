@@ -162,7 +162,7 @@ Core::has_host_port(const std::string & ip, int port) const
 		{
 			const ServerSocket & server_socket = it->second;
 
-			if (server_socket.get_port() == port && ip == "127.0.0.1")
+			if (server_socket.get_port() == port && ip == server_socket.get_ip())
 				return true;
 		}
 	}

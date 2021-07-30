@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:14:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/29 17:25:32 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/29 18:54:07 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 ServerSocket::ServerSocket(int port) :
 _port(port),
-_ip(0),
+_ip("0.0.0.0"),
 _active(true)
 {
 	_socket = -1;
 }
 
-ServerSocket::ServerSocket(int port, uint32_t ip) :
+ServerSocket::ServerSocket(int port, std::string ip) :
 _port(port),
 _ip(ip),
 _active(true)
@@ -60,7 +60,7 @@ ServerSocket::setup_socket()
 	if (_socket == -1)
 		throw "Socket error";
 	_address.sin_family = AF_INET;
-	_address.sin_addr.s_addr = inet_addr("127.0.0.1");
+	_address.sin_addr.s_addr = inet_addr(_ip.c_str());
 	_address.sin_port = htons( _port );
 	setsockopt(_socket, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &one, sizeof(int));
 }
@@ -94,6 +94,12 @@ int
 ServerSocket::get_port() const
 {
 	return (_port);
+}
+
+const std::string &
+ServerSocket::get_ip() const
+{
+	return (_ip);
 }
 
 ServerSocket *
