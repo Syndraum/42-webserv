@@ -23,6 +23,8 @@ void
 BuilderMessage::_parse_headers(std::string line)
 {
 	size_t		len = line.find(": ");
+	std::string	key;
+	std::string	value;
 
 	if (line.length() == 1 && line[0] == '\r'){
 		_message->set_header_lock(true);
@@ -30,7 +32,11 @@ BuilderMessage::_parse_headers(std::string line)
 	}
 	else if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
 		throw BadRequest();
-	_message->add_header(line.substr(0, len), line.substr(len + 2, line.length() - len - 3));
+	key = line.substr(0, len);
+	if (_message->has_header(key))
+		throw BadRequest();
+	value = line.substr(len + 2, line.length() - len - 3);
+	_message->add_header(key, value);
 }
 
 Message *

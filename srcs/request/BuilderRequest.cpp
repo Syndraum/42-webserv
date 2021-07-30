@@ -78,20 +78,6 @@ BuilderRequest::_first_line(std::string line)
 		throw BadRequest();
 }
 
-// void
-// BuilderRequest::_parse_headers(std::string line)
-// {
-// 	size_t		len = line.find(": ");
-
-// 	if (line.length() == 1 && line[0] == '\r'){
-// 		_request->set_header_lock(true);
-// 		// _request->set_body_lock(true); // TEMPORARY
-// 	}
-// 	else if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
-// 		throw BadRequest();
-// 	_request->add_header(line.substr(0, len), line.substr(len + 2, line.length() - len - 3));
-// }
-
 void
 BuilderRequest::parse_request(std::string & line)
 {
@@ -100,12 +86,6 @@ BuilderRequest::parse_request(std::string & line)
 	else if (!(_message->get_header_lock()))
 		_parse_headers(line);
 }
-
-// Request *
-// BuilderRequest::get_request() const
-// {
-// 	return _request;
-// }
 
 void
 BuilderRequest::set_message(Message * message)

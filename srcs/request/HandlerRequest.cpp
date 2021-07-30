@@ -86,7 +86,7 @@ HandlerRequest::handle(clients & v_clients, servers & v_servers)
 			}
 			
 		}
-		catch (BuilderRequest::BadRequest &e)
+		catch (BuilderMessage::BadRequest &e)
 		{
 			_handler_response.set_strategy(new StrategyError(400));
 		}
@@ -183,4 +183,9 @@ HandlerRequest::check_host(servers & vector)
 			}
 		}
 	}
+	else
+	{
+		throw BuilderMessage::BadRequest();
+	}
+	
 }
