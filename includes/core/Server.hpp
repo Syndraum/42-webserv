@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/29 18:51:43 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/07/30 16:46:46 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class Server
 	public:
 
 		typedef std::map<int, ServerSocket>	port_map;
+		typedef std::map<int, std::string>	return_map;
 		typedef std::map<std::string, CGI>	cgi_map;
 		typedef std::pair<std::string, CGI>	cgi_pair;
 
@@ -53,7 +54,8 @@ class Server
 		bool								_auto_index;
 		size_t								_client_max_body_size;
 		std::string							_path_error_page;
-		cgi_map								_CGI_map;								
+		cgi_map								_CGI_map;
+		return_map							_return_map;							
 
 	public:
 
@@ -64,6 +66,7 @@ class Server
 		Server &							operator=(Server const &rhs);
 
 		Server &							add_port(int const port);
+		Server &							add_return(int const code, std::string const uri);
 		Server &							add_listen(int const port, std::string const address);
 		Server &							add_index(std::string const & index);
 		Server &							add_method(AMethod *method);
