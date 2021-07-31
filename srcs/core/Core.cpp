@@ -14,7 +14,6 @@
 
 Core::Core(void) :
 _worker(3)
-//_maxfd(-1),
 {
 	_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
 	_methods
@@ -30,7 +29,10 @@ Core::Core(Core const & src)
 	*this = src;
 }
 
-Core::~Core() {}
+Core::~Core()
+{
+
+}
 
 Core &
 Core::operator=(Core const & rhs)
@@ -106,6 +108,12 @@ print();
 			remove_client(client);
 		// _pfdh.reset_server();
 	}
+}
+
+void
+Core::clean()
+{
+	Extension::delete_instance();
 }
 
 void

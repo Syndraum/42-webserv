@@ -18,4 +18,5 @@ int		main(int argc, char *argv[], char *env[])
 
 	core.init(argc, argv, env);
 	core.start();
+	core.clean();
 }

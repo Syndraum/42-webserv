@@ -56,6 +56,7 @@ class Core
 
 		void								init(int argc, char * argv[], char *env[]);
 		void								start();
+		void								clean();
 		void								add_server(Server & server);
 		Server &							add_server();
 		Server const &						get_server(int index = 0) const;
