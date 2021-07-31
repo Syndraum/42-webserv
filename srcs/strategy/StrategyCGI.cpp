@@ -98,8 +98,7 @@ StrategyCGI::_prepare(Client & client)
 		.add_header("SCRIPT_FILENAME", server.get_full_path(request_http.get_uri().get_path()))
 		.add_header("PATH_INFO", server.get_full_path(request_http.get_uri().get_path()))
 		.add_header("QUERY_STRING", request_http.get_uri().get_query_string())
-		.add_header("REMOTE_ADDR", client.get_socket_struct().get_ip()) // TMP
-		.add_header("REMOTE_HOST", "") //TMP
+		.add_header("REMOTE_ADDR", client.get_socket_struct().get_ip())
 		.add_header("REQUEST_METHOD", request_http.get_method()->get_name())
 		.add_header("SCRIPT_NAME", request_http.get_uri().get_path())
 		.add_header("SERVER_NAME", server_socket.get_ip())
