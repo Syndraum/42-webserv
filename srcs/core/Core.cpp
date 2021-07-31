@@ -42,7 +42,7 @@ Core::operator=(Core const & rhs)
 	return *this;
 }
 
-void
+int
 Core::init(int argc, char * argv[], char *env[])
 {
 	std::string path_config_file = Info::path_config_file;
@@ -50,7 +50,7 @@ Core::init(int argc, char * argv[], char *env[])
 	if (argc > 2)
 	{
 		std::cerr << "Error: too many arguments" << std::endl;
-		exit(2);
+		return (2);
 	}
 	if (argc == 2)
 		path_config_file = argv[1];
@@ -63,7 +63,7 @@ Core::init(int argc, char * argv[], char *env[])
 	catch(const std::exception& e)
 	{
 		std::cerr << "Error: Configuration file: " << path_config_file << " not found" << std::endl;
-		exit(1);
+		return (1);
 	}
 	try
 	{
@@ -74,9 +74,10 @@ Core::init(int argc, char * argv[], char *env[])
 	catch(const std::exception& e)
 	{
 		// std::cerr << e.what() << '\n';
-		exit(3);
+		return (3);
 	}
 	Info::env = env;
+	return (0);
 }
 
 void

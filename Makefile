@@ -119,6 +119,12 @@ run:		all
 vg:	all
 			valgrind ./$(NAME)
 
+vgf:	all
+			valgrind --leak-check=full ./$(NAME)
+
+vga:	all
+			valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
+
 clean:
 			${RM} ${OBJS}
 			${RM} ${DEPS}

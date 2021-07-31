@@ -54,7 +54,7 @@ class Core
 		virtual ~Core(void);
 		Core &								operator=(Core const &rhs);
 
-		void								init(int argc, char * argv[], char *env[]);
+		int									init(int argc, char * argv[], char *env[]);
 		void								start();
 		void								clean();
 		void								add_server(Server & server);
