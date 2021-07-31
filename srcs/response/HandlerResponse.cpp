@@ -9,7 +9,7 @@ HandlerResponse::HandlerResponse(HandlerResponse const & src)
 
 HandlerResponse::~HandlerResponse(void)
 {
-	
+	reset();
 }
 
 HandlerResponse &	HandlerResponse::operator=(HandlerResponse const & rhs)
@@ -37,5 +37,13 @@ HandlerResponse::send(int fd)
 	if (_response == 0)
 		throw std::exception();
 	_response->send(fd);
+}
+
+void
+HandlerResponse::reset()
+{
 	delete _response;
+	_response = 0;
+	delete _strategy;
+	_strategy = 0;
 }

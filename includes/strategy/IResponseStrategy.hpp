@@ -9,6 +9,7 @@
 class IResponseStrategy
 {
 public:
+	virtual ~IResponseStrategy() {}
 	virtual Response * create(Client &) = 0;
 };
 

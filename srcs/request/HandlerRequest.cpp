@@ -100,6 +100,7 @@ HandlerRequest::handle(clients & v_clients, servers & v_servers)
 		}
 		_handler_response.do_strategy(*_client);
 		_handler_response.send(it->get_socket());
+		_handler_response.reset();
 		get_request().reset();
 		return (it);
 	}

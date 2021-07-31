@@ -20,6 +20,7 @@ public:
 	void	set_strategy(IResponseStrategy *);
 	void	do_strategy(Client &);
 	void	send(int fd);
+	void	reset();
 
 private:
 
