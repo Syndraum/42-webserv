@@ -58,7 +58,7 @@ ServerSocket::setup_socket()
 
 	_socket = socket(AF_INET , SOCK_STREAM | SOCK_NONBLOCK , 0);
 	if (_socket == -1)
-		throw "Socket error";
+		throw SocketError();
 	_address.sin_family = AF_INET;
 	_address.sin_addr.s_addr = inet_addr(_ip.c_str());
 	_address.sin_port = htons( _port );
@@ -68,10 +68,8 @@ ServerSocket::setup_socket()
 void
 ServerSocket::bind_socket()
 {
-	if ((bind(_socket, reinterpret_cast<sockaddr*>(&_address), sizeof(_address)) < 0)){
-		std::cerr << strerror(errno) << std::endl;
-		throw std::exception();
-	}
+	if ((bind(_socket, reinterpret_cast<sockaddr*>(&_address), sizeof(_address)) < 0))
+		throw BindError();
 	std::cout << "bind done. Listen on port " << _port <<std::endl;
 }
 
@@ -79,7 +77,7 @@ void
 ServerSocket::listen_socket(int worker_connection)
 {
 	if ((listen(_socket, worker_connection)) < 0)
-		throw "listen failed";
+		throw ListenError();
 	std::cout << "Waiting for incoming connection..." << std::endl;
 }
 

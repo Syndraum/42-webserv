@@ -82,18 +82,14 @@ Core::start()
 {
 	HandlerRequest		hr(_br);
 	std::vector<int>	active_socket;
-	try{
-
+	try
+	{
 		for (size_t i = 0; i < _servers.size(); i++)
-		{
 			_servers[i].start(_worker);
-		}
 	}
 	catch(std::exception & e)
 	{
-		std::cout << e.what() << std::endl;
-		std::cout << "test" << std::endl;
-
+		std::cerr << "Error: " << e.what() << '\n';
 		return ;
 	}
 print();

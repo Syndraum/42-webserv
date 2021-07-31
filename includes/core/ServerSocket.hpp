@@ -15,14 +15,12 @@
 
 # include <sys/socket.h>
 # include <netinet/in.h>
-# include "ASocket.hpp"
-
+# include <arpa/inet.h>
 # include <iostream>
 # include <cerrno>
 # include <cstring>
-# include <sys/socket.h>
-# include <netinet/in.h>
-# include <arpa/inet.h>
+# include "ASocket.hpp"
+# include <exception>
 
 class ServerSocket : public ASocket
 {
@@ -50,6 +48,25 @@ class ServerSocket : public ASocket
 		ServerSocket *		set_active(bool);
 		bool				get_active() const;
 		void				print() const;
+
+		class SocketError : public std::exception
+		{
+			virtual const char*	what() const throw(){
+				return "Socket error";
+			}
+		};
+		class BindError : public std::exception
+		{
+			virtual const char*	what() const throw(){
+				return "Bind error";
+			}
+		};
+		class ListenError : public std::exception
+		{
+			virtual const char*	what() const throw(){
+				return "Listen error";
+			}
+		};
 };
 
 #endif
