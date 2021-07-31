@@ -80,8 +80,9 @@ StrategyCGI::handle_status(const Message & message, Response & response)
 void
 StrategyCGI::_prepare(Client & client)
 {
-	Request &	request_http	= client.get_request();
-	Server &	server			= client.get_server();
+	Request &		request_http	= client.get_request();
+	Server &		server			= client.get_server();
+	ServerSocket &	server_socket	= client.get_server_socket();
 
 	if (request_http.get_body().length() == 0 || !request_http.has_header("Content-Length")){
 		_request.add_header("CONTENT_LENGTH", 0);
@@ -97,15 +98,16 @@ StrategyCGI::_prepare(Client & client)
 		.add_header("SCRIPT_FILENAME", server.get_full_path(request_http.get_uri().get_path()))
 		.add_header("PATH_INFO", server.get_full_path(request_http.get_uri().get_path()))
 		.add_header("QUERY_STRING", request_http.get_uri().get_query_string())
-		.add_header("REMOTE_ADDR", "0.0.0.0") // TMP
+		.add_header("REMOTE_ADDR", client.get_socket_struct().get_ip()) // TMP
 		.add_header("REMOTE_HOST", "") //TMP
 		.add_header("REQUEST_METHOD", request_http.get_method()->get_name())
 		.add_header("SCRIPT_NAME", request_http.get_uri().get_path())
-		.add_header("SERVER_NAME", "0.0.0.0") // TMP
-		.add_header("SERVER_PORT", client.get_server_socket().get_port())
+		.add_header("SERVER_NAME", server_socket.get_ip())
+		.add_header("SERVER_PORT", server_socket.get_port())
 		.add_header("SERVER_PROTOCOL", Info::http_revision)
 		.add_header("SERVER_SOFTWARE", Info::server_name + "/" + Info::version)
 	;
 	if (_request.get_header("PATH_INFO") != "")
 		_request.add_header("PATH_TRANSLATED", server.get_full_path(request_http.get_uri().get_extra_path()));
+	_request.debug();
 }
