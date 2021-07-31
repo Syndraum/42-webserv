@@ -164,10 +164,14 @@ HandlerRequest::check_host(servers & vector)
 	ServerSocket &	server_socket	= _client->get_server_socket();
 	int				port			= server_socket.get_port();
 	std::string		host;
+	size_t			find;
 
 	if (request.has_header("Host"))
 	{
 		host = request.get_header("Host");
+		find = host.find(":", 0);
+		if(find  != std::string::npos)
+			host = host.substr(0, find);
 		if (host != get_server().get_name())
 		{
 			servers::iterator ite = vector.end();
@@ -184,8 +188,5 @@ HandlerRequest::check_host(servers & vector)
 		}
 	}
 	else
-	{
 		throw BuilderMessage::BadRequest();
-	}
-	
 }
