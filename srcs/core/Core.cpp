@@ -69,7 +69,7 @@ Core::init(int argc, char * argv[], char *env[])
 	{
 		BuilderCore builder_core(reader.get_ifs(), this);
 		builder_core.parse_mime_type();
-		builder_core.print_debug();
+		// builder_core.print_debug();
 	}
 	catch(const std::exception& e)
 	{

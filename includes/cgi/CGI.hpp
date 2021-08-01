@@ -40,9 +40,7 @@ class CGI
 
 		void										create_env(const env_map &, Array & array);
 		void										join_env(env_map &);
-		size_t										str_table_len(char ** table) const;
 		char**										create_env(void);
-		void										_parse(int fd, Message &);
 
 	public:
 

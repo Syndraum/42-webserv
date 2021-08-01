@@ -71,7 +71,7 @@ Server &
 Server::add_index(std::string const &index)
 {
 	_index.push_back(index);
-	std::cerr << "INDEX LIST SIZE : " << _index.size() << std::endl; //W
+	// std::cerr << "INDEX LIST SIZE : " << _index.size() << std::endl; //W
 	return(*this);
 }
 

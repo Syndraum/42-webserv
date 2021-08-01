@@ -518,7 +518,7 @@ BuilderCore::parse_server(Core *core)
 	if (_line[_idx] != '}')
 		unexpected_eof_error("\"}\"");
 	_core->add_server(server);
-	server.print();
+	// server.print();
 	_idx ++;
 }
 

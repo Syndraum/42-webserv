@@ -6,7 +6,6 @@ Extension::Extension(void) : _csv_reader("./config/mine_type.csv")
 {
 	try
 	{
-		std::cout << "open" << std::endl;
 		_csv_reader.open();
 		_csv_reader
 			.parse_categeries()

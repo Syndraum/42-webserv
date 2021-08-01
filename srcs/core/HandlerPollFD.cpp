@@ -157,9 +157,9 @@ HandlerPollFD::_get_client_socket(std::vector<Client> & clients, int fd)
 		exit(EXIT_FAILURE);
 	}
 	setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
-	std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
+	std::cout << "[server socket : " << fd << "] New connection, " << cs.get_socket_struct().get_ip() << " accept on socket "<< new_socket << std::endl;
 	cs.get_socket_struct().set_socket(new_socket);
-	std::cout << "Adding to list of sockets as " << clients.size() << std::endl;
+	// std::cout << "Adding to list of sockets as " << clients.size() << std::endl;
 	_add_clients_pfd(new_socket, POLLOUT);
 	if (clients.size() > 1)
 	{

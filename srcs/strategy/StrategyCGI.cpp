@@ -36,7 +36,7 @@ StrategyCGI::create(Client & client)
 
 	this->_prepare(client);
 	_request.set_body(client.get_request().get_body());
-	_request.debug();
+	// _request.debug();
 	Message * response_cgi = _request.send(client.get_full_path());
 
 	response = new Response();
@@ -108,5 +108,5 @@ StrategyCGI::_prepare(Client & client)
 	;
 	if (_request.get_header("PATH_INFO") != "")
 		_request.add_header("PATH_TRANSLATED", server.get_full_path(request_http.get_uri().get_extra_path()));
-	_request.debug();
+	// _request.debug();
 }
