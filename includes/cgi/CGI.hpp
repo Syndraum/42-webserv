@@ -24,6 +24,7 @@
 # include <cstring>
 # include "Info.hpp"
 # include "HandlerResponseCGI.hpp"
+# include "Array.hpp"
 
 class CGI
 {
@@ -37,11 +38,9 @@ class CGI
 		env_map										_cgi_env;
 		HandlerResponseCGI							_handler;
 
-		char **										create_env(const env_map &);
+		void										create_env(const env_map &, Array & array);
 		void										join_env(env_map &);
 		size_t										str_table_len(char ** table) const;
-		void										str_table_delete(char ** table) const;
-		char *										string_copy(std::string str) const;
 		char**										create_env(void);
 		void										_parse(int fd, Message &);
 
@@ -58,7 +57,6 @@ class CGI
 
 		Message *									start(Message & request, const std::string & path);
 		void										print() const;
-		void										print_env(char **) const;
 		class MyError: public std::exception
 		{
 			virtual const char*	what() const throw(){

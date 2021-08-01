@@ -23,6 +23,7 @@ SRCS_METHOD		= $(addprefix $(PREFIX)methods/, \
 SRCS_UTILS		= $(addprefix $(PREFIX)utils/, \
 								Info.cpp \
 								StringPP.cpp \
+								Array.cpp \
 								)
 
 SRCS_REQUEST	= $(addprefix $(PREFIX)request/, \

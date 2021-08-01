@@ -56,66 +56,24 @@ CGI::add_CGI_param(std::string key, std::string value)
 	_cgi_env.insert(std::pair<std::string, std::string>(key, value));
 }
 
-size_t
-CGI::str_table_len(char ** table) const
-{
-	size_t i = 0;
-	
-	while(table[i])
-		i++;
-	return (i);
-}
-
 void
-CGI::str_table_delete(char ** table) const
-{
-	size_t i = 0;
-
-	while(table[i])
-	{
-		delete table[i];
-		i++;
-	}
-	delete table;
-}
-
-char *
-CGI::string_copy(std::string str) const
-{
-	size_t i = -1;
-
-	char * ret = new char[str.length() + 1];
-
-	while(++i < str.length())
-		ret[i] = str[i];
-	ret[i] = 0;
-	return (ret);
-}
-
-char **
-CGI::create_env(const env_map & map)
+CGI::create_env(const env_map & map, Array & array)
 {
 	char **		cursor	= Info::env;
-	char **		env;
 	StringPP	line;
-	int			i = 0;
 
-	env = new char *[map.size() + str_table_len(Info::env) + 1];
+	array.set_capacity(map.size() + Array::len(Info::env));
 	while (*cursor != 0)
 	{
-		env[i] = strdup(*cursor);
-		i++;
+		array.push_back(*cursor);
 		cursor++;
 	}
 	env_map::const_iterator ite = map.end();
 	for (env_map::const_iterator it = map.begin(); it != ite; it++)
 	{
 		line = it->first + "=" + it->second;
-		env[i] = line.string_copy();
-		i++;
+		array.push_back(line.str().c_str());
 	}
-	env[i] = 0;
-	return (env);
 }
 
 void
@@ -130,13 +88,15 @@ CGI::join_env(env_map & my_env)
 Message *
 CGI::start(Message & request, const std::string & script_path)
 {
-	pid_t		pid;
-	int			pipe_out[2];
-	int			pipe_err[2];
-	int			pipe_in[2];
-	char **		env;
+	pid_t			pid;
+	int				pipe_out[2];
+	int				pipe_err[2];
+	int				pipe_in[2];
+	Array		a_env;
+	// char **		env;
 
-	env = create_env(request.get_headers());
+	// env = create_env(request.get_headers());
+	create_env(request.get_headers(), a_env);
 	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1 || pipe(pipe_in) == -1)
 		throw (std::exception()); // specify
 	pid = fork();
@@ -149,7 +109,7 @@ CGI::start(Message & request, const std::string & script_path)
 		close(pipe_out[0]);
 		close(pipe_err[0]);
 		close(pipe_in[1]);
-		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, env) < 0)
+		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, a_env.data()) < 0)
 			throw (std::exception()); // specify
 		_exit(0);
 	}
@@ -166,7 +126,7 @@ CGI::start(Message & request, const std::string & script_path)
 		close(pipe_err[0]);
 		close(pipe_in[1]);
 	}
-	str_table_delete(env);
+	// str_table_delete(env);
 	return (_handler.get_response());
 }
 
@@ -183,19 +143,6 @@ CGI::print() const
 	for (env_map::const_iterator it = _cgi_env.begin(); it != _cgi_env.end(); it++)
 	{
 		std::cout << it->first << " = " << it->second << std::endl;
-	}
-}
-
-void
-CGI::print_env(char ** env) const
-{
-	char ** cursor = env;
-
-	std::cout << "len: " << str_table_len(env) << std::endl;
-	while (*cursor != 0)
-	{
-		std::cout << *cursor << std::endl;
-		cursor++;
 	}
 }
 
