@@ -95,7 +95,7 @@ Core::start()
 		std::cerr << "Error: " << e.what() << '\n';
 		return ;
 	}
-print();
+// print();
 	_pfdh.init(_servers);
 	while (true)
 	{
@@ -107,7 +107,7 @@ print();
 		client_vector::iterator client = hr.handle(_client, _servers);
 		if (client != _client.end()){
 			remove_client(client);
-			return ;
+			// return ;
 		}
 		// _pfdh.reset_server();
 	}
@@ -117,6 +117,8 @@ void
 Core::clean()
 {
 	Extension::delete_instance();
+	_client.clear();
+	_servers.clear();
 }
 
 void
