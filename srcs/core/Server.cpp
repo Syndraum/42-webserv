@@ -49,9 +49,14 @@ Server::add_port(int const port)
 }
 
 Server &
-Server::add_listen(int const port, std::string const ip)
+Server::add_listen(int const port, std::string const ip, bool active)
 {
-	_server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port, ip)));
+	std::pair<port_map::iterator, bool>	pair;
+	port_map::iterator					it;
+
+	pair = _server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port, ip)));
+	it = pair.first;
+	it->second.set_active(active);
 	return(*this);
 }
 
@@ -66,7 +71,7 @@ Server &
 Server::add_index(std::string const &index)
 {
 	_index.push_back(index);
-	std::cerr << "INDEX LIST SIZE : " << _index.size() << std::endl; //W
+	// std::cerr << "INDEX LIST SIZE : " << _index.size() << std::endl; //W
 	return(*this);
 }
 
@@ -92,16 +97,37 @@ Server::start(int const worker)
 	{
 		ServerSocket & ss = it->second;
 
-		ss.setup_socket();
-		ss.bind_socket();
-		ss.listen_socket(worker);
+		if (ss.get_active())
+		{
+			ss.setup_socket();
+			ss.bind_socket();
+			ss.listen_socket(worker);
+		}
 	}
 }
 
+const std::string &
+Server::get_name() const
+{
+	return (_name);
+}
+
 Server::port_map &
-Server::get_server_socket(void)
+Server::get_map_socket(void)
 {
 	return (_server_sockets);
+}
+
+const Server::port_map &
+Server::get_map_socket(void) const
+{
+	return (_server_sockets);
+}
+
+ServerSocket &
+Server::get_server_socket(int port)
+{
+	return _server_sockets.at(port);
 }
 
 ServerSocket const &
@@ -189,10 +215,26 @@ Server::get_index_page(const Request & request)
 	return (ss.str());
 }
 
-Server::cgi_map &
-Server::get_cgi_map()
+CGI &
+Server::get_cgi(const std::string & key)
 {
-	return (_CGI_map);
+	return (_CGI_map.at("." + key));
+}
+
+bool
+Server::has_cgi(const std::string & extension)
+{
+	if (_CGI_map.find("." + extension) == _CGI_map.end())
+		return false;
+	return true;
+}
+
+bool
+Server::has_port(int port)
+{
+	if (_server_sockets.find(port) == _server_sockets.end())
+		return false;
+	return true;
 }
 
 Server &

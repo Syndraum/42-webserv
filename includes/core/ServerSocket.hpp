@@ -15,18 +15,20 @@
 
 # include <sys/socket.h>
 # include <netinet/in.h>
-# include "ASocket.hpp"
-
+# include <arpa/inet.h>
 # include <iostream>
 # include <cerrno>
 # include <cstring>
+# include "ASocket.hpp"
+# include <exception>
 
 class ServerSocket : public ASocket
 {
 	private:
 
-		int				_port;
-		std::string		_ip;
+		int					_port;
+		std::string			_ip;
+		bool				_active;
 		
 	public:
 	
@@ -36,13 +38,35 @@ class ServerSocket : public ASocket
 		virtual ~ServerSocket(void);
 		ServerSocket &	operator=(ServerSocket const &rhs);
 
-		void			setup_socket();
-		void			bind_socket();
-		void			listen_socket(int worker_connection);
+		void				setup_socket();
+		void				bind_socket();
+		void				listen_socket(int worker_connection);
 
-		ServerSocket *	set_port(int port);
-		int				get_port() const;
-		void			print() const;
+		ServerSocket *		set_port(int port);
+		int					get_port() const;
+		const std::string &	get_ip() const;
+		ServerSocket *		set_active(bool);
+		bool				get_active() const;
+		void				print() const;
+
+		class SocketError : public std::exception
+		{
+			virtual const char*	what() const throw(){
+				return "Socket error";
+			}
+		};
+		class BindError : public std::exception
+		{
+			virtual const char*	what() const throw(){
+				return "Bind error";
+			}
+		};
+		class ListenError : public std::exception
+		{
+			virtual const char*	what() const throw(){
+				return "Listen error";
+			}
+		};
 };
 
 #endif

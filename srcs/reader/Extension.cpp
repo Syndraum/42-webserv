@@ -6,14 +6,13 @@ Extension::Extension(void) : _csv_reader("./config/mine_type.csv")
 {
 	try
 	{
-		std::cout << "open" << std::endl;
 		_csv_reader.open();
 		_csv_reader
 			.parse_categeries()
 			.set_key_name("Name")
 			.parse_content()
 			;
-		// _csv_reader.debug();
+		_csv_reader.close();
 	}
 	catch(const std::exception& e)
 	{
@@ -23,7 +22,6 @@ Extension::Extension(void) : _csv_reader("./config/mine_type.csv")
 
 Extension::~Extension(void)
 {
-	delete _extension;
 }
 
 std::string
@@ -51,4 +49,14 @@ Extension::get_instance(void)
 	if (_extension == 0)
 		_extension = new Extension();
 	return (_extension);
+}
+
+void
+Extension::delete_instance(void)
+{
+	if (_extension != 0)
+	{
+		delete _extension;
+		_extension = 0;
+	}
 }

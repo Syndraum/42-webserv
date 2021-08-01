@@ -71,16 +71,19 @@ HandlerPollFD::init(std::vector<Server> & servers)
 	for (size_t i = 0; i < servers.size(); i++)
 	{
 		Server & server = servers[i];
-		for (Server::port_map::iterator it = server.get_server_socket().begin(); 
-			it != server.get_server_socket().end(); it++)
+		for (Server::port_map::iterator it = server.get_map_socket().begin(); 
+			it != server.get_map_socket().end(); it++)
 		{
 			ServerSocket & server_socket = it->second;
 
-			fd = server_socket.get_socket();
-			pfd = pollfd_init(fd, POLLIN);
-server_socket.set_id(server_id); // should not be here
-			_pfd.push_back(pfd);
-			server_id++;
+			if (server_socket.get_active())
+			{
+				fd = server_socket.get_socket();
+				pfd = pollfd_init(fd, POLLIN);
+				server_socket.set_id(server_id); // should not be here
+				_pfd.push_back(pfd);
+				server_id++;
+			}
 		}
 	}
 }
@@ -109,22 +112,35 @@ HandlerPollFD::accept_connection(std::vector<Server> & servers, std::vector<Clie
 	{
 		Server & server = servers[i];
 		for (
-			Server::port_map::iterator it = server.get_server_socket().begin();
-			it != server.get_server_socket().end();
+			Server::port_map::iterator it = server.get_map_socket().begin();
+			it != server.get_map_socket().end();
 			it++
 		)
 		{
 			ServerSocket & server_socket = it->second;
-			int fd = server_socket.get_socket();
-
-			if (
-				_pfd[server_socket.get_id()].revents == POLLIN
-			)
+			if (server_socket.get_active())
 			{
-				clients.push_back(Client(server, server_socket));
-				_get_client_socket(clients, fd);
+				int fd = server_socket.get_socket();
+
+				if (
+					_pfd[server_socket.get_id()].revents == POLLIN
+				)
+				{
+					clients.push_back(Client(server, server_socket));
+					_get_client_socket(clients, fd);
+				}
 			}
 		}
+	}
+}
+
+void
+HandlerPollFD::reset_server(void)
+{
+	for (pollfd_vector::iterator it = _pfd.begin(); it != _pfd.end(); it++)
+	{
+		if (it->events == POLLIN)
+			it->revents = 0;
 	}
 }
 
@@ -141,9 +157,9 @@ HandlerPollFD::_get_client_socket(std::vector<Client> & clients, int fd)
 		exit(EXIT_FAILURE);
 	}
 	setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
-	std::cout << "New connection, socket fd is " << new_socket << ", socket server :" << fd << std::endl;
+	std::cout << "[server socket : " << fd << "] New connection, " << cs.get_socket_struct().get_ip() << " accept on socket "<< new_socket << std::endl;
 	cs.get_socket_struct().set_socket(new_socket);
-	std::cout << "Adding to list of sockets as " << clients.size() << std::endl;
+	// std::cout << "Adding to list of sockets as " << clients.size() << std::endl;
 	_add_clients_pfd(new_socket, POLLOUT);
 	if (clients.size() > 1)
 	{

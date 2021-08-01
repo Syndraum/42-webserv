@@ -14,7 +14,6 @@
 
 Core::Core(void) :
 _worker(3)
-//_maxfd(-1),
 {
 	_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
 	_methods
@@ -30,7 +29,10 @@ Core::Core(Core const & src)
 	*this = src;
 }
 
-Core::~Core() {}
+Core::~Core()
+{
+
+}
 
 Core &
 Core::operator=(Core const & rhs)
@@ -40,7 +42,7 @@ Core::operator=(Core const & rhs)
 	return *this;
 }
 
-void
+int
 Core::init(int argc, char * argv[], char *env[])
 {
 	std::string path_config_file = Info::path_config_file;
@@ -48,7 +50,7 @@ Core::init(int argc, char * argv[], char *env[])
 	if (argc > 2)
 	{
 		std::cerr << "Error: too many arguments" << std::endl;
-		exit(2);
+		return (2);
 	}
 	if (argc == 2)
 		path_config_file = argv[1];
@@ -61,20 +63,21 @@ Core::init(int argc, char * argv[], char *env[])
 	catch(const std::exception& e)
 	{
 		std::cerr << "Error: Configuration file: " << path_config_file << " not found" << std::endl;
-		exit(1);
+		return (1);
 	}
 	try
 	{
 		BuilderCore builder_core(reader.get_ifs(), this);
 		builder_core.parse_mime_type();
-		builder_core.print_debug();
+		// builder_core.print_debug();
 	}
 	catch(const std::exception& e)
 	{
 		// std::cerr << e.what() << '\n';
-		exit(3);
+		return (3);
 	}
 	Info::env = env;
+	return (0);
 }
 
 void
@@ -82,21 +85,17 @@ Core::start()
 {
 	HandlerRequest		hr(_br);
 	std::vector<int>	active_socket;
-	try{
-
+	try
+	{
 		for (size_t i = 0; i < _servers.size(); i++)
-		{
 			_servers[i].start(_worker);
-		}
 	}
 	catch(std::exception & e)
 	{
-		std::cout << e.what() << std::endl;
-		std::cout << "test" << std::endl;
-
+		std::cerr << "Error: " << e.what() << '\n';
 		return ;
 	}
-print();
+// print();
 	_pfdh.init(_servers);
 	while (true)
 	{
@@ -105,10 +104,21 @@ print();
 		_pfdh.accept_connection(_servers, _client);
 //		_accept_connection();
 
-		client_vector::iterator client = hr.handle(_client);
-		if (client != _client.end())
+		client_vector::iterator client = hr.handle(_client, _servers);
+		if (client != _client.end()){
 			remove_client(client);
+			// return ;
+		}
+		// _pfdh.reset_server();
 	}
+}
+
+void
+Core::clean()
+{
+	Extension::delete_instance();
+	_client.clear();
+	_servers.clear();
 }
 
 void
@@ -149,6 +159,25 @@ Core::set_extension(Extension * extension)
 	_extension = extension;
 }
 
+bool
+Core::has_host_port(const std::string & ip, int port) const
+{
+	for (size_t i = 0; i < _servers.size(); i++)
+	{
+		const Server & server = _servers[i];
+
+		for (Server::port_map::const_iterator it = server.get_map_socket().begin();
+			it != server.get_map_socket().end(); it++)
+		{
+			const ServerSocket & server_socket = it->second;
+
+			if (server_socket.get_port() == port && ip == server_socket.get_ip())
+				return true;
+		}
+	}
+	return false;
+}
+
 void
 Core::print() const
 {
@@ -166,6 +195,7 @@ Core::remove_client(client_vector::iterator it)
 	_pfdh.erase();
 	close(it->get_socket());
 	_client.erase(it);
+	std::cout << "Disconnected" << std::endl;
 }
 
 AMethod *
