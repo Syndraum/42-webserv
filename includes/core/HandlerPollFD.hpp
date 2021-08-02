@@ -44,6 +44,7 @@ class HandlerPollFD
 		int						watch(void);
 		void					accept_connection(std::vector<Server> & servers, std::vector<Client> & clients);
 		void					erase(void);
+		void					reset_server(void);
 
 		
 

@@ -18,6 +18,7 @@
 # include "ASocket.hpp"
 # include "Request.hpp"
 # include "Server.hpp"
+# include <sstream>
 
 class ClientSocket : public ASocket
 {
@@ -29,6 +30,8 @@ class ClientSocket : public ASocket
 		ClientSocket(ClientSocket const & src);
 		virtual ~ClientSocket(void);
 		ClientSocket &	operator=(ClientSocket const &rhs);
+
+		std::string		get_ip();
 };
 
 #endif

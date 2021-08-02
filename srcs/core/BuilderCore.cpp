@@ -152,6 +152,7 @@ BuilderCore::parse_server_listen(Server *server)
 	int			port = 80;
 	std::string	ip = "0.0.0.0";
 	int			cursor;
+	bool		active;
 
 	// std::cerr << &_line[_idx] << std::endl;
 	skip_whitespaces();
@@ -183,7 +184,8 @@ BuilderCore::parse_server_listen(Server *server)
 			else
 				port = 8080;
 		}
-		server->add_listen(port, ip);
+		active = !_core->has_host_port(ip, port);
+		server->add_listen(port, ip, active);
 		skip_whitespaces();
 	}
 	if (!_line[_idx])
@@ -523,7 +525,7 @@ BuilderCore::parse_server(Core *core)
 	if (_line[_idx] != '}')
 		unexpected_eof_error("\"}\"");
 	_core->add_server(server);
-	server.print();
+	// server.print();
 	_idx ++;
 }
 

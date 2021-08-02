@@ -20,6 +20,7 @@ class HandlerRequest
 	HandlerRequest(void);
 public:
 	typedef std::vector<Client>		clients;
+	typedef std::vector<Server>		servers;
 	typedef clients::iterator		clients_iterator;
 
 	HandlerRequest(BuilderRequest &);
@@ -32,11 +33,12 @@ public:
 	const Request &		get_request() const;
 	Server &			get_server();
 	ClientSocket &		get_client_socket();
-	clients_iterator	handle(clients &);
-	void				parse();
-	void				set_path();
-	bool				is_complete() const;
 
+	clients_iterator	handle(clients &, servers &);
+	void				parse();
+	void				set_index();
+	bool				is_complete() const;
+	void				check_host(servers &);
 };
 
 #endif

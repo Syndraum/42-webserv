@@ -11,7 +11,7 @@ CsvReader::CsvReader(CsvReader const & src) : Reader()
 
 CsvReader::~CsvReader(void)
 {
-	
+
 }
 
 CsvReader &
@@ -93,6 +93,7 @@ CsvReader::parse_content()
 			it++;
 		}
 		_content.insert(std::pair< std::string, vector >(key, tmp_vector));
+		tmp_vector.clear();
 	}
 	return (*this);
 }

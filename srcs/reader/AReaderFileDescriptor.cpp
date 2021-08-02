@@ -118,7 +118,7 @@ AReaderFileDescriptor::read_body(std::string & line, int content_length)
 	int ret = recv(_fd, buffer, content_length, MSG_DONTWAIT);
 	buffer[ret] = 0;
 	line = line + buffer;
-//	std::cout << "body: " << line << std::endl;
+	std::cout << "body: " << line << std::endl;
 }
 
 void

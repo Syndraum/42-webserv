@@ -14,7 +14,14 @@
 
 MethodLibrary::MethodLibrary(void) {}
 
-MethodLibrary::~MethodLibrary() {}
+MethodLibrary::~MethodLibrary()
+{
+	vector_method::iterator	it	= _methods.begin();
+	vector_method::iterator	ite	= _methods.end();
+
+	for (; it != ite; it++)
+		delete *it;
+}
 
 MethodLibrary &
 MethodLibrary::add_method(AMethod * method)

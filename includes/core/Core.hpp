@@ -54,8 +54,9 @@ class Core
 		virtual ~Core(void);
 		Core &								operator=(Core const &rhs);
 
-		void								init(int argc, char * argv[], char *env[]);
+		int									init(int argc, char * argv[], char *env[]);
 		void								start();
+		void								clean();
 		void								add_server(Server & server);
 		Server &							add_server();
 		Server const &						get_server(int index = 0) const;
@@ -64,6 +65,7 @@ class Core
 		Core &								set_worker(int);
 		int									get_worker(void) const;
 		void								set_extension(Extension * extensoin);
+		bool								has_host_port(const std::string &, int) const;
 
 		void								remove_client(client_vector::iterator);
 		// CsvReader &							get_csv_reader();

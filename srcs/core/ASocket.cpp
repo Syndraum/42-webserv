@@ -26,7 +26,10 @@ _reader(rhs._reader)
 }
 
 ASocket::~ASocket(void)
-{}
+{
+	if (_socket > 2)
+		close(_socket);
+}
 
 ASocket const & ASocket::operator=(ASocket const & rhs)
 {

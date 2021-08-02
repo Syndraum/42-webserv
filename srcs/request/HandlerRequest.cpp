@@ -58,20 +58,20 @@ HandlerRequest::get_client_socket()
 }
 
 HandlerRequest::clients_iterator
-HandlerRequest::handle(clients & vector)
+HandlerRequest::handle(clients & v_clients, servers & v_servers)
 {
-	for (clients_iterator it = vector.begin(); it != vector.end(); it++)
+	for (clients_iterator it = v_clients.begin(); it != v_clients.end(); it++)
 	{
 		set_client(&(*it));
 		try{
-			parse();
+			this->parse();
 			if (!is_complete())
 				continue;
-			get_request().set_path(get_request().get_path() + get_server().get_index(get_request().get_path()));
-			if (get_server().get_cgi_map().find("." + Extension::get_extension(get_request().get_path())) != get_server().get_cgi_map().end())
-			{
-				_handler_response.set_strategy(new StrategyCGI(get_server().get_cgi_map()["." + Extension::get_extension(get_request().get_path())]));
-			}
+			this->check_host(v_servers);
+			this->set_index();
+			std::string extension = Extension::get_extension(get_request().get_path());
+			if (get_server().has_cgi(extension))
+				_handler_response.set_strategy(new StrategyCGI(get_server().get_cgi(extension)));
 			else
 			{
 				if (get_server().is_directory(get_request()))
@@ -86,7 +86,7 @@ HandlerRequest::handle(clients & vector)
 			}
 			
 		}
-		catch (BuilderRequest::BadRequest &e)
+		catch (BuilderMessage::BadRequest &e)
 		{
 			_handler_response.set_strategy(new StrategyError(400));
 		}
@@ -100,10 +100,11 @@ HandlerRequest::handle(clients & vector)
 		}
 		_handler_response.do_strategy(*_client);
 		_handler_response.send(it->get_socket());
+		_handler_response.reset();
 		get_request().reset();
 		return (it);
 	}
-	return (vector.end());
+	return (v_clients.end());
 }
 
 void 
@@ -117,22 +118,22 @@ HandlerRequest::parse()
 	{
 		if (gnl_ret == -1)
 			return ;
-		std::cout << "line: " << line << std::endl;
+		// std::cout << "line: " << line << std::endl;
 		line += "\r";
 		_builder.parse_request(line);
 		if (get_request().get_header_lock())
 		{
 			if (!get_request().has_header("Content-Length"))
 			{
-				std::cout << "No Content-Length" << std::endl;
+				// std::cout << "No Content-Length" << std::endl;
 				get_client_socket().get_reader().read_until_end(line);
 				//std::cout << "_buffer: " << _buffer << std::endl;
 			}
 			else
 			{
-				std::cout << "Content-Length : " << get_request().get_header("Content-Length") << std::endl;
-
+				// std::cout << "Content-Length : " << get_request().get_header("Content-Length") << std::endl;
 				get_client_socket().get_reader().read_body(line, std::atoi(get_request().get_header("Content-Length").c_str()));
+				get_request().set_body(line);
 			}
 			get_request().set_body_lock(true);
 			get_client_socket().get_reader()._reset_buffer();
@@ -142,14 +143,51 @@ HandlerRequest::parse()
 }
 
 void
-HandlerRequest::set_path()
+HandlerRequest::set_index()
 {
-	// std::string relative_path;
-	get_request().set_path(get_request().get_path() + get_server().get_index(get_request().get_path()));
+	Request &	request	= get_request();
+	Server	&	server = get_server();
+	std::string	actual_path	= request.get_path();
+
+	request.set_path(actual_path + server.get_index(actual_path));
 }
 
 bool
 HandlerRequest::is_complete() const
 {
 	return (get_request().get_header_lock() && get_request().get_body_lock());
+}
+
+void
+HandlerRequest::check_host(servers & vector)
+{
+	Request &		request			= get_request();
+	ServerSocket &	server_socket	= _client->get_server_socket();
+	int				port			= server_socket.get_port();
+	std::string		host;
+	size_t			find;
+
+	if (request.has_header("Host"))
+	{
+		host = request.get_header("Host");
+		find = host.find(":", 0);
+		if(find  != std::string::npos)
+			host = host.substr(0, find);
+		if (host != get_server().get_name())
+		{
+			servers::iterator ite = vector.end();
+		
+			for (servers::iterator it = ++(vector.begin()); it != ite; it++)
+			{
+				if ((*it).get_name() == host && (*it).has_port(port))
+				{
+					_client->set_server(&(*it));
+					_client->set_server_socket(&(it->get_server_socket(port)));
+					break;
+				}
+			}
+		}
+	}
+	else
+		throw BuilderMessage::BadRequest();
 }

@@ -23,6 +23,7 @@ SRCS_METHOD		= $(addprefix $(PREFIX)methods/, \
 SRCS_UTILS		= $(addprefix $(PREFIX)utils/, \
 								Info.cpp \
 								StringPP.cpp \
+								Array.cpp \
 								)
 
 SRCS_REQUEST	= $(addprefix $(PREFIX)request/, \
@@ -118,6 +119,12 @@ run:		all
 
 vg:	all
 			valgrind ./$(NAME)
+
+vgf:	all
+			valgrind --leak-check=full ./$(NAME)
+
+vga:	all
+			valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
 clean:
 			${RM} ${OBJS}

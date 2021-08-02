@@ -35,59 +35,78 @@ StrategyCGI::create(Client & client)
 	Response * response = 0;
 
 	this->_prepare(client);
-	_request.debug();
-	int std_out = _request.send(client.get_full_path());
-
-
-//	ReaderFileDescriptor reader(std_out);
-//	std::string line;
-//	reader.get_next_line(line);
-//	std::cout << "line : " << line << std::endl;
-//	reader.get_next_line(line);
-//	std::cout << "line : " << line << std::endl;
-//	reader.get_next_line(line);
-//	std::cout << "line : " << line << std::endl;
-
+	_request.set_body(client.get_request().get_body());
+	// _request.debug();
+	Message * response_cgi = _request.send(client.get_full_path());
 
 	response = new Response();
-//	response->set_error(418);
 	response->set_code(200);
-
-	HandlerResponseCGI _handler(std_out);
-	_handler.set_response(response);
-
-	_handler.parse();
-	response->debug();
+	response->add_header("Content-Type", response_cgi->get_header("Content-type"));
+	response->set_body(response_cgi->get_body());
+	if (response_cgi->has_header("Status"))
+		handle_status(*response_cgi, *response);
+	delete (response_cgi);
+	// response->debug();
 	return (response);
+}
+
+void
+StrategyCGI::handle_status(const Message & message, Response & response)
+{
+	std::string	status = message.get_header("Status");
+	size_t		pos;
+
+	if ((pos = status.find(" ", 0)) != std::string::npos)
+	{
+		try
+		{
+			response.set_code(std::atoi(status.substr(0, pos).c_str()));
+			if (response.get_code() >= 400){
+				response.set_error(response.get_code());
+			}
+		}
+		catch(const std::exception& e)
+		{
+			response.set_error(500);
+		}
+	}
+	else
+	{
+		response.set_error(500);
+	}
+	
 }
 
 void
 StrategyCGI::_prepare(Client & client)
 {
-	// Request &	request_http	= client.get_request();
-	// Server &	server			= client.get_server();
+	Request &		request_http	= client.get_request();
+	Server &		server			= client.get_server();
+	ServerSocket &	server_socket	= client.get_server_socket();
 
-	(void)client;
-	// if (request_http.get_body().length() != 0){
-	// 	_request.add_header("CONTENT_LENGTH", 0);
-	// 	if (request_http.has_header("Content-Type"))
-	// 		_request.add_header("CONTENT_TYPE", request_http.get_header("Content-Type"));
-	// }
-	// if (_request.get_header("PATH_INFO") != "")
-	// 	_request.add_header("PATH_TRANSLATED", server.get_full_path(request_http.get_uri().get_extra_path()));
-	// _request
-	// 	.add_header("AUTH_TYPE", "")
-	// 	.add_header("GATEWAY_INTERFACE", Info::cgi_revision)
-	// 	.add_header("PATH_INFO", request_http.get_uri().get_extra_path())
-	// 	.add_header("QUERY_STRING", request_http.get_uri().get_query_string())
-	// 	.add_header("REMOTE_ADDR", "0.0.0.0") // TMP
-	// 	.add_header("REMOTE_HOST", "")
-	// 	.add_header("REQUEST_METHOD", request_http.get_method()->get_name())
-	// 	.add_header("SCRIPT_NAME", request_http.get_uri().get_path())
-	// 	.add_header("SERVER_NAME", "0.0.0.0") // TMP
-	// 	.add_header("SERVER_PORT", client.get_server_socket().get_port())
-	// 	.add_header("SERVER_PROTOCOL", Info::http_revision)
-	// 	.add_header("SERVER_SOFTWARE", Info::server_name + "/" + Info::version)
-	// ;
-	// _request.add_header("SCRIPT_FILENAME", server.get_full_path(request_http.get_uri().get_path())); //PHP
+	if (request_http.get_body().length() == 0 || !request_http.has_header("Content-Length")){
+		_request.add_header("CONTENT_LENGTH", 0);
+	}
+	else {
+		_request.add_header("CONTENT_LENGTH", request_http.get_header("Content-Length"));
+		if (request_http.has_header("Content-Type"))
+			_request.add_header("CONTENT_TYPE", request_http.get_header("Content-Type"));
+	}
+	_request
+		.add_header("AUTH_TYPE", "")
+		.add_header("GATEWAY_INTERFACE", Info::cgi_revision)
+		.add_header("SCRIPT_FILENAME", server.get_full_path(request_http.get_uri().get_path()))
+		.add_header("PATH_INFO", server.get_full_path(request_http.get_uri().get_path()))
+		.add_header("QUERY_STRING", request_http.get_uri().get_query_string())
+		.add_header("REMOTE_ADDR", client.get_socket_struct().get_ip())
+		.add_header("REQUEST_METHOD", request_http.get_method()->get_name())
+		.add_header("SCRIPT_NAME", request_http.get_uri().get_path())
+		.add_header("SERVER_NAME", server_socket.get_ip())
+		.add_header("SERVER_PORT", server_socket.get_port())
+		.add_header("SERVER_PROTOCOL", Info::http_revision)
+		.add_header("SERVER_SOFTWARE", Info::server_name + "/" + Info::version)
+	;
+	if (_request.get_header("PATH_INFO") != "")
+		_request.add_header("PATH_TRANSLATED", server.get_full_path(request_http.get_uri().get_extra_path()));
+	// _request.debug();
 }

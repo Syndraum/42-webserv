@@ -24,6 +24,7 @@ public:
 private:
 	virtual Response *	create(Client &);
 	void				_prepare(Client &);
+	void				handle_status(const Message &, Response &);
 
 };
 

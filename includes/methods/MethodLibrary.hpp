@@ -18,9 +18,11 @@
 
 class MethodLibrary
 {
+	public:
+		typedef std::vector<AMethod *>	vector_method;
 	private:
 
-		std::vector<AMethod *>	_methods;
+		vector_method	_methods;
 
 		MethodLibrary(MethodLibrary const & src);
 		MethodLibrary &			operator=(MethodLibrary const &rhs);

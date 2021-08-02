@@ -1,8 +1,8 @@
 #include "Client.hpp"
 
 Client::Client(Server & server, ServerSocket & server_socket) :
-_server(server), 
-_server_socket(server_socket)
+_server(&server), 
+_server_socket(&server_socket)
 {}
 
 Client::Client(Client const & src) :
@@ -51,17 +51,31 @@ Client::get_socket()
 Server &
 Client::get_server()
 {
-	return (_server);
+	return (*_server);
 }
 
 ServerSocket &
 Client::get_server_socket()
 {
-	return (_server_socket);
+	return (*_server_socket);
 }
 
 std::string
 Client::get_full_path() const
 {
-	return (_server.get_full_path(_request.get_uri().get_path()));
+	const URI & uri = _request.get_uri();
+
+	return (_server->get_full_path(uri.get_path()));
+}
+
+void
+Client::set_server(Server * server)
+{
+	_server = server;
+}
+
+void
+Client::set_server_socket(ServerSocket * server_socket)
+{
+	_server_socket = server_socket;
 }
