@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/30 19:58:55 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/08/01 17:40:58 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ _core(core)
 {
 	std::string	directive;
 	std::getline(fd, _line, char(EOF));
-	while (_line[_idx])
+	while (_idx < _line.length())
 	{
 		directive = next_word_skip();
 		if (!directive.compare("worker"))
@@ -68,7 +68,7 @@ BuilderCore::skip_whitespaces()
 	std::locale	loc;
 	int			count = _idx;
 
-	while (_line[_idx])
+	while (_idx < _line.length())
 	{
 		if (_line[_idx] ==  '#')
 			skip_comments();
@@ -82,9 +82,16 @@ BuilderCore::skip_whitespaces()
 void
 BuilderCore::skip_comments()
 {
+	size_t tmp;
+
 	while (_line[_idx] == '#')
 	{
-		_idx = _line.find('\n', _idx) + 1;
+		tmp = _line.find('\n', _idx);
+		if (tmp != std::string::npos)
+			_idx = tmp + 1;
+		else
+			_idx = _line.length();
+
 		skip_whitespaces();
 	}
 }
