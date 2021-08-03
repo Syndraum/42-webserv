@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/08/03 22:26:56 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/08/03 22:39:27 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ BuilderCore::next_word_skip()
 int
 BuilderCore::line_count()
 {
-	return (std::count(_line.begin(), _line.begin() + _idx, '\n') + 1);
+	std::string::iterator stop = _line.begin() + _idx;
+	if (_idx >= _line.length())
+		stop = _line.end();
+	return (std::count(_line.begin(), stop, '\n') + 1);
 }
 
 int
