@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/08/03 22:39:27 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/08/03 23:41:56 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 BuilderCore::BuilderCore(std::istream &fd, Core *core) :
 _idx(0),
-_core(core)
+_core(core),
+_b_worker(false)
 {
 	std::string	directive;
 	std::getline(fd, _line, char(EOF));
@@ -40,6 +41,16 @@ Core *
 BuilderCore::get_builded_core() const
 {
 	return (_core);
+}
+
+void
+BuilderCore::erase_server_bool()
+{
+	_b_server_name = false; // erase?
+	_b_server_root = false;
+	_b_server_path_error_page = false;
+	_b_server_auto_index = false;
+	_b_server_client_max_body_size = false;
 }
 
 std::string
@@ -163,7 +174,6 @@ BuilderCore::parse_server_listen(Server *server)
 	int			cursor;
 	bool		active;
 
-	// std::cerr << &_line[_idx] << std::endl;
 	skip_whitespaces();
 	if (_line[_idx] == ';' || _line[_idx] == '}')
 		no_arg_error("listen");
@@ -174,7 +184,7 @@ BuilderCore::parse_server_listen(Server *server)
 		if (port < 0 || (!skip_whitespaces() && _line[_idx] != ';' && _line[_idx] != '.'))
 		{
 			_idx = cursor;
-			host_not_found_error(next_word_skip()); //
+			host_not_found_error(next_word_skip());
 		}
 		if (_line[_idx] == '.')
 		{
@@ -240,7 +250,7 @@ BuilderCore::parse_server_allow_methods(Server *server, Core *core)
 }
 
 void
-BuilderCore::parse_server_name(Server *server)
+BuilderCore::parse_server_name(Server *server) // multiple server names? else add bool management
 {
 	std::string arg = next_word_skip();
 	if (!arg.length())
@@ -252,6 +262,9 @@ BuilderCore::parse_server_name(Server *server)
 void
 BuilderCore::parse_server_root(Server *server)
 {
+	if (_b_server_root)
+		duplicate_error("root");
+	_b_server_root = true;
 	std::string arg = next_word_skip();
 	if (!arg.length())
 		no_arg_error("root");
@@ -262,6 +275,9 @@ BuilderCore::parse_server_root(Server *server)
 void
 BuilderCore::parse_server_path_error_page(Server *server)
 {
+	if (_b_server_path_error_page)
+		duplicate_error("path_error_page");
+	_b_server_path_error_page = true;
 	std::string arg = next_word_skip();
 	if (!arg.length())
 		no_arg_error("path_error_page");
@@ -272,6 +288,9 @@ BuilderCore::parse_server_path_error_page(Server *server)
 void
 BuilderCore::parse_server_auto_index(Server *server)
 {
+	if (_b_server_auto_index)
+		duplicate_error("autoindex");
+	_b_server_auto_index = true;
 	std::string arg = next_word_skip();
 	if (!arg.compare("on"))
 		server->set_auto_index(true);
@@ -294,6 +313,9 @@ BuilderCore::parse_server_client_max_body_size(Server *server)
 	int				ret;
 	size_t			client_max_body_size;
 
+	if (_b_server_client_max_body_size)
+		duplicate_error("client_max_body_size");
+	_b_server_client_max_body_size = true;
 	skip_whitespaces();
 	if (_line[_idx] == ';' || _line[_idx] == '}')
 		no_arg_error("client_max_body_size");
@@ -339,6 +361,9 @@ BuilderCore::parse_server_CGI_param(CGI *cgi)
 void
 BuilderCore::parse_server_CGI_exec_name(CGI *cgi)
 {
+	if (_b_server_CGI_exec_name)
+		duplicate_error("exec_name");
+	_b_server_CGI_exec_name = true;
 	std::string arg = next_word_skip();
 	if (!arg.length())
 		no_arg_error("exec_name");
@@ -353,6 +378,7 @@ BuilderCore::parse_server_extension(Server *server)
 	std::string extension_type = next_word_skip();
 	skip_whitespaces();
 	CGI cgi;
+	_b_server_CGI_exec_name = false;
 	if (_line [_idx++] != '{')
 		no_opening_bracket_error("extension");
 	skip_whitespaces();
@@ -400,6 +426,7 @@ BuilderCore::parse_server(Core *core)
 	skip_whitespaces();
 	std::string	directive;
 	Server server;
+	erase_server_bool();
 	if (_line [_idx++] != '{')
 		no_opening_bracket_error("server");
 	skip_whitespaces();
@@ -440,9 +467,11 @@ BuilderCore::parse_server(Core *core)
 void
 BuilderCore::parse_worker()
 {	
+	if (_b_worker)
+		duplicate_error("worker");
+	_b_worker = true;
 	skip_whitespaces();
 	int		cursor = _idx;
-
 	if (_line[_idx] == ';' || _line[_idx] == '}')
 		no_arg_error("worker");
 	int	worker = stoi_skip();
@@ -547,5 +576,12 @@ void
 BuilderCore::host_not_found_error(std::string argument)
 {
 	std::cerr << "Parsing Error : host not found in \"" << argument << "\" of the \"listen\" directive"  << " on line " << line_count() << std::endl;
+	throw(ParsingError());
+}
+
+void
+BuilderCore::duplicate_error(std::string directive)
+{
+	std::cerr << "Parsing Error : \"" << directive << "\" directive is duplicate"  << " on line " << line_count() << std::endl;
 	throw(ParsingError());
 }

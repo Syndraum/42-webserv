@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/08/03 21:48:17 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/08/03 23:41:57 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,19 @@ class BuilderCore
 		Core			*_core;
 		std::string		_error_msg;
 
+		bool			_b_worker;
+		bool			_b_server_name; //?
+		bool			_b_server_root;
+		bool			_b_server_path_error_page;
+		bool			_b_server_auto_index;
+		bool			_b_server_client_max_body_size;
+		bool			_b_server_CGI_exec_name;
+
 		std::string		next_word_skip();
 		int				skip_whitespaces();
 		void			skip_comments();
 		int				line_count();
+		void			erase_server_bool();
 		std::string		check_return_ip(int first_nb, int cursor);
 		void			parse_server_listen(Server *server);
 		void			parse_server_name(Server *server);
@@ -56,6 +65,7 @@ class BuilderCore
 		void			not_terminated_by_semicolon_error(std::string directive);
 		void			no_opening_bracket_error(std::string directive);
 		void			host_not_found_error(std::string argument);
+		void			duplicate_error(std::string directive);
 
 	public:
 
