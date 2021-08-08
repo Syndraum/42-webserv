@@ -19,7 +19,7 @@ _root("html"),
 _index(),
 _methods(),
 _auto_index(false),
-_client_max_body_size(5),
+_client_max_body_size(5 << 20),
 _path_error_page("./config/error.html"),
 _CGI_map(),
 _return_map()

@@ -55,7 +55,7 @@ class Server
 		size_t								_client_max_body_size;
 		std::string							_path_error_page;
 		cgi_map								_CGI_map;
-		return_map							_return_map;							
+		return_map							_return_map;
 
 	public:
 
