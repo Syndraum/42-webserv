@@ -14,8 +14,15 @@
 
 Server::Server(void) :
 _name("_"),
+_server_sockets(),
+_root("html"),
+_index(),
+_methods(),
 _auto_index(false),
-_client_max_body_size(5)
+_client_max_body_size(5),
+_path_error_page("./config/error.html"),
+_CGI_map(),
+_return_map()
 {}
 
 Server::Server(Server const & src)
@@ -235,6 +242,18 @@ Server::has_port(int port)
 	if (_server_sockets.find(port) == _server_sockets.end())
 		return false;
 	return true;
+}
+
+std::list<std::string> &
+Server::get_list_index(void)
+{
+	return (_index);
+}
+
+std::list<AMethod *> &
+Server::get_list_method(void)
+{
+	return (_methods);
 }
 
 Server &

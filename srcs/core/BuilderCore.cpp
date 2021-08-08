@@ -12,20 +12,29 @@
 
 #include "BuilderCore.hpp"
 
-BuilderCore::BuilderCore(std::istream &fd, Core *core) :
+BuilderCore::BuilderCore(Core *core) :
 _idx(0),
 _core(core),
 _b_worker(false)
 {
+	
+}
+
+BuilderCore::~BuilderCore() {}
+
+void
+BuilderCore::build(std::istream &fd)
+{
 	std::string	directive;
 	std::getline(fd, _line, char(EOF));
+
 	while (_idx < _line.length())
 	{
 		directive = next_word_skip();
 		if (!directive.compare("worker"))
 			parse_worker();
 		else if (!directive.compare("server"))
-			parse_server(core);
+			parse_server(_core);
 		else if (_line[_idx] ==  ';')
 			unexpected_character_error(';');
 		else if (_line[_idx] ==  '}')
@@ -34,8 +43,6 @@ _b_worker(false)
 			unknown_directive_error(directive);
 	}
 }
-
-BuilderCore::~BuilderCore() {}
 
 Core *
 BuilderCore::get_builded_core() const
@@ -460,6 +467,10 @@ BuilderCore::parse_server(Core *core)
 	}
 	if (_line[_idx] != '}')
 		unexpected_eof_error("\"}\"");
+	if (server.get_map_socket().size() == 0)
+		server.add_listen(8080, "0.0.0.0");
+	if (server.get_list_index().size() == 0)
+		server.add_index("index.html");
 	_core->add_server(server);
 	_idx ++;
 }

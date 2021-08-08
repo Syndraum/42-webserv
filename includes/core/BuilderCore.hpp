@@ -69,8 +69,9 @@ class BuilderCore
 
 	public:
 
-		BuilderCore(std::istream &fd, Core *core);
+		BuilderCore(Core *core);
 		~BuilderCore();
+		void			build(std::istream &fd);
 		void			print_debug() const; //tmp
 		Core *			get_builded_core() const;
 		void			parse_mime_type();

@@ -87,6 +87,8 @@ class Server
 		CGI &								get_cgi(const std::string &);
 		bool								has_cgi(const std::string &);
 		bool								has_port(int port);
+		std::list<std::string> &			get_list_index();
+		std::list<AMethod *> &				get_list_method();
 
 		Server &							set_name(std::string const & name);
 		Server &							set_root(std::string const & root);
