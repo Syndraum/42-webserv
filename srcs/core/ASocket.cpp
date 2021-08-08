@@ -13,6 +13,7 @@
 #include "ASocket.hpp"
 
 ASocket::ASocket(void) :
+_socket(-1),
 _id(-1),
 _reader(1)
 {
