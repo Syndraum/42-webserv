@@ -64,6 +64,8 @@ std::string
 BuilderCore::next_word_skip()
 {
 	skip_whitespaces();
+	if (_idx >= _line.length())
+		return("");
 
 	size_t			len = _line.find_first_of(";{}# \n\r\t\v\f", _idx) - _idx;
 
