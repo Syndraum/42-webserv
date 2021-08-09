@@ -1,6 +1,7 @@
 #ifndef HANDLER_REQUEST_HPP
 # define HANDLER_REQUEST_HPP
 
+# include <exception>
 # include "Request.hpp"
 # include "Server.hpp"
 # include "BuilderRequest.hpp"
@@ -39,6 +40,14 @@ public:
 	void				set_index();
 	bool				is_complete() const;
 	void				check_host(servers &);
+	void				check_body_size(Client const &) const;
+
+	class BodyTooLong : public std::exception
+	{
+		virtual const char*	what() const throw(){
+			return "Body toot long";
+		}
+	};
 };
 
 #endif

@@ -21,9 +21,11 @@ public:
 	Client &	operator=(Client const &rhs);
 
 	Request &		get_request();
+	Request const &	get_request() const;
 	ClientSocket &	get_socket_struct();
 	int				get_socket();
 	Server &		get_server();
+	Server const &	get_server() const;
 	ServerSocket &	get_server_socket();
 	std::string		get_full_path() const;
 	void			set_server(Server *);

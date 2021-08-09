@@ -79,6 +79,7 @@ class Server
 		ServerSocket &						get_server_socket(int port);
 		const ServerSocket &				get_server_socket(int port) const;
 		const bool	&						get_auto_index() const;
+		size_t								get_client_max_body_size() const;
 		const std::string &					get_root() const;
 		std::string 						get_index(const std::string &);
 		AMethod *	 						get_method(const std::string &);

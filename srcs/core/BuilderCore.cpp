@@ -17,7 +17,7 @@ _idx(0),
 _core(core),
 _b_worker(false)
 {
-	
+
 }
 
 BuilderCore::~BuilderCore() {}

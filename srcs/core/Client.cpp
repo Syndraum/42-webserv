@@ -36,6 +36,12 @@ Client::get_request()
 	return (_request);
 }
 
+const Request &
+Client::get_request() const
+{
+	return (_request);
+}
+
 ClientSocket &
 Client::get_socket_struct()
 {
@@ -50,6 +56,12 @@ Client::get_socket()
 
 Server &
 Client::get_server()
+{
+	return (*_server);
+}
+
+Server const &
+Client::get_server() const
 {
 	return (*_server);
 }

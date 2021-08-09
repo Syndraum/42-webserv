@@ -149,6 +149,12 @@ Server::get_auto_index() const
 	return (_auto_index);
 }
 
+size_t
+Server::get_client_max_body_size() const
+{
+	return (_client_max_body_size);
+}
+
 const std::string &
 Server::get_root() const
 {
@@ -347,5 +353,6 @@ Server::print() const
 		}
 		std::cout << std::endl;
 	}
+	std::cout << "client_max_body_size : " << _client_max_body_size << std::endl;
 	std::cout << std::endl;
 }

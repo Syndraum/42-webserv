@@ -68,6 +68,7 @@ HandlerRequest::handle(clients & v_clients, servers & v_servers)
 			if (!is_complete())
 				continue;
 			this->check_host(v_servers);
+			check_body_size(*it);
 			this->set_index();
 			std::string extension = Extension::get_extension(get_request().get_path());
 			if (get_server().has_cgi(extension))
@@ -97,6 +98,10 @@ HandlerRequest::handle(clients & v_clients, servers & v_servers)
 		catch (BuilderRequest::MethodNotImplemented &e)
 		{
 			_handler_response.set_strategy(new StrategyError(501));
+		}
+		catch (BodyTooLong &e)
+		{
+			_handler_response.set_strategy(new StrategyError(413));
 		}
 		_handler_response.do_strategy(*_client);
 		_handler_response.send(it->get_socket());
@@ -190,4 +195,17 @@ HandlerRequest::check_host(servers & vector)
 	}
 	else
 		throw BuilderMessage::BadRequest();
+}
+
+void
+HandlerRequest::check_body_size(Client const & client) const
+{
+	const Server &	server	= client.get_server();
+	const Request &	request	= client.get_request();
+	size_t			length	= 0;
+
+	if (request.has_header("Content-Length"))
+		length = request.get_header<size_t>("Content-Length");
+	if (server.get_client_max_body_size() < length)
+		throw BodyTooLong();
 }
