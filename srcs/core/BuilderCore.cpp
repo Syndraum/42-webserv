@@ -473,6 +473,14 @@ BuilderCore::parse_server(Core *core)
 		server.add_listen(8080, "0.0.0.0");
 	if (server.get_list_index().size() == 0)
 		server.add_index("index.html");
+	if (server.get_list_method().size() == 0)
+	{
+		const MethodLibrary::vector_method &			methods	= _core->get_library().get_vector();
+		MethodLibrary::vector_method::const_iterator	it		= methods.begin();
+		MethodLibrary::vector_method::const_iterator	ite		= methods.end();
+		for (; it != ite; it++ )
+			server.add_method(*it);
+	}
 	_core->add_server(server);
 	_idx ++;
 }

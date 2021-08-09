@@ -40,10 +40,12 @@ Server::operator=(Server const & rhs)
 		_root = rhs._root;
 		_server_sockets = rhs._server_sockets;
 		_index = rhs._index;
+		_methods = rhs._methods;
 		_auto_index = rhs._auto_index;
 		_client_max_body_size = rhs._client_max_body_size;
 		_path_error_page = rhs._path_error_page;
 		_CGI_map = rhs._CGI_map;
+		_return_map = rhs._return_map;
 	}
 	return *this;
 }
@@ -264,6 +266,12 @@ Server::get_list_index(void)
 
 std::list<AMethod *> &
 Server::get_list_method(void)
+{
+	return (_methods);
+}
+
+const std::list<AMethod *> &
+Server::get_list_method(void) const
 {
 	return (_methods);
 }

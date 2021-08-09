@@ -147,6 +147,12 @@ Core::get_worker(void) const
 	return (_worker);
 }
 
+const MethodLibrary &
+Core::get_library(void) const
+{
+	return (_methods);
+}
+
 Core &
 Core::set_worker(int worker)
 {

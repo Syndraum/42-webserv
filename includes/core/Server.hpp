@@ -92,6 +92,7 @@ class Server
 		bool								has_port(int port);
 		std::list<std::string> &			get_list_index();
 		std::list<AMethod *> &				get_list_method();
+		const std::list<AMethod *> &		get_list_method() const;
 
 		Server &							set_name(std::string const & name);
 		Server &							set_root(std::string const & root);

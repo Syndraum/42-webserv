@@ -64,6 +64,7 @@ class Core
 		AMethod	*							get_method(const std::string &) const;
 		Core &								set_worker(int);
 		int									get_worker(void) const;
+		const MethodLibrary &				get_library() const;
 		void								set_extension(Extension * extensoin);
 		bool								has_host_port(const std::string &, int) const;
 

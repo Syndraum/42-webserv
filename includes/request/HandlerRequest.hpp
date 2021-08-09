@@ -41,11 +41,18 @@ public:
 	bool				is_complete() const;
 	void				check_host(servers &);
 	void				check_body_size(Client const &) const;
+	void				check_method_exist(Client const &) const;
 
 	class BodyTooLong : public std::exception
 	{
 		virtual const char*	what() const throw(){
 			return "Body toot long";
+		}
+	};
+	class MethodNotAllowed : public std::exception
+	{
+		virtual const char*	what() const throw(){
+			return "Method not allowed";
 		}
 	};
 };

@@ -69,6 +69,7 @@ HandlerRequest::handle(clients & v_clients, servers & v_servers)
 				continue;
 			this->check_host(v_servers);
 			check_body_size(*it);
+			check_method_exist(*it);
 			this->set_index();
 			std::string extension = Extension::get_extension(get_request().get_path());
 			if (get_server().has_cgi(extension))
@@ -102,6 +103,10 @@ HandlerRequest::handle(clients & v_clients, servers & v_servers)
 		catch (BodyTooLong &e)
 		{
 			_handler_response.set_strategy(new StrategyError(413));
+		}
+		catch (MethodNotAllowed &e)
+		{
+			_handler_response.set_strategy(new StrategyError(405));
 		}
 		_handler_response.do_strategy(*_client);
 		_handler_response.send(it->get_socket());
@@ -208,4 +213,21 @@ HandlerRequest::check_body_size(Client const & client) const
 		length = request.get_header<size_t>("Content-Length");
 	if (server.get_client_max_body_size() < length)
 		throw BodyTooLong();
+}
+
+void
+HandlerRequest::check_method_exist(Client const & client) const
+{
+	const Server &					server	= client.get_server();
+	const Request &					request	= client.get_request();
+	const std::list<AMethod *> &	methods	= server.get_list_method();
+	std::list<AMethod *>::const_iterator	ite	= methods.end();
+
+	for (std::list<AMethod *>::const_iterator it = methods.begin(); it != ite; it++)
+	{
+		std::cout << "name : " << (*it)->get_name() << std::endl;
+		if (request.get_method()->get_name() == (*it)->get_name())
+			return ;
+	}
+	throw MethodNotAllowed();
 }
