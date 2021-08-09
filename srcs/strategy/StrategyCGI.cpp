@@ -44,14 +44,14 @@ StrategyCGI::create(Client & client)
 	response->add_header("Content-Type", response_cgi->get_header("Content-type"));
 	response->set_body(response_cgi->get_body());
 	if (response_cgi->has_header("Status"))
-		handle_status(*response_cgi, *response);
+		handle_status(*response_cgi, *response, client.get_server());
 	delete (response_cgi);
 	// response->debug();
 	return (response);
 }
 
 void
-StrategyCGI::handle_status(const Message & message, Response & response)
+StrategyCGI::handle_status(const Message & message, Response & response, Server & server)
 {
 	std::string	status = message.get_header("Status");
 	size_t		pos;
@@ -62,17 +62,17 @@ StrategyCGI::handle_status(const Message & message, Response & response)
 		{
 			response.set_code(std::atoi(status.substr(0, pos).c_str()));
 			if (response.get_code() >= 400){
-				response.set_error(response.get_code());
+				response.set_error(response.get_code(), server.get_path_error_page());
 			}
 		}
 		catch(const std::exception& e)
 		{
-			response.set_error(500);
+			response.set_error(500, server.get_path_error_page());
 		}
 	}
 	else
 	{
-		response.set_error(500);
+		response.set_error(500, server.get_path_error_page());
 	}
 	
 }

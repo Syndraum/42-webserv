@@ -156,6 +156,12 @@ Server::get_client_max_body_size() const
 }
 
 const std::string &
+Server::get_path_error_page() const
+{
+	return (_path_error_page);
+}
+
+const std::string &
 Server::get_root() const
 {
 	return (_root);

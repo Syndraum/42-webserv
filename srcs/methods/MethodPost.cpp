@@ -19,7 +19,7 @@ AMethod("POST")
 MethodPost::~MethodPost() {}
 
 void
-MethodPost::action(const Request & request, Response & response)
+MethodPost::action(const Request & request, Response & response, Server & server)
 {
 	(void)request;
 	(void)response;
@@ -43,6 +43,6 @@ MethodPost::action(const Request & request, Response & response)
 	}
 	catch(const std::exception& e)
 	{
-		response.set_error(404);
+		response.set_error(404, server.get_path_error_page());
 	}
 }

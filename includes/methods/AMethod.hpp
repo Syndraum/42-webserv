@@ -14,12 +14,14 @@
 # define AMETHOD_HPP
 
 # include <string>
+# include "Server.hpp"
 # include "Response.hpp"
 # include <cstdio>
 # include <exception>
 # include "Extension.hpp"
 
 class Request;
+class Server;
 
 class AMethod
 {
@@ -37,7 +39,7 @@ class AMethod
 		virtual ~AMethod(void);
 
 		const std::string &	get_name() const;
-		virtual void		action(const Request &, Response &) = 0;
+		virtual void		action(const Request &, Response &, Server &) = 0;
 
 };
 

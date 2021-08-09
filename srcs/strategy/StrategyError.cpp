@@ -28,6 +28,6 @@ StrategyError::create(Client & client)
 
 	(void)client;
 	response = new Response();
-	response->set_error(_code);
+	response->set_error(_code, client.get_server().get_path_error_page());
 	return (response);
 }

@@ -27,7 +27,7 @@ class MethodPost : public AMethod
 		MethodPost(void);
 		virtual ~MethodPost(void);
 
-		virtual void		action(const Request &, Response &);
+		virtual void		action(const Request &, Response &, Server &);
 };
 
 #endif

@@ -100,9 +100,9 @@ Response::set_body_from_file(const std::string & filename)
 }
 
 Response &
-Response::set_error(int code)
+Response::set_error(int code, std::string const & path_error_file)
 {
-	Reader			file_reader("./config/error.html");
+	Reader			file_reader(path_error_file);
 	StringPP		m_template;
 	
 	try
