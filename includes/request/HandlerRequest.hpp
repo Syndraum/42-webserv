@@ -11,6 +11,7 @@
 # include "StrategyError.hpp"
 # include "StrategyIndex.hpp"
 # include "StrategyCGI.hpp"
+# include "StrategyReturn.hpp"
 
 class HandlerRequest
 {

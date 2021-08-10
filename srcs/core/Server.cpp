@@ -22,7 +22,7 @@ _auto_index(false),
 _client_max_body_size(5 << 20),
 _path_error_page("./config/error.html"),
 _CGI_map(),
-_return_map()
+_return_list()
 {}
 
 Server::Server(Server const & src)
@@ -45,7 +45,7 @@ Server::operator=(Server const & rhs)
 		_client_max_body_size = rhs._client_max_body_size;
 		_path_error_page = rhs._path_error_page;
 		_CGI_map = rhs._CGI_map;
-		_return_map = rhs._return_map;
+		_return_list = rhs._return_list;
 	}
 	return *this;
 }
@@ -72,7 +72,7 @@ Server::add_listen(int const port, std::string const ip, bool active)
 Server &
 Server::add_return(int const code, std::string const uri)
 {
-	_return_map.insert(std::pair<int, std::string>(code, uri));
+	_return_list.push_back(Redirection(code, uri));
 	return(*this);
 }
 
@@ -276,6 +276,20 @@ Server::get_list_method(void) const
 	return (_methods);
 }
 
+Redirection *
+Server::get_first_valide_redirection()
+{
+	return_list::iterator	it	= _return_list.begin();
+	return_list::iterator	ite	= _return_list.end();
+
+	for (; it != ite; it++)
+	{
+		if (it->is_handler())
+			return (&(*it));
+	}
+	return (0);
+}
+
 Server &
 Server::set_name(std::string const & name)
 {
@@ -358,12 +372,12 @@ Server::print() const
 		}
 		std::cout << std::endl;
 	}
-	if (_return_map.size())
+	if (_return_list.size())
 	{
 		std::cout << "Returns : " << std::endl;
-		for (return_map::const_iterator it4 = _return_map.begin(); it4 != _return_map.end(); it4++)
+		for (return_list::const_iterator it4 = _return_list.begin(); it4 != _return_list.end(); it4++)
 		{
-			std::cout << " - " << it4->first << " : \"" << it4->second << "\"" << std::endl;
+			std::cout << " - " << it4->get_code() << " : \"" << it4->get_ressource() << "\"" << std::endl;
 		}
 		std::cout << std::endl;
 	}

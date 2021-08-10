@@ -55,6 +55,7 @@ SRCS_CORE		= $(addprefix $(PREFIX)core/, \
 								Message.cpp \
 								HandlerPollFD.cpp \
 								BuilderMessage.cpp \
+								Redirection.cpp \
 								)
 
 SRCS_READER		= $(addprefix $(PREFIX)reader/, \
@@ -71,6 +72,7 @@ SRCS_STRATEGY	= $(addprefix $(PREFIX)strategy/, \
 								StrategyError.cpp \
 								StrategyIndex.cpp \
 								StrategyCGI.cpp \
+								StrategyReturn.cpp \
 								)
 
 SRCS			=	$(SRCS_METHOD) \

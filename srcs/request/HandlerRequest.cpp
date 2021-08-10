@@ -72,7 +72,9 @@ HandlerRequest::handle(clients & v_clients, servers & v_servers)
 			check_method_exist(*it);
 			this->set_index();
 			std::string extension = Extension::get_extension(get_request().get_path());
-			if (get_server().has_cgi(extension))
+			if (it->get_server().get_first_valide_redirection())
+				_handler_response.set_strategy(new StrategyReturn(*(get_server().get_first_valide_redirection())));
+			else if (get_server().has_cgi(extension))
 				_handler_response.set_strategy(new StrategyCGI(get_server().get_cgi(extension)));
 			else
 			{
