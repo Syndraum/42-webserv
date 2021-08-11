@@ -95,7 +95,7 @@ class Server
 		std::list<std::string> &			get_list_index();
 		std::list<AMethod *> &				get_list_method();
 		const std::list<AMethod *> &		get_list_method() const;
-		Redirection *						get_first_valide_redirection();
+		const return_list &					get_return_list() const;
 
 		Server &							set_name(std::string const & name);
 		Server &							set_root(std::string const & root);

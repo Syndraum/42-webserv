@@ -276,18 +276,10 @@ Server::get_list_method(void) const
 	return (_methods);
 }
 
-Redirection *
-Server::get_first_valide_redirection()
+const Server::return_list &
+Server::get_return_list() const
 {
-	return_list::iterator	it	= _return_list.begin();
-	return_list::iterator	ite	= _return_list.end();
-
-	for (; it != ite; it++)
-	{
-		if (it->is_handler())
-			return (&(*it));
-	}
-	return (0);
+	return (_return_list);
 }
 
 Server &
