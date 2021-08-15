@@ -14,8 +14,15 @@
 
 Server::Server(void) :
 _name("_"),
+_server_sockets(),
+_root("html"),
+_index(),
+_methods(),
 _auto_index(false),
-_client_max_body_size(5)
+_client_max_body_size(5 << 20),
+_path_error_page("./config/error.html"),
+_CGI_map(),
+_return_list()
 {}
 
 Server::Server(Server const & src)
@@ -33,10 +40,12 @@ Server::operator=(Server const & rhs)
 		_root = rhs._root;
 		_server_sockets = rhs._server_sockets;
 		_index = rhs._index;
+		_methods = rhs._methods;
 		_auto_index = rhs._auto_index;
 		_client_max_body_size = rhs._client_max_body_size;
 		_path_error_page = rhs._path_error_page;
 		_CGI_map = rhs._CGI_map;
+		_return_list = rhs._return_list;
 	}
 	return *this;
 }
@@ -63,7 +72,7 @@ Server::add_listen(int const port, std::string const ip, bool active)
 Server &
 Server::add_return(int const code, std::string const uri)
 {
-	_return_map.insert(std::pair<int, std::string>(code, uri));
+	_return_list.push_back(Redirection(code, uri));
 	return(*this);
 }
 
@@ -140,6 +149,18 @@ const bool &
 Server::get_auto_index() const
 {
 	return (_auto_index);
+}
+
+size_t
+Server::get_client_max_body_size() const
+{
+	return (_client_max_body_size);
+}
+
+const std::string &
+Server::get_path_error_page() const
+{
+	return (_path_error_page);
 }
 
 const std::string &
@@ -237,6 +258,30 @@ Server::has_port(int port)
 	return true;
 }
 
+std::list<std::string> &
+Server::get_list_index(void)
+{
+	return (_index);
+}
+
+std::list<AMethod *> &
+Server::get_list_method(void)
+{
+	return (_methods);
+}
+
+const std::list<AMethod *> &
+Server::get_list_method(void) const
+{
+	return (_methods);
+}
+
+const Server::return_list &
+Server::get_return_list() const
+{
+	return (_return_list);
+}
+
 Server &
 Server::set_name(std::string const & name)
 {
@@ -319,14 +364,15 @@ Server::print() const
 		}
 		std::cout << std::endl;
 	}
-	if (_return_map.size())
+	if (_return_list.size())
 	{
 		std::cout << "Returns : " << std::endl;
-		for (return_map::const_iterator it4 = _return_map.begin(); it4 != _return_map.end(); it4++)
+		for (return_list::const_iterator it4 = _return_list.begin(); it4 != _return_list.end(); it4++)
 		{
-			std::cout << " - " << it4->first << " : \"" << it4->second << "\"" << std::endl;
+			std::cout << " - " << it4->get_code() << " : \"" << it4->get_ressource() << "\"" << std::endl;
 		}
 		std::cout << std::endl;
 	}
+	std::cout << "client_max_body_size : " << _client_max_body_size << std::endl;
 	std::cout << std::endl;
 }

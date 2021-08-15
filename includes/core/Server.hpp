@@ -32,15 +32,17 @@
 # include <sstream>
 # include "Request.hpp"
 # include "AMethod.hpp"
+# include "Redirection.hpp"
 
 class CGI;
+class AMethod;
 
 class Server
 {
 	public:
 
 		typedef std::map<int, ServerSocket>	port_map;
-		typedef std::map<int, std::string>	return_map;
+		typedef std::list<Redirection>	return_list;
 		typedef std::map<std::string, CGI>	cgi_map;
 		typedef std::pair<std::string, CGI>	cgi_pair;
 
@@ -55,7 +57,7 @@ class Server
 		size_t								_client_max_body_size;
 		std::string							_path_error_page;
 		cgi_map								_CGI_map;
-		return_map							_return_map;							
+		return_list							_return_list;
 
 	public:
 
@@ -79,6 +81,8 @@ class Server
 		ServerSocket &						get_server_socket(int port);
 		const ServerSocket &				get_server_socket(int port) const;
 		const bool	&						get_auto_index() const;
+		size_t								get_client_max_body_size() const;
+		const std::string &					get_path_error_page() const;
 		const std::string &					get_root() const;
 		std::string 						get_index(const std::string &);
 		AMethod *	 						get_method(const std::string &);
@@ -87,6 +91,11 @@ class Server
 		CGI &								get_cgi(const std::string &);
 		bool								has_cgi(const std::string &);
 		bool								has_port(int port);
+
+		std::list<std::string> &			get_list_index();
+		std::list<AMethod *> &				get_list_method();
+		const std::list<AMethod *> &		get_list_method() const;
+		const return_list &					get_return_list() const;
 
 		Server &							set_name(std::string const & name);
 		Server &							set_root(std::string const & root);

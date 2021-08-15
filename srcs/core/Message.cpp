@@ -65,7 +65,7 @@ Message::clear_header()
 }
 
 bool
-Message::has_header(const std::string & key)
+Message::has_header(const std::string & key) const
 {
 	if (_headers.find(key) == _headers.end())
 		return (false);

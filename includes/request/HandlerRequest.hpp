@@ -1,6 +1,7 @@
 #ifndef HANDLER_REQUEST_HPP
 # define HANDLER_REQUEST_HPP
 
+# include <exception>
 # include "Request.hpp"
 # include "Server.hpp"
 # include "BuilderRequest.hpp"
@@ -10,6 +11,7 @@
 # include "StrategyError.hpp"
 # include "StrategyIndex.hpp"
 # include "StrategyCGI.hpp"
+# include "StrategyReturn.hpp"
 
 class HandlerRequest
 {
@@ -39,6 +41,21 @@ public:
 	void				set_index();
 	bool				is_complete() const;
 	void				check_host(servers &);
+	void				check_body_size(Client const &) const;
+	void				check_method_exist(Client const &) const;
+
+	class BodyTooLong : public std::exception
+	{
+		virtual const char*	what() const throw(){
+			return "Body toot long";
+		}
+	};
+	class MethodNotAllowed : public std::exception
+	{
+		virtual const char*	what() const throw(){
+			return "Method not allowed";
+		}
+	};
 };
 
 #endif

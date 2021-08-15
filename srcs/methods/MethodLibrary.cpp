@@ -41,3 +41,9 @@ MethodLibrary::get_method(const std::string & name) const
 	}
 	return (0);
 }
+
+const MethodLibrary::vector_method &
+MethodLibrary::get_vector() const
+{
+	return (_methods);
+}

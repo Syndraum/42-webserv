@@ -34,6 +34,7 @@ class MethodLibrary
 
 		MethodLibrary &			add_method(AMethod *);
 		AMethod	*				get_method(const std::string &) const;
+		const vector_method &	get_vector() const;
 };
 
 #endif

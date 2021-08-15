@@ -20,7 +20,7 @@ MethodGet::~MethodGet()
 {}
 
 void
-MethodGet::action(const Request & request, Response & response)
+MethodGet::action(const Request & request, Response & response, Server & server)
 {	
 	Extension * extension = Extension::get_instance();
 	std::string ext = Extension::get_extension(request.get_path().c_str());
@@ -42,6 +42,6 @@ MethodGet::action(const Request & request, Response & response)
 	}
 	catch(const std::exception& e)
 	{
-		response.set_error(404);
+		response.set_error(404, server.get_path_error_page());
 	}
 }

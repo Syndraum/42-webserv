@@ -23,7 +23,17 @@ public:
 	virtual ~Message(void);
 	Message &	operator=(Message const &rhs);
 
-	map const &									get_headers() const;
+	map const &								get_headers() const;
+	template<typename T>
+	T										get_header(std::string const &key) const
+	{
+		std::stringstream	ss;
+		T					result;
+
+		ss << _headers.at(key);
+		ss >> result;
+		return (result);
+	}
 	std::string &							get_header(std::string const &key);
 	std::string const &						get_header(std::string const &key) const;
 	bool									get_header_lock() const;
@@ -39,7 +49,7 @@ public:
 	}
 	Message &								add_header(const std::string & , const std::string &);
 	Message &								clear_header();
-	bool									has_header(const std::string &);
+	bool									has_header(const std::string &) const;
 	void									set_header_lock(bool);
 	Message &								set_body(const std::string &);
 	void									set_body_lock(bool);

@@ -50,7 +50,7 @@ class Request : public Message
 		void										set_uri(std::string const &rhs);
 		void										set_version(std::string const &rhs);
 
-		void										action(Response &);
+		// void										action(Response &);
 		void										reset();
 
 //		void										print_debug() const;

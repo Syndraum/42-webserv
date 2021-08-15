@@ -68,9 +68,13 @@ HandlerRequest::handle(clients & v_clients, servers & v_servers)
 			if (!is_complete())
 				continue;
 			this->check_host(v_servers);
+			check_body_size(*it);
+			check_method_exist(*it);
 			this->set_index();
 			std::string extension = Extension::get_extension(get_request().get_path());
-			if (get_server().has_cgi(extension))
+			if (it->get_server().get_return_list().size())
+				_handler_response.set_strategy(new StrategyReturn(get_server().get_return_list().front()));
+			else if (get_server().has_cgi(extension))
 				_handler_response.set_strategy(new StrategyCGI(get_server().get_cgi(extension)));
 			else
 			{
@@ -97,6 +101,14 @@ HandlerRequest::handle(clients & v_clients, servers & v_servers)
 		catch (BuilderRequest::MethodNotImplemented &e)
 		{
 			_handler_response.set_strategy(new StrategyError(501));
+		}
+		catch (BodyTooLong &e)
+		{
+			_handler_response.set_strategy(new StrategyError(413));
+		}
+		catch (MethodNotAllowed &e)
+		{
+			_handler_response.set_strategy(new StrategyError(405));
 		}
 		_handler_response.do_strategy(*_client);
 		_handler_response.send(it->get_socket());
@@ -190,4 +202,34 @@ HandlerRequest::check_host(servers & vector)
 	}
 	else
 		throw BuilderMessage::BadRequest();
+}
+
+void
+HandlerRequest::check_body_size(Client const & client) const
+{
+	const Server &	server	= client.get_server();
+	const Request &	request	= client.get_request();
+	size_t			length	= 0;
+
+	if (request.has_header("Content-Length"))
+		length = request.get_header<size_t>("Content-Length");
+	if (server.get_client_max_body_size() < length)
+		throw BodyTooLong();
+}
+
+void
+HandlerRequest::check_method_exist(Client const & client) const
+{
+	const Server &					server	= client.get_server();
+	const Request &					request	= client.get_request();
+	const std::list<AMethod *> &	methods	= server.get_list_method();
+	std::list<AMethod *>::const_iterator	ite	= methods.end();
+
+	for (std::list<AMethod *>::const_iterator it = methods.begin(); it != ite; it++)
+	{
+		std::cout << "name : " << (*it)->get_name() << std::endl;
+		if (request.get_method()->get_name() == (*it)->get_name())
+			return ;
+	}
+	throw MethodNotAllowed();
 }

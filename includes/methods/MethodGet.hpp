@@ -28,7 +28,7 @@ class MethodGet : public AMethod
 		MethodGet(void);
 		virtual ~MethodGet(void);
 
-		virtual void action(const Request &, Response &);
+		virtual void action(const Request &, Response &, Server &);
 };
 
 #endif

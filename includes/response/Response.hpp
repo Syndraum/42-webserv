@@ -54,7 +54,7 @@ class Response : public Message
 		std::string									get_message(int code);
 		Response &									set_code(int code);
 		Response &									set_body_from_file(const std::string & filename);
-		Response &									set_error(int code);
+		Response &									set_error(int code, std::string const & path_error);
 		int											get_code() const;
 };
 

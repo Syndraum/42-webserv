@@ -78,13 +78,13 @@ void
 Request::set_version(std::string const &rhs)
 { _version = rhs; }
 
-void
-Request::action(Response & response)
-{
-	if (!_method) //if method == NULL
-		throw NoMethod();
-	_method->action(*this, response);
-}
+// void
+// Request::action(Response & response)
+// {
+// 	if (!_method) //if method == NULL
+// 		throw NoMethod();
+// 	_method->action(*this, response);
+// }
 
 void
 Request::reset()

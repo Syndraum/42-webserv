@@ -28,6 +28,7 @@ StrategyAccept::create(Client & client)
 
 	response = new Response();
 	request.set_path(server.get_full_path(request.get_path()));
-	request.action(*response);
+	request.get_method()->action(request, *response, server);
+	// request.action(*response);
 	return (response);
 }
