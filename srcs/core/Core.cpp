@@ -13,7 +13,7 @@
 #include "Core.hpp"
 
 Core::Core(void) :
-_worker(3)
+_worker(1024)
 {
 	_SIZE_SOCK_ADDR = sizeof(struct sockaddr_in);
 	_methods
