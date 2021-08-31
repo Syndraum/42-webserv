@@ -157,11 +157,14 @@ HandlerRequest::parse()
 void
 HandlerRequest::set_index()
 {
-	Request &	request	= get_request();
-	Server	&	server = get_server();
+	Request &	request		= get_request();
+	Server	&	server		= get_server();
 	std::string	actual_path	= request.get_path();
+	std::string	slash		= "";
 
-	request.set_path(actual_path + server.get_index(actual_path));
+	if (!actual_path.empty() && actual_path[actual_path.length() - 1] != '/')
+		slash = "/";
+	request.set_path(actual_path + slash + server.get_index(actual_path));
 }
 
 bool
