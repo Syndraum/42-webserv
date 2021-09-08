@@ -73,4 +73,5 @@ class Core
 		void								print() const;
 };
 
+
 #endif

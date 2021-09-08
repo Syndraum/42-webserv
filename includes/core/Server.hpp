@@ -103,6 +103,7 @@ class Server
 		Server &							set_client_max_body_size(size_t const limit);
 		Server &							set_path_error_page(std::string const & path);
 		bool								is_directory(const Request &);
+		ServerSocket *						find_socket(int);
 		void								print() const;
 
 };

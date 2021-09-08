@@ -329,6 +329,20 @@ Server::is_directory(const Request & request)
 	return (true);
 }
 
+ServerSocket *
+Server::find_socket(int socket)
+{
+	port_map::iterator it	= _server_sockets.begin();
+	port_map::iterator ite	= _server_sockets.end();
+
+	for (; it != ite; it++)
+	{
+		if (it->second.get_socket() == socket)
+			return (&(it->second));
+	}
+	return (0);
+}
+
 void
 Server::print() const
 {
