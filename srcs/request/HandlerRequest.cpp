@@ -68,7 +68,8 @@ HandlerRequest::handle(Client & client, servers & v_servers)
 		this->check_host(v_servers);
 		check_body_size(*_client);
 		check_method_exist(*_client);
-		this->set_index();
+		if (get_server().is_directory(get_request()))
+			this->set_index();
 		std::string extension = Extension::get_extension(get_request().get_path());
 		if (_client->get_server().get_return_list().size())
 			_handler_response.set_strategy(new StrategyReturn(get_server().get_return_list().front()));
