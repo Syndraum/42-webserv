@@ -27,17 +27,16 @@ _reader(rhs._reader)
 
 ASocket::~ASocket(void)
 {
-	if (_socket > 2)
-		close(_socket);
+	
 }
 
 ASocket const & ASocket::operator=(ASocket const & rhs)
 {
 	if (this != &rhs)
 	{
-		_socket = rhs._socket;
-		_address = rhs._address;
-		_reader = rhs._reader;
+		this->_socket = rhs._socket;
+		this->_address = rhs._address;
+		this->_reader = rhs._reader;
 	}
 //	for (int i = 0; i < BUFFER_SIZE; i++)
 //		_buffer[i] = rhs._buffer[i];
@@ -73,4 +72,11 @@ ReaderSocket &
 ASocket::get_reader(void)
 {
 	return (_reader);
+}
+
+void
+ASocket::sclose()
+{
+	if (_socket > 2)
+		close(_socket);
 }

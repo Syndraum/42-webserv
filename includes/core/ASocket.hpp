@@ -44,6 +44,7 @@ class ASocket
 		const sockaddr_in &		get_address(void) const;
 		void					set_address(const sockaddr_in & Address);
 		ReaderSocket &			get_reader(void);
+		void					sclose();
 };
 
 #endif

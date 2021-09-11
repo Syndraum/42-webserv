@@ -47,7 +47,7 @@ class HandlerPollFD
 		struct pollfd			pollfd_init(int fd, short event);
 		void					init(std::vector<Server> & servers);
 		int						watch(void);
-		void					handle(std::vector<Server> & servers, std::vector<Client> & clients);
+		int						handle(std::vector<Server> & servers, std::vector<Client> & clients);
 		void					erase(void);
 		void					remove(int);
 		void					reset_server(void);

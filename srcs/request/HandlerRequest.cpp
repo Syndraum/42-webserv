@@ -227,7 +227,7 @@ HandlerRequest::check_method_exist(Client const & client) const
 
 	for (std::list<AMethod *>::const_iterator it = methods.begin(); it != ite; it++)
 	{
-		std::cout << "name : " << (*it)->get_name() << std::endl;
+		// std::cout << "name : " << (*it)->get_name() << std::endl;
 		if (request.get_method()->get_name() == (*it)->get_name())
 			return ;
 	}

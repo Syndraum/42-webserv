@@ -119,6 +119,9 @@ void
 Core::clean()
 {
 	Extension::delete_instance();
+	
+	for (size_t i = 0; i < _client.size(); i++)
+		_client[i].get_socket_struct().sclose();
 	_client.clear();
 	_servers.clear();
 }

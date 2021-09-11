@@ -17,6 +17,7 @@
 # include <vector>
 # include "Client.hpp"
 # include <poll.h>
+# include <algorithm>
 # include "MethodGet.hpp"
 # include "MethodDelete.hpp"
 # include "MethodPost.hpp"

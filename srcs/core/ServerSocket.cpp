@@ -35,7 +35,7 @@ ServerSocket::ServerSocket(ServerSocket const & src)
 
 ServerSocket::~ServerSocket(void)
 {
-	
+	sclose();
 }
 
 ServerSocket &

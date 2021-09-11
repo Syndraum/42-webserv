@@ -125,7 +125,7 @@ HandlerPollFD::watch(void)
 	return (poll(&(_pfd.front()), _pfd.size(), 60000));
 }
 
-void
+int
 HandlerPollFD::handle(std::vector<Server> & servers, std::vector<Client> & clients)
 {
 	for (size_t i = 0; i < _pfd.size(); i++)
@@ -136,12 +136,17 @@ HandlerPollFD::handle(std::vector<Server> & servers, std::vector<Client> & clien
 			{
 				Client & client = *find_client_by_socket(clients, _pfd[i].fd);
 				if (_hr->handle(client, servers) == -1)
+				{
+					// std::cout << "AWAIT on " << _pfd[i].fd << std::endl;
 					_pfd[i].revents = 0;
+				}
 				else
 				{
-					remove(client.get_socket());
+					// std::cout << "close fd " << client.get_socket() << std::endl;
 					close(client.get_socket());
+					remove(client.get_socket());
 					clients.erase(std::find<std::vector<Client>::iterator, Client>(clients.begin(), clients.end(), client));
+					return (1);
 				}
 			}
 			else
@@ -153,6 +158,7 @@ HandlerPollFD::handle(std::vector<Server> & servers, std::vector<Client> & clien
 			}
 		}
 	}
+	return (0);
 }
 
 void
