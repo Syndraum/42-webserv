@@ -76,7 +76,6 @@ HandlerPollFD::init(std::vector<Server> & servers)
 {
 	int fd;
 	struct pollfd pfd;
-	int server_id = 0;
 
 	for (size_t i = 0; i < servers.size(); i++)
 	{
@@ -90,9 +89,7 @@ HandlerPollFD::init(std::vector<Server> & servers)
 			{
 				fd = server_socket.get_socket();
 				pfd = pollfd_init(fd, POLLIN);
-				server_socket.set_id(server_id); // should not be here
 				_pfd.push_back(pfd);
-				server_id++;
 				if (fd > _fd_server_max)
 					_fd_server_max = fd;
 			}
@@ -129,7 +126,7 @@ HandlerPollFD::watch(void)
 }
 
 void
-HandlerPollFD::accept_connection(std::vector<Server> & servers, std::vector<Client> & clients)
+HandlerPollFD::handle(std::vector<Server> & servers, std::vector<Client> & clients)
 {
 	for (size_t i = 0; i < _pfd.size(); i++)
 	{
@@ -156,30 +153,6 @@ HandlerPollFD::accept_connection(std::vector<Server> & servers, std::vector<Clie
 			}
 		}
 	}
-	// for (size_t i = 0; i < servers.size(); i++)
-	// {
-	// 	Server & server = servers[i];
-	// 	for (
-	// 		Server::port_map::iterator it = server.get_map_socket().begin();
-	// 		it != server.get_map_socket().end();
-	// 		it++
-	// 	)
-	// 	{
-	// 		ServerSocket & server_socket = it->second;
-	// 		if (server_socket.get_active())
-	// 		{
-	// 			int fd = server_socket.get_socket();
-
-	// 			if (
-	// 				_pfd[server_socket.get_id()].revents == POLLIN
-	// 			)
-	// 			{
-	// 				clients.push_back(Client(server, server_socket));
-	// 				_accept_connection(clients, fd);
-	// 			}
-	// 		}
-	// 	}
-	// }
 }
 
 void
@@ -238,9 +211,7 @@ HandlerPollFD::_accept_connection(std::vector<Client> & clients, int server_sock
 	new_client.get_socket_struct().set_socket(new_socket);
 	// std::cout << "Adding to list of sockets as " << clients.size() << std::endl;
 	_add_clients_pfd(new_socket, POLLIN);
-	{
-		std::cout << "the previous socket is : " << clients.begin()->get_socket_struct().get_socket() << std::endl;
-	}
+	std::cout << "the previous socket is : " << clients.begin()->get_socket_struct().get_socket() << std::endl;
 	return (new_socket);
 }
 

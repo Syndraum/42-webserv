@@ -103,7 +103,7 @@ Core::start()
 	{
 //		poll(&(_pfdh.get_pfd().front()), _pfdh.get_pfd().size(), 60000);
 		_pfdh.watch();
-		_pfdh.accept_connection(_servers, _client);
+		_pfdh.handle(_servers, _client);
 //		_accept_connection();
 
 		// client_vector::iterator client = hr.handle(_client, _servers);
