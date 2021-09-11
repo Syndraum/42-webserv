@@ -101,17 +101,8 @@ Core::start()
 	_pfdh.set_hr(hr);
 	while (true)
 	{
-//		poll(&(_pfdh.get_pfd().front()), _pfdh.get_pfd().size(), 60000);
 		_pfdh.watch();
 		_pfdh.handle(_servers, _client);
-//		_accept_connection();
-
-		// client_vector::iterator client = hr.handle(_client, _servers);
-		// if (client != _client.end()){
-		// 	remove_client(client);
-		// 	// return ;
-		// }
-		// _pfdh.reset_server();
 	}
 }
 
