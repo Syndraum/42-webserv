@@ -1,0 +1,80 @@
+body{
+	background-image: radial-gradient( circle farthest-corner at 1.3% 2.8%,  rgba(239,249,249,1) 0%, rgba(182,199,226,1) 100.2% );
+	min-height: 100vh;
+	color: #0437ce;
+}
+
+h1{
+	font-size: 96px;
+}
+
+.dot {
+	height: 25px;
+	width: 25px;
+	background-color: #4FAD63;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.color-green{
+	color: #4FAD63;
+}
+
+.margin-xxl{
+	margin-top: 200px;
+}
+
+a{
+	text-decoration: unset;
+	color: #0437ce;
+}
+
+a:hover{
+	text-decoration: unset;
+	color: #0437ce;
+}
+
+.cont {
+	position: absolute;
+	top: 50%;
+	right: 30%;
+	margin-left: -64.5px;
+	margin-top: -85.5px;
+  }
+  
+  .ghost {
+	animation: float 3s ease-out infinite;
+  }
+  
+  @keyframes float {
+	50% {
+	   transform: translate(0, 20px);
+	}
+  }
+  .shadowFrame {
+	width: 130px;
+	margin-top: 15px;
+  }
+  .shadows {
+	animation: shrink 3s ease-out infinite;
+	transform-origin: center center;
+	
+  }
+  .shadows ellipse {
+	transform-origin: center center;
+  }
+  
+  @keyframes shrink {
+	0% {
+	  width: 90%;
+	  margin: 0 5%;
+	}
+	50% {
+	  width: 60%;
+	  margin: 0 18%;
+	}
+	100% {
+	  width: 90%;
+	  margin: 0 5%;
+	}
+  }
