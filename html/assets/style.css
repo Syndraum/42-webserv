@@ -1,19 +1,17 @@
 body{
 	background-image: radial-gradient( circle farthest-corner at 1.3% 2.8%,  rgba(239,249,249,1) 0%, rgba(182,199,226,1) 100.2% );
 	min-height: 100vh;
-	color: #0437ce;
+	color: #3b3e44;
 }
 
 h1{
-	font-size: 96px;
+	font-size: 3rem;
 }
 
-.dot {
-	height: 25px;
-	width: 25px;
-	background-color: #4FAD63;
-	border-radius: 50%;
-	display: inline-block;
+@media (min-width: 1200px){
+	h1 {
+		font-size: 6rem;
+	}
 }
 
 .color-green{
@@ -34,47 +32,93 @@ a:hover{
 	color: #0437ce;
 }
 
+.link:hover .link-arrow{
+	transform: translateX(+30px);
+}
+
+.link-arrow{
+	transition: transform 450ms ease-out;
+}
+
+/* GHOST */
+
 .cont {
 	position: absolute;
 	top: 50%;
 	right: 30%;
 	margin-left: -64.5px;
 	margin-top: -85.5px;
-  }
-  
-  .ghost {
+}
+
+.ghost {
 	animation: float 3s ease-out infinite;
-  }
-  
-  @keyframes float {
+}
+
+@keyframes float {
 	50% {
-	   transform: translate(0, 20px);
+		transform: translate(0, 20px);
 	}
-  }
-  .shadowFrame {
+}
+.shadowFrame {
 	width: 130px;
 	margin-top: 15px;
-  }
-  .shadows {
+}
+
+.shadows {
 	animation: shrink 3s ease-out infinite;
 	transform-origin: center center;
 	
-  }
-  .shadows ellipse {
+}
+
+.shadows ellipse {
 	transform-origin: center center;
-  }
-  
-  @keyframes shrink {
+}
+
+@keyframes shrink {
 	0% {
-	  width: 90%;
-	  margin: 0 5%;
+		width: 90%;
+		margin: 0 5%;
 	}
 	50% {
-	  width: 60%;
-	  margin: 0 18%;
+		width: 60%;
+		margin: 0 18%;
 	}
 	100% {
-	  width: 90%;
-	  margin: 0 5%;
+		width: 90%;
+		margin: 0 5%;
 	}
-  }
+}
+
+/* CIRCLE PULSE */
+
+.ring-container {
+	position: relative;
+}
+
+.circle {
+	width: 15px;
+	height: 15px;
+	background-color: #4FAD63;
+	border-radius: 50%;
+	/* position: absolute;
+	top: 23px;
+	left: 23px; */
+}
+
+.ringring {
+	border: 3px solid #4FAD63;
+	-webkit-border-radius: 30px;
+	height: 25px;
+	width: 25px;
+	position: absolute;
+	left: -5px;
+	top: -5px;
+	-webkit-animation: pulsate 1s ease-out;
+	-webkit-animation-iteration-count: infinite; 
+	opacity: 0.0
+}
+@-webkit-keyframes pulsate {
+	0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
+	50% {opacity: 1.0;}
+	100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
+}
