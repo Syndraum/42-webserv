@@ -40,6 +40,32 @@ a:hover{
 	transition: transform 450ms ease-out;
 }
 
+.key {
+    border-radius: 5px;
+    padding: 6px 9px;
+    background: #eaf0f4;
+    margin: 0px 3px;
+	color: black;
+}
+
+.quote{
+	background: #515bf7;
+	padding: 15px;
+	border-radius: 11px;
+	color: white;
+}
+
+h3{
+	margin: 25px 0px;
+}
+
+.code{
+	background-color: #333;
+	color: #eee;
+	padding: 15px;
+	border-radius: 11px;
+}
+
 /* GHOST */
 
 .cont {
