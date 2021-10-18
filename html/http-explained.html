@@ -13,9 +13,14 @@
 			<div class="row justify-content-center">
 				<div class="col-11 col-lg-9">
 					<div class="row mt-5">
-						<div class="col-9">
+						<div class="col-12">
+							<a href="/"><h1 class="fs-1 fw-bold">Webserviette</h1></a>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-9 mb-5">
 							<h3>What is HTTP ?</h3>
-							<p>HTTP est un protocole de communication client-serveur. Les clients HTTP les plus connus sont les navigateurs Web permettant à un utilisateur d'accéder à un serveur.
+							<p>HTTP est un protocole de communication client-serveur. Les clients HTTP les plus connus sont les navigateurs Web permettant à un utilisateur d'accéder à un serveur. Ils existe des client en ligne de commande comme <span class="code-text">curl</span> ou <span class="code-text">telnet</span> par exemple.
 								Le client envoie un requête au serveur, et celui-ci renvoie une reponse en fonction des ressource en local et des éléments de la requête.
 							</p>
 							<p class="quote">
@@ -65,6 +70,29 @@
 									</li>
 								</ul>
 							</p>
+							<p>
+								Comme pour la requête, la reponse contient des headers qui seront utiliser par le client.
+								Un body peut etre revoyer. Par exemple pour une methode GET, le body contiendra la ressource demander.
+							</p>
+							<p class="code">
+								HTTP/1.1 200 OK<br>
+								Content-Length: 1643<br>
+								Content-type: image/png<br>
+								Server: Webserviette/0.1<br>
+								 <br>
+								[BODY]
+							</p>
+							<h3>Et les CGI ?</h3>
+							<p>
+								Au lieu d'envoyer le contenu d'un fichier (fichier HTML, image), le serveur HTTP exécute un programme, puis retourne le contenu généré. CGI est le standard industriel qui indique comment transmettre la requête du serveur HTTP au programme, et comment récupérer la réponse générée dudit programme.
+							</p>
+							<a class="link d-inline-flex flex-row align-items-center mt-5" href="/form.html">
+								<span class="link-text me-5 fs-5">Passer au fromulaire</span>
+								<svg class="link-arrow" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0437ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<line x1="4" y1="12" x2="20" y2="12"/>
+									<polyline points="14 6 20 12 14 18"/>
+								</svg>
+							</a>
 						</div>
 					</div>
 				</div>
