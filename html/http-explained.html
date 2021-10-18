@@ -20,24 +20,24 @@
 					<div class="row mt-3">
 						<div class="col-9 mb-5">
 							<h3>What is HTTP ?</h3>
-							<p>HTTP est un protocole de communication client-serveur. Les clients HTTP les plus connus sont les navigateurs Web permettant à un utilisateur d'accéder à un serveur. Ils existe des client en ligne de commande comme <span class="code-text">curl</span> ou <span class="code-text">telnet</span> par exemple.
-								Le client envoie un requête au serveur, et celui-ci renvoie une reponse en fonction des ressource en local et des éléments de la requête.
+							<p>HTTP est un protocole de communication client-serveur. Les clients HTTP les plus connus sont les navigateurs Web permettant à un utilisateur d'accéder à un serveur. Il existe des clients en ligne de commande comme <span class="code-text">curl</span> ou <span class="code-text">telnet</span> par exemple.
+								Le client envoie un requête au serveur, et celui-ci renvoie une reponse en fonction des ressources en local et des éléments de la requête.
 							</p>
 							<p class="quote">
 								<strong>Pro-tips</strong> : Vous pouvez observez les reponses serveur et leurs requêtes associés à l'aide de l'outils de développement <span class="key">Ctrl</span> <span class="key">Maj</span> <span class="key">I</span> onglet Réseaux.
 							</p>
 							<h3>Requête et methodes</h3>
-							<p>La requête est un message composé de plusieur ligne. La première ligne contient La methode et la cible de la methode.</p>
+							<p>La requête est un message composé de plusieurs lignes. La première ligne contient La methode et la cible de la methode.</p>
 							<p class="code">GET /index.html HTML/1.1</p>
 							<p>
-								Les méthodes geré par ce serveur sont les suivants :
+								Les méthodes gerés par ce serveur sont les suivantes :
 								<ul>
-									<li>GET : Acceder a la ressource</li>
+									<li>GET : Acceder à la ressource</li>
 									<li>DELETE : Supprimer la ressource</li>
 									<li>POST : Envoyer des données via le body</li>
 								</ul>
 							</p>
-							<p>La suite de la requête est composé de Header, chaque header est composé d'une clé associé a une valeur. Ces valeurs peuvent être utilisé par le serveur.</p>
+							<p>La suite de la requête est composé de Header, chaque header est composé d'une clé associé à une valeur. Ces valeurs peuvent être utilisées par le serveur.</p>
 							<p class="code">
 								. . .<br>
 								Host: localhost:8081<br>
@@ -47,11 +47,11 @@
 								. . .
 							</p>
 							<p>
-								Enfin la requête peux ce terminer par un body contenent des informations, comme des données de formulaire. Ces données peuvent étre utilisé par un programme tier par exemple.
+								Enfin la requête peut se terminer par un body contenent des informations, comme des données de formulaire. Ces données peuvent étre utilisé par un programme tier par exemple.
 							</p>
 							<h3>Code et Reponse</h3>
 							<p>
-								Le serveur va pouvoir executer des actions et renvoyer une reponse. Chaque reponse contient un code indiquant si tout s'est bien passé ou si une erreur est survenue.
+								Le serveur va pouvoir executer des actions et renvoyer une reponse. Chaque reponse contient un code indiquant si tout c'est bien passé ou si une erreur est survenue.
 								<ul>
 									<li>
 										<div class="my-4">Succès de la requête</div>
@@ -61,7 +61,7 @@
 										<div class="my-4">Redirection</div>
 										<span class="code">HTTP/1.1 302 Found</span></li>
 									<li >
-										<div class="my-4">Ressource introuvable (Erreur requete)</div>
+										<div class="my-4">Ressource introuvable (Erreur requête)</div>
 										<span class="code">HTTP/1.1 404 Not Found</span>
 									</li>
 									<li>
