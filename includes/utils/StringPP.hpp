@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include <algorithm>
 
 class StringPP
 {
@@ -27,6 +28,8 @@ public:
 	}
 	std::string &	replace_all(const std::string & search, const std::string & replace);
 	char *			string_copy() const;
+	static	void	to_lower(std::string &);
+	static std::string to_lower(const std::string &);
 
 };
 

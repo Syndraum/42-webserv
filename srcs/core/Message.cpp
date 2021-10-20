@@ -32,11 +32,11 @@ Message::get_headers() const
 
 std::string &
 Message::get_header(std::string const &key)
-{ return (_headers[key]); }
+{ return (_headers[StringPP::to_lower(key)]); }
 
 std::string const &
 Message::get_header(std::string const &key) const
-{ return (_headers.at(key)); }
+{ return (_headers.at(StringPP::to_lower(key))); }
 
 bool
 Message::get_header_lock() const
@@ -53,7 +53,7 @@ Message::get_body_lock() const
 Message &
 Message::add_header(const std::string & name, const std::string & content)
 {
-	_headers.insert(std::pair<std::string, std::string>(name, content));
+	_headers.insert(std::pair<std::string, std::string>(StringPP::to_lower(name), content));
 	return *this;
 }
 
@@ -67,7 +67,9 @@ Message::clear_header()
 bool
 Message::has_header(const std::string & key) const
 {
-	if (_headers.find(key) == _headers.end())
+	std::string	find	= StringPP::to_lower(key); 
+
+	if (_headers.find(find) == _headers.end())
 		return (false);
 	return (true);
 }

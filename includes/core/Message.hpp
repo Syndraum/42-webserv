@@ -4,6 +4,7 @@
 # include <map>
 # include <string>
 # include <sstream>
+# include "StringPP.hpp"
 
 # include <iostream> // TMP
 
