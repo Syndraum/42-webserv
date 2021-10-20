@@ -104,13 +104,16 @@ CGI::start(Message & request, const std::string & script_path)
 		throw (std::exception()); // specify
 	else if (!pid)
 	{
-		if (dup2(pipe_out[1], 1) == -1 || dup2(pipe_err[1], 2) == -1 || dup2(pipe_in[0], 0) == -1)
-			throw (std::exception()); // specify
+		if (dup2(pipe_out[1], 1) == -1 || dup2(pipe_in[0], 0) == -1)
+			_exit(2);
+			// throw (std::exception()); // specify
 		close(pipe_out[0]);
 		close(pipe_err[0]);
 		close(pipe_in[1]);
-		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, a_env.data()) < 0)
-			throw (std::exception()); // specify
+		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, a_env.data()) == -1){
+			_exit(1);
+			// throw (std::exception()); // specify
+		}
 		_exit(0);
 	}
 	else
@@ -118,15 +121,14 @@ CGI::start(Message & request, const std::string & script_path)
 		close(pipe_out[1]);
 		close(pipe_err[1]);
 		close(pipe_in[0]);
-		write(pipe_in[1], request.get_body().c_str(), request.get_body().length()); // MAYBE WHILE 
+		write(pipe_in[1], request.get_body().c_str(), request.get_body().length());
 		_handler.set_fd(pipe_out[0]);
 		_handler.init();
-		_handler.parse();
+		_handler.parse(); // MAYBE WHILE
 		close(pipe_out[0]);
 		close(pipe_err[0]);
 		close(pipe_in[1]);
 	}
-	// str_table_delete(env);
 	return (_handler.get_response());
 }
 
