@@ -118,7 +118,7 @@ CGI::start(Message & request, const std::string & script_path)
 		close(pipe_out[1]);
 		close(pipe_err[1]);
 		close(pipe_in[0]);
-		write(pipe_in[1], request.get_body().c_str(), request.get_body().length());
+		write(pipe_in[1], request.get_body().c_str(), request.get_body().length()); // MAYBE WHILE 
 		_handler.set_fd(pipe_out[0]);
 		_handler.init();
 		_handler.parse();

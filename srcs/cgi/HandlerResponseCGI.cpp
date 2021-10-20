@@ -82,7 +82,7 @@ HandlerResponseCGI::parse()
 			return ;
 		// std::cout << "CGI line: " << line << std::endl;
 		line += "\r";
-		_builder._parse_headers(line);
+		_builder._parse_headers(line); //NEED CATCH
 		if (_response->get_header_lock())
 		{
 			if (!_response->has_header("Content-Length"))

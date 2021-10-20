@@ -41,7 +41,7 @@ StrategyCGI::create(Client & client)
 
 	response = new Response();
 	response->set_code(200);
-	response->add_header("Content-Type", response_cgi->get_header("Content-type"));
+	response->add_header("Content-Type", response_cgi->get_header("Content-Type"));
 	response->set_body(response_cgi->get_body());
 	if (response_cgi->has_header("Status"))
 		handle_status(*response_cgi, *response, client.get_server());
