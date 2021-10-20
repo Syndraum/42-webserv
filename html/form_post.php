@@ -5,7 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Form</title>
+    <title>Form POST</title>
 
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -22,10 +22,10 @@
 					</div>
 				</div>
 				<div class="row mt-3">
-					<div class="col-9 mb-5">
-						<h3>GET Form : result</h3>
+					<div class="col-12 col-md-9 col-xl-7 mb-5">
+						<h3>POST Form : result</h3>
 						<p>
-							Les données du formaulaire s'affiche si dessous. L'url ne contient pas les données du formulaire.
+							Les données du formaulaire s'affichent ci-dessous. L'url ne contient pas les données du formulaire avec la methodes POST, ils sont envoyées dans le body de la requête.
 						</p>
 						<div class="code">
 							Email : <span class="fw-light"><?php echo $_POST['email'] ?></span>
@@ -33,7 +33,7 @@
 							Login : <span class="fw-light"><?php echo $_POST['login'] ?></span>
 						</div>
 						<a class="link d-inline-flex flex-row align-items-center mt-5" href="/form.html">
-							<span class="link-text me-5 fs-5">Retour au fromulaire</span>
+							<span class="link-text me-5 fs-5">Retour au formulaire</span>
 							<svg class="link-arrow" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0437ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<line x1="4" y1="12" x2="20" y2="12"/>
 								<polyline points="14 6 20 12 14 18"/>
