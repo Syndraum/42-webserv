@@ -46,6 +46,8 @@ StrategyCGI::create(Client & client)
 		response->set_body(response_cgi->get_body());
 		if (response_cgi->has_header("Status"))
 			handle_status(*response_cgi, *response, client.get_server());
+		if (!response_cgi->has_header("Content-Type") || response_cgi->get_header("Content-Type") == "")
+			response->set_error(500, client.get_server().get_path_error_page());
 		delete (response_cgi);
 	}
 	catch(const std::exception& e)
