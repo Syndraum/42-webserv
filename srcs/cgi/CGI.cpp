@@ -104,7 +104,7 @@ CGI::start(Message & request, const std::string & script_path)
 		throw (std::exception()); // specify
 	else if (!pid)
 	{
-		if (dup2(pipe_out[1], 1) == -1 || dup2(pipe_in[0], 0) == -1)
+		if (dup2(pipe_out[1], 1) == -1 || dup2(pipe_err[1], 2) == -1 || dup2(pipe_in[0], 0) == -1)
 			_exit(2);
 			// throw (std::exception()); // specify
 		close(pipe_out[0]);
