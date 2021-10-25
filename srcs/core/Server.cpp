@@ -63,6 +63,8 @@ Server::add_listen(int const port, std::string const ip, bool active)
 	std::pair<port_map::iterator, bool>	pair;
 	port_map::iterator					it;
 
+	if (has_port(port))
+		throw Server::PortAlreadyUsed();
 	pair = _server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port, ip)));
 	it = pair.first;
 	it->second.set_active(active);

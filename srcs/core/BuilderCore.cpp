@@ -211,7 +211,15 @@ BuilderCore::parse_server_listen(Server *server)
 				port = 8080;
 		}
 		active = !_core->has_host_port(ip, port);
-		server->add_listen(port, ip, active);
+		try
+		{
+			server->add_listen(port, ip, active);
+		}
+		catch(const Server::PortAlreadyUsed& e)
+		{
+			std::cerr << "Error : line " << line_count() <<" : port already in use"<< std::endl;
+			throw e;
+		}
 		skip_whitespaces();
 	}
 	check_semicolon("listen");
