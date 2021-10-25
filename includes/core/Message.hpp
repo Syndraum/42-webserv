@@ -31,7 +31,7 @@ public:
 		std::stringstream	ss;
 		T					result;
 
-		ss << _headers.at(key);
+		ss << _headers.at(StringPP::to_lower(key));
 		ss >> result;
 		return (result);
 	}
