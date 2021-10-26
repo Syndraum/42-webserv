@@ -20,74 +20,128 @@
 					<div class="row mt-3">
 						<div class="col-12 col-md-9 col-xl-7 mb-5">
 							<h3>What is HTTP ?</h3>
-							<p>HTTP est un protocole de communication client-serveur. Les clients HTTP les plus connus sont les navigateurs Web permettant à un utilisateur d'accéder à un serveur. Il existe des clients en ligne de commande comme <span class="code-text">curl</span> ou <span class="code-text">telnet</span> par exemple.
-								Le client envoie un requête au serveur, et celui-ci renvoie une reponse en fonction des ressources en local et des éléments de la requête.
+							<p>
+								HTTP functions as a request–response protocol in the client–server model. 
+								A web browser, for example, may be the client and a process, named web server, running on a computer hosting one or more websites may be the server. 
+								The client submits an HTTP request message to the server. 
+								The server, which provides resources such as HTML files and other content, or performs other functions on behalf of the client, returns a response message to the client. 
+								The response contains completion status information about the request and may also contain requested content in its message body.
+								There are command line clients like <span class="code-text">curl</span> or <span class="code-text">telnet</span>.
 							</p>
 							<p class="quote">
-								<strong>Pro-tips</strong> : Vous pouvez observez les reponses serveur et leurs requêtes associés à l'aide de l'outils de développement <span class="key">Ctrl</span> <span class="key">Maj</span> <span class="key">I</span> onglet Réseaux.
+								<strong>Pro-tips</strong> : In web browser, you can observe the server responses and associate requests, with developpement tool <span class="key">Ctrl</span> <span class="key">Maj</span> <span class="key">I</span> in Network tab.
 							</p>
-							<h3>Requête et methodes</h3>
-							<p>La requête est un message composé de plusieurs lignes. La première ligne contient La methode et la cible de la methode.</p>
-							<p class="code">GET /index.html HTML/1.1</p>
+							<h3>Request and Method</h3>
+							<h4>Request methods</h4>
 							<p>
-								Les méthodes gerés par ce serveur sont les suivantes :
-								<ul>
-									<li>GET : Acceder à la ressource</li>
-									<li>DELETE : Supprimer la ressource</li>
-									<li>POST : Envoyer des données via le body</li>
-								</ul>
-							</p>
-							<p>La suite de la requête est composé de Header, chaque header est composé d'une clé associé à une valeur. Ces valeurs peuvent être utilisées par le serveur.</p>
-							<p class="code">
-								. . .<br>
-								Host: localhost:8081<br>
-								Accept-Encoding: gzip, deflate<br>
-								Accept-Language: fr_fr<br>
-								Connection: keep-alive<br>
-								. . .
+								HTTP defines methods to indicate the desired action to be performed on the resource. 
 							</p>
 							<p>
-								Enfin la requête peut se terminer par un body contenent des informations, comme des données de formulaire. Ces données peuvent étre utilisé par un programme tier par exemple.
-							</p>
-							<h3>Code et Reponse</h3>
-							<p>
-								Le serveur va pouvoir executer des actions et renvoyer une reponse. Chaque reponse contient un code indiquant si tout c'est bien passé ou si une erreur est survenue.
-								<ul>
-									<li>
-										<div class="my-4">Succès de la requête</div>
-										<span class="code">HTTP/1.1 200 OK</span>
+								The method manage by this server are
+								<ul class="no-style border-list">
+									<li class="green-b">
+										<div class="fw-bold">GET</div>
+										<div class="fw-light">Requests that the target resource transfers a representation of its state.</div>
+									<li class="orange-b">
+										<div class="fw-bold">DELETE</div>
+										<div class="fw-light">Requests that the target resource deletes its state.</div>
 									</li>
-									<li>
-										<div class="my-4">Redirection</div>
-										<span class="code">HTTP/1.1 302 Found</span></li>
-									<li >
-										<div class="my-4">Ressource introuvable (Erreur requête)</div>
-										<span class="code">HTTP/1.1 404 Not Found</span>
-									</li>
-									<li>
-										<div class="my-4">Erreur serveur</div>
-										<span class="code">HTTP/1.1 500 Internal Server Error</span>
+									<li class="blue-b">
+										<div class="fw-bold">POST</div>
+										<div class="fw-light">
+											Requests that the target resource processes the representation enclosed in the request according to the semantics of the target resource. 
+											For example, it is used for posting a message to an Internet forum, subscribing to a mailing list, or completing an online shopping transaction.
+										</div>
 									</li>
 								</ul>
 							</p>
+							<h4>Request syntax</h4>
+							<p>A client sends request messages to the server, which consist of</p>
+							<ol class="xl-ol border-list">
+								<li>
+									<p>A request line, consisting of the case-sensitive request method, a space, the request target, another space, the protocol version, a carriage return, and a line feed</p>
+									<p class="code">GET /index.html HTML/1.1</p>
+								</li>
+								<li>
+									<p>One or more request header fields, each consisting of the case-insensitive field name, a colon, optional leading whitespace, the field value, an optional trailing whitespace and ending with a carriage return and a line feed</p>
+									<p class="code">
+										. . .<br>
+										Host: localhost:8081<br>
+										Accept-Encoding: gzip, deflate<br>
+										Accept-Language: fr_fr<br>
+										Connection: keep-alive<br>
+										. . .
+									</p>
+								</li>
+								<li>
+									<p>An empty line, consisting of a carriage return and a line feed</p>
+								</li>
+								<li>
+									<p>
+										And an optional message body, containt information like form data. This data can be used by a third party program, for example.
+									</p>
+								</li>
+							</ol>
+							<h3>Code and Reponse</h3>
+							<h4>Response status codes</h4>
 							<p>
-								Comme pour la requête, la reponse contient des headers qui seront utiliser par le client.
-								Un body peut etre revoyer. Par exemple pour une methode GET, le body contiendra la ressource demander.
+								In HTTP/1.0 and since, the first line of the HTTP response is called the status line and includes a numeric status code (such as "404") and a textual reason phrase (such as "Not Found"). 
+								The response status code is a three-digit integer code representing the result of the server's attempt to understand and satisfy the client's corresponding request.
 							</p>
-							<p class="code">
-								HTTP/1.1 200 OK<br>
-								Content-Length: 1643<br>
-								Content-type: image/png<br>
-								Server: Webserviette/0.1<br>
-								 <br>
-								[BODY]
+							<p>
+								The first digit of the status code defines its class
 							</p>
-							<h3>Et les CGI ?</h3>
+							<ul class="no-style border-list">
+								<li class="blue-b">
+									<div class="fw-bold">1XX - informational</div>
+									<div class="fw-light">The request was received, continuing process.</div>
+								</li>
+								<li class="green-b">
+									<div class="fw-bold">2XX - successful</div>
+									<div class="fw-light">The request was successfully received, understood, and accepted.</div>
+								</li>
+								<li>
+									<div class="fw-bold">3XX - redirection</div>
+									<div class="fw-light">Further action needs to be taken in order to complete the request.</div>
+								</li>
+								<li class="orange-b">
+									<div class="fw-bold">4XX - client error</div>
+									<div class="fw-light">The request contains bad syntax or cannot be fulfilled.</div>
+								</li>
+								<li class="red-b">
+									<div class="fw-bold">5XX - server error</div>
+									<div class="fw-light">The server failed to fulfill an apparently valid request.</div>
+								</li>
+							</ul>
+							<h4>Response syntax</h4>
+							<p>A server sends response messages to the client, which consist of</p>
+							<ol class="xl-ol border-list">
+								<li>
+									<p>A status line, consisting of the protocol version, a space, the response status code, another space, a possibly empty reason phrase, a carriage return and a line feed</p>
+									<p class="code">HTTP/1.1 200 OK</p>
+								</li>
+								<li>
+									<p>Zero or more response header fields, each consisting of the case-insensitive field name, a colon, optional leading whitespace, the field value, an optional trailing whitespace and ending with a carriage return and a line feed</p>
+									<p class="code">
+										Content-Length: 1643<br>
+										Content-type: image/png<br>
+										Server: Webserviette/0.1
+									</p>
+								</li>
+								<li>
+									<p>An empty line, consisting of a carriage return and a line feed.</p>
+								</li>
+								<li>
+									<p>An optional message body.</p>
+								</li>
+							</ol>
+							<h3>Example</h3>
+							<h3>And CGI ?</h3>
 							<p>
 								Au lieu d'envoyer le contenu d'un fichier (fichier HTML, image), le serveur HTTP exécute un programme, puis retourne le contenu généré. CGI est le standard industriel qui indique comment transmettre la requête du serveur HTTP au programme, et comment récupérer la réponse générée dudit programme.
 							</p>
 							<a class="link d-inline-flex flex-row align-items-center mt-5" href="/form.html">
-								<span class="link-text me-5 fs-5">Passer au fromulaire</span>
+								<span class="link-text me-5 fs-5">Go to Form</span>
 								<svg class="link-arrow" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0437ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 									<line x1="4" y1="12" x2="20" y2="12"/>
 									<polyline points="14 6 20 12 14 18"/>

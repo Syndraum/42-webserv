@@ -4,6 +4,8 @@ body{
 	color: #3b3e44;
 }
 
+/* TITLE */
+
 h1{
 	font-size: 3rem;
 }
@@ -14,6 +16,20 @@ h1{
 	}
 }
 
+h3{
+	margin-top: 4rem;
+	margin-bottom: 1.5rem;
+	font-weight: bold;
+}
+
+h4{
+	font-size: 1.3rem;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+
+/* COLOR */
+
 .color-green{
 	color: #4FAD63;
 }
@@ -22,9 +38,7 @@ h1{
 	color: rgb(90, 90, 90)
 }
 
-.margin-xxl{
-	margin-top: 200px;
-}
+/* ACTION */
 
 a{
 	text-decoration: unset;
@@ -48,11 +62,93 @@ a:hover{
 	transition: transform 450ms ease-out;
 }
 
+/* COMMUN */
+
+.margin-xxl{
+	margin-top: 200px;
+}
+
+p{
+	margin-bottom: 1.5rem;
+}
+
+.line{
+	border: solid 1px rgb(134, 134, 134);
+}
+
+/* LIST */
+
+.no-style{
+	list-style: none;
+}
+
+.xl-ol{
+	list-style: none;
+	counter-reset: li;
+}
+
+.xl-ol > li{
+	counter-increment: li;
+}
+
+.xl-ol > li::before{
+	content: counter(li);
+	font-size: 3rem;
+	color: #bdbdbd;
+	display: inline-block;
+	/* margin-left: -10px; */
+}
+
+.border-list > li{
+	border-left: solid 3px #bdbdbd;
+	padding: 20px;
+	background-color: #f2f2f9a3;
+	margin: 15px 0px;
+}
+
+.border-list > li > p{
+	margin-bottom: 1rem;
+}
+
+.border-list > li[class="blue-b"]{
+	border-color: #0EA4CF;
+}
+
+.border-list > li[class="blue-b"] > .title-list{
+	color: #0EA4CF;
+}
+
+.border-list > li[class="green-b"]{
+	border-color: #4FAD63;
+}
+
+.border-list > li[class="green-b"] > .title-list{
+	color: #4FAD63
+}
+
+.border-list > li[class="orange-b"]{
+	border-color: #f0931a;
+}
+
+.border-list > li[class="orange-b"] > .title-list{
+	color: #f0931a;
+}
+
+.border-list > li[class="red-b"]{
+	border-color: #ce3737;
+}
+
+.border-list > li[class="red-b"] > .title-list{
+	color: #ce3737;
+}
+
+/* QUOTE */
+
 .key {
-    border-radius: 5px;
-    padding: 6px 9px;
-    background: #eaf0f4;
-    margin: 0px 3px;
+	border-radius: 5px;
+	padding: 6px 9px;
+	background: #eaf0f4;
+	margin: 0px 3px;
 	color: black;
 }
 
@@ -61,16 +157,11 @@ a:hover{
 	padding: 15px;
 	border-radius: 11px;
 	color: white;
+	line-height: 2rem;
 }
 
-h3{
-	margin-top: 4rem;
-	margin-bottom: 1.5rem;
-}
 
-p{
-	margin-bottom: 1.5rem;
-}
+/* CODE */
 
 .code{
 	background-color: #333;
@@ -96,10 +187,6 @@ p{
 
 .color-value{
 	color:rgb(232, 235, 67);
-}
-
-.line{
-	border: solid 1px rgba(53, 53, 53, 0.99)
 }
 
 /* GHOST */
