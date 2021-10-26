@@ -23,10 +23,14 @@
 				</div>
 				<div class="row mt-3">
 					<div class="col-12 col-md-9 col-xl-7 mb-5">
-						<h3>Envoyer des données ?</h3>
+						<h3>Send data ?</h3>
 						<p>
-							Pour qu'un utilisteur soumette des données, on utilse en majorité des formulaires HTML. Ces formulaires pointe sur une ressources (un fichier php par exemple) qui s'occupera de recupérer ces données (et de faire un tas de truc avec).
-							Cette cible est appelé <span class="code-text">action</span> dans un formulaire.
+							We use, in majority, HTML form to send data in a http context. A form points to a ressource (a PHP file for example) on the server with a script for processing input data.
+
+							This target is call <span class="code-text">action</span> in a form.
+						</p>
+						<p>
+							A form also needs to specify which method will be used, GET or POST, to send the request.
 						</p>
 						<p class="code">
 							&lt;<span class="color-balise">form</span> <span class="color-arg">method</span>=<span class="color-value">"GET"</span> <span class="color-arg">action</span>=<span class="color-value">"form_get.php"</span>&gt;<br>
@@ -35,15 +39,12 @@
 							<span class="float-end color-grey">HTML<span>
 						</p>
 						<p class="quote">
-							<strong>Prérequis</strong> : Les cibles des ces formulaires sont des fichiers php, le server doit etre correctement configuré pour lancé le CGI.
-						</p>
-						<p>
-							Un formulaire a aussi beson de specifier quelle METHOD va être utilisé pour l'envoie de la requête.
+							<strong>prerequisite</strong> : the targets of this forms are PHP files, the server muste be correctly setup to run this CGI.
 						</p>
 						<h3>Method GET</h3>
 						<p>
-							La methode GET envoie les données du formulaire dans l'url directement.<br>
-							Essayez, entrez des données et cliquer sur envoyé.
+							The GET method send data of the form directly in URI.<br>
+							Try to send data with GET, click on submit button.
 						</p>
 						<div class="row">
 							<div class="col-12 col-md-11">
@@ -70,8 +71,8 @@
 						</div>
 						<h3>Method POST</h3>
 						<p>
-							La methode POST envoie les données du formulaire dans le body de la requête.<br>
-							Essayez, entrez des données et cliquer sur envoyé.
+							The POST MEthod send data of the form in body request.<br>
+							Try to send data with POST, click on submit button.
 						</p>
 						<div class="row">
 							<div class="col-12 col-md-11">
@@ -97,7 +98,7 @@
 							</div>
 						</div>
 						<a class="link d-inline-flex flex-row align-items-center mt-5" href="/upload.html">
-							<span class="link-text me-5 fs-5">Upload</span>
+							<span class="link-text me-5 fs-5">Go to Upload</span>
 							<svg class="link-arrow" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0437ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<line x1="4" y1="12" x2="20" y2="12"/>
 								<polyline points="14 6 20 12 14 18"/>

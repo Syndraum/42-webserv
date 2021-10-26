@@ -22,10 +22,14 @@
 							<h3>What is HTTP ?</h3>
 							<p>
 								HTTP functions as a request–response protocol in the client–server model. 
-								A web browser, for example, may be the client and a process, named web server, running on a computer hosting one or more websites may be the server. 
+								A web browser, for example, may be the client and a process, named web server, running on a computer hosting one or more websites may be the server.
+							</p>
+							<p>
 								The client submits an HTTP request message to the server. 
 								The server, which provides resources such as HTML files and other content, or performs other functions on behalf of the client, returns a response message to the client. 
 								The response contains completion status information about the request and may also contain requested content in its message body.
+							</p>
+							<p>
 								There are command line clients like <span class="code-text">curl</span> or <span class="code-text">telnet</span>.
 							</p>
 							<p class="quote">
@@ -136,9 +140,39 @@
 								</li>
 							</ol>
 							<h3>Example</h3>
+							<p>Below is a sample conversation between an HTTP client and an HTTP server</p>
+							<h4>Client request</h4>
+							<p class="code">
+								GET / HTTP/1.1<br>
+								Host: www.example.com<br>
+								User-Agent: Mozilla/5.0
+							</p>
+							<h4>Server response</h4>
+							<div class="code">
+								HTTP/1.1 200 OK<br>
+								Date: Mon, 23 May 2005 22:38:34 GMT<br>
+								Content-Type: text/html; charset=UTF-8<br>
+								Content-Length: 155<br>
+								Server: Apache/1.3.3.7 (Unix) (Red-Hat/Linux)<br>
+								<br>
+								&lt;html&gt;<br>
+								<div class="indent">
+								&lt;head&gt;<br>
+									<div class="indent">&lt;title&gt;An Example Page&lt;/title&gt;<br></div>
+								&lt;/head&gt;<br>
+								&lt;body&gt;<br>
+									<div class="indent">&lt;p&gt;Hello World, this is a very simple HTML document.&lt;/p&gt;<br></div>
+								&lt;/body&gt;<br>
+								</div>
+								&lt;/html&gt;
+							</div>
 							<h3>And CGI ?</h3>
 							<p>
-								Au lieu d'envoyer le contenu d'un fichier (fichier HTML, image), le serveur HTTP exécute un programme, puis retourne le contenu généré. CGI est le standard industriel qui indique comment transmettre la requête du serveur HTTP au programme, et comment récupérer la réponse générée dudit programme.
+								Common Gateway Interface (CGI) is an interface specification that enables web servers to execute an external program, typically to process user requests.
+
+							</p>
+							<p>
+								A typical use case occurs when a Web user submits a Web form on a web page that uses CGI. The form's data is sent to the Web server within an HTTP request with a URL denoting a CGI script. The Web server then launches the CGI script in a new computer process, passing the form data to it. The output of the CGI script, usually in the form of HTML, is returned by the script to the Web server, and the server relays it back to the browser as its response to the browser's request.
 							</p>
 							<a class="link d-inline-flex flex-row align-items-center mt-5" href="/form.html">
 								<span class="link-text me-5 fs-5">Go to Form</span>

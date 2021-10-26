@@ -25,15 +25,16 @@
 					<div class="col-12 col-md-9 col-xl-7 mb-5">
 						<h3>POST Form : result</h3>
 						<p>
-							Les données du formaulaire s'affichent ci-dessous. L'url ne contient pas les données du formulaire avec la methodes POST, ils sont envoyées dans le body de la requête.
+						The data is displayed below.<br>
+						With POST Method data are send in body request. For send new data, go back to the form page.
 						</p>
 						<div class="code">
-							Email : <span class="fw-light"><?php echo $_POST['email'] ?></span>
-							<br>
 							Login : <span class="fw-light"><?php echo $_POST['login'] ?></span>
+							<br>
+							Email : <span class="fw-light"><?php echo $_POST['email'] ?></span>
 						</div>
 						<a class="link d-inline-flex flex-row align-items-center mt-5" href="/form.html">
-							<span class="link-text me-5 fs-5">Retour au formulaire</span>
+							<span class="link-text me-5 fs-5">Return to Form</span>
 							<svg class="link-arrow" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0437ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<line x1="4" y1="12" x2="20" y2="12"/>
 								<polyline points="14 6 20 12 14 18"/>

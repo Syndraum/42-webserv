@@ -76,6 +76,10 @@ p{
 	border: solid 1px rgb(134, 134, 134);
 }
 
+.indent{
+	padding-left: 20px;
+}
+
 /* LIST */
 
 .no-style{

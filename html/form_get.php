@@ -25,16 +25,17 @@
 					<div class="col-12 col-md-9 col-xl-7 mb-5">
 						<h3>GET Form : result</h3>
 						<p>
-							Les données du formulaire s'affichent ci-dessous. <br>Observez bien l'url. Il se compose de la ressource <span class="code-text">form_get.php</span>, d'un séparateur <span class="code-text">?</span>, et d'argument au format <span class="code-text">nom=valeur</span><br>
-							Essayez de changer ses valeurs à la main et relancez la requête.
+							The data is displayed below.<br>
+							Look at the URI. It is composed of the ressource <span class="code-text">form_get.php</span>, a separator <span class="code-text">?</span>, and the arguments in <span class="code-text">key=value</span> format<br>
+							Try to change value in the URI, and relaunch request.
 						</p>
 						<div class="code">
-							Email : <span class="fw-light"><?php echo $_GET['email'] ?></span>
-							<br>
 							Login : <span class="fw-light"><?php echo $_GET['login'] ?></span>
+							<br>
+							Email : <span class="fw-light"><?php echo $_GET['email'] ?></span>
 						</div>
 						<a class="link d-inline-flex flex-row align-items-center mt-5" href="/form.html">
-							<span class="link-text me-5 fs-5">Retour au formulaire</span>
+							<span class="link-text me-5 fs-5">Return to Form</span>
 							<svg class="link-arrow" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0437ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<line x1="4" y1="12" x2="20" y2="12"/>
 								<polyline points="14 6 20 12 14 18"/>
