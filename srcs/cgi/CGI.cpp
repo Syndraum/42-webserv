@@ -71,7 +71,7 @@ CGI::create_env(const env_map & map, Array & array)
 	env_map::const_iterator ite = map.end();
 	for (env_map::const_iterator it = map.begin(); it != ite; it++)
 	{
-		line = it->first + "=" + it->second;
+		line = StringPP::to_upper(it->first) + "=" + it->second;
 		array.push_back(line.str().c_str());
 	}
 }

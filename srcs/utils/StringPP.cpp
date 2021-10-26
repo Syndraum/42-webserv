@@ -73,3 +73,18 @@ StringPP::to_lower(const std::string & src)
 
 	return (cpy);
 }
+
+void
+StringPP::to_upper(std::string & src)
+{
+	std::transform(src.begin(), src.end(), src.begin(), ::toupper);
+}
+
+std::string
+StringPP::to_upper(const std::string & src)
+{
+	std::string cpy(src);
+	StringPP::to_upper(cpy);
+
+	return (cpy);
+}
