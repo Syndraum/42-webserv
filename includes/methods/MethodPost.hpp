@@ -27,7 +27,9 @@ class MethodPost : public AMethod
 		MethodPost(void);
 		virtual ~MethodPost(void);
 
-		virtual void		action(const Request &, Response &, Server &);
+		virtual void		action(const Request &, Response &, Server &, AReaderFileDescriptor &);
+		std::string			get_boundary(const Request &);
+		void				upload(const Request &, Server &, AReaderFileDescriptor &);
 };
 
 #endif

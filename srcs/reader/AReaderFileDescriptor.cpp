@@ -136,5 +136,5 @@ AReaderFileDescriptor::write_body(int fd)
 		std::cout << "## (" << n_read << ") " << _buffer << std::endl;
 		write (fd, _buffer, n_read);
 	}
-	// dup2(_fd, fd);
+	dup2(_fd, fd);
 }

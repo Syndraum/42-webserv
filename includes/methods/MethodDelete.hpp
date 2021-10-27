@@ -27,7 +27,7 @@ class MethodDelete : public AMethod
 		MethodDelete(void);
 		virtual ~MethodDelete(void);
 
-		virtual void		action(const Request &, Response &, Server &);
+		virtual void		action(const Request &, Response &, Server &, AReaderFileDescriptor &);
 };
 
 #endif
