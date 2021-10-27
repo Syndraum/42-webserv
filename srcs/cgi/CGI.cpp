@@ -86,7 +86,7 @@ CGI::join_env(env_map & my_env)
 }
 
 Message *
-CGI::start(Message & request, const std::string & script_path)
+CGI::start(Message & request, const std::string & script_path, AReaderFileDescriptor & reader)
 {
 	pid_t			pid;
 	int				pipe_out[2];
@@ -121,7 +121,10 @@ CGI::start(Message & request, const std::string & script_path)
 		close(pipe_out[1]);
 		close(pipe_err[1]);
 		close(pipe_in[0]);
-		write(pipe_in[1], request.get_body().c_str(), request.get_body().length());
+		reader.write_body(pipe_in[1]);
+		// write(pipe_in[1], reader.get_buffer().c_str(), reader.get_buffer().length());
+		// write(1, reader.get_buffer().c_str(), reader.get_buffer().length());
+		// write(pipe_in[1], request.get_body().c_str(), request.get_body().length());
 		_handler.set_fd(pipe_out[0]);
 		_handler.init();
 		_handler.parse(); // MAYBE WHILE

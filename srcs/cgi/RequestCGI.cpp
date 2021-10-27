@@ -26,7 +26,7 @@ RequestCGI::operator=(RequestCGI const &rhs)
 	return (*this);
 }
 
-Message * RequestCGI::send(const std::string & script_path)
+Message * RequestCGI::send(const std::string & script_path, AReaderFileDescriptor & reader)
 {
-	return (_cgi.start(*this, script_path));
+	return (_cgi.start(*this, script_path, reader));
 }

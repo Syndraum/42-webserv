@@ -18,9 +18,10 @@
 # include <netinet/in.h>
 # include <iostream>
 # include <unistd.h>
+# include <cstring>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 32
+#  define BUFFER_SIZE 33
 # endif
 
 class AReaderFileDescriptor
@@ -30,7 +31,6 @@ class AReaderFileDescriptor
 		char	_buffer[BUFFER_SIZE];
 
 		AReaderFileDescriptor(void);
-
 
 	public:
 		AReaderFileDescriptor(int fd);
@@ -43,9 +43,10 @@ class AReaderFileDescriptor
 		void		read_until_end(std::string &);
 		int			get_fd(void);
 		void		set_fd(int);
+		std::string	get_buffer() const;
 		void		_reset_buffer(void);
-		virtual int	_read(void) = 0;
-
+		virtual int	_read(int n_read = BUFFER_SIZE - 1) = 0;
+		void		write_body(int fd);
 };
 
 #endif

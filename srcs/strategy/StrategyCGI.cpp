@@ -37,10 +37,10 @@ StrategyCGI::create(Client & client)
 
 	this->_prepare(client);
 	_request.set_body(client.get_request().get_body());
-	// _request.debug();
+	_request.debug();
 	try
 	{
-		response_cgi = _request.send(client.get_full_path());
+		response_cgi = _request.send(client.get_full_path(), client.get_socket_struct().get_reader());
 		response->set_code(200);
 		response->add_header("Content-Type", response_cgi->get_header("Content-Type"));
 		response->set_body(response_cgi->get_body());
@@ -94,7 +94,7 @@ StrategyCGI::_prepare(Client & client)
 	Server &		server			= client.get_server();
 	ServerSocket &	server_socket	= client.get_server_socket();
 
-	if (request_http.get_body().length() == 0 || !request_http.has_header("Content-Length")){
+	if (!request_http.has_header("Content-Length")){
 		_request.add_header("CONTENT_LENGTH", 0);
 	}
 	else {
