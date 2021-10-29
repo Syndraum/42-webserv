@@ -21,7 +21,7 @@
 # include <cstring>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 33
+#  define BUFFER_SIZE 127
 # endif
 
 class AReaderFileDescriptor
@@ -43,9 +43,10 @@ class AReaderFileDescriptor
 		void		read_until_end(std::string &);
 		int			get_fd(void);
 		void		set_fd(int);
-		std::string	get_buffer() const;
+		std::string	get_buffer(void) const;
 		void		_reset_buffer(void);
 		virtual int	_read(int n_read = BUFFER_SIZE - 1) = 0;
+		std::string	get_next_buffer(void);
 		void		write_body(int fd);
 };
 

@@ -41,13 +41,13 @@ AReaderFileDescriptor::operator=(AReaderFileDescriptor const & rhs)
 void
 AReaderFileDescriptor::_reset_buffer(void)
 {
-	std::cout << "----------RESET BUFFER--------" << std::endl;
+	// std::cout << "----------RESET BUFFER--------" << std::endl;
 	for (int i = 0; i < BUFFER_SIZE; i++)
 		_buffer[i] = '\0';
 }
 
 std::string
-AReaderFileDescriptor::get_buffer() const
+AReaderFileDescriptor::get_buffer(void) const
 {
 	return (_buffer);
 }
@@ -124,6 +124,13 @@ AReaderFileDescriptor::read_until_end(std::string & line)
 	get_next_line(line);
 
 //	std::cout << "temp: " << temp << std::endl;
+}
+
+std::string
+AReaderFileDescriptor::get_next_buffer(void)
+{
+	_read();
+	return (get_buffer());
 }
 
 void

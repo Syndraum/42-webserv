@@ -65,6 +65,7 @@ SRCS_READER		= $(addprefix $(PREFIX)reader/, \
 								AReaderFileDescriptor.cpp \
 								ReaderFileDescriptor.cpp \
 								ReaderSocket.cpp \
+								Upload.cpp \
 								)
 
 SRCS_STRATEGY	= $(addprefix $(PREFIX)strategy/, \

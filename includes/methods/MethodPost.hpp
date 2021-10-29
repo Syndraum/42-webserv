@@ -14,6 +14,7 @@
 # define METHOD_POST_HPP
 
 #include "AMethod.hpp"
+#include "Upload.hpp"
 
 class MethodPost : public AMethod
 {
@@ -28,8 +29,6 @@ class MethodPost : public AMethod
 		virtual ~MethodPost(void);
 
 		virtual void		action(const Request &, Response &, Server &, AReaderFileDescriptor &);
-		std::string			get_boundary(const Request &);
-		void				upload(const Request &, Server &, AReaderFileDescriptor &);
 };
 
 #endif
