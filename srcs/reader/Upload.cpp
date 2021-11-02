@@ -114,6 +114,7 @@ Upload::header()
 {
 	size_t position = 0;
 
+	debug();
 	while(_buffer[0] != '\r')
 	{
 		position = _buffer.find(": ");
@@ -124,13 +125,16 @@ Upload::header()
 		next_position();
 		// debug();
 	}
+	_position = 2;
+	next_position();
 	_message.debug();
+	debug();
 	if (_message.has_header("Content-Type"))
 	{
 		set_filename(_message);
 		std::cout << "filename : " << _filename << std::endl;
 		_file.open(_filename.c_str(), std::fstream::out | std::fstream::trunc);
-		_state = FIND;
+		_state = WRITE;
 	}
 	else
 		_state = FIND;
@@ -157,8 +161,20 @@ Upload::find()
 void
 Upload::write()
 {
-	_file.close();
-	_state = FIND;
+	// debug();
+	if (find_bound())
+	{
+		_file << _buffer.substr(0, _position - 2);
+		_file.close();
+		_state = FIND;
+	}
+	else
+	{
+		_position = BUFFER_SIZE - 1 - _boundary.size();
+		_file << _buffer.substr(0, _position);
+		next_position();
+	}
+	
 }
 
 void
