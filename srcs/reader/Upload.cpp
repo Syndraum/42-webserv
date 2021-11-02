@@ -163,6 +163,8 @@ Upload::write()
 	{
 		_file << _buffer.substr(0, _position - 2);
 		_file.close();
+		_filename = "";
+		_message.clear_header();
 		_state = FIND;
 	}
 	else
