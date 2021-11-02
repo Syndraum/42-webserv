@@ -41,13 +41,22 @@ void
 Upload::upload(Server & server, const Request & request)
 {
 	set_boundary(request);
-	_buffer = _reader.get_buffer() + _reader.get_next_buffer();
-	_n_buffer = _reader.get_next_buffer();
-	_chunck = _buffer + _n_buffer;
-	if ((_position = _chunck.find(_boundary)) != std::string::npos)
-	{
-		std::cout << "FIND boundray : " << _position << std::endl;
-	}
+	std::cout << "Boundary : " << _boundary << std::endl;
+	_reader.fill_buffer();
+	_buffer = _reader.get_buffer();
+	debug();
+	// switch (_state)
+	// {
+	// case FIND:
+	// 	find();
+	// 	break;
+	// case HEADER:
+
+	
+	// default:
+	// 	break;
+	// }
+	find();
 	(void)server;
 }
 
@@ -61,6 +70,32 @@ Upload::set_boundary(const Request & request)
 	if (p_bound != std::string::npos)
 	{
 		p_egal = content_type.find('=', p_bound);
-		_boundary = "--" + content_type.substr(p_egal);
+		_boundary = "--" + content_type.substr(p_egal + 1);
 	}
+}
+
+void
+Upload::next_bound()
+{
+	_buffer = _buffer.substr(_position + _boundary.size());
+}
+
+void
+Upload::find()
+{
+	if ((_position = _buffer.find(_boundary)) != std::string::npos)
+	{
+		// std::cout << "FIND boundary : " << _position << std::endl;
+		// if (_state == WRITE){
+		// }
+		next_bound();
+		_state = HEADER;
+		debug();
+	}
+}
+
+void
+Upload::debug()
+{
+	std::cout << "BUFFER ----|" << _buffer << "|----" << std::endl;
 }

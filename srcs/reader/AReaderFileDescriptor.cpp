@@ -84,7 +84,7 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 		}
 		else if (p_oel == std::string::npos)
 		{
-			ret = _read();
+			ret = next_read();
 			if (ret == -1)
 				return (ret);
 			_buffer[ret] = 0;
@@ -126,12 +126,40 @@ AReaderFileDescriptor::read_until_end(std::string & line)
 //	std::cout << "temp: " << temp << std::endl;
 }
 
-std::string
-AReaderFileDescriptor::get_next_buffer(void)
+int
+AReaderFileDescriptor::next_read(size_t size)
 {
-	_read();
-	return (get_buffer());
+	std::string	tmp;
+	size_t		remain = 0;
+
+	if (size > BUFFER_SIZE - 1)
+		throw std::exception();
+	if (size != BUFFER_SIZE - 1){
+		tmp = std::string(&_buffer[size]);
+		remain = tmp.length();
+		tmp.copy(_buffer, remain);
+		_buffer[remain] = 0;
+	}
+	return(_read(&_buffer[remain], BUFFER_SIZE - 1 - remain));
 }
+
+int
+AReaderFileDescriptor::fill_buffer()
+{
+	size_t len = strlen(_buffer);
+	if (len >= BUFFER_SIZE)
+		return (-2);
+	return (_read(&_buffer[len], BUFFER_SIZE - 1 - len));
+}
+
+// std::string
+// AReaderFileDescriptor::get_next_buffer(int index)
+// {
+// 	_buffer[0] = _buffer[index];
+// 	_buffer[index + 1] = 0;
+// 	_read();
+// 	return (get_buffer());
+// }
 
 void
 AReaderFileDescriptor::write_body(int fd)
@@ -139,7 +167,7 @@ AReaderFileDescriptor::write_body(int fd)
 	int n_read = 0;
 
 	write(fd, _buffer, std::strlen(_buffer));
-	while ((n_read = _read()) > 0){
+	while ((n_read = next_read()) > 0){
 		std::cout << "## (" << n_read << ") " << _buffer << std::endl;
 		write (fd, _buffer, n_read);
 	}

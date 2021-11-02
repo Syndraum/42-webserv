@@ -45,8 +45,10 @@ class AReaderFileDescriptor
 		void		set_fd(int);
 		std::string	get_buffer(void) const;
 		void		_reset_buffer(void);
-		virtual int	_read(int n_read = BUFFER_SIZE - 1) = 0;
-		std::string	get_next_buffer(void);
+		virtual int	_read(void *, int n_read = BUFFER_SIZE - 1) = 0;
+		int			next_read(size_t size = BUFFER_SIZE - 1);
+		int			fill_buffer();
+		// std::string	get_next_buffer(int index = BUFFER_SIZE - 1);
 		void		write_body(int fd);
 };
 

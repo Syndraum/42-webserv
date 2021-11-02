@@ -11,6 +11,7 @@ class Upload
 public:
 	enum e_state{
 		FIND,
+		HEADER,
 		WRITE,
 		END,
 	};
@@ -35,6 +36,9 @@ public:
 
 	void	upload(Server &, const Request &);
 	void	set_boundary(const Request &);
+	void	next_bound();
+	void	find();
+	void	debug();
 };
 
 #endif
