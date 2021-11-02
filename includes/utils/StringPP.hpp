@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+# include <iostream>
 
 class StringPP
 {
@@ -26,12 +27,13 @@ public:
 		replace_all(search, ss.str());
 		return (m_string);
 	}
-	std::string &	replace_all(const std::string & search, const std::string & replace);
-	char *			string_copy() const;
-	static	void	to_lower(std::string &);
-	static std::string to_lower(const std::string &);
-	static	void	to_upper(std::string &);
-	static std::string to_upper(const std::string &);
+	std::string &		replace_all(const std::string & search, const std::string & replace);
+	char *				string_copy() const;
+	static	void		to_lower(std::string &);
+	static std::string	to_lower(const std::string &);
+	static	void		to_upper(std::string &);
+	static std::string	to_upper(const std::string &);
+	static std::string	extract_between(const std::string &, std::string);
 
 };
 

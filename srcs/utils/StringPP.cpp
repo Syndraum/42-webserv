@@ -88,3 +88,15 @@ StringPP::to_upper(const std::string & src)
 
 	return (cpy);
 }
+
+std::string
+StringPP::extract_between(const std::string & src, std::string delimiter)
+{
+	size_t	position	= 0;
+	size_t	size_del	= delimiter.size();
+
+	position = src.find(delimiter);
+	if (position == std::string::npos)
+		return (src);
+	return (src.substr(position + size_del, src.find(delimiter, position + size_del) - size_del - position));
+}

@@ -44,19 +44,24 @@ Upload::upload(Server & server, const Request & request)
 	std::cout << "Boundary : " << _boundary << std::endl;
 	_reader.fill_buffer();
 	_buffer = _reader.get_buffer();
-	debug();
-	// switch (_state)
-	// {
-	// case FIND:
-	// 	find();
-	// 	break;
-	// case HEADER:
-
-	
-	// default:
-	// 	break;
-	// }
-	find();
+	// debug();
+	while (_state != END)
+	{
+		switch (_state)
+		{
+		case FIND:
+			find();
+			break;
+		case HEADER:
+			header();
+			break;
+		case WRITE:
+			write();
+			break;
+		default:
+			break;
+		}
+	}
 	(void)server;
 }
 
@@ -75,27 +80,89 @@ Upload::set_boundary(const Request & request)
 }
 
 void
-Upload::next_bound()
+Upload::set_filename(const Message & message)
 {
-	_buffer = _buffer.substr(_position + _boundary.size());
+	std::string	header;
+	size_t		position;
+
+	if (!message.has_header("Content-Disposition"))
+		throw std::exception();
+	header = message.get_header("Content-Disposition");
+	position = header.find("filename");
+	if (position != std::string::npos)
+		_filename = StringPP::extract_between(header.substr(position), "\"");
+	else
+		_filename = "unknow";
+}
+
+
+void
+Upload::next_position()
+{
+	_reader.next_read(_position);
+	_buffer = _reader.get_buffer();
+}
+
+bool
+Upload::find_bound()
+{
+	return ((_position = _buffer.find(_boundary)) != std::string::npos);
+}
+
+void
+Upload::header()
+{
+	size_t position = 0;
+
+	while(_buffer[0] != '\r')
+	{
+		position = _buffer.find(": ");
+		if (position == std::string::npos)
+			throw std::exception();
+		_message.add_header(_buffer.substr(0, position), _buffer.substr(position + 2, _buffer.find('\n') - (position + 2)));
+		_position = _buffer.find('\n') + 1;
+		next_position();
+		// debug();
+	}
+	_message.debug();
+	if (_message.has_header("Content-Type"))
+	{
+		set_filename(_message);
+		std::cout << "filename : " << _filename << std::endl;
+		_file.open(_filename.c_str(), std::fstream::out | std::fstream::trunc);
+		_state = FIND;
+	}
+	else
+		_state = FIND;
+	
 }
 
 void
 Upload::find()
 {
-	if ((_position = _buffer.find(_boundary)) != std::string::npos)
+	if (find_bound())
 	{
-		// std::cout << "FIND boundary : " << _position << std::endl;
-		// if (_state == WRITE){
-		// }
-		next_bound();
-		_state = HEADER;
-		debug();
+		if (_buffer.find(_boundary + "--") == _position)
+			_state = END;
+		else
+		{
+			_position += _boundary.length() + 2;
+			next_position();
+			_state = HEADER;
+		}
+		// debug();
 	}
+}
+
+void
+Upload::write()
+{
+	_file.close();
+	_state = FIND;
 }
 
 void
 Upload::debug()
 {
-	std::cout << "BUFFER ----|" << _buffer << "|----" << std::endl;
+	std::cout << "BUFFER ~~~~|" << _buffer << "|~~~~" << std::endl;
 }

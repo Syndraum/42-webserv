@@ -2,9 +2,12 @@
 # define UPLOAD
 
 # include <string>
+# include <fstream>
 # include "Request.hpp"
 # include "AReaderFileDescriptor.hpp"
 # include "Server.hpp"
+# include "Message.hpp"
+# include "StringPP.hpp"
 
 class Upload
 {
@@ -26,6 +29,9 @@ private:
 	std::string				_n_buffer;
 	std::string				_chunck;
 	size_t					_position;
+	std::string				_filename;
+	std::fstream			_file;
+	Message					_message;
 
 public:
 
@@ -36,8 +42,12 @@ public:
 
 	void	upload(Server &, const Request &);
 	void	set_boundary(const Request &);
-	void	next_bound();
+	void	set_filename(const Message &);
+	void	next_position();
+	bool	find_bound();
 	void	find();
+	void	header();
+	void	write();
 	void	debug();
 };
 
