@@ -22,12 +22,9 @@ public:
 private:
 
 	AReaderFileDescriptor &	_reader;
-
 	Upload::e_state			_state;
 	std::string				_boundary;
 	std::string				_buffer;
-	std::string				_n_buffer;
-	std::string				_chunck;
 	size_t					_position;
 	std::string				_filename;
 	std::fstream			_file;
@@ -46,7 +43,7 @@ public:
 	void	next_position();
 	bool	find_bound();
 	void	find();
-	void	header();
+	void	header(const Server &);
 	void	write();
 	void	debug();
 };

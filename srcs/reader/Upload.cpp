@@ -5,8 +5,6 @@ _reader(reader),
 _state(FIND),
 _boundary(),
 _buffer(),
-_n_buffer(),
-_chunck(),
 _position(0)
 {}
 
@@ -30,9 +28,9 @@ Upload::operator=(Upload const & rhs)
 		_state = rhs._state;
 		_boundary = rhs._boundary;
 		_buffer = rhs._buffer;
-		_n_buffer = rhs._n_buffer;
-		_chunck = rhs._chunck;
-		_position= rhs._position;
+		_position = rhs._position;
+		_filename = rhs._filename;
+		_message = rhs._message;
 	}
 	return *this;
 }
@@ -53,7 +51,7 @@ Upload::upload(Server & server, const Request & request)
 			find();
 			break;
 		case HEADER:
-			header();
+			header(server);
 			break;
 		case WRITE:
 			write();
@@ -62,7 +60,6 @@ Upload::upload(Server & server, const Request & request)
 			break;
 		}
 	}
-	(void)server;
 }
 
 void
@@ -110,7 +107,7 @@ Upload::find_bound()
 }
 
 void
-Upload::header()
+Upload::header(const Server & server)
 {
 	size_t position = 0;
 
@@ -133,7 +130,7 @@ Upload::header()
 	{
 		set_filename(_message);
 		std::cout << "filename : " << _filename << std::endl;
-		_file.open(_filename.c_str(), std::fstream::out | std::fstream::trunc);
+		_file.open((server.get_root() + "/" + _filename).c_str(), std::fstream::out | std::fstream::trunc);
 		_state = WRITE;
 	}
 	else
