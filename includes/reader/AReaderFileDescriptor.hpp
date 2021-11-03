@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AReaderFileDescriptor.hpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/28 18:51:12 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/03 12:40:35 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class AReaderFileDescriptor
 {
 	protected:
 		int		_fd;
+		size_t	_size;
 		char	_buffer[BUFFER_SIZE];
 
 		AReaderFileDescriptor(void);
