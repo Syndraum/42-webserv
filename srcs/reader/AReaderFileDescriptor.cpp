@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/03 13:04:38 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/03 15:07:36 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,10 +144,10 @@ AReaderFileDescriptor::next_read(size_t start)
 	int			ret		= 1;
 
 	if (start > BUFFER_SIZE - 1)
-		throw std::exception();
+		throw OutOfBuffer();
 	if (start != BUFFER_SIZE - 1){
 		if (start >= _size)
-			throw std::exception();
+			throw OutOfBound();
 		remain = _size - start;
 		tmp = std::string(&_buffer[start], remain);
 		tmp.copy(_buffer, remain);

@@ -116,7 +116,7 @@ Upload::header(const Server & server)
 	{
 		position = _buffer.find(": ");
 		if (position == std::string::npos)
-			throw std::exception();
+			throw BadMessage();
 		_message.add_header(_buffer.substr(0, position), _buffer.substr(position + 2, _buffer.find('\n') - (position + 2)));
 		_position = _buffer.find('\n') + 1;
 		next_position();
@@ -161,6 +161,7 @@ Upload::write()
 	// debug();
 	if (find_bound())
 	{
+		std::cout << "FIND - BOUND" << std::endl;
 		_file << _buffer.substr(0, _position - 2);
 		_file.close();
 		_filename = "";
@@ -169,7 +170,8 @@ Upload::write()
 	}
 	else
 	{
-		_position = BUFFER_SIZE - 1 - _boundary.size();
+		std::cout << "FIND - NOT BOUND" << std::endl;
+		_position = _buffer.size() - _boundary.size();
 		_file << _buffer.substr(0, _position);
 		next_position();
 	}
