@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodPost.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 16:05:23 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/20 16:44:19 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/03 16:37:05 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ MethodPost::~MethodPost() {}
 void
 MethodPost::action(const Request & request, Response & response, Server & server, AReaderFileDescriptor & reader)
 {
-	(void)response;
-	Upload	uploader(reader);
-	Extension * extension = Extension::get_instance();
-	std::string ext = Extension::get_extension(request.get_path().c_str());
-	std::string mine = extension->get_reader()[ext];
+	Extension *	extension	= Extension::get_instance();
+	std::string ext			= Extension::get_extension(request.get_path().c_str());
+	std::string mine		= extension->get_reader()[ext];
+	Upload		uploader	= Upload(reader);
+
 	if (request.has_header("Content-Type") && request.get_header("Content-Type").find("multipart/form-data", 0) != std::string::npos)
 	{
 		uploader.upload(server, request);
@@ -49,6 +49,7 @@ MethodPost::action(const Request & request, Response & response, Server & server
 	{
 		response.set_error(404, server.get_path_error_page());
 	}
+	(void)response;
 }
 
 // std::string

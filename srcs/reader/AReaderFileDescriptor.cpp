@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/03 15:07:36 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/03 16:24:57 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 		else if (p_oel == std::string::npos)
 		{
 			ret = next_read();
-			std::cout << "ret : " << ret << std::endl;
+			// std::cout << "ret : " << ret << std::endl;
 			if (ret == -1)
 				return (ret);
 			_buffer[ret] = 0;

@@ -161,7 +161,7 @@ Upload::write()
 	// debug();
 	if (find_bound())
 	{
-		std::cout << "FIND - BOUND" << std::endl;
+		// std::cout << "FIND - BOUND" << std::endl;
 		_file << _buffer.substr(0, _position - 2);
 		_file.close();
 		_filename = "";
@@ -170,7 +170,7 @@ Upload::write()
 	}
 	else
 	{
-		std::cout << "FIND - NOT BOUND" << std::endl;
+		// std::cout << "FIND - NOT BOUND" << std::endl;
 		_position = _buffer.size() - _boundary.size();
 		_file << _buffer.substr(0, _position);
 		next_position();
