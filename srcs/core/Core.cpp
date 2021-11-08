@@ -203,5 +203,5 @@ Core::remove_client(client_vector::iterator it)
 AMethod *
 Core::get_method(std::string const & name) const
 {
-	return (_methods.get_method(name));
+	return (_methods.clone_method(name));
 }

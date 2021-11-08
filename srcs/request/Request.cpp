@@ -25,13 +25,16 @@ Request::Request(Request const &rhs)
 	*this = rhs;
 }
 
-Request::~Request() {}
+Request::~Request()
+{
+	delete (_method);
+}
 
 Request const &
 Request::operator=(Request const &rhs)
 {
 	Message::operator=(rhs);
-	_method = rhs.get_method();
+	_method = rhs.get_method()->clone();
 	_path = rhs.get_path();
 	_uri = rhs._uri;
 	_version = rhs.get_version();

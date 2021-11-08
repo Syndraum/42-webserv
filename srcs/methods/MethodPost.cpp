@@ -51,6 +51,14 @@ MethodPost::action(const Request & request, Response & response, Server & server
 	(void)response;
 }
 
+AMethod *
+MethodPost::clone() const
+{
+	AMethod * clone = new MethodPost();
+	*clone = *this;
+	return (clone);
+}
+
 bool
 MethodPost::has_upload(const Request & request)
 {

@@ -22,6 +22,16 @@ _name(name)
 
 AMethod::~AMethod(void) {}
 
+AMethod &
+AMethod::operator=(AMethod const &rhs)
+{
+	if (this != &rhs)
+	{
+		_name = rhs._name;
+	}
+	return (*this);
+}
+
 const std::string &
 AMethod::get_name() const
 {

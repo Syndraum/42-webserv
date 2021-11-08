@@ -33,6 +33,7 @@ class MethodLibrary
 		virtual ~MethodLibrary(void);
 
 		MethodLibrary &			add_method(AMethod *);
+		AMethod	*				clone_method(const std::string &) const;
 		AMethod	*				get_method(const std::string &) const;
 		const vector_method &	get_vector() const;
 };

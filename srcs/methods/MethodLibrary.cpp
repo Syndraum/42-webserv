@@ -31,6 +31,18 @@ MethodLibrary::add_method(AMethod * method)
 }
 
 AMethod	*
+MethodLibrary::clone_method(const std::string & name) const
+{
+	std::vector<AMethod *>::const_iterator ite = _methods.end();
+	for (std::vector<AMethod *>::const_iterator it = _methods.begin(); it != ite; it++)
+	{
+		if ((*it)->get_name() == name)
+			return ((*it)->clone());
+	}
+	return (0);
+}
+
+AMethod	*
 MethodLibrary::get_method(const std::string & name) const
 {
 	std::vector<AMethod *>::const_iterator ite = _methods.end();
