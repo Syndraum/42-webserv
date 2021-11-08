@@ -58,3 +58,45 @@ StringPP::string_copy() const
 	ret[i] = 0;
 	return (ret);
 }
+
+void
+StringPP::to_lower(std::string & src)
+{
+	std::transform(src.begin(), src.end(), src.begin(), ::tolower);
+}
+
+std::string
+StringPP::to_lower(const std::string & src)
+{
+	std::string cpy(src);
+	StringPP::to_lower(cpy);
+
+	return (cpy);
+}
+
+void
+StringPP::to_upper(std::string & src)
+{
+	std::transform(src.begin(), src.end(), src.begin(), ::toupper);
+}
+
+std::string
+StringPP::to_upper(const std::string & src)
+{
+	std::string cpy(src);
+	StringPP::to_upper(cpy);
+
+	return (cpy);
+}
+
+std::string
+StringPP::extract_between(const std::string & src, std::string delimiter)
+{
+	size_t	position	= 0;
+	size_t	size_del	= delimiter.size();
+
+	position = src.find(delimiter);
+	if (position == std::string::npos)
+		return (src);
+	return (src.substr(position + size_del, src.find(delimiter, position + size_del) - size_del - position));
+}

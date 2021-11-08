@@ -60,7 +60,13 @@ class Server
 		return_list							_return_list;
 
 	public:
-
+		class PortAlreadyUsed : public std::exception
+		{
+			public:
+			virtual const char* what() const throw(){
+				return "PortAlreadyUsed";
+			}
+		};
 		Server(void);
 		Server(std::string const &root, int const port = 8080);
 		Server(Server const & src);
@@ -103,6 +109,7 @@ class Server
 		Server &							set_client_max_body_size(size_t const limit);
 		Server &							set_path_error_page(std::string const & path);
 		bool								is_directory(const Request &);
+		ServerSocket *						find_socket(int);
 		void								print() const;
 
 };

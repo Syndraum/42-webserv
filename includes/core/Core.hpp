@@ -17,6 +17,7 @@
 # include <vector>
 # include "Client.hpp"
 # include <poll.h>
+# include <algorithm>
 # include "MethodGet.hpp"
 # include "MethodDelete.hpp"
 # include "MethodPost.hpp"
@@ -72,5 +73,6 @@ class Core
 		// CsvReader &							get_csv_reader();
 		void								print() const;
 };
+
 
 #endif

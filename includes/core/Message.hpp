@@ -4,6 +4,7 @@
 # include <map>
 # include <string>
 # include <sstream>
+# include "StringPP.hpp"
 
 # include <iostream> // TMP
 
@@ -30,7 +31,7 @@ public:
 		std::stringstream	ss;
 		T					result;
 
-		ss << _headers.at(key);
+		ss << _headers.at(StringPP::to_lower(key));
 		ss >> result;
 		return (result);
 	}

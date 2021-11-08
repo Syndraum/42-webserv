@@ -19,6 +19,7 @@
 # include <cstdio>
 # include <exception>
 # include "Extension.hpp"
+# include "AReaderFileDescriptor.hpp"
 
 class Request;
 class Server;
@@ -39,7 +40,7 @@ class AMethod
 		virtual ~AMethod(void);
 
 		const std::string &	get_name() const;
-		virtual void		action(const Request &, Response &, Server &) = 0;
+		virtual void		action(const Request &, Response &, Server &, AReaderFileDescriptor &) = 0;
 
 };
 

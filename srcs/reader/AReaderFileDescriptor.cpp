@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AReaderFileDescriptor.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/26 13:38:06 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/03 16:24:57 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ AReaderFileDescriptor::AReaderFileDescriptor(void)
 {}
 
 AReaderFileDescriptor::AReaderFileDescriptor(int fd):
-_fd(fd)
+_fd(fd),
+_size(0)
 {
 	_reset_buffer();
 }
@@ -32,17 +33,31 @@ AReaderFileDescriptor::~AReaderFileDescriptor(void)
 AReaderFileDescriptor const &
 AReaderFileDescriptor::operator=(AReaderFileDescriptor const & rhs)
 {
-	_fd = rhs._fd;
-	for (int i = 0; i < BUFFER_SIZE; i++)
-		_buffer[i] = rhs._buffer[i];
+	if (this != &rhs)
+	{
+		_fd = rhs._fd;
+		for (int i = 0; i < BUFFER_SIZE; i++)
+			_buffer[i] = rhs._buffer[i];
+		_size = rhs._size;
+	}
 	return *this;
 }
 
 void
 AReaderFileDescriptor::_reset_buffer(void)
 {
+	// std::cout << "----------RESET BUFFER--------" << std::endl;
 	for (int i = 0; i < BUFFER_SIZE; i++)
 		_buffer[i] = '\0';
+	_size = 0;
+}
+
+std::string
+AReaderFileDescriptor::get_buffer(void) const
+{
+	std::string tmp = std::string(_buffer, _size);
+	std::cout << "size : " << tmp.size() << std::endl;
+	return (tmp);
 }
 
 int
@@ -59,54 +74,46 @@ AReaderFileDescriptor::set_fd(int fd)
 
 int AReaderFileDescriptor::get_next_line(std::string & line)
 {
-	int	response = 2;
-	int ret = 1;
+	std::string	tmp	= std::string("");
+	bool		run		= true;
+	int			ret		= 1;
+	size_t		p_oel;
 
-	std::string temp("");
-	size_t found;
 	line = "";
-
-	while (response > 1)
+	while (run)
 	{
-		temp += _buffer;
-		found = temp.find("\r\n");
-		// std::cout << "temp: " << temp << std::endl;
-//		std::cout << "found: " << found << std::endl;
+		// std::cout << "##BUFF(" << _size << ") : " << std::string(_buffer, _size) << std::endl;
+		tmp += std::string(_buffer, _size);
+		p_oel = tmp.find("\r\n");
 
-		if (ret == 0) //cdai, if the client close his socket, it send EOF
+		if (ret == 0)
 		{
-			line = temp;
-			response = 0;
+			line = tmp;
+			run = false;
 		}
-		else if (found == std::string::npos) //cdai, if i don't find "\r\n", i call recv
+		else if (p_oel == std::string::npos)
 		{
-//			std::cout << "recv" << std::endl;
-//			std::cout << "ASocket->_socket" << _socket << std::endl;
-			//ret = recv(_fd, _buffer, BUFFER_SIZE - 1, MSG_DONTWAIT);
-			ret = _read();
-//			std::cout << "ret: " << ret << std::endl;
-
-			// we cannot use ERRNO, so we don't know which kind of error it is
-			// if the socket is empty (when we already read EOF), recv send always -1
-			if (ret == -1) // handle segfault on index -1. Mainly, it will send -1 while the socket is open and there is nothing to read
-				return -1;
+			ret = next_read();
+			// std::cout << "ret : " << ret << std::endl;
+			if (ret == -1)
+				return (ret);
 			_buffer[ret] = 0;
 		}
-		else //we found "\r\n" then we call substr
+		else
 		{
-			// strdup ou substr
-			line = temp.substr(0, found);
-			response = 1;
+			line = tmp.substr(0, p_oel);
+			run = false;
 		}
 	}
 
-	if (temp.length() > found) //Handle found == std::string::npos (size_t MAX)
+	if (tmp.length() > p_oel) //Handle p_oel == std::string::npos (size_t MAX)
 	{
-		temp.copy(_buffer, temp.length() - found - 2, found + 2);
-		_buffer[temp.length() - found - 2] = 0;
+		tmp.copy(_buffer, tmp.length() - p_oel - 2, p_oel + 2);
+		_buffer[tmp.length() - p_oel - 2] = 0;
 	}
-
-	return (response);
+	_size = tmp.length() - p_oel - 2;
+	// std::cout << "##LINE : " << line << std::endl;
+	return (ret);
 }
 
 void
@@ -127,4 +134,63 @@ AReaderFileDescriptor::read_until_end(std::string & line)
 	get_next_line(line);
 
 //	std::cout << "temp: " << temp << std::endl;
+}
+
+int
+AReaderFileDescriptor::next_read(size_t start)
+{
+	std::string	tmp;
+	size_t		remain	= 0;
+	int			ret		= 1;
+
+	if (start > BUFFER_SIZE - 1)
+		throw OutOfBuffer();
+	if (start != BUFFER_SIZE - 1){
+		if (start >= _size)
+			throw OutOfBound();
+		remain = _size - start;
+		tmp = std::string(&_buffer[start], remain);
+		tmp.copy(_buffer, remain);
+		_buffer[remain] = 0;
+	}
+	ret = _read(&_buffer[remain], BUFFER_SIZE - 1 - remain);
+	_size = remain;
+	if (ret >= 0)
+		_size += ret;
+	return(ret);
+}
+
+int
+AReaderFileDescriptor::fill_buffer()
+{
+	int ret = 0;
+
+	if (_size >= BUFFER_SIZE - 1)
+		return (-2);
+	ret = _read(&_buffer[_size], BUFFER_SIZE - 1 - _size);
+	if (ret >= 0)
+		_size += ret;
+	return (ret);
+}
+
+// std::string
+// AReaderFileDescriptor::get_next_buffer(int index)
+// {
+// 	_buffer[0] = _buffer[index];
+// 	_buffer[index + 1] = 0;
+// 	_read();
+// 	return (get_buffer());
+// }
+
+void
+AReaderFileDescriptor::write_body(int fd)
+{
+	int n_read = 0;
+
+	write(fd, _buffer, std::strlen(_buffer));
+	while ((n_read = next_read()) > 0){
+		std::cout << "## (" << n_read << ") " << _buffer << std::endl;
+		write (fd, _buffer, n_read);
+	}
+	dup2(_fd, fd);
 }

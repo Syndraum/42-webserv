@@ -22,13 +22,14 @@ StrategyAccept &	StrategyAccept::operator=(StrategyAccept const & rhs)
 Response * 
 StrategyAccept::create(Client & client)
 {
-	Response *	response	= 0;
-	Request &	request		= client.get_request();
-	Server &	server		= client.get_server();
+	Response *				response	= 0;
+	Request &				request		= client.get_request();
+	Server &				server		= client.get_server();
+	AReaderFileDescriptor &	reader		= client.get_socket_struct().get_reader();
 
 	response = new Response();
 	request.set_path(server.get_full_path(request.get_path()));
-	request.get_method()->action(request, *response, server);
+	request.get_method()->action(request, *response, server, reader);
 	// request.action(*response);
 	return (response);
 }

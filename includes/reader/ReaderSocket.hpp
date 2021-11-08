@@ -32,7 +32,7 @@ class ReaderSocket : public AReaderFileDescriptor
 		virtual ~ReaderSocket(void);
 		ReaderSocket const & operator=(ReaderSocket const &);
 
-		virtual int	_read(void);
+		virtual int	_read(void *, int);
 };
 
 #endif

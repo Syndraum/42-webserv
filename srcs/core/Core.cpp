@@ -98,19 +98,11 @@ Core::start()
 	}
 // print();
 	_pfdh.init(_servers);
+	_pfdh.set_hr(hr);
 	while (true)
 	{
-//		poll(&(_pfdh.get_pfd().front()), _pfdh.get_pfd().size(), 60000);
 		_pfdh.watch();
-		_pfdh.accept_connection(_servers, _client);
-//		_accept_connection();
-
-		client_vector::iterator client = hr.handle(_client, _servers);
-		if (client != _client.end()){
-			remove_client(client);
-			// return ;
-		}
-		// _pfdh.reset_server();
+		_pfdh.handle(_servers, _client);
 	}
 }
 
@@ -118,6 +110,9 @@ void
 Core::clean()
 {
 	Extension::delete_instance();
+	
+	for (size_t i = 0; i < _client.size(); i++)
+		_client[i].get_socket_struct().sclose();
 	_client.clear();
 	_servers.clear();
 }

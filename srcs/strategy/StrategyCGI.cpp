@@ -32,20 +32,30 @@ StrategyCGI &	StrategyCGI::operator=(StrategyCGI const & rhs)
 Response *
 StrategyCGI::create(Client & client)
 {
-	Response * response = 0;
+	Response *	response		= new Response();
+	Message *	response_cgi	= 0;
 
 	this->_prepare(client);
 	_request.set_body(client.get_request().get_body());
-	// _request.debug();
-	Message * response_cgi = _request.send(client.get_full_path());
+	_request.debug();
+	try
+	{
+		response_cgi = _request.send(client.get_full_path(), client.get_socket_struct().get_reader());
+		response->set_code(200);
+		response->add_header("Content-Type", response_cgi->get_header("Content-Type"));
+		response->set_body(response_cgi->get_body());
+		if (response_cgi->has_header("Status"))
+			handle_status(*response_cgi, *response, client.get_server());
+		if (!response_cgi->has_header("Content-Type") || response_cgi->get_header("Content-Type") == "")
+			response->set_error(500, client.get_server().get_path_error_page());
+		delete (response_cgi);
+	}
+	catch(const std::exception& e)
+	{
 
-	response = new Response();
-	response->set_code(200);
-	response->add_header("Content-Type", response_cgi->get_header("Content-type"));
-	response->set_body(response_cgi->get_body());
-	if (response_cgi->has_header("Status"))
-		handle_status(*response_cgi, *response, client.get_server());
-	delete (response_cgi);
+		std::cerr << "Bad CGI Response" << std::endl;
+		response->set_error(500, client.get_server().get_path_error_page());
+	}
 	// response->debug();
 	return (response);
 }
@@ -84,7 +94,7 @@ StrategyCGI::_prepare(Client & client)
 	Server &		server			= client.get_server();
 	ServerSocket &	server_socket	= client.get_server_socket();
 
-	if (request_http.get_body().length() == 0 || !request_http.has_header("Content-Length")){
+	if (!request_http.has_header("Content-Length")){
 		_request.add_header("CONTENT_LENGTH", 0);
 	}
 	else {

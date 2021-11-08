@@ -36,7 +36,7 @@ public:
 	Server &			get_server();
 	ClientSocket &		get_client_socket();
 
-	clients_iterator	handle(clients &, servers &);
+	int					handle(Client &, servers &);
 	void				parse();
 	void				set_index();
 	bool				is_complete() const;

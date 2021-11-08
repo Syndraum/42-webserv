@@ -19,6 +19,12 @@ public:
 	Client(Client const & src);
 	virtual ~Client(void);
 	Client &	operator=(Client const &rhs);
+	bool operator==(const Client & rhs) const
+	{
+		if (this->_socket.get_socket() == rhs._socket.get_socket())
+			return (true);
+		return (false);
+	}
 
 	Request &		get_request();
 	Request const &	get_request() const;
@@ -30,6 +36,7 @@ public:
 	std::string		get_full_path() const;
 	void			set_server(Server *);
 	void			set_server_socket(ServerSocket *);
+
 private:
 
 };

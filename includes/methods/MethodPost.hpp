@@ -14,6 +14,7 @@
 # define METHOD_POST_HPP
 
 #include "AMethod.hpp"
+#include "Upload.hpp"
 
 class MethodPost : public AMethod
 {
@@ -27,7 +28,8 @@ class MethodPost : public AMethod
 		MethodPost(void);
 		virtual ~MethodPost(void);
 
-		virtual void		action(const Request &, Response &, Server &);
+		virtual void		action(const Request &, Response &, Server &, AReaderFileDescriptor &);
+		bool				has_upload(const Request &);
 };
 
 #endif

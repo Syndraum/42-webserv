@@ -63,6 +63,8 @@ Server::add_listen(int const port, std::string const ip, bool active)
 	std::pair<port_map::iterator, bool>	pair;
 	port_map::iterator					it;
 
+	if (has_port(port))
+		throw Server::PortAlreadyUsed();
 	pair = _server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port, ip)));
 	it = pair.first;
 	it->second.set_active(active);
@@ -327,6 +329,20 @@ Server::is_directory(const Request & request)
 		return (false);
 	closedir(directory);
 	return (true);
+}
+
+ServerSocket *
+Server::find_socket(int socket)
+{
+	port_map::iterator it	= _server_sockets.begin();
+	port_map::iterator ite	= _server_sockets.end();
+
+	for (; it != ite; it++)
+	{
+		if (it->second.get_socket() == socket)
+			return (&(it->second));
+	}
+	return (0);
 }
 
 void

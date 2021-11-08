@@ -14,7 +14,6 @@
 
 ASocket::ASocket(void) :
 _socket(-1),
-_id(-1),
 _reader(1)
 {
 //	reset_buffer();
@@ -28,18 +27,16 @@ _reader(rhs._reader)
 
 ASocket::~ASocket(void)
 {
-	if (_socket > 2)
-		close(_socket);
+	
 }
 
 ASocket const & ASocket::operator=(ASocket const & rhs)
 {
 	if (this != &rhs)
 	{
-		_socket = rhs._socket;
-		_address = rhs._address;
-		_id = rhs._id;
-		_reader = rhs._reader;
+		this->_socket = rhs._socket;
+		this->_address = rhs._address;
+		this->_reader = rhs._reader;
 	}
 //	for (int i = 0; i < BUFFER_SIZE; i++)
 //		_buffer[i] = rhs._buffer[i];
@@ -71,17 +68,15 @@ ASocket::set_address(const sockaddr_in & Address)
 	this->_address = Address;
 }
 
-int
-ASocket::get_id() const
-{ return (_id); }
-
-
-void
-ASocket::set_id(int id)
-{ _id = id; }
-
 ReaderSocket &
 ASocket::get_reader(void)
 {
 	return (_reader);
+}
+
+void
+ASocket::sclose()
+{
+	if (_socket > 2)
+		close(_socket);
 }

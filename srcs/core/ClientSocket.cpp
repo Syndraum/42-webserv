@@ -27,8 +27,7 @@ ClientSocket::~ClientSocket(void) {}
 ClientSocket &
 ClientSocket::operator=(ClientSocket const & rhs)
 {
-	if (this != &rhs)
-		ASocket::operator=(rhs);
+	ASocket::operator=(rhs);
 	return *this;
 }
 

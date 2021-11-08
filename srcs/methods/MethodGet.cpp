@@ -20,11 +20,12 @@ MethodGet::~MethodGet()
 {}
 
 void
-MethodGet::action(const Request & request, Response & response, Server & server)
+MethodGet::action(const Request & request, Response & response, Server & server, AReaderFileDescriptor & reader)
 {	
-	Extension * extension = Extension::get_instance();
-	std::string ext = Extension::get_extension(request.get_path().c_str());
-	std::string mine = extension->get_reader()[ext];
+	Extension *	extension = Extension::get_instance();
+	std::string	ext = Extension::get_extension(request.get_path().c_str());
+	std::string	mine = extension->get_reader()[ext];
+	(void)reader;
 
 	if (mine.empty())
 		mine = "application/octet-stream";

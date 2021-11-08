@@ -29,7 +29,6 @@ class ASocket
 	protected:
 		int						_socket;
 		sockaddr_in				_address;
-		int						_id;
 		ReaderSocket			_reader;
 
 		void					set_reader(ReaderSocket &);
@@ -44,9 +43,8 @@ class ASocket
 		void					set_socket(int socket);
 		const sockaddr_in &		get_address(void) const;
 		void					set_address(const sockaddr_in & Address);
-		int						get_id() const;
-		void					set_id(int id);
 		ReaderSocket &			get_reader(void);
+		void					sclose();
 };
 
 #endif

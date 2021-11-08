@@ -34,7 +34,7 @@ ReaderSocket const & ReaderSocket::operator=(ReaderSocket const & rhs)
 }
 
 int
-ReaderSocket::_read(void)
+ReaderSocket::_read(void * address, int n_read)
 {
-	return (recv(_fd, _buffer, BUFFER_SIZE - 1, MSG_DONTWAIT));
+	return (recv(_fd, address, n_read, MSG_DONTWAIT));
 }

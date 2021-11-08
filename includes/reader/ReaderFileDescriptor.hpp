@@ -32,7 +32,7 @@ class ReaderFileDescriptor : public AReaderFileDescriptor
 		virtual ~ReaderFileDescriptor(void);
 		ReaderFileDescriptor const & operator=(ReaderFileDescriptor const &);
 
-		virtual int _read(void);
+		virtual int _read(void *, int);
 };
 
 #endif

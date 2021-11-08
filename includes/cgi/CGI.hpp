@@ -25,6 +25,7 @@
 # include "Info.hpp"
 # include "HandlerResponseCGI.hpp"
 # include "Array.hpp"
+# include "AReaderFileDescriptor.hpp"
 
 class CGI
 {
@@ -53,7 +54,7 @@ class CGI
 		void										set_exec_name(std::string const & name);
 		void										add_CGI_param(std::string key, std::string value);
 
-		Message *									start(Message & request, const std::string & path);
+		Message *									start(Message & request, const std::string & path, AReaderFileDescriptor &);
 		void										print() const;
 		class MyError: public std::exception
 		{
