@@ -26,14 +26,13 @@ MethodPost::action(const Request & request, Response & response, Server & server
 	std::string mine		= extension->get_reader()[ext];
 	Upload		uploader	= Upload(reader);
 
-	if (request.has_header("Content-Type") && request.get_header("Content-Type").find("multipart/form-data", 0) != std::string::npos)
+	if (has_upload(request))
 	{
 		uploader.upload(server, request);
 	}
 
 	if (mine.empty())
 		mine = "application/octet-stream";
-	// std::cout << "ext : " << ext << std::endl;
 	try
 	{
 		response
@@ -52,40 +51,14 @@ MethodPost::action(const Request & request, Response & response, Server & server
 	(void)response;
 }
 
-// std::string
-// MethodPost::get_boundary(const Request & request)
-// {
-// 	std::string	content_type	= request.get_header("Content-type");
-// 	std::string	boundary;
-// 	size_t		p_bound			= content_type.find("boundary");
-// 	size_t		p_egal;
+bool
+MethodPost::has_upload(const Request & request)
+{
+	bool	has_header	= request.has_header("Content-Type");
+	size_t	position;
 
-// 	if (p_bound != std::string::npos)
-// 	{
-// 		p_egal = content_type.find('=', p_bound);
-// 		boundary = content_type.substr(p_egal);
-// 	}
-// 	return (boundary);
-// }
-
-// void
-// MethodPost::upload(const Request & request, Server & server, AReaderFileDescriptor & reader)
-// {
-// 	bool		process		= false;
-// 	std::string	boundary	= "--" + get_boundary(request);
-// 	std::string	buffer		= reader.get_buffer();
-// 	std::string next_buffer;
-// 	std::string	chunck;
-// 	size_t		pos;
-
-// 	buffer += reader.get_next_buffer();
-// 	next_buffer = reader.get_next_buffer();
-// 	chunck = buffer + next_buffer;
-// 	if ((pos = chunck.find(boundary)) != std::string::npos)
-// 	{
-
-// 	}
-// 	(void)server;
-// }
-
-// int
+	if (!has_header)
+		return (false);
+	position = request.get_header("Content-Type").find("multipart/form-data", 0);
+	return (position != std::string::npos);
+}
