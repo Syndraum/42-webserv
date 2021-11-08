@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AReaderFileDescriptor.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/26 13:38:06 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/03 16:24:57 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ AReaderFileDescriptor::AReaderFileDescriptor(void)
 {}
 
 AReaderFileDescriptor::AReaderFileDescriptor(int fd):
-_fd(fd)
+_fd(fd),
+_size(0)
 {
 	_reset_buffer();
 }
@@ -32,9 +33,13 @@ AReaderFileDescriptor::~AReaderFileDescriptor(void)
 AReaderFileDescriptor const &
 AReaderFileDescriptor::operator=(AReaderFileDescriptor const & rhs)
 {
-	_fd = rhs._fd;
-	for (int i = 0; i < BUFFER_SIZE; i++)
-		_buffer[i] = rhs._buffer[i];
+	if (this != &rhs)
+	{
+		_fd = rhs._fd;
+		for (int i = 0; i < BUFFER_SIZE; i++)
+			_buffer[i] = rhs._buffer[i];
+		_size = rhs._size;
+	}
 	return *this;
 }
 
@@ -44,12 +49,15 @@ AReaderFileDescriptor::_reset_buffer(void)
 	// std::cout << "----------RESET BUFFER--------" << std::endl;
 	for (int i = 0; i < BUFFER_SIZE; i++)
 		_buffer[i] = '\0';
+	_size = 0;
 }
 
 std::string
 AReaderFileDescriptor::get_buffer(void) const
 {
-	return (_buffer);
+	std::string tmp = std::string(_buffer, _size);
+	std::cout << "size : " << tmp.size() << std::endl;
+	return (tmp);
 }
 
 int
@@ -74,7 +82,8 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 	line = "";
 	while (run)
 	{
-		tmp += _buffer;
+		// std::cout << "##BUFF(" << _size << ") : " << std::string(_buffer, _size) << std::endl;
+		tmp += std::string(_buffer, _size);
 		p_oel = tmp.find("\r\n");
 
 		if (ret == 0)
@@ -85,6 +94,7 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 		else if (p_oel == std::string::npos)
 		{
 			ret = next_read();
+			// std::cout << "ret : " << ret << std::endl;
 			if (ret == -1)
 				return (ret);
 			_buffer[ret] = 0;
@@ -101,8 +111,8 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 		tmp.copy(_buffer, tmp.length() - p_oel - 2, p_oel + 2);
 		_buffer[tmp.length() - p_oel - 2] = 0;
 	}
+	_size = tmp.length() - p_oel - 2;
 	// std::cout << "##LINE : " << line << std::endl;
-	// std::cout << "##BUFF : " << _buffer << std::endl;
 	return (ret);
 }
 
@@ -127,29 +137,40 @@ AReaderFileDescriptor::read_until_end(std::string & line)
 }
 
 int
-AReaderFileDescriptor::next_read(size_t size)
+AReaderFileDescriptor::next_read(size_t start)
 {
 	std::string	tmp;
-	size_t		remain = 0;
+	size_t		remain	= 0;
+	int			ret		= 1;
 
-	if (size > BUFFER_SIZE - 1)
-		throw std::exception();
-	if (size != BUFFER_SIZE - 1){
-		tmp = std::string(&_buffer[size]);
-		remain = tmp.length();
+	if (start > BUFFER_SIZE - 1)
+		throw OutOfBuffer();
+	if (start != BUFFER_SIZE - 1){
+		if (start >= _size)
+			throw OutOfBound();
+		remain = _size - start;
+		tmp = std::string(&_buffer[start], remain);
 		tmp.copy(_buffer, remain);
 		_buffer[remain] = 0;
 	}
-	return(_read(&_buffer[remain], BUFFER_SIZE - 1 - remain));
+	ret = _read(&_buffer[remain], BUFFER_SIZE - 1 - remain);
+	_size = remain;
+	if (ret >= 0)
+		_size += ret;
+	return(ret);
 }
 
 int
 AReaderFileDescriptor::fill_buffer()
 {
-	size_t len = strlen(_buffer);
-	if (len >= BUFFER_SIZE)
+	int ret = 0;
+
+	if (_size >= BUFFER_SIZE - 1)
 		return (-2);
-	return (_read(&_buffer[len], BUFFER_SIZE - 1 - len));
+	ret = _read(&_buffer[_size], BUFFER_SIZE - 1 - _size);
+	if (ret >= 0)
+		_size += ret;
+	return (ret);
 }
 
 // std::string

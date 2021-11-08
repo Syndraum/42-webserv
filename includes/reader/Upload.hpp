@@ -32,6 +32,12 @@ private:
 
 public:
 
+	class BadMessage : public std::exception
+	{
+		virtual const char* what() const throw(){
+			return "Bad message";
+		}
+	};
 	Upload(AReaderFileDescriptor &);
 	Upload(Upload const & src);
 	virtual ~Upload(void);
