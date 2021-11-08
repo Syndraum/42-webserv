@@ -13,7 +13,8 @@
 #include "MethodPost.hpp"
 
 MethodPost::MethodPost(void) :
-AMethod("POST")
+AMethod("POST"),
+_uploader(Upload())
 {}
 
 MethodPost::~MethodPost() {}
@@ -24,11 +25,12 @@ MethodPost::action(const Request & request, Response & response, Server & server
 	Extension *	extension	= Extension::get_instance();
 	std::string ext			= Extension::get_extension(request.get_path().c_str());
 	std::string mine		= extension->get_reader()[ext];
-	Upload		uploader	= Upload(reader);
+	// Upload		uploader	= Upload(reader);
 
 	if (has_upload(request))
 	{
-		uploader.upload(server, request);
+		_uploader.set_reader(reader)->upload(server, request);
+		// uploader.upload(server, request);
 	}
 
 	if (mine.empty())

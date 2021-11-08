@@ -34,7 +34,10 @@ Request const &
 Request::operator=(Request const &rhs)
 {
 	Message::operator=(rhs);
-	_method = rhs.get_method()->clone();
+	delete (_method);
+	_method = 0;
+	if(rhs.get_method())
+		_method = rhs.get_method()->clone();
 	_path = rhs.get_path();
 	_uri = rhs._uri;
 	_version = rhs.get_version();
@@ -92,6 +95,8 @@ Request::set_version(std::string const &rhs)
 void
 Request::reset()
 {
+	if (_method != 0)
+		delete (_method);
 	_method = 0;
 	_path = "";
 	_version = "";

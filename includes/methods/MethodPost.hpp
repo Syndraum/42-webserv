@@ -20,6 +20,8 @@ class MethodPost : public AMethod
 {
 	private:
 
+		Upload	_uploader;
+
 		MethodPost &		operator=(MethodPost const &rhs);
 		MethodPost(MethodPost const & src);
 
