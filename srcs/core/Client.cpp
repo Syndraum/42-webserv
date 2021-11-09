@@ -2,7 +2,9 @@
 
 Client::Client(Server & server, ServerSocket & server_socket) :
 _server(&server), 
-_server_socket(&server_socket)
+_server_socket(&server_socket),
+_strategy(0),
+_response(0)
 {}
 
 Client::Client(Client const & src) :
@@ -14,7 +16,7 @@ _server_socket(src._server_socket)
 
 Client::~Client(void)
 {
-	
+	// clean_reponse();
 }
 
 Client &
@@ -26,6 +28,8 @@ Client::operator=(Client const & rhs)
 		_server = rhs._server;
 		_socket = rhs._socket;
 		_server_socket = rhs._server_socket;
+		_strategy = rhs._strategy;
+		_response = rhs._response;
 	}
 	return *this;
 }
@@ -90,4 +94,33 @@ void
 Client::set_server_socket(ServerSocket * server_socket)
 {
 	_server_socket = server_socket;
+}
+
+void
+Client::set_strategy(IResponseStrategy * strategy)
+{
+	_strategy = strategy;
+}
+
+void
+Client::do_strategy(Client & client)
+{
+	_response = _strategy->create(client);
+}
+
+void
+Client::send(int fd)
+{
+	if (_response == 0)
+		throw std::exception();
+	_response->send(fd);
+}
+
+void
+Client::clean_reponse()
+{
+	delete _response;
+	_response = 0;
+	delete _strategy;
+	_strategy = 0;
 }

@@ -6,7 +6,6 @@
 # include "Server.hpp"
 # include "BuilderRequest.hpp"
 # include "Client.hpp"
-# include "HandlerResponse.hpp"
 # include "StrategyAccept.hpp"
 # include "StrategyError.hpp"
 # include "StrategyIndex.hpp"
@@ -17,7 +16,6 @@ class HandlerRequest
 {
 	Client *			_client;
 	BuilderRequest &	_builder;
-	HandlerResponse		_handler_response;
 
 	HandlerRequest(void);
 public:

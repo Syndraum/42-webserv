@@ -6,6 +6,8 @@
 # include "Server.hpp"
 # include "Request.hpp"
 
+class Client;
+
 class IResponseStrategy
 {
 public:

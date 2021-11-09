@@ -72,46 +72,46 @@ HandlerRequest::handle(Client & client, servers & v_servers)
 			this->set_index();
 		std::string extension = Extension::get_extension(get_request().get_path());
 		if (_client->get_server().get_return_list().size())
-			_handler_response.set_strategy(new StrategyReturn(get_server().get_return_list().front()));
+			_client->set_strategy(new StrategyReturn(get_server().get_return_list().front()));
 		else if (get_server().has_cgi(extension))
-			_handler_response.set_strategy(new StrategyCGI(get_server().get_cgi(extension)));
+			_client->set_strategy(new StrategyCGI(get_server().get_cgi(extension)));
 		else
 		{
 			if (get_server().is_directory(get_request()))
 			{
 				if (!get_server().get_auto_index())
-					_handler_response.set_strategy(new StrategyError(403));
+					_client->set_strategy(new StrategyError(403));
 				else
-					_handler_response.set_strategy(new StrategyIndex());
+					_client->set_strategy(new StrategyIndex());
 			}
 			else
-				_handler_response.set_strategy(new StrategyAccept());
+				_client->set_strategy(new StrategyAccept());
 		}
 		
 	}
 	catch (BuilderMessage::BadRequest &e)
 	{
-		_handler_response.set_strategy(new StrategyError(400));
+		_client->set_strategy(new StrategyError(400));
 	}
 	catch (BuilderRequest::BadHttpVersion &e)
 	{
-		_handler_response.set_strategy(new StrategyError(505));
+		_client->set_strategy(new StrategyError(505));
 	}
 	catch (BuilderRequest::MethodNotImplemented &e)
 	{
-		_handler_response.set_strategy(new StrategyError(501));
+		_client->set_strategy(new StrategyError(501));
 	}
 	catch (BodyTooLong &e)
 	{
-		_handler_response.set_strategy(new StrategyError(413));
+		_client->set_strategy(new StrategyError(413));
 	}
 	catch (MethodNotAllowed &e)
 	{
-		_handler_response.set_strategy(new StrategyError(405));
+		_client->set_strategy(new StrategyError(405));
 	}
-	_handler_response.do_strategy(*_client);
-	_handler_response.send(_client->get_socket());
-	_handler_response.reset();
+	_client->do_strategy(*_client);
+	_client->send(_client->get_socket());
+	_client->clean_reponse();
 	get_request().reset();
 	return (_client->get_socket());
 }

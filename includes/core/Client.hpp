@@ -4,13 +4,19 @@
 # include "ClientSocket.hpp"
 # include "Server.hpp"
 # include "Request.hpp"
+# include "Response.hpp"
+# include "IResponseStrategy.hpp"
+
+class IResponseStrategy;
 
 class Client
 {
-	Request			_request;
-	ClientSocket	_socket;
-	Server *		_server;
-	ServerSocket *	_server_socket;
+	Request					_request;
+	ClientSocket			_socket;
+	Server *				_server;
+	ServerSocket *			_server_socket;
+	IResponseStrategy *		_strategy;
+	Response *				_response;
 
 	Client(void);
 public:
@@ -36,6 +42,11 @@ public:
 	std::string		get_full_path() const;
 	void			set_server(Server *);
 	void			set_server_socket(ServerSocket *);
+
+	void	set_strategy(IResponseStrategy *);
+	void	do_strategy(Client &);
+	void	send(int fd);
+	void	clean_reponse();
 
 private:
 
