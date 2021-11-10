@@ -4,7 +4,8 @@ Client::Client(Server & server, ServerSocket & server_socket) :
 _server(&server), 
 _server_socket(&server_socket),
 _strategy(0),
-_response(0)
+_response(0),
+_state(READ_HEADER)
 {}
 
 Client::Client(Client const & src) :
@@ -30,6 +31,7 @@ Client::operator=(Client const & rhs)
 		_server_socket = rhs._server_socket;
 		_strategy = rhs._strategy;
 		_response = rhs._response;
+		_state = rhs._state;
 	}
 	return *this;
 }
@@ -84,6 +86,12 @@ Client::get_full_path() const
 	return (_server->get_full_path(uri.get_path()));
 }
 
+Client::request_state
+Client::get_state() const
+{
+	return (_state);
+}
+
 void
 Client::set_server(Server * server)
 {
@@ -100,12 +108,14 @@ void
 Client::set_strategy(IResponseStrategy * strategy)
 {
 	_strategy = strategy;
+	_state = STRATEGY;
 }
 
 void
 Client::do_strategy(Client & client)
 {
 	_response = _strategy->create(client);
+	_state = SEND_RESPONSE;
 }
 
 void

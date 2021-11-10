@@ -11,12 +11,21 @@ class IResponseStrategy;
 
 class Client
 {
+public:
+	enum request_state {
+		READ_HEADER,
+		STRATEGY,
+		SEND_RESPONSE,
+		END
+	};
+private:
 	Request					_request;
 	ClientSocket			_socket;
 	Server *				_server;
 	ServerSocket *			_server_socket;
 	IResponseStrategy *		_strategy;
 	Response *				_response;
+	request_state			_state;
 
 	Client(void);
 public:
@@ -40,6 +49,7 @@ public:
 	Server const &	get_server() const;
 	ServerSocket &	get_server_socket();
 	std::string		get_full_path() const;
+	request_state	get_state() const;
 	void			set_server(Server *);
 	void			set_server_socket(ServerSocket *);
 

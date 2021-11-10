@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerPollFD.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:58:45 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/24 19:12:03 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/10 18:42:48 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ HandlerPollFD::handle(std::vector<Server> & servers, std::vector<Client> & clien
 {
 	for (size_t i = 0; i < _pfd.size(); i++)
 	{
-		if (_pfd[i].revents == POLLIN)
+		if ((_pfd[i].revents & POLLIN) == POLLIN || (_pfd[i].revents & POLLOUT) == POLLOUT)
 		{
 			if (_fd_server_max < _pfd[i].fd)
 			{
@@ -216,7 +216,7 @@ HandlerPollFD::_accept_connection(std::vector<Client> & clients, int server_sock
 	std::cout << "[server socket : " << server_socket << "] New connection, " << new_client.get_socket_struct().get_ip() << " accept on socket "<< new_socket << std::endl;
 	new_client.get_socket_struct().set_socket(new_socket);
 	// std::cout << "Adding to list of sockets as " << clients.size() << std::endl;
-	_add_clients_pfd(new_socket, POLLIN);
+	_add_clients_pfd(new_socket, POLLIN | POLLOUT);
 	std::cout << "the previous socket is : " << clients.begin()->get_socket_struct().get_socket() << std::endl;
 	return (new_socket);
 }

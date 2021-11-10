@@ -14,14 +14,17 @@
 
 class HandlerRequest
 {
+public:
+	typedef std::vector<Client>		clients;
+	typedef std::vector<Server>		servers;
+	typedef clients::iterator		clients_iterator;
+	
+private:
 	Client *			_client;
 	BuilderRequest &	_builder;
 
 	HandlerRequest(void);
 public:
-	typedef std::vector<Client>		clients;
-	typedef std::vector<Server>		servers;
-	typedef clients::iterator		clients_iterator;
 
 	HandlerRequest(BuilderRequest &);
 	HandlerRequest(HandlerRequest const & src);
@@ -35,6 +38,7 @@ public:
 	ClientSocket &		get_client_socket();
 
 	int					handle(Client &, servers &);
+	void				read_header(servers &);
 	void				parse();
 	void				set_index();
 	bool				is_complete() const;
