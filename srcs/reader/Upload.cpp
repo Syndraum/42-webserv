@@ -92,7 +92,6 @@ Upload::set_filename(const Message & message)
 		_filename = "unknow";
 }
 
-
 void
 Upload::next_position()
 {
@@ -130,7 +129,7 @@ Upload::header(const Server & server)
 	{
 		set_filename(_message);
 		std::cout << "filename : " << _filename << std::endl;
-		_file.open((server.get_root() + "/" + _filename).c_str(), std::fstream::out | std::fstream::trunc);
+		_file.open((server.get_upload_path() + "/" + _filename).c_str(), std::fstream::out | std::fstream::trunc);
 		_state = WRITE;
 	}
 	else
