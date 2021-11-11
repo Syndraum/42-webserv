@@ -20,6 +20,8 @@ class MethodPost : public AMethod
 {
 	private:
 
+		Upload	_uploader;
+
 		MethodPost &		operator=(MethodPost const &rhs);
 		MethodPost(MethodPost const & src);
 
@@ -29,6 +31,7 @@ class MethodPost : public AMethod
 		virtual ~MethodPost(void);
 
 		virtual void		action(const Request &, Response &, Server &, AReaderFileDescriptor &);
+		virtual AMethod*	clone() const;
 		bool				has_upload(const Request &);
 };
 

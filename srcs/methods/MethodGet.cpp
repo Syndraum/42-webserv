@@ -46,3 +46,11 @@ MethodGet::action(const Request & request, Response & response, Server & server,
 		response.set_error(404, server.get_path_error_page());
 	}
 }
+
+AMethod *
+MethodGet::clone() const
+{
+	AMethod * clone = new MethodGet();
+	*clone = *this;
+	return (clone);
+}

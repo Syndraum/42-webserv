@@ -31,3 +31,11 @@ MethodDelete::action(const Request & request, Response & response, Server & serv
 		response.set_code(204);
 	}
 }
+
+AMethod *
+MethodDelete::clone() const
+{
+	AMethod * clone = new MethodDelete();
+	*clone = *this;
+	return (clone);
+}

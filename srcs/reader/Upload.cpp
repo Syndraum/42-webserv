@@ -1,6 +1,6 @@
 #include "Upload.hpp"
 
-Upload::Upload(AReaderFileDescriptor & reader) : 
+Upload::Upload(AReaderFileDescriptor * reader) :
 _reader(reader),
 _state(FIND),
 _boundary(),
@@ -35,13 +35,22 @@ Upload::operator=(Upload const & rhs)
 	return *this;
 }
 
+Upload *
+Upload::set_reader(AReaderFileDescriptor & reader)
+{
+	_reader = &reader;
+	return (this);
+}
+
 void
 Upload::upload(Server & server, const Request & request)
 {
+	if(_reader == 0)
+		throw InvalidReader();
 	set_boundary(request);
 	std::cout << "Boundary : " << _boundary << std::endl;
-	_reader.fill_buffer();
-	_buffer = _reader.get_buffer();
+	_reader->fill_buffer();
+	_buffer = _reader->get_buffer();
 	// debug();
 	while (_state != END)
 	{
@@ -96,8 +105,10 @@ Upload::set_filename(const Message & message)
 void
 Upload::next_position()
 {
-	_reader.next_read(_position);
-	_buffer = _reader.get_buffer();
+	if(_reader == 0)
+		throw InvalidReader();
+	_reader->next_read(_position);
+	_buffer = _reader->get_buffer();
 }
 
 bool

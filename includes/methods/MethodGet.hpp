@@ -29,6 +29,7 @@ class MethodGet : public AMethod
 		virtual ~MethodGet(void);
 
 		virtual void action(const Request &, Response &, Server &, AReaderFileDescriptor &);
+		virtual AMethod*	clone() const;
 };
 
 #endif

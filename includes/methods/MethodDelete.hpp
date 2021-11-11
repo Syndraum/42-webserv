@@ -28,6 +28,7 @@ class MethodDelete : public AMethod
 		virtual ~MethodDelete(void);
 
 		virtual void		action(const Request &, Response &, Server &, AReaderFileDescriptor &);
+		virtual AMethod*	clone() const;
 };
 
 #endif
