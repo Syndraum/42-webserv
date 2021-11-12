@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/30 16:46:46 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/09 16:29:54 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ class Server
 		bool								_auto_index;
 		size_t								_client_max_body_size;
 		std::string							_path_error_page;
+		std::string							_upload_path;
 		cgi_map								_CGI_map;
 		return_list							_return_list;
 
@@ -89,6 +90,7 @@ class Server
 		const bool	&						get_auto_index() const;
 		size_t								get_client_max_body_size() const;
 		const std::string &					get_path_error_page() const;
+		const std::string &					get_upload_path() const;
 		const std::string &					get_root() const;
 		std::string 						get_index(const std::string &);
 		AMethod *	 						get_method(const std::string &);
@@ -108,6 +110,7 @@ class Server
 		Server &							set_auto_index(bool const auto_index);
 		Server &							set_client_max_body_size(size_t const limit);
 		Server &							set_path_error_page(std::string const & path);
+		Server &							set_upload_path(std::string const & path);
 		bool								is_directory(const Request &);
 		ServerSocket *						find_socket(int);
 		void								print() const;

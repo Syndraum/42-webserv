@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/08/03 23:41:56 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/09 16:28:57 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ BuilderCore::erase_server_bool()
 	_b_server_name = false; // erase?
 	_b_server_root = false;
 	_b_server_path_error_page = false;
+	_b_server_upload_path = false;
 	_b_server_auto_index = false;
 	_b_server_client_max_body_size = false;
 }
@@ -303,6 +304,19 @@ BuilderCore::parse_server_path_error_page(Server *server)
 }
 
 void
+BuilderCore::parse_server_upload_path(Server *server)
+{
+	if (_b_server_upload_path)
+		duplicate_error("upload_path");
+	_b_server_upload_path = true;
+	std::string arg = next_word_skip();
+	if (!arg.length())
+		no_arg_error("upload_path");
+	server->set_upload_path(arg);
+	check_semicolon("upload_path");
+}
+
+void
 BuilderCore::parse_server_auto_index(Server *server)
 {
 	if (_b_server_auto_index)
@@ -466,6 +480,8 @@ BuilderCore::parse_server(Core *core)
 			parse_server_client_max_body_size(&server);
 		else if (!directive.compare("path_error_page"))
 			parse_server_path_error_page(&server);
+		else if (!directive.compare("upload_path"))
+			parse_server_upload_path(&server);
 		else if (!directive.compare("extension"))
 			parse_server_extension(&server);
 		else if (!directive.compare("return"))

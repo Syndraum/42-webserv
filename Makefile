@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+         #
+#    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/07/25 17:58:24 by cdai             ###   ########.fr        #
+#    Updated: 2021/11/12 11:25:29 by mchardin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -144,7 +144,7 @@ test:		all
 			./$(NAME)
 
 valgrind:	all
-			valgrind $(PREFIX)$(NAME)
+			valgrind ./$(NAME)
 
 .PHONY: 	all re run clean fclean
 
