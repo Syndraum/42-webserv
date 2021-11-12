@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/03 16:24:57 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/08 22:34:42 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,44 +74,46 @@ AReaderFileDescriptor::set_fd(int fd)
 
 int AReaderFileDescriptor::get_next_line(std::string & line)
 {
-	std::string	tmp	= std::string("");
+	std::string	tmp		= std::string("");
 	bool		run		= true;
 	int			ret		= 1;
-	size_t		p_oel;
+	size_t		p_eol;
 
 	line = "";
 	while (run)
 	{
 		// std::cout << "##BUFF(" << _size << ") : " << std::string(_buffer, _size) << std::endl;
 		tmp += std::string(_buffer, _size);
-		p_oel = tmp.find("\r\n");
+		p_eol = tmp.find("\r\n");
 
 		if (ret == 0)
 		{
 			line = tmp;
 			run = false;
 		}
-		else if (p_oel == std::string::npos)
+		else if (p_eol == std::string::npos)
 		{
 			ret = next_read();
 			// std::cout << "ret : " << ret << std::endl;
-			if (ret == -1)
+			if (ret == -1){
+				_reset_buffer();
 				return (ret);
+			}
 			_buffer[ret] = 0;
 		}
 		else
 		{
-			line = tmp.substr(0, p_oel);
+			line = tmp.substr(0, p_eol);
 			run = false;
 		}
 	}
 
-	if (tmp.length() > p_oel) //Handle p_oel == std::string::npos (size_t MAX)
+	if (tmp.length() > p_eol) //Handle p_eol == std::string::npos (size_t MAX)
 	{
-		tmp.copy(_buffer, tmp.length() - p_oel - 2, p_oel + 2);
-		_buffer[tmp.length() - p_oel - 2] = 0;
+		tmp.copy(_buffer, tmp.length() - p_eol - 2, p_eol + 2);
+		_buffer[tmp.length() - p_eol - 2] = 0;
+		_size = tmp.length() - p_eol - 2;
 	}
-	_size = tmp.length() - p_oel - 2;
 	// std::cout << "##LINE : " << line << std::endl;
 	return (ret);
 }
@@ -187,10 +189,11 @@ AReaderFileDescriptor::write_body(int fd)
 {
 	int n_read = 0;
 
-	write(fd, _buffer, std::strlen(_buffer));
+	write(fd, _buffer, _size);
 	while ((n_read = next_read()) > 0){
 		std::cout << "## (" << n_read << ") " << _buffer << std::endl;
 		write (fd, _buffer, n_read);
 	}
-	dup2(_fd, fd);
+	_reset_buffer();
+	// dup2(_fd, fd);
 }

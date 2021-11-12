@@ -32,15 +32,16 @@ class AMethod
 
 		AMethod(void);
 		AMethod(AMethod const & src);
-		AMethod &			operator=(AMethod const &rhs);
 
 	public:
 
+		AMethod &			operator=(AMethod const &rhs);
 		AMethod(std::string name);
 		virtual ~AMethod(void);
 
 		const std::string &	get_name() const;
 		virtual void		action(const Request &, Response &, Server &, AReaderFileDescriptor &) = 0;
+		virtual AMethod *	clone() const = 0 ;
 
 };
 

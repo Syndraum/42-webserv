@@ -33,7 +33,7 @@ BuilderRequest::_add_method(std::string line)
 	int ret = line.find(' ');
 
 	std::string name = line.substr(0, ret);
-	_request->set_method(_methods->get_method(name));
+	_request->set_method(_methods->clone_method(name));
 	if (!_request->get_method())
 		throw MethodNotImplemented();
 	 //should check here if not allowed

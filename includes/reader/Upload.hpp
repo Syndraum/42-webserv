@@ -21,7 +21,7 @@ public:
 
 private:
 
-	AReaderFileDescriptor &	_reader;
+	AReaderFileDescriptor *	_reader;
 	Upload::e_state			_state;
 	std::string				_boundary;
 	std::string				_buffer;
@@ -38,10 +38,18 @@ public:
 			return "Bad message";
 		}
 	};
-	Upload(AReaderFileDescriptor &);
+	class InvalidReader : public std::exception
+	{
+		virtual const char* what() const throw(){
+			return "Invalid Reader";
+		}
+	};
+	Upload(AReaderFileDescriptor * reader = 0);
 	Upload(Upload const & src);
 	virtual ~Upload(void);
 	Upload &	operator=(Upload const &rhs);
+
+	Upload *	set_reader(AReaderFileDescriptor &);
 
 	void	upload(Server &, const Request &);
 	void	set_boundary(const Request &);
