@@ -54,6 +54,7 @@ public:
 	void	upload(Server &, const Request &);
 	void	set_boundary(const Request &);
 	void	set_filename(const Message &);
+	e_state	get_state() const;
 	void	next_position();
 	bool	find_bound();
 	void	find();

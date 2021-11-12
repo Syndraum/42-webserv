@@ -47,13 +47,18 @@ Upload::upload(Server & server, const Request & request)
 {
 	if(_reader == 0)
 		throw InvalidReader();
-	set_boundary(request);
-	std::cout << "Boundary : " << _boundary << std::endl;
-	_reader->fill_buffer();
-	_buffer = _reader->get_buffer();
-	// debug();
-	while (_state != END)
+	// std::cout << "adress :" << this << std::endl;
+	if (_boundary == "")
 	{
+		set_boundary(request);
+		std::cout << "Boundary : " << _boundary << std::endl;
+		std::cout << "state : " << _state << std::endl;
+		_reader->fill_buffer();
+		_buffer = _reader->get_buffer();
+	}
+	// debug();
+	// while (_state != END)
+	// {
 		switch (_state)
 		{
 		case FIND:
@@ -68,7 +73,7 @@ Upload::upload(Server & server, const Request & request)
 		default:
 			break;
 		}
-	}
+	// }
 }
 
 void
@@ -101,6 +106,11 @@ Upload::set_filename(const Message & message)
 		_filename = "unknow";
 }
 
+Upload::e_state
+Upload::get_state() const
+{
+	return (_state);
+}
 
 void
 Upload::next_position()

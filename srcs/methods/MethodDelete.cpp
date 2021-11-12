@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodDelete.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:12 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:50:14 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/12 22:06:28 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ MethodDelete::action(const Request & request, Response & response, Server & serv
 	{
 		response.set_code(204);
 	}
+	finished();
 }
 
 AMethod *

@@ -48,6 +48,7 @@ public:
 	Server &		get_server();
 	Server const &	get_server() const;
 	ServerSocket &	get_server_socket();
+	Response *		get_response();
 	std::string		get_full_path() const;
 	request_state	get_state() const;
 	void			set_server(Server *);

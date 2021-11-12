@@ -78,6 +78,12 @@ Client::get_server_socket()
 	return (*_server_socket);
 }
 
+Response *
+Client::get_response()
+{
+	return (_response);
+}
+
 std::string
 Client::get_full_path() const
 {

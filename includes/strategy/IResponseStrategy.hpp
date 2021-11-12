@@ -11,9 +11,10 @@ class Client;
 class IResponseStrategy
 {
 protected:
-	bool	_finish;
+	bool		_finish;
 
 	IResponseStrategy();
+	IResponseStrategy &			operator=(IResponseStrategy const &rhs);
 public:
 	virtual ~IResponseStrategy() {}
 	virtual Response * create(Client &) = 0;
