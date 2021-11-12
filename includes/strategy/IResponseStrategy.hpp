@@ -10,9 +10,14 @@ class Client;
 
 class IResponseStrategy
 {
+protected:
+	bool	_finish;
+
+	IResponseStrategy();
 public:
 	virtual ~IResponseStrategy() {}
 	virtual Response * create(Client &) = 0;
+	bool	is_finish() const;
 };
 
 #endif

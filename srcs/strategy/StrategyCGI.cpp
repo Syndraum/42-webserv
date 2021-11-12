@@ -56,6 +56,7 @@ StrategyCGI::create(Client & client)
 		std::cerr << "Bad CGI Response" << std::endl;
 		response->set_error(500, client.get_server().get_path_error_page());
 	}
+	_finish = true;
 	// response->debug();
 	return (response);
 }

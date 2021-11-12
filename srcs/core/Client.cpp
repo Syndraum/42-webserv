@@ -115,7 +115,9 @@ void
 Client::do_strategy(Client & client)
 {
 	_response = _strategy->create(client);
-	_state = SEND_RESPONSE;
+	if (_strategy->is_finish()) {
+		_state = SEND_RESPONSE;
+	}
 }
 
 void

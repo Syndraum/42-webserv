@@ -36,5 +36,6 @@ StrategyReturn::create(Client & client)
 	response->set_code(_redirection.get_code());
 	if (_redirection.is_handler())
 		response->add_header("Location", _redirection.get_ressource());
+	_finish = true;
 	return (response);
 }

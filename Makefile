@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: roalvare <roalvare@student.42.fr>          +#+  +:+       +#+         #
+#    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/07/25 17:58:24 by cdai             ###   ########.fr        #
+#    Updated: 2021/11/12 12:36:55 by syndraum         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,6 +69,7 @@ SRCS_READER		= $(addprefix $(PREFIX)reader/, \
 								)
 
 SRCS_STRATEGY	= $(addprefix $(PREFIX)strategy/, \
+								IResponseStrategy.cpp \
 								StrategyAccept.cpp \
 								StrategyError.cpp \
 								StrategyIndex.cpp \

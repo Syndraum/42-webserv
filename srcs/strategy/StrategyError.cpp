@@ -1,9 +1,12 @@
 #include "StrategyError.hpp"
 
-StrategyError::StrategyError(int code) : _code(code)
+StrategyError::StrategyError(int code) : 
+IResponseStrategy(),
+_code(code)
 {}
 
-StrategyError::StrategyError(StrategyError const & src)
+StrategyError::StrategyError(StrategyError const & src) :
+IResponseStrategy()
 {
 	*this = src;
 }
@@ -29,5 +32,6 @@ StrategyError::create(Client & client)
 	(void)client;
 	response = new Response();
 	response->set_error(_code, client.get_server().get_path_error_page());
+	_finish = true;
 	return (response);
 }

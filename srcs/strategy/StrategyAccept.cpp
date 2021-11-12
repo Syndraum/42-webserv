@@ -1,8 +1,11 @@
 #include "StrategyAccept.hpp"
 
-StrategyAccept::StrategyAccept(void){}
+StrategyAccept::StrategyAccept(void) :
+IResponseStrategy()
+{}
 
-StrategyAccept::StrategyAccept(StrategyAccept const & src)
+StrategyAccept::StrategyAccept(StrategyAccept const & src) :
+IResponseStrategy()
 {
 	*this = src;
 }
@@ -31,5 +34,6 @@ StrategyAccept::create(Client & client)
 	request.set_path(server.get_full_path(request.get_path()));
 	request.get_method()->action(request, *response, server, reader);
 	// request.action(*response);
+	_finish = true;
 	return (response);
 }
