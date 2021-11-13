@@ -19,9 +19,18 @@ StrategyError::~StrategyError(void)
 StrategyError &
 StrategyError::operator=(StrategyError const & rhs)
 {
+	IResponseStrategy::operator=(rhs);
 	if (this != &rhs)
 		_code = rhs._code;
 	return *this;
+}
+
+IResponseStrategy *	
+StrategyError::clone() const
+{
+	StrategyError * copy = new StrategyError();
+	*copy = *this;
+	return (copy);
 }
 
 Response * 

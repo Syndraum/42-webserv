@@ -2,12 +2,14 @@
 
 HandlerRequest::HandlerRequest(BuilderRequest &	builder) :
 	_client(0),
-	_builder(builder)
+	_builder(builder),
+	_account(0)
 {}
 
 HandlerRequest::HandlerRequest(HandlerRequest const & src) :
 	_client(src._client),
-	_builder(src._builder)
+	_builder(src._builder),
+	_account(src._account)
 {}
 
 HandlerRequest::~HandlerRequest(void)
@@ -20,6 +22,7 @@ HandlerRequest::operator=(HandlerRequest const & rhs)
 {
 	if (this != &rhs){
 		_client = rhs._client;
+		_account = rhs._account;
 	}
 	return *this;
 }
@@ -55,6 +58,12 @@ HandlerRequest::get_client_socket()
 	return (_client->get_socket_struct());
 }
 
+size_t
+HandlerRequest::get_account() const
+{
+	return (_account);
+}
+
 int
 HandlerRequest::handle(Client & client, servers & v_servers)
 {
@@ -71,8 +80,9 @@ HandlerRequest::handle(Client & client, servers & v_servers)
 		break;
 	case Client::SEND_RESPONSE:
 		_client->send(_client->get_socket());
-		_client->clean_reponse();
+		// _client->clean_reponse();
 		get_request().reset();
+		_account++;
 		return (_client->get_socket());
 		break;
 	default:

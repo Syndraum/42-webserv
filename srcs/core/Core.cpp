@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/08/03 21:12:55 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/13 22:30:06 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ Core::init(int argc, char * argv[], char *env[])
 void
 Core::start()
 {
+	bool				run	= true;
 	HandlerRequest		hr(_br);
 	std::vector<int>	active_socket;
 	try
@@ -99,10 +100,12 @@ Core::start()
 // print();
 	_pfdh.init(_servers);
 	_pfdh.set_hr(hr);
-	while (true)
+	while (run)
 	{
 		_pfdh.watch();
 		_pfdh.handle(_servers, _client);
+		// if (hr.get_account() >= 2)
+		// 	run = false;
 	}
 }
 

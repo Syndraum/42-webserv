@@ -21,12 +21,21 @@ StrategyCGI::~StrategyCGI(void)
 
 StrategyCGI &	StrategyCGI::operator=(StrategyCGI const & rhs)
 {
+	IResponseStrategy::operator=(rhs);
 	if (this != &rhs)
 	{
 		_cgi = rhs._cgi;
 		_request =  rhs._request;
 	}
 	return *this;
+}
+
+IResponseStrategy *	
+StrategyCGI::clone() const
+{
+	StrategyCGI * copy = new StrategyCGI();
+	*copy = *this;
+	return (copy);
 }
 
 Response *

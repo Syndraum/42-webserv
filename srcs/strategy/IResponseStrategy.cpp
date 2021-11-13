@@ -6,6 +6,12 @@ _finish(false)
 
 }
 
+IResponseStrategy::IResponseStrategy(IResponseStrategy const & src) : 
+_finish(src._finish)
+{
+
+}
+
 IResponseStrategy &
 IResponseStrategy::operator=(IResponseStrategy const &rhs)
 {

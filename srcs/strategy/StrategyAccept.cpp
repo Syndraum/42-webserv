@@ -24,6 +24,14 @@ StrategyAccept &	StrategyAccept::operator=(StrategyAccept const & rhs)
 	return *this;
 }
 
+IResponseStrategy *	
+StrategyAccept::clone() const
+{
+	StrategyAccept * copy = new StrategyAccept();
+	*copy = *this;
+	return (copy);
+}
+
 Response * 
 StrategyAccept::create(Client & client)
 {

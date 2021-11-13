@@ -22,6 +22,7 @@ public:
 private:
 	Client *			_client;
 	BuilderRequest &	_builder;
+	size_t				_account;
 
 	HandlerRequest(void);
 public:
@@ -36,6 +37,7 @@ public:
 	const Request &		get_request() const;
 	Server &			get_server();
 	ClientSocket &		get_client_socket();
+	size_t				get_account() const;
 
 	int					handle(Client &, servers &);
 	void				read_header(servers &);

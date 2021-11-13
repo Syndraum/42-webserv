@@ -20,11 +20,19 @@ StrategyReturn::~StrategyReturn(void)
 StrategyReturn &
 StrategyReturn::operator=(StrategyReturn const & rhs)
 {
+	IResponseStrategy::operator=(rhs);
 	if (this != &rhs)
 		;
 	return *this;
 }
 
+IResponseStrategy *	
+StrategyReturn::clone() const
+{
+	StrategyReturn * copy = new StrategyReturn();
+	*copy = *this;
+	return (copy);
+}
 
 Response *
 StrategyReturn::create(Client & client)

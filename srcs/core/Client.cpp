@@ -17,20 +17,23 @@ _server_socket(src._server_socket)
 
 Client::~Client(void)
 {
-	// clean_reponse();
+	clean_reponse();
 }
 
 Client &
 Client::operator=(Client const & rhs)
 {
+	// clean_reponse();
+	std::cout << "COPY" << std::endl;
 	if (this != &rhs)
 	{
+		std::cout << "ACCEPT" << std::endl;
 		_request = rhs._request;
 		_server = rhs._server;
 		_socket = rhs._socket;
 		_server_socket = rhs._server_socket;
-		_strategy = rhs._strategy;
-		_response = rhs._response;
+		_strategy = rhs._strategy; //
+		_response = rhs._response; //
 		_state = rhs._state;
 	}
 	return *this;

@@ -20,6 +20,7 @@ public:
 	StrategyCGI(StrategyCGI const & src);
 	virtual ~StrategyCGI(void);
 	StrategyCGI &	operator=(StrategyCGI const &rhs);
+	IResponseStrategy *	clone() const;
 
 private:
 	virtual Response *	create(Client &);

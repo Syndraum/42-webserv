@@ -17,9 +17,18 @@ StrategyIndex::~StrategyIndex(void)
 
 StrategyIndex &	StrategyIndex::operator=(StrategyIndex const & rhs)
 {
+	IResponseStrategy::operator=(rhs);
 	if (this != &rhs)
 		;
 	return *this;
+}
+
+IResponseStrategy *	
+StrategyIndex::clone() const
+{
+	StrategyIndex * copy = new StrategyIndex();
+	*copy = *this;
+	return (copy);
 }
 
 Response * 
