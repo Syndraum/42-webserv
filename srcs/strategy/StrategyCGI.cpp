@@ -33,7 +33,7 @@ StrategyCGI &	StrategyCGI::operator=(StrategyCGI const & rhs)
 IResponseStrategy *	
 StrategyCGI::clone() const
 {
-	StrategyCGI * copy = new StrategyCGI();
+	StrategyCGI * copy = new StrategyCGI(_cgi);
 	*copy = *this;
 	return (copy);
 }

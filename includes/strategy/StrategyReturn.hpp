@@ -14,7 +14,7 @@ public:
 	StrategyReturn(StrategyReturn const & src);
 	virtual ~StrategyReturn(void);
 	StrategyReturn &	operator=(StrategyReturn const &rhs);
-	IResponseStrategy *	clone() const;
+	virtual IResponseStrategy *	clone() const;
 
 private:
 	virtual Response *	create(Client &);

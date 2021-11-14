@@ -12,7 +12,7 @@ public:
 	StrategyAccept(StrategyAccept const & src);
 	virtual ~StrategyAccept(void);
 	StrategyAccept &	operator=(StrategyAccept const &rhs);
-	IResponseStrategy *	clone() const;
+	virtual IResponseStrategy *	clone() const;
 
 private:
 	virtual Response * create(Client &);

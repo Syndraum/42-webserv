@@ -12,7 +12,7 @@ public:
 	StrategyError(StrategyError const & src);
 	virtual ~StrategyError(void);
 	StrategyError &	operator=(StrategyError const &rhs);
-	IResponseStrategy *	clone() const;
+	virtual IResponseStrategy *	clone() const;
 
 private:
 	virtual Response * create(Client &);

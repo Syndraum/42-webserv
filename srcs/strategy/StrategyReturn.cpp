@@ -29,7 +29,7 @@ StrategyReturn::operator=(StrategyReturn const & rhs)
 IResponseStrategy *	
 StrategyReturn::clone() const
 {
-	StrategyReturn * copy = new StrategyReturn();
+	StrategyReturn * copy = new StrategyReturn(_redirection);
 	*copy = *this;
 	return (copy);
 }
