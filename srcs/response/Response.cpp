@@ -15,7 +15,8 @@
 Response::Response(int code) :
 Message(),
 _version(Info::http_revision),
-_code(code)
+_code(code),
+_state(WRITE_HEADER)
 {}
 
 Response::Response(Response const & src)
@@ -36,12 +37,13 @@ Response::operator=(Response const & rhs)
 		this->_code = rhs._code;
 		this->_headers = rhs._headers;
 		this->_body = rhs._body;
+		this->_state = rhs._state;
 	}
 	return *this;
 }
 
 std::string
-Response::get_response()
+Response::get_header()
 {
 	std::stringstream ss;
 
@@ -53,8 +55,35 @@ Response::get_response()
 		ss << it->first << ": " << it->second << "\r\n";
 	}
 	ss << "\r\n";
+	// ss << _body;
+	return ss.str();
+}
+
+std::string
+Response::get_response()
+{
+	std::stringstream ss;
+
+	// ss << _version << " " << _code << " " << get_message(_code) << "\r\n";
+	// add_header("Content-Length", _body.length());
+	// add_header("Server", Info::server_name + "/" + Info::version );
+	// for (header_map::iterator it = _headers.begin(); it != _headers.end(); it++)
+	// {
+	// 	ss << it->first << ": " << it->second << "\r\n";
+	// }
+	// ss << "\r\n";
 	ss << _body;
 	return ss.str();
+}
+
+void
+Response::send_header(int fd)
+{
+	std::string response = get_header();
+
+	write(fd, response.data(), response.size());
+
+	_state = Response::WRITE_BODY;
 }
 
 void
@@ -63,6 +92,8 @@ Response::send(int fd)
 	std::string response = get_response();
 
 	write(fd, response.data(), response.size());
+
+	_state =  Response::END;
 }
 
 std::string
@@ -130,6 +161,12 @@ int
 Response::get_code() const
 {
 	return (_code);
+}
+
+Response::response_state
+Response::get_state() const
+{
+	return (_state);
 }
 
 std::string

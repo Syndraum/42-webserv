@@ -131,7 +131,25 @@ Client::send(int fd)
 {
 	if (_response == 0)
 		throw std::exception();
-	_response->send(fd);
+
+	// std::cout << "Response State : " << _response->get_state() << std::endl;
+
+
+	switch (_response->get_state())
+	{
+	case Response::WRITE_HEADER:
+		_response->send_header(fd);
+		// std::cout << "END READ" << std::endl;
+		break;
+	case Response::WRITE_BODY:
+		_response->send(fd);
+		break;
+	case Response::END:
+		_state = Client::END;
+		break;
+	default:
+		break;
+	}
 }
 
 void

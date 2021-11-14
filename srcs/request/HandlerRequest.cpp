@@ -71,10 +71,11 @@ HandlerRequest::handle(Client & client, servers & v_servers)
 		break;
 	case Client::SEND_RESPONSE:
 		_client->send(_client->get_socket());
+		break;
+	case Client::END:
 		_client->clean_reponse();
 		get_request().reset();
 		return (_client->get_socket());
-		break;
 	default:
 		break;
 	}
