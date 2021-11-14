@@ -6,7 +6,7 @@
 #    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/11/12 12:36:55 by syndraum         ###   ########.fr        #
+#    Updated: 2021/11/14 19:05:17 by syndraum         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS_CGI		= $(addprefix $(PREFIX)cgi/, \
 								CGI.cpp \
 								RequestCGI.cpp \
 								HandlerResponseCGI.cpp \
+								Pipe.cpp \
 								)
 
 SRCS_CORE		= $(addprefix $(PREFIX)core/, \

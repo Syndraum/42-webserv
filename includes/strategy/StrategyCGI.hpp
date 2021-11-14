@@ -7,11 +7,15 @@
 # include "Info.hpp"
 # include "ReaderFileDescriptor.hpp"
 # include "HandlerResponseCGI.hpp"
+# include "Pipe.hpp"
 
 class StrategyCGI : public IResponseStrategy
 {
 	CGI &		_cgi;
 	RequestCGI	_request;
+	// pid_t		pid;
+	HandlerResponseCGI			_handler;
+	Pipe		_pipe;
 
 	StrategyCGI(void);
 

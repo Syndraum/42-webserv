@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 16:13:49 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/25 14:26:53 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/14 21:24:34 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@
 # include "StringPP.hpp"
 # include <cstring>
 # include "Info.hpp"
-# include "HandlerResponseCGI.hpp"
 # include "Array.hpp"
-# include "AReaderFileDescriptor.hpp"
+# include "Pipe.hpp"
 
 class CGI
 {
@@ -37,7 +36,6 @@ class CGI
 	
 		std::string									_exec_name;
 		env_map										_cgi_env;
-		HandlerResponseCGI							_handler;
 
 		void										create_env(const env_map &, Array & array);
 		void										join_env(env_map &);
@@ -54,7 +52,7 @@ class CGI
 		void										set_exec_name(std::string const & name);
 		void										add_CGI_param(std::string key, std::string value);
 
-		Message *									start(Message & request, const std::string & path, AReaderFileDescriptor &);
+		pid_t										start(Message & request, const std::string & path, Pipe & pipes);
 		void										print() const;
 		class MyError: public std::exception
 		{

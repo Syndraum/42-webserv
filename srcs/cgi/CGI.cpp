@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/25 15:14:05 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/14 21:24:54 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 CGI::CGI() :
 _exec_name(),
-_cgi_env(),
-_handler(1)
+_cgi_env()
 {}
 
-CGI::CGI(CGI const & src) : _handler(src._handler)
+CGI::CGI(CGI const & src)
 {
 	*this = src;
 }
@@ -33,7 +32,6 @@ CGI::operator=(CGI const &rhs)
 	{
 		_exec_name = rhs._exec_name;
 		_cgi_env = rhs._cgi_env;
-		_handler = rhs._handler;
 	}
 	return (*this);
 }
@@ -85,14 +83,14 @@ CGI::join_env(env_map & my_env)
 		my_env[it->first] = it->second;
 }
 
-Message *
-CGI::start(Message & request, const std::string & script_path, AReaderFileDescriptor & reader)
+pid_t
+CGI::start(Message & request, const std::string & script_path, Pipe & pipes)
 {
 	pid_t			pid;
-	int				pipe_out[2];
-	int				pipe_err[2];
-	int				pipe_in[2];
-	Array		a_env;
+	int *			pipe_out	= pipes.get_out();
+	int	*			pipe_err	= pipes.get_err();
+	int	*			pipe_in		= pipes.get_in();
+	Array			a_env;
 	// char **		env;
 
 	// env = create_env(request.get_headers());
@@ -121,15 +119,8 @@ CGI::start(Message & request, const std::string & script_path, AReaderFileDescri
 		close(pipe_out[1]);
 		close(pipe_err[1]);
 		close(pipe_in[0]);
-		reader.write_body(pipe_in[1]);
-		_handler.set_fd(pipe_out[0]);
-		_handler.init();
-		_handler.parse(); // MAYBE WHILE
-		close(pipe_out[0]);
-		close(pipe_err[0]);
-		close(pipe_in[1]);
 	}
-	return (_handler.get_response());
+	return (pid);
 }
 
 void

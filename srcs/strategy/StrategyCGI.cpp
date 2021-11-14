@@ -3,13 +3,15 @@
 StrategyCGI::StrategyCGI(CGI & cgi) :
 IResponseStrategy(),
 _cgi(cgi),
-_request(cgi)
+_request(cgi),
+_handler(1)
 {}
 
 StrategyCGI::StrategyCGI(StrategyCGI const & src) :
 IResponseStrategy(),
 _cgi(src._cgi), 
-_request(src._request)
+_request(src._request),
+_handler(src._handler)
 {
 	
 }
@@ -26,6 +28,7 @@ StrategyCGI &	StrategyCGI::operator=(StrategyCGI const & rhs)
 	{
 		_cgi = rhs._cgi;
 		_request =  rhs._request;
+		_handler = rhs._handler;
 	}
 	return *this;
 }
@@ -41,15 +44,27 @@ StrategyCGI::clone() const
 Response *
 StrategyCGI::create(Client & client)
 {
-	Response *	response		= new Response();
-	Message *	response_cgi	= 0;
+	Response *				response		= new Response();
+	Message *				response_cgi	= 0;
+	AReaderFileDescriptor &	reader			= client.get_socket_struct().get_reader();
+	// Pipe		m_pipe;
 
 	this->_prepare(client);
 	_request.set_body(client.get_request().get_body());
 	_request.debug();
 	try
 	{
-		response_cgi = _request.send(client.get_full_path(), client.get_socket_struct().get_reader());
+		_cgi.start(_request, client.get_full_path(), _pipe);
+
+		reader.write_body(_pipe.get_in()[1]);
+		_handler.set_fd(_pipe.get_out()[0]);
+		_handler.init();
+		_handler.parse(); // MAYBE WHILE
+		close(_pipe.get_out()[0]);
+		close(_pipe.get_err()[0]);
+		close(_pipe.get_in()[1]);
+		response_cgi = _handler.get_response();
+
 		response->set_code(200);
 		response->add_header("Content-Type", response_cgi->get_header("Content-Type"));
 		response->set_body(response_cgi->get_body());
