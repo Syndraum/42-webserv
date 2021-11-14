@@ -36,7 +36,7 @@ HandlerResponse::send(int fd)
 {
 	if (_response == 0)
 		throw std::exception();
-	_response->send(fd);
+	_response->send_body(fd);
 }
 
 void

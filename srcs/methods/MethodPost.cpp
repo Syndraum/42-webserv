@@ -54,7 +54,8 @@ MethodPost::action(const Request & request, Response & response, Server & server
 	{
 		response
 			.set_code(200)
-			.set_body_from_file(request.get_path().c_str())
+			// .set_body_from_file(request.get_path().c_str())
+			.set_filename(request.get_path())
 			.add_header(
 				"Content-type", 
 				mine

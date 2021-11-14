@@ -142,7 +142,7 @@ Client::send(int fd)
 		// std::cout << "END READ" << std::endl;
 		break;
 	case Response::WRITE_BODY:
-		_response->send(fd);
+		_response->send_body(fd);
 		break;
 	case Response::END:
 		_state = Client::END;
