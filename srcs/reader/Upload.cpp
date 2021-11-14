@@ -140,7 +140,7 @@ Upload::header(const Server & server)
 	{
 		set_filename(_message);
 		std::cout << "filename : " << _filename << std::endl;
-		_file.open((server.get_upload_path() + "/" + _filename).c_str(), std::fstream::out | std::fstream::trunc);
+		_file.open((server.get_root() + "/" + server.get_upload_path() + "/" + _filename).c_str(), std::fstream::out | std::fstream::trunc);
 		if ((_file.rdstate() & std::ifstream::failbit ) != 0)
     		throw std::exception(); // should catch to return error 500
 		_state = WRITE;

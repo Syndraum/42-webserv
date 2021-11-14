@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerPollFD.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:58:45 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/24 19:12:03 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/12 14:23:30 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,16 +97,16 @@ HandlerPollFD::init(std::vector<Server> & servers)
 	}
 }
 
-void
-HandlerPollFD::erase(void)
-{
-	for (pollfd_vector::iterator it = _pfd.begin(); it != _pfd.end(); it++)
-		if (it->revents == POLLOUT)
-		{
-			_pfd.erase(it);
-			return ;
-		}
-}
+// void
+// HandlerPollFD::erase(void)
+// {
+// 	for (pollfd_vector::iterator it = _pfd.begin(); it != _pfd.end(); it++)
+// 		if (it->revents == POLLOUT)
+// 		{
+// 			_pfd.erase(it);
+// 			return ;
+// 		}
+// }
 
 void
 HandlerPollFD::remove(int socket)

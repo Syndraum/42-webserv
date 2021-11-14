@@ -6,75 +6,75 @@
 #    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/11/12 11:25:29 by mchardin         ###   ########.fr        #
+#    Updated: 2021/11/13 20:09:12 by mchardin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-PREFIX		=	./srcs/
+PREFIX			=	./srcs/
 
-SRCS_METHOD		= $(addprefix $(PREFIX)methods/, \
-								AMethod.cpp \
-								MethodDelete.cpp \
-								MethodGet.cpp \
-								MethodPost.cpp \
-								MethodLibrary.cpp \
-								)
+SRCS_METHOD		=	$(addprefix $(PREFIX)methods/, \
+					AMethod.cpp \
+					MethodDelete.cpp \
+					MethodGet.cpp \
+					MethodPost.cpp \
+					MethodLibrary.cpp \
+					)
 
-SRCS_UTILS		= $(addprefix $(PREFIX)utils/, \
-								Info.cpp \
-								StringPP.cpp \
-								Array.cpp \
-								)
+SRCS_UTILS		=	$(addprefix $(PREFIX)utils/, \
+					Info.cpp \
+					StringPP.cpp \
+					Array.cpp \
+					)
 
-SRCS_REQUEST	= $(addprefix $(PREFIX)request/, \
-								Request.cpp \
-								BuilderRequest.cpp \
-								HandlerRequest.cpp \
-								URI.cpp \
-								)
+SRCS_REQUEST	=	$(addprefix $(PREFIX)request/, \
+					Request.cpp \
+					BuilderRequest.cpp \
+					HandlerRequest.cpp \
+					URI.cpp \
+					)
 
-SRCS_RESPONSE	= $(addprefix $(PREFIX)response/, \
-								Response.cpp \
-								HandlerResponse.cpp \
-								)
+SRCS_RESPONSE	=	$(addprefix $(PREFIX)response/, \
+					Response.cpp \
+					HandlerResponse.cpp \
+					)
 
-SRCS_CGI		= $(addprefix $(PREFIX)cgi/, \
-								CGI.cpp \
-								RequestCGI.cpp \
-								HandlerResponseCGI.cpp \
-								)
+SRCS_CGI		=	$(addprefix $(PREFIX)cgi/, \
+					CGI.cpp \
+					RequestCGI.cpp \
+					HandlerResponseCGI.cpp \
+					)
 
-SRCS_CORE		= $(addprefix $(PREFIX)core/, \
-								Core.cpp \
-								BuilderCore.cpp \
-								Server.cpp \
-								ASocket.cpp \
-								ServerSocket.cpp \
-								ClientSocket.cpp \
-								Client.cpp \
-								Message.cpp \
-								HandlerPollFD.cpp \
-								BuilderMessage.cpp \
-								Redirection.cpp \
-								)
+SRCS_CORE		=	$(addprefix $(PREFIX)core/, \
+					Core.cpp \
+					BuilderCore.cpp \
+					Server.cpp \
+					ASocket.cpp \
+					ServerSocket.cpp \
+					ClientSocket.cpp \
+					Client.cpp \
+					Message.cpp \
+					HandlerPollFD.cpp \
+					BuilderMessage.cpp \
+					Redirection.cpp \
+					)
 
-SRCS_READER		= $(addprefix $(PREFIX)reader/, \
-								Reader.cpp \
-								Extension.cpp \
-								CsvReader.cpp \
-								AReaderFileDescriptor.cpp \
-								ReaderFileDescriptor.cpp \
-								ReaderSocket.cpp \
-								Upload.cpp \
-								)
+SRCS_READER		=	$(addprefix $(PREFIX)reader/, \
+					Reader.cpp \
+					Extension.cpp \
+					CsvReader.cpp \
+					AReaderFileDescriptor.cpp \
+					ReaderFileDescriptor.cpp \
+					ReaderSocket.cpp \
+					Upload.cpp \
+					)
 
-SRCS_STRATEGY	= $(addprefix $(PREFIX)strategy/, \
-								StrategyAccept.cpp \
-								StrategyError.cpp \
-								StrategyIndex.cpp \
-								StrategyCGI.cpp \
-								StrategyReturn.cpp \
-								)
+SRCS_STRATEGY	=	$(addprefix $(PREFIX)strategy/, \
+					StrategyAccept.cpp \
+					StrategyError.cpp \
+					StrategyIndex.cpp \
+					StrategyCGI.cpp \
+					StrategyReturn.cpp \
+					)
 
 SRCS			=	$(SRCS_METHOD) \
 					$(SRCS_UTILS) \
@@ -85,10 +85,10 @@ SRCS			=	$(SRCS_METHOD) \
 					$(SRCS_READER) \
 					$(SRCS_STRATEGY) \
 					$(addprefix $(PREFIX), \
-								main.cpp \
-								)
+					main.cpp \
+					)
 
-INCLUDE_DIR = ./includes
+INCLUDE_DIR		=	./includes
 
 INCLUDE_FLAG	=	-I$(INCLUDE_DIR)/methods \
 					-I$(INCLUDE_DIR)/utils \
@@ -99,53 +99,54 @@ INCLUDE_FLAG	=	-I$(INCLUDE_DIR)/methods \
 					-I$(INCLUDE_DIR)/reader \
 					-I$(INCLUDE_DIR)/strategy
 
-OBJS		=	${SRCS:.cpp=.o}
+OBJS			=	${SRCS:.cpp=.o}
 
-DEPS		=	${OBJS:.o=.d}
+DEPS			=	${OBJS:.o=.d}
 
-CXX			=	clang++
+CXX				=	clang++
 
-CXXFLAGS	=	-Werror -Wextra -Wall -MMD -std=c++98 -g $(INCLUDE_FLAG)
+CXXFLAGS		=	-Werror -Wextra -Wall -MMD -std=c++98 -g $(INCLUDE_FLAG)
 
-NAME 		=	webserv
+NAME 			=	webserv
 
-RM			=	rm -f
+RM				=	rm -f
 
 all:
-			${MAKE} ${NAME}
+				${MAKE} ${NAME}
 
-${NAME}:	${OBJS}
-			${CXX} ${CXXFLAGS} ${OBJS} -o ${NAME}
+${NAME}:		${OBJS}
+				${CXX} ${CXXFLAGS} ${OBJS} -o ${NAME}
+				chmod 751 ${NAME}
 
-run:		all
-			./$(NAME)
+run:			all
+				./$(NAME)
 
-vg:	all
-			valgrind ./$(NAME)
+vg:				all
+				valgrind ./$(NAME)
 
-vgf:	all
-			valgrind --leak-check=full ./$(NAME)
+vgf:			all
+				valgrind --leak-check=full ./$(NAME)
 
-vga:	all
-			valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
+vga:			all
+				valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
 clean:
-			${RM} ${OBJS}
-			${RM} ${DEPS}
+				${RM} ${OBJS}
+				${RM} ${DEPS}
 
 fclean:
-			${RM} ${OBJS}
-			${RM} ${DEPS}
-			${RM} ${NAME}
+				${RM} ${OBJS}
+				${RM} ${DEPS}
+				${RM} ${NAME}
 
-re:			fclean all
+re:				fclean all
 
-test:		all
-			./$(NAME)
+test:			all
+				./$(NAME)
 
-valgrind:	all
-			valgrind ./$(NAME)
+valgrind:		all
+				valgrind ./$(NAME)
 
-.PHONY: 	all re run clean fclean
+.PHONY: 		all re run clean fclean vg vgf vga test
 
--include	${DEPS}
+-include		${DEPS}
