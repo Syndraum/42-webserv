@@ -6,7 +6,7 @@
 #    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/11/13 20:09:12 by mchardin         ###   ########.fr        #
+#    Updated: 2021/11/15 19:18:14 by mchardin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -116,7 +116,7 @@ all:
 
 ${NAME}:		${OBJS}
 				${CXX} ${CXXFLAGS} ${OBJS} -o ${NAME}
-				chmod 751 ${NAME}
+				chmod 755 ${NAME}
 
 run:			all
 				./$(NAME)
