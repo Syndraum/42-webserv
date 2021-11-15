@@ -43,6 +43,7 @@ class Response : public Message
 		std::string									_version;
 		int											_code;
 		response_state								_state;
+		Reader										_file_reader;
 
 		std::string									_1xx__response(int code);
 		std::string									_2xx__response(int code);
@@ -59,10 +60,11 @@ class Response : public Message
 		std::string									get_header();
 		std::string									get_response();
 		void										send_header(int fd);
-		void										send(int fd);
+		void										send_body(int fd);
 		std::string									get_message(int code);
 		Response &									set_code(int code);
 		Response &									set_body_from_file(const std::string & filename);
+		Response &									set_filename(const std::string & filename);
 		Response &									set_error(int code, std::string const & path_error);
 		int											get_code() const;
 		response_state								get_state() const;

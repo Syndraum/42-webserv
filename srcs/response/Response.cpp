@@ -38,6 +38,7 @@ Response::operator=(Response const & rhs)
 		this->_headers = rhs._headers;
 		this->_body = rhs._body;
 		this->_state = rhs._state;
+		this->_file_reader = rhs._file_reader;
 	}
 	return *this;
 }
@@ -48,7 +49,10 @@ Response::get_header()
 	std::stringstream ss;
 
 	ss << _version << " " << _code << " " << get_message(_code) << "\r\n";
-	add_header("Content-Length", _body.length());
+	if (_body.empty())
+		add_header("Content-Length", _file_reader.get_length());
+	else
+		add_header("Content-Length", _body.size());
 	add_header("Server", Info::server_name + "/" + Info::version );
 	for (header_map::iterator it = _headers.begin(); it != _headers.end(); it++)
 	{
@@ -62,7 +66,11 @@ Response::get_header()
 std::string
 Response::get_response()
 {
-	std::stringstream ss;
+	if (!_body.empty())
+	{
+		return _body;
+	}
+	// std::stringstream ss;
 
 	// ss << _version << " " << _code << " " << get_message(_code) << "\r\n";
 	// add_header("Content-Length", _body.length());
@@ -72,8 +80,15 @@ Response::get_response()
 	// 	ss << it->first << ": " << it->second << "\r\n";
 	// }
 	// ss << "\r\n";
-	ss << _body;
-	return ss.str();
+	// ss << _body;
+	// return ss.str();
+
+	// if (!_file_reader.get_ifs().is_open())
+	// {
+	// 	// throw error;
+	// 	// _file_reader.open();
+	// }
+	return _file_reader.get_buffer();
 }
 
 void
@@ -87,13 +102,28 @@ Response::send_header(int fd)
 }
 
 void
-Response::send(int fd)
+Response::send_body(int fd)
 {
 	std::string response = get_response();
 
-	write(fd, response.data(), response.size());
+	// std::cout << response << " " << response.size() << std::endl;
 
-	_state =  Response::END;
+	// write(fd, response.data(), response.size());
+
+	ssize_t send_res = send(fd, response.data(), response.size(), MSG_NOSIGNAL);
+	// ssize_t write_res = write(fd, response.data(), response.size());
+
+	// std::cout << response << " " << response.size() << "send_res :" << send_res << std::endl;
+	// std::cout << response << " " << response.size() << "write_res :" << write_res << std::endl;
+
+	if (_file_reader.finished() || !_body.empty() || send_res < (ssize_t)1)
+	{
+		if (send_res < (ssize_t)1)
+			std::cout << response << " " << response.size() << "send_res :" << send_res << std::endl;
+		std::cout << "finished" << std::endl;
+		_file_reader.close();
+		_state = Response::END;
+	}
 }
 
 std::string
@@ -127,6 +157,17 @@ Response::set_body_from_file(const std::string & filename)
 	file_reader.open();
 	file_reader.to_string(_body);
 	file_reader.close();
+	return *this;
+}
+
+Response &
+Response::set_filename(const std::string & filename)
+{
+	_file_reader.get_ifs().open(filename.c_str(), std::ios_base::in );
+	if (_file_reader.get_ifs().fail())
+		throw std::exception();
+	_file_reader.set_length();
+	std::cout << "file is open" << std::endl;
 	return *this;
 }
 
