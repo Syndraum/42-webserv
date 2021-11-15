@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/08/03 23:41:57 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/09 16:25:21 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class BuilderCore
 		bool			_b_server_name; //?
 		bool			_b_server_root;
 		bool			_b_server_path_error_page;
+		bool			_b_server_upload_path;
 		bool			_b_server_auto_index;
 		bool			_b_server_client_max_body_size;
 		bool			_b_server_CGI_exec_name;
@@ -45,6 +46,7 @@ class BuilderCore
 		void			parse_server_name(Server *server);
 		void			parse_server_root(Server *server);
 		void			parse_server_path_error_page(Server *server);
+		void			parse_server_upload_path(Server *server);
 		void			parse_server_auto_index(Server *server);
 		void			parse_server_index(Server *server);
 		void			parse_server_allow_methods(Server *server, Core *core);

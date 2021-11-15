@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/30 17:03:33 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/09 16:53:50 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ _methods(),
 _auto_index(false),
 _client_max_body_size(5 << 20),
 _path_error_page("./config/error.html"),
+_upload_path(_root),
 _CGI_map(),
 _return_list()
 {}
@@ -44,6 +45,7 @@ Server::operator=(Server const & rhs)
 		_auto_index = rhs._auto_index;
 		_client_max_body_size = rhs._client_max_body_size;
 		_path_error_page = rhs._path_error_page;
+		_upload_path = rhs._upload_path;
 		_CGI_map = rhs._CGI_map;
 		_return_list = rhs._return_list;
 	}
@@ -163,6 +165,12 @@ const std::string &
 Server::get_path_error_page() const
 {
 	return (_path_error_page);
+}
+
+const std::string &
+Server::get_upload_path() const
+{
+	return (_upload_path);
 }
 
 const std::string &
@@ -316,6 +324,16 @@ Server &
 Server::set_path_error_page(std::string const & path)
 {
 	_path_error_page = path;
+	return(*this);
+}
+
+Server &
+Server::set_upload_path(std::string const & path)
+{
+	if (path[path.size() - 1] == '/')
+		_upload_path = path.substr(0, path.size() - 1);
+	else
+		_upload_path = path;
 	return(*this);
 }
 
