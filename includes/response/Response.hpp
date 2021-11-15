@@ -30,12 +30,19 @@ class Response : public Message
 {
 	public:
 
+		enum response_state {
+			WRITE_HEADER,
+			WRITE_BODY,
+			END
+		};
+
 		typedef std::map<std::string, std::string>	header_map;
 
 	private:
 
 		std::string									_version;
 		int											_code;
+		response_state								_state;
 
 		std::string									_1xx__response(int code);
 		std::string									_2xx__response(int code);
@@ -49,13 +56,16 @@ class Response : public Message
 		virtual ~Response(void);
 		Response &									operator=(Response const &rhs);
 
+		std::string									get_header();
 		std::string									get_response();
+		void										send_header(int fd);
 		void										send(int fd);
 		std::string									get_message(int code);
 		Response &									set_code(int code);
 		Response &									set_body_from_file(const std::string & filename);
 		Response &									set_error(int code, std::string const & path_error);
 		int											get_code() const;
+		response_state								get_state() const;
 };
 
 # include "Request.hpp"
