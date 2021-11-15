@@ -1,6 +1,7 @@
 #include "Client.hpp"
 
 Client::Client(Server & server, ServerSocket & server_socket) :
+_request(),
 _server(&server), 
 _server_socket(&server_socket),
 _strategy(0),
@@ -10,7 +11,9 @@ _state(READ_HEADER)
 
 Client::Client(Client const & src) :
 _server(src._server),
-_server_socket(src._server_socket)
+_server_socket(src._server_socket),
+_strategy(0),
+_response(0)
 {
 	*this = src;
 }
@@ -23,7 +26,7 @@ Client::~Client(void)
 Client &
 Client::operator=(Client const & rhs)
 {
-	// clean_reponse();
+	clean_reponse();
 	// std::cout << "COPY" << std::endl;
 	if (this != &rhs)
 	{
@@ -32,8 +35,10 @@ Client::operator=(Client const & rhs)
 		_server = rhs._server;
 		_socket = rhs._socket;
 		_server_socket = rhs._server_socket;
-		_strategy = rhs._strategy; //
-		_response = rhs._response; //
+		if (rhs._strategy)
+			_strategy = rhs._strategy->clone();
+		if (rhs._response)
+		_response = new Response(*(rhs._response)); //
 		_state = rhs._state;
 	}
 	return *this;
@@ -123,6 +128,8 @@ Client::set_strategy(IResponseStrategy * strategy)
 void
 Client::do_strategy(Client & client)
 {
+	if (_strategy == 0)
+		std::cout << "STRATEGY NULL" << std::endl;
 	_response = _strategy->create(client);
 	if (_strategy->is_finish()) {
 		_state = SEND_RESPONSE;
