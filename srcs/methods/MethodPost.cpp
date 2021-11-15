@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 16:05:23 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/12 20:32:43 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/15 21:28:05 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,16 @@ MethodPost::action(const Request & request, Response & response, Server & server
 	if (has_upload(request))
 	{
 		// std::cout << "adress :" << this << std::endl;
-		_uploader.set_reader(reader)->upload(server, request);
+		try
+		{
+			_uploader.set_reader(reader)->upload(server, request);
+		}
+		catch(const std::exception& e)
+		{
+			response.set_error(500, server.get_path_error_page());
+			finished();
+			return ;
+		}
 		if (_uploader.get_state() != Upload::END)
 			return ;
 		// uploader.upload(server, request);
