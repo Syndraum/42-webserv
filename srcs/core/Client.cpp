@@ -24,10 +24,10 @@ Client &
 Client::operator=(Client const & rhs)
 {
 	// clean_reponse();
-	std::cout << "COPY" << std::endl;
+	// std::cout << "COPY" << std::endl;
 	if (this != &rhs)
 	{
-		std::cout << "ACCEPT" << std::endl;
+		// std::cout << "ACCEPT" << std::endl;
 		_request = rhs._request;
 		_server = rhs._server;
 		_socket = rhs._socket;

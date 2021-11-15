@@ -4,7 +4,9 @@ StrategyCGI::StrategyCGI(CGI & cgi) :
 IResponseStrategy(),
 _cgi(cgi),
 _request(cgi),
-_handler(1)
+_handler(1),
+_state(INIT),
+_response_cgi(0)
 {}
 
 StrategyCGI::StrategyCGI(StrategyCGI const & src) :
@@ -13,12 +15,12 @@ _cgi(src._cgi),
 _request(src._request),
 _handler(src._handler)
 {
-	
+	*this = src;
 }
 
 StrategyCGI::~StrategyCGI(void)
 {
-	
+	clear();
 }
 
 StrategyCGI &	StrategyCGI::operator=(StrategyCGI const & rhs)
@@ -29,6 +31,9 @@ StrategyCGI &	StrategyCGI::operator=(StrategyCGI const & rhs)
 		_cgi = rhs._cgi;
 		_request =  rhs._request;
 		_handler = rhs._handler;
+		_pipe = rhs._pipe;
+		_state = rhs._state;
+		_response_cgi = rhs._response_cgi;
 	}
 	return *this;
 }
@@ -44,44 +49,41 @@ StrategyCGI::clone() const
 Response *
 StrategyCGI::create(Client & client)
 {
-	Response *				response		= new Response();
-	Message *				response_cgi	= 0;
-	AReaderFileDescriptor &	reader			= client.get_socket_struct().get_reader();
-	// Pipe		m_pipe;
+	Response *				response		= client.get_response();
 
-	this->_prepare(client);
-	_request.set_body(client.get_request().get_body());
-	_request.debug();
+	std::cout << "state : " << _state << std::endl;
+	if (response == 0)
+		response = new Response();
 	try
 	{
-		_cgi.start(_request, client.get_full_path(), _pipe);
-
-		reader.write_body(_pipe.get_in()[1]);
-		_handler.set_fd(_pipe.get_out()[0]);
-		_handler.init();
-		_handler.parse(); // MAYBE WHILE
-		close(_pipe.get_out()[0]);
-		close(_pipe.get_err()[0]);
-		close(_pipe.get_in()[1]);
-		response_cgi = _handler.get_response();
-
-		response->set_code(200);
-		response->add_header("Content-Type", response_cgi->get_header("Content-Type"));
-		response->set_body(response_cgi->get_body());
-		if (response_cgi->has_header("Status"))
-			handle_status(*response_cgi, *response, client.get_server());
-		if (!response_cgi->has_header("Content-Type") || response_cgi->get_header("Content-Type") == "")
-			response->set_error(500, client.get_server().get_path_error_page());
-		delete (response_cgi);
+		switch (_state)
+		{
+		case StrategyCGI::INIT:
+			init(client);
+			break;
+		case StrategyCGI::WRITE_BODY:
+			write_body(client);
+			break;
+		case StrategyCGI::PARSE_HEADER:
+			parse_header();
+			break;
+		case StrategyCGI::PREPARE_REPONSE:
+			prepare_response(client);
+			break;
+		case StrategyCGI::END:
+			_finish = true;
+			break;
+		default:
+			break;
+		}
 	}
 	catch(const std::exception& e)
 	{
-
 		std::cerr << "Bad CGI Response" << std::endl;
 		response->set_error(500, client.get_server().get_path_error_page());
+		_state = END;
+		_finish = true;
 	}
-	_finish = true;
-	// response->debug();
 	return (response);
 }
 
@@ -144,4 +146,66 @@ StrategyCGI::_prepare(Client & client)
 	if (_request.get_header("PATH_INFO") != "")
 		_request.add_header("PATH_TRANSLATED", server.get_full_path(request_http.get_uri().get_extra_path()));
 	// _request.debug();
+}
+
+StrategyCGI::cgi_state
+StrategyCGI::get_state() const
+{
+	return (_state);
+}
+
+void
+StrategyCGI::clear()
+{
+	delete(_response_cgi);
+	_response_cgi = 0;
+}
+
+void
+StrategyCGI::init(Client & client)
+{
+	this->_prepare(client);
+	_request.set_body(client.get_request().get_body());
+	_request.debug();
+	_cgi.start(_request, client.get_full_path(), _pipe);
+	_state = WRITE_BODY;
+}
+
+void
+StrategyCGI::write_body(Client & client)
+{
+	AReaderFileDescriptor &	reader	= client.get_socket_struct().get_reader();
+
+	reader.write_body(_pipe.get_in()[1]);
+	_state = PARSE_HEADER;
+}
+
+void
+StrategyCGI::parse_header()
+{
+	_handler.set_fd(_pipe.get_out()[0]);
+	_handler.init();
+	_handler.parse(); // MAYBE WHILE
+	_state = PREPARE_REPONSE;
+}
+
+void
+StrategyCGI::prepare_response(Client & client)
+{
+	Response *	response	= client.get_response();
+
+	close(_pipe.get_out()[0]);
+	close(_pipe.get_err()[0]);
+	close(_pipe.get_in()[1]);
+	_response_cgi = _handler.get_response();
+
+	response->set_code(200);
+	response->add_header("Content-Type", _response_cgi->get_header("Content-Type"));
+	response->set_body(_response_cgi->get_body());
+	if (_response_cgi->has_header("Status"))
+		handle_status(*_response_cgi, *response, client.get_server());
+	if (!_response_cgi->has_header("Content-Type") || _response_cgi->get_header("Content-Type") == "")
+		response->set_error(500, client.get_server().get_path_error_page());
+	clear();
+	_state = END;
 }
