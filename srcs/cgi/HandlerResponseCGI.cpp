@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerResponseCGI.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:19:20 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/26 13:00:11 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/15 23:20:41 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,13 @@ HandlerResponseCGI::parse()
 		{
 			if (!_response->has_header("Content-Length"))
 			{
-				std::cout << "No Content-Length" << std::endl;
+				// std::cout << "No Content-Length" << std::endl;
 				_reader.read_until_end(line);
 				_response->set_body(line);
 			}
 			else
 			{
-				std::cout << "Content-Length : " << _response->get_header("Content-Length") << std::endl;
+				// std::cout << "Content-Length : " << _response->get_header("Content-Length") << std::endl;
 
 				_reader.read_body(line, std::atoi(_response->get_header("Content-Length").c_str()));
 				_response->set_body(line);

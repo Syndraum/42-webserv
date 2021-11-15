@@ -128,8 +128,6 @@ Client::set_strategy(IResponseStrategy * strategy)
 void
 Client::do_strategy(Client & client)
 {
-	if (_strategy == 0)
-		std::cout << "STRATEGY NULL" << std::endl;
 	_response = _strategy->create(client);
 	if (_strategy->is_finish()) {
 		_state = SEND_RESPONSE;
