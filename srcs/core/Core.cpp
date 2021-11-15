@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/13 22:30:06 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/15 19:29:11 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Core::Core(Core const & src)
 
 Core::~Core()
 {
-
+	clean();
 }
 
 Core &
@@ -194,14 +194,14 @@ Core::print() const
 		std::cout << "no Server found \n";
 }
 
-void
-Core::remove_client(client_vector::iterator it)
-{
-	_pfdh.erase();
-	close(it->get_socket());
-	_client.erase(it);
-	std::cout << "Disconnected" << std::endl;
-}
+// void
+// Core::remove_client(client_vector::iterator it)
+// {
+// 	_pfdh.erase();
+// 	close(it->get_socket());
+// 	_client.erase(it);
+// 	std::cout << "Disconnected" << std::endl;
+// }
 
 AMethod *
 Core::get_method(std::string const & name) const
