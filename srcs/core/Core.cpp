@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/12 14:23:07 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/15 18:29:14 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Core::Core(Core const & src)
 
 Core::~Core()
 {
-
+	clean();
 }
 
 Core &
