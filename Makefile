@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
+#    By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/11/12 11:25:29 by mchardin         ###   ########.fr        #
+#    Updated: 2021/11/15 16:30:59 by syndraum         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS_CGI		= $(addprefix $(PREFIX)cgi/, \
 								CGI.cpp \
 								RequestCGI.cpp \
 								HandlerResponseCGI.cpp \
+								Pipe.cpp \
 								)
 
 SRCS_CORE		= $(addprefix $(PREFIX)core/, \
@@ -69,6 +70,7 @@ SRCS_READER		= $(addprefix $(PREFIX)reader/, \
 								)
 
 SRCS_STRATEGY	= $(addprefix $(PREFIX)strategy/, \
+								IResponseStrategy.cpp \
 								StrategyAccept.cpp \
 								StrategyError.cpp \
 								StrategyIndex.cpp \

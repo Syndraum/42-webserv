@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestCGI.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/13 14:58:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/28 18:20:39 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/14 21:31:31 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ class RequestCGI : public Message
 		RequestCGI(CGI & cgi);
 		~RequestCGI(void);
 		RequestCGI const &					operator=(RequestCGI const &rhs);
-
-
-		Message *							send(const std::string &, AReaderFileDescriptor &);
 };
 
 #endif

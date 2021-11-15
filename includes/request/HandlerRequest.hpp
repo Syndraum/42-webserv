@@ -6,7 +6,6 @@
 # include "Server.hpp"
 # include "BuilderRequest.hpp"
 # include "Client.hpp"
-# include "HandlerResponse.hpp"
 # include "StrategyAccept.hpp"
 # include "StrategyError.hpp"
 # include "StrategyIndex.hpp"
@@ -15,15 +14,18 @@
 
 class HandlerRequest
 {
-	Client *			_client;
-	BuilderRequest &	_builder;
-	HandlerResponse		_handler_response;
-
-	HandlerRequest(void);
 public:
 	typedef std::vector<Client>		clients;
 	typedef std::vector<Server>		servers;
 	typedef clients::iterator		clients_iterator;
+	
+private:
+	Client *			_client;
+	BuilderRequest &	_builder;
+	size_t				_account;
+
+	HandlerRequest(void);
+public:
 
 	HandlerRequest(BuilderRequest &);
 	HandlerRequest(HandlerRequest const & src);
@@ -35,8 +37,10 @@ public:
 	const Request &		get_request() const;
 	Server &			get_server();
 	ClientSocket &		get_client_socket();
+	size_t				get_account() const;
 
 	int					handle(Client &, servers &);
+	void				read_header(servers &);
 	void				parse();
 	void				set_index();
 	bool				is_complete() const;

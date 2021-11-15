@@ -35,7 +35,12 @@ Reader &
 Reader::operator=(Reader const & rhs)
 {
 	if (this != &rhs)
-		;
+	{
+		_ifs.copyfmt(rhs._ifs);
+		_path = rhs._path;
+		_length = rhs._length;
+		_line = rhs._line;
+	}
 	return *this;
 }
 
@@ -47,6 +52,14 @@ Reader::open()
 	_ifs.open(_path.c_str(), std::ios_base::in );
 	if (_ifs.fail())
 		throw std::exception();
+	_ifs.seekg (0, _ifs.end);
+	_length = _ifs.tellg();
+	_ifs.seekg (0, _ifs.beg);
+}
+
+void
+Reader::set_length()
+{
 	_ifs.seekg (0, _ifs.end);
 	_length = _ifs.tellg();
 	_ifs.seekg (0, _ifs.beg);
@@ -85,4 +98,27 @@ std::ifstream &
 Reader::get_ifs()
 {
 	return _ifs;
+}
+
+std::string
+Reader::get_buffer()
+{
+	char * buffer = new char[BUFFER_SIZE];
+	_ifs.read(buffer, BUFFER_SIZE);
+	// buffer[BUFFER_SIZE] = '\0';
+	std::streamsize nb_char_readed = _ifs.gcount();
+
+	// if (nb_char_readed == 0)
+	// {
+	// 	std::cout << "nb_char_readed :" << nb_char_readed << std::endl;
+	// }
+	std::string str(buffer, (std::size_t)nb_char_readed);
+	delete[] buffer;
+	return str;
+}
+
+bool
+Reader::finished() const
+{
+	return _ifs.eof();
 }

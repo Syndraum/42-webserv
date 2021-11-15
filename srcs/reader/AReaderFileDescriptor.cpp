@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/08 22:34:42 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/15 13:27:31 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,16 +184,24 @@ AReaderFileDescriptor::fill_buffer()
 // 	return (get_buffer());
 // }
 
-void
+int
 AReaderFileDescriptor::write_body(int fd)
 {
-	int n_read = 0;
+	int n_read = _size;
+	int static count = 0;
 
-	write(fd, _buffer, _size);
-	while ((n_read = next_read()) > 0){
-		std::cout << "## (" << n_read << ") " << _buffer << std::endl;
-		write (fd, _buffer, n_read);
+	if (count == 0)
+		write(fd, _buffer, _size);
+	else
+	{
+		if ((n_read = next_read()) <= 0)
+			_reset_buffer();
+		else
+		{
+			std::cout << "## (" << n_read << ") " << _buffer << std::endl;
+			write (fd, _buffer, n_read);
+		}
 	}
-	_reset_buffer();
-	// dup2(_fd, fd);
+	++count;
+	return (n_read);
 }

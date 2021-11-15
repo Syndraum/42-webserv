@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/03 14:02:56 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/15 13:13:36 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ class AReaderFileDescriptor
 		int			next_read(size_t size = BUFFER_SIZE - 1);
 		int			fill_buffer();
 		// std::string	get_next_buffer(int index = BUFFER_SIZE - 1);
-		void		write_body(int fd);
+		int			write_body(int fd);
 };
 
 #endif
