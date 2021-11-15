@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/09 16:53:50 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/12 18:24:08 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,14 +323,19 @@ Server::set_client_max_body_size(size_t const limit)
 Server &
 Server::set_path_error_page(std::string const & path)
 {
-	_path_error_page = path;
+	if (!path.empty() && path[path.size() - 1] == '/')
+		_path_error_page = path.substr(0, path.size() - 1);
+	else
+		_path_error_page = path;
 	return(*this);
 }
 
 Server &
 Server::set_upload_path(std::string const & path)
 {
-	if (path[path.size() - 1] == '/')
+	// if (path.find(".."))
+	// 	throw std::exception();
+	if (!path.empty() && path[path.size() - 1] == '/')
 		_upload_path = path.substr(0, path.size() - 1);
 	else
 		_upload_path = path;
