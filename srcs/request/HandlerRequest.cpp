@@ -1,15 +1,15 @@
 #include "HandlerRequest.hpp"
 
-HandlerRequest::HandlerRequest(
-	BuilderRequest &	builder
-	) :
-		_client(0),
-		_builder(builder)
+HandlerRequest::HandlerRequest(BuilderRequest &	builder) :
+	_client(0),
+	_builder(builder),
+	_account(0)
 {}
 
 HandlerRequest::HandlerRequest(HandlerRequest const & src) :
 	_client(src._client),
-	_builder(src._builder)
+	_builder(src._builder),
+	_account(src._account)
 {}
 
 HandlerRequest::~HandlerRequest(void)
@@ -22,6 +22,7 @@ HandlerRequest::operator=(HandlerRequest const & rhs)
 {
 	if (this != &rhs){
 		_client = rhs._client;
+		_account = rhs._account;
 	}
 	return *this;
 }
@@ -57,63 +58,38 @@ HandlerRequest::get_client_socket()
 	return (_client->get_socket_struct());
 }
 
+size_t
+HandlerRequest::get_account() const
+{
+	return (_account);
+}
+
 int
 HandlerRequest::handle(Client & client, servers & v_servers)
 {
 	set_client(&client);
-	try{
-		this->parse();
-		if (!is_complete())
-			return (-1);
-		this->check_host(v_servers);
-		check_body_size(*_client);
-		check_method_exist(*_client);
-		if (get_server().is_directory(get_request()))
-			this->set_index();
-		std::string extension = Extension::get_extension(get_request().get_path());
-		if (_client->get_server().get_return_list().size())
-			_handler_response.set_strategy(new StrategyReturn(get_server().get_return_list().front()));
-		else if (get_server().has_cgi(extension))
-			_handler_response.set_strategy(new StrategyCGI(get_server().get_cgi(extension)));
-		else
-		{
-			if (get_server().is_directory(get_request()))
-			{
-				if (!get_server().get_auto_index())
-					_handler_response.set_strategy(new StrategyError(403));
-				else
-					_handler_response.set_strategy(new StrategyIndex());
-			}
-			else
-				_handler_response.set_strategy(new StrategyAccept());
-		}
-		
-	}
-	catch (BuilderMessage::BadRequest &e)
+	// std::cout << "State : " << _client->get_state() << std::endl;
+	switch (_client->get_state())
 	{
-		_handler_response.set_strategy(new StrategyError(400));
+	case Client::READ_HEADER:
+		read_header(v_servers);
+		// std::cout << "END READ" << std::endl;
+		break;
+	case Client::STRATEGY:
+		_client->do_strategy(*_client);
+		break;
+	case Client::SEND_RESPONSE:
+		_client->send(_client->get_socket());
+		break;
+	case Client::END:
+		_client->clean_reponse();
+		get_request().reset();
+		_account++;
+		return (_client->get_socket());
+	default:
+		break;
 	}
-	catch (BuilderRequest::BadHttpVersion &e)
-	{
-		_handler_response.set_strategy(new StrategyError(505));
-	}
-	catch (BuilderRequest::MethodNotImplemented &e)
-	{
-		_handler_response.set_strategy(new StrategyError(501));
-	}
-	catch (BodyTooLong &e)
-	{
-		_handler_response.set_strategy(new StrategyError(413));
-	}
-	catch (MethodNotAllowed &e)
-	{
-		_handler_response.set_strategy(new StrategyError(405));
-	}
-	_handler_response.do_strategy(*_client);
-	_handler_response.send(_client->get_socket());
-	_handler_response.reset();
-	get_request().reset();
-	return (_client->get_socket());
+	return (-1);
 }
 
 void 
@@ -148,6 +124,59 @@ HandlerRequest::parse()
 		// 	get_client_socket().get_reader()._reset_buffer();
 			gnl_ret = 0;
 		}
+	}
+}
+
+void
+HandlerRequest::read_header(servers & v_servers)
+{
+	try{
+		this->parse();
+		if (!is_complete())
+			return;
+		this->check_host(v_servers);
+		check_body_size(*_client);
+		check_method_exist(*_client);
+		if (get_server().is_directory(get_request()))
+			this->set_index();
+		std::string extension = Extension::get_extension(get_request().get_path());
+		if (_client->get_server().get_return_list().size())
+			_client->set_strategy(new StrategyReturn(get_server().get_return_list().front()));
+		else if (get_server().has_cgi(extension))
+			_client->set_strategy(new StrategyCGI(get_server().get_cgi(extension)));
+		else
+		{
+			if (get_server().is_directory(get_request()))
+			{
+				if (!get_server().get_auto_index())
+					_client->set_strategy(new StrategyError(403));
+				else
+					_client->set_strategy(new StrategyIndex());
+			}
+			else
+				_client->set_strategy(new StrategyAccept());
+		}
+		
+	}
+	catch (BuilderMessage::BadRequest &e)
+	{
+		_client->set_strategy(new StrategyError(400));
+	}
+	catch (BuilderRequest::BadHttpVersion &e)
+	{
+		_client->set_strategy(new StrategyError(505));
+	}
+	catch (BuilderRequest::MethodNotImplemented &e)
+	{
+		_client->set_strategy(new StrategyError(501));
+	}
+	catch (BodyTooLong &e)
+	{
+		_client->set_strategy(new StrategyError(413));
+	}
+	catch (MethodNotAllowed &e)
+	{
+		_client->set_strategy(new StrategyError(405));
 	}
 }
 

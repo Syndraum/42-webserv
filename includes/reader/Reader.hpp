@@ -15,6 +15,11 @@
 
 # include <string>
 # include <fstream>
+# include <iostream>
+
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 256
+#endif
 
 class Reader
 {
@@ -40,6 +45,9 @@ class Reader
 
 		std::ifstream &	get_ifs();
 		int				get_length() const;
+		void			set_length();
+		std::string		get_buffer();
+		bool			finished() const;
 };
 
 #endif

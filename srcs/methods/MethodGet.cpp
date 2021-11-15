@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodGet.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:20 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:50:21 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/12 22:06:38 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ MethodGet::action(const Request & request, Response & response, Server & server,
 	{
 		response
 			.set_code(200)
-			.set_body_from_file(request.get_path().c_str())
+			// .set_body_from_file(request.get_path())
+			.set_filename(request.get_path())
 			.add_header(
 				"Content-type", 
 				mine
@@ -45,6 +46,7 @@ MethodGet::action(const Request & request, Response & response, Server & server,
 	{
 		response.set_error(404, server.get_path_error_page());
 	}
+	finished();
 }
 
 AMethod *

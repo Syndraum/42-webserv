@@ -11,6 +11,7 @@ public:
 	StrategyIndex(StrategyIndex const & src);
 	virtual ~StrategyIndex(void);
 	StrategyIndex &	operator=(StrategyIndex const &rhs);
+	IResponseStrategy *	clone() const;
 
 private:
 	virtual Response * create(Client &);

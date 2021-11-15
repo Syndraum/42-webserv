@@ -6,11 +6,21 @@
 # include "Server.hpp"
 # include "Request.hpp"
 
+class Client;
+
 class IResponseStrategy
 {
+protected:
+	bool		_finish;
+
+	IResponseStrategy();
+	IResponseStrategy(IResponseStrategy const & src);
+	IResponseStrategy &			operator=(IResponseStrategy const &rhs);
 public:
 	virtual ~IResponseStrategy() {}
 	virtual Response * create(Client &) = 0;
+	bool	is_finish() const;
+	virtual IResponseStrategy *	clone() const = 0;
 };
 
 #endif
