@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/15 13:27:31 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/15 21:07:20 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,21 +187,6 @@ AReaderFileDescriptor::fill_buffer()
 int
 AReaderFileDescriptor::write_body(int fd)
 {
-	int n_read = _size;
-	int static count = 0;
-
-	if (count == 0)
-		write(fd, _buffer, _size);
-	else
-	{
-		if ((n_read = next_read()) <= 0)
-			_reset_buffer();
-		else
-		{
-			std::cout << "## (" << n_read << ") " << _buffer << std::endl;
-			write (fd, _buffer, n_read);
-		}
-	}
-	++count;
-	return (n_read);
+	write (fd, _buffer, _size);
+	return(next_read());
 }
