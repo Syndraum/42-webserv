@@ -51,7 +51,6 @@ StrategyCGI::create(Client & client)
 {
 	Response *				response		= client.get_response();
 
-	std::cout << "state : " << _state << std::endl;
 	if (response == 0)
 		response = new Response();
 	try
@@ -166,7 +165,7 @@ StrategyCGI::init(Client & client)
 {
 	this->_prepare(client);
 	_request.set_body(client.get_request().get_body());
-	_request.debug();
+	// _request.debug();
 	_cgi.start(_request, client.get_full_path(), _pipe);
 	_state = WRITE_BODY;
 }
@@ -175,9 +174,11 @@ void
 StrategyCGI::write_body(Client & client)
 {
 	AReaderFileDescriptor &	reader	= client.get_socket_struct().get_reader();
+	int n_read = 0;
 
-	reader.write_body(_pipe.get_in()[1]);
-	_state = PARSE_HEADER;
+	n_read = reader.write_body(_pipe.get_in()[1]);
+	if (n_read <= 0)
+		_state = PARSE_HEADER;
 }
 
 void
