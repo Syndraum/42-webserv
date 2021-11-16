@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Reader.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:36 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/01 15:50:37 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/16 12:58:04 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 Reader::Reader(void) :
 _path(),
 _ifs(),
-_length()
+_length(0),
+_line()
 {}
 
 Reader::Reader(const std::string & path) :
 _path(path),
 _ifs(),
-_length(0)
+_length(0),
+_line()
 {}
 
 Reader::Reader(Reader const & src)
@@ -79,7 +81,8 @@ Reader::to_string(std::string & str)
 void
 Reader::close()
 {
-	_ifs.close();
+	if (_ifs.is_open())
+		_ifs.close();
 }
 
 void

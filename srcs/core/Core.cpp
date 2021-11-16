@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/15 23:21:50 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 12:54:31 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ Core::start()
 	{
 		_pfdh.watch();
 		_pfdh.handle(_servers, _client);
-		// if (hr.get_account() >= 2)
+		// if (hr.get_account() >= 1000)
 		// 	run = false;
 	}
 }

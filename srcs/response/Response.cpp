@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/15 23:20:30 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:01:43 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ Response::Response(int code) :
 Message(),
 _version(Info::http_revision),
 _code(code),
-_state(WRITE_HEADER)
+_state(WRITE_HEADER),
+_file_reader()
 {}
 
 Response::Response(Response const & src)
@@ -96,7 +97,7 @@ Response::send_header(int fd)
 {
 	std::string response = get_header();
 
-	write(fd, response.data(), response.size());
+	send(fd, response.data(), response.size(), 0);
 
 	_state = Response::WRITE_BODY;
 }
@@ -105,6 +106,8 @@ void
 Response::send_body(int fd)
 {
 	std::string response = get_response();
+	// if (response.size() == 0)
+	// 	std::cout << "EMPTY BODY ?" << std::endl;
 
 	// std::cout << response << " " << response.size() << std::endl;
 
@@ -118,8 +121,8 @@ Response::send_body(int fd)
 
 	if (_file_reader.finished() || !_body.empty() || send_res < (ssize_t)1)
 	{
-		if (send_res < (ssize_t)1)
-			std::cout << response << " " << response.size() << "send_res :" << send_res << std::endl;
+		// if (send_res < (ssize_t)1)
+		// 	std::cout << response << " " << response.size() << "send_res :" << send_res << std::endl;
 		// std::cout << "finished" << std::endl;
 		_file_reader.close();
 		_state = Response::END;
@@ -189,12 +192,12 @@ Response::set_error(int code, std::string const & path_error_file)
 			.set_body(m_template.str())
 			.clear_header()
 			.add_header("Content-Type", "text/html");
-
 	}
 	catch (std::exception &e)
 	{
 		this->set_code(code).clear_header();
 	}
+	file_reader.close();
 	return *this;
 }
 

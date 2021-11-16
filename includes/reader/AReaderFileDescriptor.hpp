@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/15 13:13:36 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 11:10:08 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <exception>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 256
+#  define BUFFER_SIZE 1025
 # endif
 
 class AReaderFileDescriptor
