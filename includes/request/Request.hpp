@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/02 15:51:43 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/16 13:17:16 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,7 @@ class Request : public Message
 		void										set_uri(std::string const &rhs);
 		void										set_version(std::string const &rhs);
 
-		// void										action(Response &);
 		void										reset();
-
-//		void										print_debug() const;
 };
 
 # include "AMethod.hpp"

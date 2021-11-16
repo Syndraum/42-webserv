@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/14 21:24:54 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:18:14 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,7 @@ CGI::start(Message & request, const std::string & script_path, Pipe & pipes)
 	int	*			pipe_err	= pipes.get_err();
 	int	*			pipe_in		= pipes.get_in();
 	Array			a_env;
-	// char **		env;
 
-	// env = create_env(request.get_headers());
 	create_env(request.get_headers(), a_env);
 	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1 || pipe(pipe_in) == -1)
 		throw (std::exception()); // specify
@@ -104,13 +102,11 @@ CGI::start(Message & request, const std::string & script_path, Pipe & pipes)
 	{
 		if (dup2(pipe_out[1], 1) == -1 || dup2(pipe_err[1], 2) == -1 || dup2(pipe_in[0], 0) == -1)
 			_exit(2);
-			// throw (std::exception()); // specify
 		close(pipe_out[0]);
 		close(pipe_err[0]);
 		close(pipe_in[1]);
 		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, a_env.data()) == -1){
 			_exit(1);
-			// throw (std::exception()); // specify
 		}
 		_exit(0);
 	}
@@ -127,11 +123,6 @@ void
 CGI::print() const
 {
 	std::cout << "exec name : " << _exec_name << std::endl;
-//	std::cout << "_arg : " << _arg << std::endl;
-
-//	int i = -1;
-//	while (_env[++i])
-//		std::cerr << "_envi[i]: " << _env[i] << std::endl;
 	std::cout << "CGI params : " << std::endl;
 	for (env_map::const_iterator it = _cgi_env.begin(); it != _cgi_env.end(); it++)
 	{

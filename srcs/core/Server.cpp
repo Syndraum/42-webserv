@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/12 18:24:08 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:27:20 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ Server &
 Server::add_index(std::string const &index)
 {
 	_index.push_back(index);
-	// std::cerr << "INDEX LIST SIZE : " << _index.size() << std::endl; //W
 	return(*this);
 }
 
@@ -235,7 +234,6 @@ Server::get_index_page(const Request & request)
 	{
 		while ((entry = readdir(directory)) != NULL){
 			ss << "<a href=\"" << request.get_path();
-			// std::cout << "last : " << request.get_path()[request.get_path().length() - 1] << std::endl;
 			if (request.get_path()[request.get_path().length() - 1] != '/')
 				ss << "\\";
 			ss << entry->d_name << "\">" << entry->d_name << "</a>\n";
@@ -333,8 +331,6 @@ Server::set_path_error_page(std::string const & path)
 Server &
 Server::set_upload_path(std::string const & path)
 {
-	// if (path.find(".."))
-	// 	throw std::exception();
 	if (!path.empty() && path[path.size() - 1] == '/')
 		_upload_path = path.substr(0, path.size() - 1);
 	else

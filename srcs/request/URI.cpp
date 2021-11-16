@@ -113,7 +113,6 @@ URI::set_uri(const std::string & uri)
 	}
 	if (query_begin != _content.length())
 		_query_string = _content.substr(query_begin + 1, _content.length() - query_begin);
-	// debug();
 }
 
 void

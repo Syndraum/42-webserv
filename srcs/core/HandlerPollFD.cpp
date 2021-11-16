@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerPollFD.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:58:45 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/15 19:29:04 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:23:38 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,17 +97,6 @@ HandlerPollFD::init(std::vector<Server> & servers)
 	}
 }
 
-// void
-// HandlerPollFD::erase(void)
-// {
-// 	for (pollfd_vector::iterator it = _pfd.begin(); it != _pfd.end(); it++)
-// 		if (it->revents == POLLOUT)
-// 		{
-// 			_pfd.erase(it);
-// 			return ;
-// 		}
-// }
-
 void
 HandlerPollFD::remove(int socket)
 {
@@ -137,12 +126,10 @@ HandlerPollFD::handle(std::vector<Server> & servers, std::vector<Client> & clien
 				Client & client = *find_client_by_socket(clients, _pfd[i].fd);
 				if (_hr->handle(client, servers) == -1)
 				{
-					// std::cout << "AWAIT on " << _pfd[i].fd << std::endl;
 					_pfd[i].revents = 0;
 				}
 				else
 				{
-					// std::cout << "close fd " << client.get_socket() << std::endl;
 					close(client.get_socket());
 					remove(client.get_socket());
 					clients.erase(std::find<std::vector<Client>::iterator, Client>(clients.begin(), clients.end(), client));
@@ -215,9 +202,7 @@ HandlerPollFD::_accept_connection(std::vector<Client> & clients, int server_sock
 	setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
 	std::cout << "[server socket : " << server_socket << "] New connection, " << new_client.get_socket_struct().get_ip() << " accept on socket "<< new_socket << std::endl;
 	new_client.get_socket_struct().set_socket(new_socket);
-	// std::cout << "Adding to list of sockets as " << clients.size() << std::endl;
 	_add_clients_pfd(new_socket, POLLIN | POLLOUT);
-	std::cout << "the previous socket is : " << clients.begin()->get_socket_struct().get_socket() << std::endl;
 	return (new_socket);
 }
 

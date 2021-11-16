@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:20 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/12 22:06:38 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:30:28 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,10 @@ MethodGet::action(const Request & request, Response & response, Server & server,
 
 	if (mine.empty())
 		mine = "application/octet-stream";
-	// std::cout << "ext : " << ext << std::endl;
 	try
 	{
 		response
 			.set_code(200)
-			// .set_body_from_file(request.get_path())
 			.set_filename(request.get_path())
 			.add_header(
 				"Content-type", 

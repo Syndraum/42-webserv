@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 16:05:23 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/15 21:28:05 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:31:52 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,9 @@ MethodPost::action(const Request & request, Response & response, Server & server
 	Extension *	extension	= Extension::get_instance();
 	std::string ext			= Extension::get_extension(request.get_path().c_str());
 	std::string mine		= extension->get_reader()[ext];
-	// Upload		uploader	= Upload(reader);
 
 	if (has_upload(request))
 	{
-		// std::cout << "adress :" << this << std::endl;
 		try
 		{
 			_uploader.set_reader(reader)->upload(server, request);
@@ -54,7 +52,6 @@ MethodPost::action(const Request & request, Response & response, Server & server
 		}
 		if (_uploader.get_state() != Upload::END)
 			return ;
-		// uploader.upload(server, request);
 	}
 
 	if (mine.empty())
@@ -63,7 +60,6 @@ MethodPost::action(const Request & request, Response & response, Server & server
 	{
 		response
 			.set_code(200)
-			// .set_body_from_file(request.get_path().c_str())
 			.set_filename(request.get_path())
 			.add_header(
 				"Content-type", 
