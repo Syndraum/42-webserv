@@ -27,10 +27,8 @@ Client &
 Client::operator=(Client const & rhs)
 {
 	clean_reponse();
-	// std::cout << "COPY" << std::endl;
 	if (this != &rhs)
 	{
-		// std::cout << "ACCEPT" << std::endl;
 		_request = rhs._request;
 		_server = rhs._server;
 		_socket = rhs._socket;
@@ -38,7 +36,7 @@ Client::operator=(Client const & rhs)
 		if (rhs._strategy)
 			_strategy = rhs._strategy->clone();
 		if (rhs._response)
-		_response = new Response(*(rhs._response)); //
+			_response = new Response(*(rhs._response));
 		_state = rhs._state;
 	}
 	return *this;
@@ -139,15 +137,10 @@ Client::send(int fd)
 {
 	if (_response == 0)
 		throw std::exception();
-
-	// std::cout << "Response State : " << _response->get_state() << std::endl;
-
-
 	switch (_response->get_state())
 	{
 	case Response::WRITE_HEADER:
 		_response->send_header(fd);
-		// std::cout << "END READ" << std::endl;
 		break;
 	case Response::WRITE_BODY:
 		_response->send_body(fd);

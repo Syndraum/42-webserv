@@ -17,7 +17,6 @@ private:
 	vector				_categories;
 	std::string			_key_name;
 	map					_content;
-	// std::string			_empty;
 public:
 
 	CsvReader(void);

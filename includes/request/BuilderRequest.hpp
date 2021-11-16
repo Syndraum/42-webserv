@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BuilderRequest.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:20 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/28 18:52:03 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:16:55 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ class BuilderRequest : public BuilderMessage
 		int						_add_method(std::string line);
 		int						_add_path(std::string line);
 		int						_add_version(std::string line);
-		// void					_parse_headers(std::string line);
 	public:
 
 		BuilderRequest(void);
@@ -42,8 +41,6 @@ class BuilderRequest : public BuilderMessage
 
 		void					parse_request(std::string &);
 		virtual void			set_message(Message *);
-		// Request *				get_request() const;
-		// void					set_request(Request *);
 		void					set_library(MethodLibrary *);
 
 		bool					is_first_line() const;

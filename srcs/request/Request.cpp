@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/11 16:28:56 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/02 15:53:14 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/16 13:38:49 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,6 @@ void
 Request::set_version(std::string const &rhs)
 { _version = rhs; }
 
-// void
-// Request::action(Response & response)
-// {
-// 	if (!_method) //if method == NULL
-// 		throw NoMethod();
-// 	_method->action(*this, response);
-// }
 
 void
 Request::reset()
@@ -102,14 +95,3 @@ Request::reset()
 	_version = "";
 	_headers.clear();
 }
-
-//void
-//Request::print_debug() const //TMP
-//{
-//	cerr << "METHOD CODE : " << _method << " PATH : \"" << _path << "\" " << _version << endl;
-//    cerr << "HEADERS : " << endl;
-//
-//    for (auto& it: _headers)
-//        cout << "\"" << it.first << "\" - \"" << it.second << "\"" << endl;
-//
-//}

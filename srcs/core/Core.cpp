@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/15 23:21:50 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:22:18 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,9 @@ Core::init(int argc, char * argv[], char *env[])
 		BuilderCore builder_core(this);
 		builder_core.build(reader.get_ifs());
 		builder_core.parse_mime_type();
-		// builder_core.print_debug(); // 
 	}
 	catch(const std::exception& e)
 	{
-		// std::cerr << e.what() << '\n';
 		return (3);
 	}
 	Info::env = env;
@@ -87,6 +85,7 @@ Core::start()
 	bool				run	= true;
 	HandlerRequest		hr(_br);
 	std::vector<int>	active_socket;
+
 	try
 	{
 		for (size_t i = 0; i < _servers.size(); i++)
@@ -97,14 +96,13 @@ Core::start()
 		std::cerr << "Error: " << e.what() << '\n';
 		return ;
 	}
-// print();
 	_pfdh.init(_servers);
 	_pfdh.set_hr(hr);
 	while (run)
 	{
 		_pfdh.watch();
 		_pfdh.handle(_servers, _client);
-		// if (hr.get_account() >= 2)
+		// if (hr.get_account() >= 1000)
 		// 	run = false;
 	}
 }
@@ -193,15 +191,6 @@ Core::print() const
 	if (_servers.size() == 0)
 		std::cout << "no Server found \n";
 }
-
-// void
-// Core::remove_client(client_vector::iterator it)
-// {
-// 	_pfdh.erase();
-// 	close(it->get_socket());
-// 	_client.erase(it);
-// 	std::cout << "Disconnected" << std::endl;
-// }
 
 AMethod *
 Core::get_method(std::string const & name) const

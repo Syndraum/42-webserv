@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:19:20 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/15 23:20:41 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:19:06 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ HandlerResponseCGI::parse()
 	{
 		if (gnl_ret == -1)
 			return ;
-		// std::cout << "CGI line: " << line << std::endl;
 		line += "\r";
 		try
 		{
@@ -95,14 +94,11 @@ HandlerResponseCGI::parse()
 		{
 			if (!_response->has_header("Content-Length"))
 			{
-				// std::cout << "No Content-Length" << std::endl;
 				_reader.read_until_end(line);
 				_response->set_body(line);
 			}
 			else
 			{
-				// std::cout << "Content-Length : " << _response->get_header("Content-Length") << std::endl;
-
 				_reader.read_body(line, std::atoi(_response->get_header("Content-Length").c_str()));
 				_response->set_body(line);
 			}

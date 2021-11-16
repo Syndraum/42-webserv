@@ -68,12 +68,10 @@ int
 HandlerRequest::handle(Client & client, servers & v_servers)
 {
 	set_client(&client);
-	// std::cout << "State : " << _client->get_state() << std::endl;
 	switch (_client->get_state())
 	{
 	case Client::READ_HEADER:
 		read_header(v_servers);
-		// std::cout << "END READ" << std::endl;
 		break;
 	case Client::STRATEGY:
 		_client->do_strategy(*_client);
@@ -103,25 +101,10 @@ HandlerRequest::parse()
 	{
 		if (gnl_ret == -1)
 			return ;
-		// std::cout << "line: " << line << std::endl;
 		line += "\r";
 		_builder.parse_request(line);
 		if (get_request().get_header_lock())
 		{
-		// 	if (!get_request().has_header("Content-Length"))
-		// 	{
-		// 		// std::cout << "No Content-Length" << std::endl;
-		// 		get_client_socket().get_reader().read_until_end(line);
-		// 		//std::cout << "_buffer: " << _buffer << std::endl;
-		// 	}
-		// 	else
-		// 	{
-		// 		// std::cout << "Content-Length : " << get_request().get_header("Content-Length") << std::endl;
-		// 		get_client_socket().get_reader().read_body(line, std::atoi(get_request().get_header("Content-Length").c_str()));
-		// 		get_request().set_body(line);
-		// 	}
-		// 	get_request().set_body_lock(true);
-		// 	get_client_socket().get_reader()._reset_buffer();
 			gnl_ret = 0;
 		}
 	}
@@ -256,7 +239,6 @@ HandlerRequest::check_method_exist(Client const & client) const
 
 	for (std::list<AMethod *>::const_iterator it = methods.begin(); it != ite; it++)
 	{
-		// std::cout << "name : " << (*it)->get_name() << std::endl;
 		if (request.get_method()->get_name() == (*it)->get_name())
 			return ;
 	}

@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/15 23:20:30 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:42:44 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ Response::Response(int code) :
 Message(),
 _version(Info::http_revision),
 _code(code),
-_state(WRITE_HEADER)
+_state(WRITE_HEADER),
+_file_reader()
 {}
 
 Response::Response(Response const & src)
@@ -59,7 +60,6 @@ Response::get_header()
 		ss << it->first << ": " << it->second << "\r\n";
 	}
 	ss << "\r\n";
-	// ss << _body;
 	return ss.str();
 }
 
@@ -70,24 +70,6 @@ Response::get_response()
 	{
 		return _body;
 	}
-	// std::stringstream ss;
-
-	// ss << _version << " " << _code << " " << get_message(_code) << "\r\n";
-	// add_header("Content-Length", _body.length());
-	// add_header("Server", Info::server_name + "/" + Info::version );
-	// for (header_map::iterator it = _headers.begin(); it != _headers.end(); it++)
-	// {
-	// 	ss << it->first << ": " << it->second << "\r\n";
-	// }
-	// ss << "\r\n";
-	// ss << _body;
-	// return ss.str();
-
-	// if (!_file_reader.get_ifs().is_open())
-	// {
-	// 	// throw error;
-	// 	// _file_reader.open();
-	// }
 	return _file_reader.get_buffer();
 }
 
@@ -96,7 +78,7 @@ Response::send_header(int fd)
 {
 	std::string response = get_header();
 
-	write(fd, response.data(), response.size());
+	send(fd, response.data(), response.size(), 0);
 
 	_state = Response::WRITE_BODY;
 }
@@ -104,23 +86,10 @@ Response::send_header(int fd)
 void
 Response::send_body(int fd)
 {
-	std::string response = get_response();
-
-	// std::cout << response << " " << response.size() << std::endl;
-
-	// write(fd, response.data(), response.size());
-
-	ssize_t send_res = send(fd, response.data(), response.size(), MSG_NOSIGNAL);
-	// ssize_t write_res = write(fd, response.data(), response.size());
-
-	// std::cout << response << " " << response.size() << "send_res :" << send_res << std::endl;
-	// std::cout << response << " " << response.size() << "write_res :" << write_res << std::endl;
-
+	std::string	response = get_response();
+	ssize_t		send_res = send(fd, response.data(), response.size(), MSG_NOSIGNAL);
 	if (_file_reader.finished() || !_body.empty() || send_res < (ssize_t)1)
 	{
-		if (send_res < (ssize_t)1)
-			std::cout << response << " " << response.size() << "send_res :" << send_res << std::endl;
-		// std::cout << "finished" << std::endl;
 		_file_reader.close();
 		_state = Response::END;
 	}
@@ -167,7 +136,6 @@ Response::set_filename(const std::string & filename)
 	if (_file_reader.get_ifs().fail())
 		throw std::exception();
 	_file_reader.set_length();
-	// std::cout << "file is open" << std::endl;
 	return *this;
 }
 
@@ -189,12 +157,12 @@ Response::set_error(int code, std::string const & path_error_file)
 			.set_body(m_template.str())
 			.clear_header()
 			.add_header("Content-Type", "text/html");
-
 	}
 	catch (std::exception &e)
 	{
 		this->set_code(code).clear_header();
 	}
+	file_reader.close();
 	return *this;
 }
 

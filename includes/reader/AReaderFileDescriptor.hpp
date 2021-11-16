@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/15 13:13:36 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:16:32 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <exception>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 256
+#  define BUFFER_SIZE 1025
 # endif
 
 class AReaderFileDescriptor
@@ -62,7 +62,6 @@ class AReaderFileDescriptor
 		virtual int	_read(void *, int n_read = BUFFER_SIZE - 1) = 0;
 		int			next_read(size_t size = BUFFER_SIZE - 1);
 		int			fill_buffer();
-		// std::string	get_next_buffer(int index = BUFFER_SIZE - 1);
 		int			write_body(int fd);
 };
 

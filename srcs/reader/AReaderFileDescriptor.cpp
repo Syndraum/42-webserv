@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/15 21:07:20 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 13:29:50 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ AReaderFileDescriptor::operator=(AReaderFileDescriptor const & rhs)
 void
 AReaderFileDescriptor::_reset_buffer(void)
 {
-	// std::cout << "----------RESET BUFFER--------" << std::endl;
 	for (int i = 0; i < BUFFER_SIZE; i++)
 		_buffer[i] = '\0';
 	_size = 0;
@@ -82,7 +81,6 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 	line = "";
 	while (run)
 	{
-		// std::cout << "##BUFF(" << _size << ") : " << std::string(_buffer, _size) << std::endl;
 		tmp += std::string(_buffer, _size);
 		p_eol = tmp.find("\r\n");
 
@@ -94,7 +92,6 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 		else if (p_eol == std::string::npos)
 		{
 			ret = next_read();
-			// std::cout << "ret : " << ret << std::endl;
 			if (ret == -1){
 				_reset_buffer();
 				return (ret);
@@ -114,7 +111,6 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 		_buffer[tmp.length() - p_eol - 2] = 0;
 		_size = tmp.length() - p_eol - 2;
 	}
-	// std::cout << "##LINE : " << line << std::endl;
 	return (ret);
 }
 
@@ -134,8 +130,6 @@ void
 AReaderFileDescriptor::read_until_end(std::string & line)
 {
 	get_next_line(line);
-
-//	std::cout << "temp: " << temp << std::endl;
 }
 
 int
@@ -174,15 +168,6 @@ AReaderFileDescriptor::fill_buffer()
 		_size += ret;
 	return (ret);
 }
-
-// std::string
-// AReaderFileDescriptor::get_next_buffer(int index)
-// {
-// 	_buffer[0] = _buffer[index];
-// 	_buffer[index + 1] = 0;
-// 	_read();
-// 	return (get_buffer());
-// }
 
 int
 AReaderFileDescriptor::write_body(int fd)

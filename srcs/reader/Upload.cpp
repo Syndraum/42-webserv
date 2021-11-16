@@ -47,7 +47,6 @@ Upload::upload(Server & server, const Request & request)
 {
 	if(_reader == 0)
 		throw InvalidReader();
-	// std::cout << "adress :" << this << std::endl;
 	if (_boundary == "")
 	{
 		set_boundary(request);
@@ -56,24 +55,20 @@ Upload::upload(Server & server, const Request & request)
 		_reader->fill_buffer();
 		_buffer = _reader->get_buffer();
 	}
-	// debug();
-	// while (_state != END)
-	// {
-		switch (_state)
-		{
-		case FIND:
-			find();
-			break;
-		case HEADER:
-			header(server);
-			break;
-		case WRITE:
-			write();
-			break;
-		default:
-			break;
-		}
-	// }
+	switch (_state)
+	{
+	case FIND:
+		find();
+		break;
+	case HEADER:
+		header(server);
+		break;
+	case WRITE:
+		write();
+		break;
+	default:
+		break;
+	}
 }
 
 void
@@ -132,7 +127,6 @@ Upload::header(const Server & server)
 {
 	size_t position = 0;
 
-	// debug();
 	while(_buffer[0] != '\r')
 	{
 		position = _buffer.find(": ");
@@ -141,12 +135,9 @@ Upload::header(const Server & server)
 		_message.add_header(_buffer.substr(0, position), _buffer.substr(position + 2, _buffer.find('\n') - (position + 2)));
 		_position = _buffer.find('\n') + 1;
 		next_position();
-		// debug();
 	}
 	_position = 2;
 	next_position();
-	// _message.debug();
-	// debug();
 	if (_message.has_header("Content-Type"))
 	{
 		set_filename(_message);
@@ -173,17 +164,14 @@ Upload::find()
 			next_position();
 			_state = HEADER;
 		}
-		// debug();
 	}
 }
 
 void
 Upload::write()
 {
-	// debug();
 	if (find_bound())
 	{
-		// std::cout << "FIND - BOUND" << std::endl;
 		_file << _buffer.substr(0, _position - 2);
 		_file.close();
 		_filename = "";
@@ -192,7 +180,6 @@ Upload::write()
 	}
 	else
 	{
-		// std::cout << "FIND - NOT BOUND" << std::endl;
 		_position = _buffer.size() - _boundary.size();
 		_file << _buffer.substr(0, _position);
 		next_position();
