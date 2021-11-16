@@ -14,9 +14,18 @@ Extension::Extension(void) : _csv_reader("./config/mine_type.csv")
 			;
 		_csv_reader.close();
 	}
-	catch(const std::exception& e)
+	catch (std::exception& e)
 	{
-		std::cerr << "Warning: mine_type ressource is missing or incorrect" << std::endl;
+		try
+		{
+			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+			(void)e_exit;
+			throw (ExitException());
+		}
+		catch (std::bad_cast &bc)
+		{
+			std::cerr << "Warning: mine_type ressource is missing or incorrect" << std::endl;
+		}
 	}
 }
 

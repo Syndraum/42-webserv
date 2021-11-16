@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/09 16:25:21 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/16 16:01:05 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class BuilderCore
 		std::string		_error_msg;
 
 		bool			_b_worker;
-		bool			_b_server_name; //?
+		bool			_b_server_name;
 		bool			_b_server_root;
 		bool			_b_server_path_error_page;
 		bool			_b_server_upload_path;

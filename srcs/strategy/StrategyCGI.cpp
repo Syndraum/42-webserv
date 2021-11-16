@@ -76,12 +76,21 @@ StrategyCGI::create(Client & client)
 			break;
 		}
 	}
-	catch(const std::exception& e)
+	catch (std::exception& e)
 	{
-		std::cerr << "Bad CGI Response" << std::endl;
-		response->set_error(500, client.get_server().get_path_error_page());
-		_state = END;
-		_finish = true;
+		try
+		{
+			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+			(void)e_exit;
+			throw (ExitException());
+		}
+		catch (std::bad_cast &bc)
+		{
+			std::cerr << "Bad CGI Response" << std::endl;
+			response->set_error(500, client.get_server().get_path_error_page());
+			_state = END;
+			_finish = true;
+		}
 	}
 	return (response);
 }
@@ -101,9 +110,18 @@ StrategyCGI::handle_status(const Message & message, Response & response, Server 
 				response.set_error(response.get_code(), server.get_path_error_page());
 			}
 		}
-		catch(const std::exception& e)
+		catch (std::exception& e)
 		{
-			response.set_error(500, server.get_path_error_page());
+			try
+			{
+				ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+				(void)e_exit;
+				throw (ExitException());
+			}
+			catch (std::bad_cast &bc)
+			{
+				response.set_error(500, server.get_path_error_page());
+			}
 		}
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/09 16:28:57 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/16 16:54:32 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ BuilderCore::get_builded_core() const
 void
 BuilderCore::erase_server_bool()
 {
-	_b_server_name = false; // erase?
+	_b_server_name = false;
 	_b_server_root = false;
 	_b_server_path_error_page = false;
 	_b_server_upload_path = false;
@@ -216,7 +216,7 @@ BuilderCore::parse_server_listen(Server *server)
 		{
 			server->add_listen(port, ip, active);
 		}
-		catch(const Server::PortAlreadyUsed& e)
+		catch (const Server::PortAlreadyUsed& e)
 		{
 			std::cerr << "Error : line " << line_count() <<" : port already in use"<< std::endl;
 			throw e;
@@ -237,7 +237,6 @@ BuilderCore::parse_server_index(Server *server)
 	while (_line[_idx] && _line[_idx] != ';' && _line[_idx] != '}')
 	{
 		index = next_word_skip();
-		// std::cerr << "Index : " << index << std::endl; 
 		server->add_index(index);
 	}
 	check_semicolon("index");
@@ -268,7 +267,7 @@ BuilderCore::parse_server_allow_methods(Server *server, Core *core)
 }
 
 void
-BuilderCore::parse_server_name(Server *server) // multiple server names? else add bool management
+BuilderCore::parse_server_name(Server *server)
 {
 	std::string arg = next_word_skip();
 	if (!arg.length())

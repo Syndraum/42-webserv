@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodPost.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 16:05:23 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/16 13:31:52 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 17:11:18 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,20 @@ MethodPost::action(const Request & request, Response & response, Server & server
 		{
 			_uploader.set_reader(reader)->upload(server, request);
 		}
-		catch(const std::exception& e)
+		catch (std::exception& e)
 		{
-			response.set_error(500, server.get_path_error_page());
-			finished();
-			return ;
+			try
+			{
+				ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+				(void)e_exit;
+				throw (ExitException());
+			}
+			catch (std::bad_cast &bc)
+			{
+				response.set_error(500, server.get_path_error_page());
+				finished();
+				return ;
+			}
 		}
 		if (_uploader.get_state() != Upload::END)
 			return ;
@@ -67,9 +76,18 @@ MethodPost::action(const Request & request, Response & response, Server & server
 				)
 			;
 	}
-	catch(const std::exception& e)
+	catch (std::exception& e)
 	{
-		response.set_error(404, server.get_path_error_page());
+		try
+		{
+			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+			(void)e_exit;
+			throw (ExitException());
+		}
+		catch (std::bad_cast &bc)
+		{
+			response.set_error(404, server.get_path_error_page());
+		}
 	}
 	(void)response;
 	finished();

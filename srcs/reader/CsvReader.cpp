@@ -105,9 +105,18 @@ CsvReader::operator[](const std::string & key) const
 	{
 		return (_content.at(key).at(0));
 	}
-	catch(const std::exception& e)
+	catch (std::exception& e)
 	{
-		return ("");
+		try
+		{
+			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+			(void)e_exit;
+			throw (ExitException());
+		}
+		catch (std::bad_cast &bc)
+		{
+			return ("");
+		}
 	}
 }
 
