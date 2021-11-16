@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:41 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/28 18:53:09 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/16 16:43:55 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "Reader.hpp"
 # include "StringPP.hpp"
 # include "Info.hpp"
+# include "ExitException.hpp"
 
 # include <iostream>
 

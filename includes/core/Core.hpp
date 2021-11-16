@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/16 13:15:41 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 16:44:41 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "HandlerRequest.hpp"
 # include "HandlerPollFD.hpp"
 # include "BuilderCore.hpp"
+# include "ExitException.hpp"
 
 class BuilderCore;
 

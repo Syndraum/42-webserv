@@ -6,22 +6,15 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/15 19:09:13 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/16 16:44:17 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Core.hpp"
 
-class ExitError: public std::exception
-{
-	virtual const char*	what() const throw(){
-		return "Exit error";
-	}
-};
-
 void	exit_properly(int)
 {
-	throw(ExitError());
+	throw(ExitException());
 }
 
 int		main(int argc, char *argv[], char *env[])
@@ -39,14 +32,9 @@ int		main(int argc, char *argv[], char *env[])
 		if (!core.init(argc, argv, env))
 			core.start();
 	}
-	catch (ExitError &e)
+	catch (ExitException &e)
 	{
-		class MyError: public std::exception
-		{
-			virtual const char*	what() const throw(){
-				return "My error";
-			}
-		};
+		return (0);
 	}
 	// while (1)
 	// 	;

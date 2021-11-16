@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/16 13:42:44 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 17:31:32 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,16 @@ Response::set_error(int code, std::string const & path_error_file)
 	}
 	catch (std::exception &e)
 	{
-		this->set_code(code).clear_header();
+		try
+		{
+			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+			(void)e_exit;
+			throw (ExitException());
+		}
+		catch (std::bad_cast &bc)
+		{
+			this->set_code(code).clear_header();
+		}
 	}
 	file_reader.close();
 	return *this;

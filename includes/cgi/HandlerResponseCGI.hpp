@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:19:18 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/28 18:20:43 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/16 16:52:12 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <iostream>
 # include "ReaderFileDescriptor.hpp"
 # include "BuilderMessage.hpp"
+# include "ExitException.hpp"
 # include "Message.hpp"
 # include <cstdlib>
 

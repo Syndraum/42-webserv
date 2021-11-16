@@ -1,9 +1,9 @@
 #ifndef STRING_PP_HPP
 # define STRING_PP_HPP
 
-#include <string>
-#include <sstream>
-#include <algorithm>
+# include <string>
+# include <sstream>
+# include <algorithm>
 # include <iostream>
 
 class StringPP
