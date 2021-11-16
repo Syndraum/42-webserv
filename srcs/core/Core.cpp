@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/15 19:29:11 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/15 23:21:50 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ Core::init(int argc, char * argv[], char *env[])
 		BuilderCore builder_core(this);
 		builder_core.build(reader.get_ifs());
 		builder_core.parse_mime_type();
-		builder_core.print_debug(); // 
+		// builder_core.print_debug(); // 
 	}
 	catch(const std::exception& e)
 	{

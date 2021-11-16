@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/14 17:42:44 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/15 23:20:30 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ Response::send_body(int fd)
 	{
 		if (send_res < (ssize_t)1)
 			std::cout << response << " " << response.size() << "send_res :" << send_res << std::endl;
-		std::cout << "finished" << std::endl;
+		// std::cout << "finished" << std::endl;
 		_file_reader.close();
 		_state = Response::END;
 	}
@@ -167,7 +167,7 @@ Response::set_filename(const std::string & filename)
 	if (_file_reader.get_ifs().fail())
 		throw std::exception();
 	_file_reader.set_length();
-	std::cout << "file is open" << std::endl;
+	// std::cout << "file is open" << std::endl;
 	return *this;
 }
 

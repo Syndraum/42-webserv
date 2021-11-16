@@ -132,7 +132,7 @@ Upload::header(const Server & server)
 {
 	size_t position = 0;
 
-	debug();
+	// debug();
 	while(_buffer[0] != '\r')
 	{
 		position = _buffer.find(": ");
@@ -145,8 +145,8 @@ Upload::header(const Server & server)
 	}
 	_position = 2;
 	next_position();
-	_message.debug();
-	debug();
+	// _message.debug();
+	// debug();
 	if (_message.has_header("Content-Type"))
 	{
 		set_filename(_message);

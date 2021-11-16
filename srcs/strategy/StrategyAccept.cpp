@@ -35,11 +35,13 @@ StrategyAccept::clone() const
 Response * 
 StrategyAccept::create(Client & client)
 {
+	// std::cout << "BEGIN" << std::endl;
 	Response *				response	= client.get_response();
 	Request &				request		= client.get_request();
 	Server &				server		= client.get_server();
 	AReaderFileDescriptor &	reader		= client.get_socket_struct().get_reader();
 
+	// std::cout << "ACCEPT" << std::endl;
 	if (response == 0){
 		response = new Response();
 		request.set_path(server.get_full_path(request.get_path()));
