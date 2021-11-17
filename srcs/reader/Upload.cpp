@@ -51,10 +51,12 @@ Upload::upload(Server & server, const Request & request)
 	{
 		set_boundary(request);
 		std::cout << "Boundary : " << _boundary << std::endl;
-		std::cout << "state : " << _state << std::endl;
-		_reader->fill_buffer();
+		// _reader->debug();
+		// _reader->fill_buffer();
+		// _reader->debug();
 		_buffer = _reader->get_buffer();
 	}
+	// std::cout << "state : " << _state << std::endl;
 	switch (_state)
 	{
 	case FIND:

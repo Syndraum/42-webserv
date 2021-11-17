@@ -26,6 +26,7 @@ private:
 	IResponseStrategy *		_strategy;
 	Response *				_response;
 	request_state			_state;
+	short					_revent;
 
 	Client(void);
 public:
@@ -53,6 +54,8 @@ public:
 	request_state	get_state() const;
 	void			set_server(Server *);
 	void			set_server_socket(ServerSocket *);
+	short			get_revent() const;
+	void			set_revent(short);
 
 	void	set_strategy(IResponseStrategy *);
 	void	do_strategy(Client &);

@@ -11,6 +11,7 @@
 # include "StrategyIndex.hpp"
 # include "StrategyCGI.hpp"
 # include "StrategyReturn.hpp"
+# include <poll.h>
 
 class HandlerRequest
 {
@@ -58,6 +59,12 @@ public:
 	{
 		virtual const char*	what() const throw(){
 			return "Method not allowed";
+		}
+	};
+	class RecvError : public std::exception
+	{
+		virtual const char*	what() const throw(){
+			return "Recv error";
 		}
 	};
 };
