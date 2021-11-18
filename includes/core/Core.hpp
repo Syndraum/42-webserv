@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/16 16:44:41 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/18 21:53:18 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ class Core
 		void								add_server(Server & server);
 		Server &							add_server();
 		Server const &						get_server(int index = 0) const;
+		size_t								get_server_count() const;
 		Core &								add_method(AMethod *);
 		AMethod	*							get_method(const std::string &) const;
 		Core &								set_worker(int);

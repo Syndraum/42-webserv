@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:02 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:35:02 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 00:47:55 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,10 +231,10 @@ HandlerRequest::check_host(servers & vector)
 		
 			for (servers::iterator it = ++(vector.begin()); it != ite; it++)
 			{
-				if ((*it).get_name() == host && (*it).has_port(port))
+				if ((*it).get_name() == host && (*it).get_server_socket(port, server_socket.get_ip()))
 				{
 					_client->set_server(&(*it));
-					_client->set_server_socket(&(it->get_server_socket(port)));
+					_client->set_server_socket(it->get_server_socket(port, server_socket.get_ip()));
 					break;
 				}
 			}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/16 13:27:20 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 00:49:49 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,15 @@ Server::operator=(Server const & rhs)
 }
 
 Server &
-Server::add_port(int const port)
-{
-	_server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port)));
-	return(*this);
-}
-
-Server &
 Server::add_listen(int const port, std::string const ip, bool active)
 {
-	std::pair<port_map::iterator, bool>	pair;
-	port_map::iterator					it;
+	std::pair<port_vector::iterator, bool>	pair;
+	port_vector::iterator					it;
 
-	if (has_port(port))
-		throw Server::PortAlreadyUsed();
-	pair = _server_sockets.insert(std::pair<int, ServerSocket>(port, ServerSocket(port, ip)));
-	it = pair.first;
+	for (it = _server_sockets.begin(); it != _server_sockets.end(); it++)
+		if (it->first == port && it->second.get_ip() == ip)
+			throw Server::PortAlreadyUsed();
+	it = _server_sockets.insert(_server_sockets.end(), std::pair<int, ServerSocket>(port, ServerSocket(port, ip)));
 	it->second.set_active(active);
 	return(*this);
 }
@@ -105,7 +98,7 @@ Server::add_CGI(std::string name, CGI content)
 void
 Server::start(int const worker)
 {
-	for (port_map::iterator it = _server_sockets.begin(); it != _server_sockets.end() ; it++)
+	for (port_vector::iterator it = _server_sockets.begin(); it != _server_sockets.end() ; it++)
 	{
 		ServerSocket & ss = it->second;
 
@@ -124,28 +117,44 @@ Server::get_name() const
 	return (_name);
 }
 
-Server::port_map &
-Server::get_map_socket(void)
+Server::port_vector &
+Server::get_vector_socket(void)
 {
 	return (_server_sockets);
 }
 
-const Server::port_map &
-Server::get_map_socket(void) const
+const Server::port_vector &
+Server::get_vector_socket(void) const
 {
 	return (_server_sockets);
 }
 
-ServerSocket &
-Server::get_server_socket(int port)
+ServerSocket *
+Server::get_server_socket(int port, std::string ip)
 {
-	return _server_sockets.at(port);
+	port_vector::iterator					it;
+	for (it = _server_sockets.begin(); it != _server_sockets.end(); it++)
+	{
+		if (it->first == port && it->second.get_ip() == ip)
+		{
+			return &it->second;
+		}
+	}
+	return 0;
 }
 
-ServerSocket const &
-Server::get_server_socket(int port) const
+ServerSocket const *
+Server::get_server_socket(int port, std::string ip) const
 {
-	return _server_sockets.at(port);
+		port_vector::const_iterator					it;
+	for (it = _server_sockets.begin(); it != _server_sockets.end(); it++)
+	{
+		if (it->first == port && it->second.get_ip() == ip)
+		{
+			return &it->second;
+		}
+	}
+	return 0;
 }
 
 const bool &
@@ -258,14 +267,6 @@ Server::has_cgi(const std::string & extension)
 	return true;
 }
 
-bool
-Server::has_port(int port)
-{
-	if (_server_sockets.find(port) == _server_sockets.end())
-		return false;
-	return true;
-}
-
 std::list<std::string> &
 Server::get_list_index(void)
 {
@@ -353,8 +354,8 @@ Server::is_directory(const Request & request)
 ServerSocket *
 Server::find_socket(int socket)
 {
-	port_map::iterator it	= _server_sockets.begin();
-	port_map::iterator ite	= _server_sockets.end();
+	port_vector::iterator it	= _server_sockets.begin();
+	port_vector::iterator ite	= _server_sockets.end();
 
 	for (; it != ite; it++)
 	{
@@ -368,7 +369,7 @@ void
 Server::print() const
 {
 	std::cout << "Server " << _name << std::endl;
-	for (port_map::const_iterator it = _server_sockets.begin(); it != _server_sockets.end(); it++)
+	for (port_vector::const_iterator it = _server_sockets.begin(); it != _server_sockets.end(); it++)
 	{
 		it->second.print();
 	}

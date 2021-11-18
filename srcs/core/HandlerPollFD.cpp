@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerPollFD.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:58:45 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/17 19:20:16 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 00:38:46 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ HandlerPollFD::init(std::vector<Server> & servers)
 	for (size_t i = 0; i < servers.size(); i++)
 	{
 		Server & server = servers[i];
-		for (Server::port_map::iterator it = server.get_map_socket().begin(); 
-			it != server.get_map_socket().end(); it++)
+		for (Server::port_vector::iterator it = server.get_vector_socket().begin(); 
+			it != server.get_vector_socket().end(); it++)
 		{
 			ServerSocket & server_socket = it->second;
 
@@ -175,8 +175,8 @@ HandlerPollFD::find_server_by_socket(std::vector<Server> & servers, int socket)
 	for (size_t i = 0; i < servers.size(); i++)
 	{
 		for (
-			Server::port_map::iterator it = servers[i].get_map_socket().begin();
-			it != servers[i].get_map_socket().end();
+			Server::port_vector::iterator it = servers[i].get_vector_socket().begin();
+			it != servers[i].get_vector_socket().end();
 			it++
 		)
 		{

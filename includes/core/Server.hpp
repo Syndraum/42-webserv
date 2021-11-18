@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/09 16:29:54 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 00:38:46 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ class Server
 {
 	public:
 
-		typedef std::map<int, ServerSocket>	port_map;
-		typedef std::list<Redirection>	return_list;
-		typedef std::map<std::string, CGI>	cgi_map;
-		typedef std::pair<std::string, CGI>	cgi_pair;
+		typedef std::vector< std::pair<int, ServerSocket> >	port_vector;
+		typedef std::list<Redirection>						return_list;
+		typedef std::map<std::string, CGI>					cgi_map;
+		typedef std::pair<std::string, CGI>					cgi_pair;
 
 	private:
 
 		std::string							_name;
-		port_map							_server_sockets;
+		port_vector							_server_sockets;
 		std::string							_root;
 		std::list<std::string>				_index;
 		std::list<AMethod *>				_methods;
@@ -74,7 +74,6 @@ class Server
 		virtual ~Server(void);
 		Server &							operator=(Server const &rhs);
 
-		Server &							add_port(int const port);
 		Server &							add_return(int const code, std::string const uri);
 		Server &							add_listen(int const port, std::string const address, bool = true);
 		Server &							add_index(std::string const & index);
@@ -83,10 +82,10 @@ class Server
 		void								start(int const worker);
 
 		const std::string &					get_name() const;
-		port_map &							get_map_socket();
-		const port_map &					get_map_socket() const;
-		ServerSocket &						get_server_socket(int port);
-		const ServerSocket &				get_server_socket(int port) const;
+		port_vector &						get_vector_socket();
+		const port_vector &					get_vector_socket() const;
+		ServerSocket *						get_server_socket(int port, std::string ip);
+		const ServerSocket *				get_server_socket(int port, std::string ip) const;
 		const bool	&						get_auto_index() const;
 		size_t								get_client_max_body_size() const;
 		const std::string &					get_path_error_page() const;
