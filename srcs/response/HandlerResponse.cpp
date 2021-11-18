@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   HandlerResponse.cpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/18 14:35:11 by mchardin          #+#    #+#             */
+/*   Updated: 2021/11/18 14:35:12 by mchardin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "HandlerResponse.hpp"
 
 HandlerResponse::HandlerResponse(void) : _strategy(0), _response(0) {}

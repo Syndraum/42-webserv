@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/16 17:31:32 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/16 18:43:14 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,15 +119,15 @@ Response::set_code(int code)
 	return *this;
 }
 
-Response &
-Response::set_body_from_file(const std::string & filename)
-{
-	Reader	file_reader(filename);
-	file_reader.open();
-	file_reader.to_string(_body);
-	file_reader.close();
-	return *this;
-}
+// Response &
+// Response::set_body_from_file(const std::string & filename)
+// {
+// 	Reader	file_reader(filename);
+// 	file_reader.open();
+// 	file_reader.to_string(_body);
+// 	file_reader.close();
+// 	return *this;
+// }
 
 Response &
 Response::set_filename(const std::string & filename)
