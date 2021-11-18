@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:11 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:35:12 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:26:28 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ HandlerResponse::do_strategy(Client & client)
 	_response = _strategy->create(client);
 }
 
-void
-HandlerResponse::send(int fd)
-{
-	if (_response == 0)
-		throw std::exception();
-	_response->send_body(fd);
-}
+// void
+// HandlerResponse::send(int fd)
+// {
+// 	if (_response == 0)
+// 		throw std::exception();
+// 	_response->send_body(fd);
+// }
 
 void
 HandlerResponse::reset()

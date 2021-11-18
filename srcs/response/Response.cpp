@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/18 16:08:51 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:27:38 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,16 @@ void
 Response::send_header(int fd)
 {
 	std::string response = get_header();
+	ssize_t		ret;
 
-	send(fd, response.data(), response.size(), 0);
-
+	if (response.size())
+	{
+		ret = send(fd, response.data(), response.size(), 0);
+		if (ret < (ssize_t)0)
+			throw (std::exception());
+		else if ((size_t)ret < response.size())
+			_body = response.substr((size_t)ret, response.size() - ret);
+	}
 	_state = Response::WRITE_BODY;
 }
 
