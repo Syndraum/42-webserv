@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Redirection.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/18 14:34:17 by mchardin          #+#    #+#             */
+/*   Updated: 2021/11/18 14:34:17 by mchardin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "Redirection.hpp"
 
 Redirection::Redirection(int code, const std::string & ressource) :

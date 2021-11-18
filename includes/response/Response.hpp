@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:41 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/16 16:43:55 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/16 18:43:20 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ class Response : public Message
 		void										send_body(int fd);
 		std::string									get_message(int code);
 		Response &									set_code(int code);
-		Response &									set_body_from_file(const std::string & filename);
+		// Response &									set_body_from_file(const std::string & filename);
 		Response &									set_filename(const std::string & filename);
 		Response &									set_error(int code, std::string const & path_error);
 		int											get_code() const;

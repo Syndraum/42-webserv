@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   HandlerRequest.cpp                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/18 14:35:02 by mchardin          #+#    #+#             */
+/*   Updated: 2021/11/18 14:35:02 by mchardin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "HandlerRequest.hpp"
 
 HandlerRequest::HandlerRequest(BuilderRequest &	builder) :

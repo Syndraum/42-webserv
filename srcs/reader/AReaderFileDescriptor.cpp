@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AReaderFileDescriptor.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/18 02:42:18 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/18 14:52:19 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,8 @@ AReaderFileDescriptor::read_body(std::string & line, int content_length)
 	_buffer[0] = 0;
 	char buffer[content_length + 1];
 	int ret = recv(_fd, buffer, content_length, MSG_DONTWAIT);
+	if (ret < 0)
+		throw std::exception();
 	buffer[ret] = 0;
 	line = line + buffer;
 	std::cout << "body: " << line << std::endl;

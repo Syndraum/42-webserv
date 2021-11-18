@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/16 17:31:32 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:27:38 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,16 @@ void
 Response::send_header(int fd)
 {
 	std::string response = get_header();
+	ssize_t		ret;
 
-	send(fd, response.data(), response.size(), 0);
-
+	if (response.size())
+	{
+		ret = send(fd, response.data(), response.size(), 0);
+		if (ret < (ssize_t)0)
+			throw (std::exception());
+		else if ((size_t)ret < response.size())
+			_body = response.substr((size_t)ret, response.size() - ret);
+	}
 	_state = Response::WRITE_BODY;
 }
 
@@ -87,11 +94,19 @@ void
 Response::send_body(int fd)
 {
 	std::string	response = get_response();
-	ssize_t		send_res = send(fd, response.data(), response.size(), MSG_NOSIGNAL);
-	if (_file_reader.finished() || !_body.empty() || send_res < (ssize_t)1)
+	ssize_t		ret;
+	if (response.size())
 	{
-		_file_reader.close();
-		_state = Response::END;
+		ret = send(fd, response.data(), response.size(), MSG_NOSIGNAL);
+		if (ret < (ssize_t)0)
+			throw (std::exception());
+		else if ((size_t)ret < response.size())
+			_body = response.substr((size_t)ret, response.size() - ret);
+		else if (_file_reader.finished() || !_body.empty())
+		{
+			_file_reader.close();
+			_state = Response::END;
+		}
 	}
 }
 
@@ -119,15 +134,15 @@ Response::set_code(int code)
 	return *this;
 }
 
-Response &
-Response::set_body_from_file(const std::string & filename)
-{
-	Reader	file_reader(filename);
-	file_reader.open();
-	file_reader.to_string(_body);
-	file_reader.close();
-	return *this;
-}
+// Response &
+// Response::set_body_from_file(const std::string & filename)
+// {
+// 	Reader	file_reader(filename);
+// 	file_reader.open();
+// 	file_reader.to_string(_body);
+// 	file_reader.close();
+// 	return *this;
+// }
 
 Response &
 Response::set_filename(const std::string & filename)
