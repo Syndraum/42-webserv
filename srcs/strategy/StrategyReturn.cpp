@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   StrategyReturn.cpp                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/18 14:35:39 by mchardin          #+#    #+#             */
+/*   Updated: 2021/11/18 14:35:39 by mchardin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "StrategyReturn.hpp"
 
 StrategyReturn::StrategyReturn(const Redirection & redirection) :
