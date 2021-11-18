@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:45:01 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/16 19:01:24 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/18 14:50:41 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,5 @@ ReaderSocket const & ReaderSocket::operator=(ReaderSocket const & rhs)
 int
 ReaderSocket::_read(void * address, int n_read)
 {
-	return (recv(_fd, address, n_read, MSG_DONTWAIT));
+	return (recv(_fd, address, n_read, 0));
 }

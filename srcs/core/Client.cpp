@@ -18,7 +18,8 @@ _server(&server),
 _server_socket(&server_socket),
 _strategy(0),
 _response(0),
-_state(READ_HEADER)
+_state(READ_HEADER),
+_revent(0)
 {}
 
 Client::Client(Client const & src) :
@@ -50,6 +51,7 @@ Client::operator=(Client const & rhs)
 		if (rhs._response)
 			_response = new Response(*(rhs._response));
 		_state = rhs._state;
+		_revent = rhs._revent;
 	}
 	return *this;
 }
@@ -114,6 +116,18 @@ Client::request_state
 Client::get_state() const
 {
 	return (_state);
+}
+
+short
+Client::get_revent() const
+{
+	return (_revent);
+}
+
+void
+Client::set_revent(short revent)
+{
+	_revent = revent;
 }
 
 void

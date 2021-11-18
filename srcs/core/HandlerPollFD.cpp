@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:58:45 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/16 13:23:38 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/17 19:20:16 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,22 @@ HandlerPollFD::handle(std::vector<Server> & servers, std::vector<Client> & clien
 {
 	for (size_t i = 0; i < _pfd.size(); i++)
 	{
+		// if (_pfd[i].revents != 0)
+		// {
+		// 	std::cout << "fd : " << _pfd[i].fd << std::endl;
+		// 	if ((_pfd[i].revents & POLLIN) == POLLIN)
+		// 		std::cout << "\tPOLLIN" << std::endl;
+		// 	if ((_pfd[i].revents & POLLOUT) == POLLOUT)
+		// 		std::cout << "\tPOLLOUT" << std::endl;
+		// 	if ((_pfd[i].revents & POLLOUT) == 0 && (_pfd[i].revents & POLLIN) == 0)
+		// 		std::cout << "\tOTHER" << std::endl;
+		// }
 		if ((_pfd[i].revents & POLLIN) == POLLIN || (_pfd[i].revents & POLLOUT) == POLLOUT)
 		{
 			if (_fd_server_max < _pfd[i].fd)
 			{
 				Client & client = *find_client_by_socket(clients, _pfd[i].fd);
+				client.set_revent(_pfd[i].revents);
 				if (_hr->handle(client, servers) == -1)
 				{
 					_pfd[i].revents = 0;
@@ -202,7 +213,15 @@ HandlerPollFD::_accept_connection(std::vector<Client> & clients, int server_sock
 	setsockopt(new_socket, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(int));
 	std::cout << "[server socket : " << server_socket << "] New connection, " << new_client.get_socket_struct().get_ip() << " accept on socket "<< new_socket << std::endl;
 	new_client.get_socket_struct().set_socket(new_socket);
+	fcntl(new_socket, F_SETFL, O_NONBLOCK);
 	_add_clients_pfd(new_socket, POLLIN | POLLOUT);
 	return (new_socket);
 }
 
+bool
+HandlerPollFD::has_flag(short revent, short flag)
+{
+	if ((revent & flag) == 0)
+		return (false);
+	return (true);
+}
