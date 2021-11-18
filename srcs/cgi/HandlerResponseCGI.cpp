@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerResponseCGI.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:19:20 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/16 13:19:06 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 17:10:49 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,19 @@ HandlerResponseCGI::parse()
 		{
 			_builder._parse_headers(line);
 		}
-		catch(const std::exception& e)
+		catch (std::exception& e)
 		{
-			_reader._reset_buffer();
-			throw e;
+			try
+			{
+				ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+				(void)e_exit;
+				throw (ExitException());
+			}
+			catch (std::bad_cast &bc)
+			{
+				_reader._reset_buffer();
+				throw e;
+			}
 		}
 		if (_response->get_header_lock())
 		{

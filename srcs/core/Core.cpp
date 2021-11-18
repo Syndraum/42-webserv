@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/16 13:22:18 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 17:10:42 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,19 @@ Core::init(int argc, char * argv[], char *env[])
 	{
 		reader.open();
 	}
-	catch(const std::exception& e)
+	catch (std::exception& e)
 	{
-		std::cerr << "Error: Configuration file: " << path_config_file << " not found" << std::endl;
-		return (1);
+		try
+		{
+			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+			(void)e_exit;
+			throw (ExitException());
+		}
+		catch (std::bad_cast &bc)
+		{
+			std::cerr << "Error: Configuration file: " << path_config_file << " not found" << std::endl;
+			return (1);
+		}
 	}
 	try
 	{
@@ -71,9 +80,18 @@ Core::init(int argc, char * argv[], char *env[])
 		builder_core.build(reader.get_ifs());
 		builder_core.parse_mime_type();
 	}
-	catch(const std::exception& e)
+	catch (std::exception& e)
 	{
-		return (3);
+		try
+		{
+			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+			(void)e_exit;
+			throw (ExitException());
+		}
+		catch (std::bad_cast &bc)
+		{
+			return (3);
+		}
 	}
 	Info::env = env;
 	return (0);
@@ -91,10 +109,19 @@ Core::start()
 		for (size_t i = 0; i < _servers.size(); i++)
 			_servers[i].start(_worker);
 	}
-	catch(std::exception & e)
+	catch (std::exception & e)
 	{
-		std::cerr << "Error: " << e.what() << '\n';
-		return ;
+		try
+		{
+			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+			(void)e_exit;
+			throw (ExitException());
+		}
+		catch (std::bad_cast &bc)
+		{
+			std::cerr << "Error: " << e.what() << '\n';
+			return ;
+		}
 	}
 	_pfdh.init(_servers);
 	_pfdh.set_hr(hr);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodGet.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:20 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/16 13:30:28 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/16 17:10:54 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,18 @@ MethodGet::action(const Request & request, Response & response, Server & server,
 				)
 			;
 	}
-	catch(const std::exception& e)
+	catch (std::exception& e)
 	{
-		response.set_error(404, server.get_path_error_page());
+		try
+		{
+			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+			(void)e_exit;
+			throw (ExitException());
+		}
+		catch (std::bad_cast &bc)
+		{
+			response.set_error(404, server.get_path_error_page());
+		}
 	}
 	finished();
 }

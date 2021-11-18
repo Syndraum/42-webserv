@@ -2,6 +2,7 @@
 # define CSV_READER_HPP
 
 # include "Reader.hpp"
+# include "ExitException.hpp"
 # include <vector>
 # include <map>
 # include <sstream>
