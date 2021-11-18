@@ -75,6 +75,8 @@ HandlerRequest::handle(Client & client, servers & v_servers)
 		read_header(v_servers);
 		break;
 	case Client::STRATEGY:
+		if ((_client->get_revent() & POLLIN) != 0)
+			_client->get_socket_struct().get_reader().fill_buffer();
 		_client->do_strategy(*_client);
 		break;
 	case Client::SEND_RESPONSE:
@@ -95,52 +97,32 @@ void
 HandlerRequest::parse()
 {
 	std::string				line = "";
-	// int						gnl_ret	= 1;
 	AReaderFileDescriptor &	reader	= get_client_socket().get_reader();
 	std::string &			chunck	= reader.get_chunck();
 	int						ret		= 0;
 	
 	_builder.set_message(&get_request());
-	// while (gnl_ret && (gnl_ret = reader.get_next_line(line)))
-	// {
-		if (reader.has_all_headers())
+	if (reader.has_all_headers())
+	{
+		reader.cut_header();
+		while (chunck.find("\r\n\r\n") != std::string::npos)
 		{
-			// std::cout << "ALL HEADER" << std::endl;
-			reader.cut_header();
-			while (chunck.find("\r\n\r\n") != std::string::npos)
-			{
-				line = chunck.substr(0, chunck.find("\r\n")) + "\r";
-				// std::cout << "header: " << line << std::endl;
-				// std::cout << "chunck: " << chunck << std::endl;
-				_builder.parse_request(line);
-				chunck = chunck.substr(chunck.find("\r\n") + 2);
-			}
-			
-			get_request().set_header_lock(true);
+			line = chunck.substr(0, chunck.find("\r\n")) + "\r";
+			_builder.parse_request(line);
+			chunck = chunck.substr(chunck.find("\r\n") + 2);
 		}
-		else
+		get_request().set_header_lock(true);
+	}
+	else
+	{
+		if ((_client->get_revent() & POLLIN) != 0)
 		{
-			if ((_client->get_revent() & POLLIN) != 0)
-			{
-				ret = reader.next_read();
-				if (ret == -1)
-					throw RecvError();
-				reader.concatenation();
-			}
-			// std::cout << "BUFFER ~~~~|" << reader.get_buffer() << "|~~~~" << std::endl;
+			ret = reader.next_read();
+			if (ret == -1)
+				throw RecvError();
+			reader.concatenation();
 		}
-		// std::cout << "gnl : " << gnl_ret << std::endl;
-		// if (gnl_ret == -1){
-		// 	std::cout << "ERROR RET" << std::endl;
-		// 	return ;
-		// }
-		// line += "\r";
-		// _builder.parse_request(line);
-		// if (get_request().get_header_lock())
-		// {
-		// 	gnl_ret = 0;
-		// }
-	// }
+	}
 }
 
 void

@@ -2,7 +2,7 @@
 
 Upload::Upload(AReaderFileDescriptor * reader) :
 _reader(reader),
-_state(FIND),
+_state(FIND_BOUNDARY),
 _boundary(),
 _buffer(),
 _position(0)
@@ -54,12 +54,12 @@ Upload::upload(Server & server, const Request & request)
 		// _reader->debug();
 		// _reader->fill_buffer();
 		// _reader->debug();
-		_buffer = _reader->get_buffer();
 	}
+	_buffer = _reader->get_buffer();
 	// std::cout << "state : " << _state << std::endl;
 	switch (_state)
 	{
-	case FIND:
+	case FIND_BOUNDARY:
 		find();
 		break;
 	case HEADER:
@@ -114,12 +114,12 @@ Upload::next_position()
 {
 	if(_reader == 0)
 		throw InvalidReader();
-	_reader->next_read(_position);
+	_reader->move_buffer_until(_position);
 	_buffer = _reader->get_buffer();
 }
 
 bool
-Upload::find_bound()
+Upload::has_boundary()
 {
 	return ((_position = _buffer.find(_boundary)) != std::string::npos);
 }
@@ -127,36 +127,56 @@ Upload::find_bound()
 void
 Upload::header(const Server & server)
 {
-	size_t position = 0;
+	size_t			pos = 0;
+	std::string &	chunck	= _reader->get_chunck();
+	std::string		line;
 
-	while(_buffer[0] != '\r')
+	if (_reader->has_all_headers())
 	{
-		position = _buffer.find(": ");
-		if (position == std::string::npos)
-			throw BadMessage();
-		_message.add_header(_buffer.substr(0, position), _buffer.substr(position + 2, _buffer.find('\n') - (position + 2)));
-		_position = _buffer.find('\n') + 1;
-		next_position();
-	}
-	_position = 2;
-	next_position();
-	if (_message.has_header("Content-Type"))
-	{
-		set_filename(_message);
-		std::cout << "filename : " << _filename << std::endl;
-		_file.open((server.get_root() + "/" + server.get_upload_path() + "/" + _filename).c_str(), std::fstream::out | std::fstream::trunc);
-		if ((_file.rdstate() & std::ifstream::failbit ) != 0)
-    		throw std::exception(); // should catch to return error 500
-		_state = WRITE;
+		_reader->cut_header();
+		while (chunck.find("\r\n\r\n") != std::string::npos)
+		{
+			line = chunck.substr(0, chunck.find("\r\n")) + "\r";
+			pos = line.find(": ");
+			if (pos == std::string::npos)
+				throw BadMessage();
+			_message.add_header(line.substr(0, pos), line.substr(pos + 2, line.find('\n') - (pos + 2)));
+			chunck = chunck.substr(chunck.find("\r\n") + 2);
+			if (_message.has_header("Content-Type"))
+			{
+				set_filename(_message);
+				std::cout << "filename : " << _filename << std::endl;
+				_file.open((server.get_root() + "/" + server.get_upload_path() + "/" + _filename).c_str(), std::fstream::out | std::fstream::trunc);
+				if ((_file.rdstate() & std::ifstream::failbit ) != 0)
+					throw std::exception(); // should catch to return error 500
+				_state = WRITE;
+			}
+			else
+				_state = FIND_BOUNDARY;
+		}
 	}
 	else
-		_state = FIND;
+	{
+		_reader->concatenation();
+	}
+
+	// while(_buffer[0] != '\r')
+	// {
+	// 	position = _buffer.find(": ");
+	// 	if (position == std::string::npos)
+	// 		throw BadMessage();
+	// 	_message.add_header(_buffer.substr(0, position), _buffer.substr(position + 2, _buffer.find('\n') - (position + 2)));
+	// 	_position = _buffer.find('\n') + 1;
+	// 	next_position();
+	// }
+	// _position = 2;
+	// next_position();
 }
 
 void
 Upload::find()
 {
-	if (find_bound())
+	if (has_boundary())
 	{
 		if (_buffer.find(_boundary + "--") == _position)
 			_state = END;
@@ -165,6 +185,7 @@ Upload::find()
 			_position += _boundary.length() + 2;
 			next_position();
 			_state = HEADER;
+			_reader->reset_chunck();
 		}
 	}
 }
@@ -172,13 +193,13 @@ Upload::find()
 void
 Upload::write()
 {
-	if (find_bound())
+	if (has_boundary())
 	{
 		_file << _buffer.substr(0, _position - 2);
 		_file.close();
 		_filename = "";
 		_message.clear_header();
-		_state = FIND;
+		_state = FIND_BOUNDARY;
 	}
 	else
 	{

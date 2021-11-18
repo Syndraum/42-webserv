@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/17 14:34:16 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/18 01:53:51 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <exception>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1025
+#  define BUFFER_SIZE 256
 # endif
 
 class AReaderFileDescriptor
@@ -69,7 +69,9 @@ class AReaderFileDescriptor
 		bool		has_line() const;
 		bool		has_all_headers() const;
 		void		concatenation();
+		void		reset_chunck();
 		void		cut_header();
+		void		move_buffer_until(size_t);
 
 		void		debug() const;
 };

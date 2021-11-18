@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/17 19:25:30 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/18 02:42:18 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,6 @@ AReaderFileDescriptor::next_read(size_t start)
 	_size = remain;
 	if (ret >= 0)
 		_size += ret;
-	
 	return(ret);
 }
 
@@ -167,6 +166,10 @@ AReaderFileDescriptor::fill_buffer()
 	if (_size >= BUFFER_SIZE - 1)
 		return (-2);
 	ret = _read(&_buffer[_size], BUFFER_SIZE - 1 - _size);
+	if (ret <= -1)
+		throw std::exception(); //
+	else if (ret == 0)
+		throw std::exception(); //
 	if (ret >= 0)
 		_size += ret;
 	return (ret);
@@ -210,6 +213,12 @@ AReaderFileDescriptor::concatenation()
 }
 
 void
+AReaderFileDescriptor::reset_chunck()
+{
+	_chunck = "";
+}
+
+void
 AReaderFileDescriptor::cut_header()
 {
 	size_t		pos_buffer;
@@ -234,6 +243,23 @@ AReaderFileDescriptor::cut_header()
 		// tmp = std::string(_buffer, _size);
 		// std::cout << "Size : " << _size << " BUFFER : |" << _buffer << "|" << std::endl;
 	}
+}
+
+void
+AReaderFileDescriptor::move_buffer_until(size_t pos)
+{
+	std::string	tmp;
+	size_t		remain	= 0;
+
+	if (pos >= _size)
+		throw OutOfBound();
+	if (pos == 0)
+		return ;
+	remain = _size - pos;
+	tmp = std::string(&_buffer[pos], remain);
+	tmp.copy(_buffer, remain);
+	_buffer[remain] = 0;
+	_size = remain;
 }
 
 std::string &

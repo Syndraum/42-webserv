@@ -13,7 +13,7 @@ class Upload
 {
 public:
 	enum e_state{
-		FIND,
+		FIND_BOUNDARY,
 		HEADER,
 		WRITE,
 		END,
@@ -56,7 +56,7 @@ public:
 	void	set_filename(const Message &);
 	e_state	get_state() const;
 	void	next_position();
-	bool	find_bound();
+	bool	has_boundary();
 	void	find();
 	void	header(const Server &);
 	void	write();
