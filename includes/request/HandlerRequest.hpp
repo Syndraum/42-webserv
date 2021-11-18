@@ -48,6 +48,7 @@ public:
 	void				check_host(servers &);
 	void				check_body_size(Client const &) const;
 	void				check_method_exist(Client const &) const;
+	int					clean();
 
 	class BodyTooLong : public std::exception
 	{

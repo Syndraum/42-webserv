@@ -206,7 +206,14 @@ StrategyCGI::parse_header()
 		_handler.set_fd(_pipe.get_out()[0]);
 		_handler.init();
 	}
-	_handler.parse();
+	try
+	{
+		_handler.parse();
+	}
+	catch(const AReaderFileDescriptor::EndOfFile& e)
+	{
+		_state = PREPARE_REPONSE;
+	}
 	if (_handler.get_response()->get_body_lock())
 		_state = PREPARE_REPONSE;
 }

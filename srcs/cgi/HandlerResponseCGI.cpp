@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:19:20 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/18 21:55:36 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/18 23:26:29 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,7 @@ HandlerResponseCGI::clear()
 void 
 HandlerResponseCGI::parse()
 {
-	// std::string		line;
-	// int				gnl_ret = 1;
-
 	std::string				line = "";
-	// AReaderFileDescriptor &	reader	= get_client_socket().get_reader();
 	std::string &			chunck	= _reader.get_chunck();
 	int						ret		= 0;
 	
