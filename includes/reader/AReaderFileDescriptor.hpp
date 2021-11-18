@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/18 16:06:55 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/18 17:00:21 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,26 @@
 
 class AReaderFileDescriptor
 {
+	public:
+	class ReadError : public std::exception
+	{
+		virtual const char*	what() const throw(){
+			return "Read error";
+		}
+	};
+
+	class WriteError : public std::exception
+	{
+		virtual const char*	what() const throw(){
+			return "Write error";
+		}
+	};
+	class EndOfFile : public std::exception
+	{
+		virtual const char*	what() const throw(){
+			return "End of file";
+		}
+	};
 	protected:
 		int			_fd;
 		size_t		_size;

@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/18 16:53:40 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/18 21:47:24 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,18 @@ int AReaderFileDescriptor::get_next_line(std::string & line)
 		}
 		else if (p_eol == std::string::npos)
 		{
-			ret = next_read();
-			if (ret == -1){
-				_reset_buffer();
-				return (ret);
+			try
+			{
+				ret = next_read();
 			}
+			catch(const EndOfFile& e)
+			{
+				ret = 0;
+			}
+			// if (ret == -1){
+			// 	_reset_buffer();
+			// 	return (ret);
+			// }
 			_buffer[ret] = 0;
 		}
 		else
@@ -152,9 +159,13 @@ AReaderFileDescriptor::next_read(size_t start)
 		_buffer[remain] = 0;
 	}
 	ret = _read(&_buffer[remain], BUFFER_SIZE - 1 - remain);
+	if (ret == -1)
+		throw ReadError();
 	_size = remain;
 	if (ret >= 0)
 		_size += ret;
+	if (ret == 0)
+		throw EndOfFile();
 	return(ret);
 }
 
@@ -166,10 +177,10 @@ AReaderFileDescriptor::fill_buffer()
 	if (_size >= BUFFER_SIZE - 1)
 		return (-2);
 	ret = _read(&_buffer[_size], BUFFER_SIZE - 1 - _size);
-	if (ret <= -1)
-		throw std::exception(); //
+	if (ret == -1)
+		throw ReadError(); //
 	else if (ret == 0)
-		throw std::exception(); //
+		throw EndOfFile(); //
 	if (ret >= 0)
 		_size += ret;
 	return (ret);

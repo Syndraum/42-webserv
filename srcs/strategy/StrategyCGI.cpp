@@ -201,10 +201,14 @@ StrategyCGI::write_body(Client & client)
 void
 StrategyCGI::parse_header()
 {
-	_handler.set_fd(_pipe.get_out()[0]);
-	_handler.init();
+	if (_handler.get_response() == 0)
+	{
+		_handler.set_fd(_pipe.get_out()[0]);
+		_handler.init();
+	}
 	_handler.parse();
-	_state = PREPARE_REPONSE;
+	if (_handler.get_response()->get_body_lock())
+		_state = PREPARE_REPONSE;
 }
 
 void

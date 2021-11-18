@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerResponseCGI.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:19:20 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/16 17:10:49 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/18 21:55:36 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,48 +72,45 @@ HandlerResponseCGI::clear()
 void 
 HandlerResponseCGI::parse()
 {
-	std::string		line;
-	int				gnl_ret = 1;
+	// std::string		line;
+	// int				gnl_ret = 1;
+
+	std::string				line = "";
+	// AReaderFileDescriptor &	reader	= get_client_socket().get_reader();
+	std::string &			chunck	= _reader.get_chunck();
+	int						ret		= 0;
 	
 	_builder.set_message(_response);
-	while (gnl_ret && (gnl_ret = _reader.get_next_line(line)))
+	if (!_response->get_header_lock())
 	{
-		if (gnl_ret == -1)
-			return ;
-		line += "\r";
+		if (_reader.has_all_headers())
+		{
+			_reader.cut_header();
+			while (chunck.find("\r\n\r\n") != std::string::npos)
+			{
+				line = chunck.substr(0, chunck.find("\r\n")) + "\r";
+				_builder._parse_headers(line);
+				chunck = chunck.substr(chunck.find("\r\n") + 2);
+			}
+			_response->set_header_lock(true);
+			_reader.debug();
+		}
+		else
+		{
+			ret = _reader.next_read();
+			_reader.concatenation();
+		}
+	}
+	else
+	{
+		_response->set_body(_response->get_body() + _reader.get_buffer());
 		try
 		{
-			_builder._parse_headers(line);
+			ret = _reader.next_read();
 		}
-		catch (std::exception& e)
+		catch(const AReaderFileDescriptor::EndOfFile& e)
 		{
-			try
-			{
-				ExitException	&e_exit = dynamic_cast<ExitException&>(e);
-				(void)e_exit;
-				throw (ExitException());
-			}
-			catch (std::bad_cast &bc)
-			{
-				_reader._reset_buffer();
-				throw e;
-			}
-		}
-		if (_response->get_header_lock())
-		{
-			if (!_response->has_header("Content-Length"))
-			{
-				_reader.read_until_end(line);
-				_response->set_body(line);
-			}
-			else
-			{
-				_reader.read_body(line, std::atoi(_response->get_header("Content-Length").c_str()));
-				_response->set_body(line);
-			}
 			_response->set_body_lock(true);
-//			get_client_socket().get_reader()._reset_buffer();
-			gnl_ret = 0;
 		}
 	}
 }
