@@ -68,12 +68,15 @@ int
 HandlerRequest::handle(Client & client, servers & v_servers)
 {
 	set_client(&client);
+	// std::cout << "state : " << client.get_state() << std::endl;
 	switch (_client->get_state())
 	{
 	case Client::READ_HEADER:
 		read_header(v_servers);
 		break;
 	case Client::STRATEGY:
+		if ((_client->get_revent() & POLLIN) != 0)
+			_client->get_socket_struct().get_reader().fill_buffer();
 		_client->do_strategy(*_client);
 		break;
 	case Client::SEND_RESPONSE:
@@ -93,19 +96,31 @@ HandlerRequest::handle(Client & client, servers & v_servers)
 void 
 HandlerRequest::parse()
 {
-	std::string		line;
-	int				gnl_ret = 1;
+	std::string				line = "";
+	AReaderFileDescriptor &	reader	= get_client_socket().get_reader();
+	std::string &			chunck	= reader.get_chunck();
+	int						ret		= 0;
 	
 	_builder.set_message(&get_request());
-	while (gnl_ret && (gnl_ret = get_client_socket().get_reader().get_next_line(line)))
+	if (reader.has_all_headers())
 	{
-		if (gnl_ret == -1)
-			return ;
-		line += "\r";
-		_builder.parse_request(line);
-		if (get_request().get_header_lock())
+		reader.cut_header();
+		while (chunck.find("\r\n\r\n") != std::string::npos)
 		{
-			gnl_ret = 0;
+			line = chunck.substr(0, chunck.find("\r\n")) + "\r";
+			_builder.parse_request(line);
+			chunck = chunck.substr(chunck.find("\r\n") + 2);
+		}
+		get_request().set_header_lock(true);
+	}
+	else
+	{
+		if ((_client->get_revent() & POLLIN) != 0)
+		{
+			ret = reader.next_read();
+			if (ret == -1)
+				throw RecvError();
+			reader.concatenation();
 		}
 	}
 }
@@ -114,6 +129,7 @@ void
 HandlerRequest::read_header(servers & v_servers)
 {
 	try{
+		// if ((_client->get_revent() & POLLIN) != 0)
 		this->parse();
 		if (!is_complete())
 			return;

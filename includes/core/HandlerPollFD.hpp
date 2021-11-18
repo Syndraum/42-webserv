@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerPollFD.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdai <cdai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:49:36 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/24 18:50:20 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/17 17:14:26 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "HandlerRequest.hpp"
 # include <poll.h>
 # include <algorithm>
+# include <fcntl.h>
 
 class HandlerPollFD
 {
@@ -53,6 +54,7 @@ class HandlerPollFD
 		void					reset_server(void);
 		Server *				find_server_by_socket(std::vector<Server> &, int);
 		Client *				find_client_by_socket(std::vector<Client> &, int);
+		static bool				has_flag(short revent, short flag);
 };
 
 # include "Core.hpp"
