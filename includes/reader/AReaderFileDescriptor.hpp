@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/18 01:53:51 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:06:55 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ class AReaderFileDescriptor
 		void		concatenation();
 		void		reset_chunck();
 		void		cut_header();
-		void		move_buffer_until(size_t);
+		void		move_buffer_until(size_t pivot = BUFFER_SIZE - 1);
 
 		void		debug() const;
 };

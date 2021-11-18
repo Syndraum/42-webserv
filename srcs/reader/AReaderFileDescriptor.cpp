@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/18 02:42:18 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:53:40 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,8 +178,15 @@ AReaderFileDescriptor::fill_buffer()
 int
 AReaderFileDescriptor::write_body(int fd)
 {
-	write (fd, _buffer, _size);
-	return(next_read());
+	ssize_t ret = 0;
+
+	if (_size == 0)
+		return (ret);
+	ret = write (fd, _buffer, _size);
+	// if (ret == -1)
+	// 	throw std::exception(); //
+	move_buffer_until(ret);
+	return(ret);
 }
 
 bool
@@ -251,7 +258,8 @@ AReaderFileDescriptor::move_buffer_until(size_t pos)
 	std::string	tmp;
 	size_t		remain	= 0;
 
-	if (pos >= _size)
+	std::cout << "pos : " << pos << " size : " << _size << std::endl;
+	if (pos > _size)
 		throw OutOfBound();
 	if (pos == 0)
 		return ;

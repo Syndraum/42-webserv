@@ -6,6 +6,7 @@
 # include "Request.hpp"
 # include "Response.hpp"
 # include "IResponseStrategy.hpp"
+# include "poll.h"
 
 class IResponseStrategy;
 
