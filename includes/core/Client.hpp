@@ -18,6 +18,7 @@
 # include "Request.hpp"
 # include "Response.hpp"
 # include "IResponseStrategy.hpp"
+# include "poll.h"
 
 class IResponseStrategy;
 
@@ -39,6 +40,7 @@ private:
 	Response *				_response;
 	request_state			_state;
 	short					_revent;
+	bool					_close;
 
 	Client(void);
 public:
@@ -64,10 +66,13 @@ public:
 	Response *		get_response();
 	std::string		get_full_path() const;
 	request_state	get_state() const;
+	void			set_state(request_state);
 	void			set_server(Server *);
 	void			set_server_socket(ServerSocket *);
 	short			get_revent() const;
 	void			set_revent(short);
+	bool			get_close() const;
+	void			set_close(bool);
 
 	void	set_strategy(IResponseStrategy *);
 	void	do_strategy(Client &);

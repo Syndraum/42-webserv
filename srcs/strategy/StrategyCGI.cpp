@@ -98,6 +98,7 @@ StrategyCGI::create(Client & client)
 		}
 		catch (std::bad_cast &bc)
 		{
+			std::cerr << e.what() << std::endl;
 			std::cerr << "Bad CGI Response" << std::endl;
 			response->set_error(500, client.get_server().get_path_error_page());
 			_state = END;
@@ -202,20 +203,31 @@ void
 StrategyCGI::write_body(Client & client)
 {
 	AReaderFileDescriptor &	reader	= client.get_socket_struct().get_reader();
-	int n_read = 0;
+	int n_write = 0;
 
-	n_read = reader.write_body(_pipe.get_in()[1]);
-	if (n_read <= 0)
+	n_write = reader.write_body(_pipe.get_in()[1]);
+	if (n_write == 0)
 		_state = PARSE_HEADER;
 }
 
 void
 StrategyCGI::parse_header()
 {
-	_handler.set_fd(_pipe.get_out()[0]);
-	_handler.init();
-	_handler.parse();
-	_state = PREPARE_REPONSE;
+	if (_handler.get_response() == 0)
+	{
+		_handler.set_fd(_pipe.get_out()[0]);
+		_handler.init();
+	}
+	try
+	{
+		_handler.parse();
+	}
+	catch(const AReaderFileDescriptor::EndOfFile& e)
+	{
+		_state = PREPARE_REPONSE;
+	}
+	if (_handler.get_response()->get_body_lock())
+		_state = PREPARE_REPONSE;
 }
 
 void

@@ -81,26 +81,38 @@ HandlerRequest::handle(Client & client, servers & v_servers)
 {
 	set_client(&client);
 	// std::cout << "state : " << client.get_state() << std::endl;
-	switch (_client->get_state())
+	try
 	{
-	case Client::READ_HEADER:
-		read_header(v_servers);
-		break;
-	case Client::STRATEGY:
-		if ((_client->get_revent() & POLLIN) != 0)
-			_client->get_socket_struct().get_reader().fill_buffer();
-		_client->do_strategy(*_client);
-		break;
-	case Client::SEND_RESPONSE:
-		_client->send(_client->get_socket());
-		break;
-	case Client::END:
-		_client->clean_reponse();
-		get_request().reset();
-		_account++;
-		return (_client->get_socket());
-	default:
-		break;
+		switch (_client->get_state())
+		{
+		case Client::READ_HEADER:
+				read_header(v_servers);
+			break;
+		case Client::STRATEGY:
+			if ((_client->get_revent() & POLLIN) != 0)
+				_client->get_socket_struct().get_reader().fill_buffer();
+			_client->do_strategy(*_client);
+			break;
+		case Client::SEND_RESPONSE:
+			_client->send(_client->get_socket());
+			break;
+		case Client::END:
+			return (clean());
+			// _client->clean_reponse();
+			// get_request().reset();
+			// _account++;
+			// return (_client->get_socket());
+		default:
+			break;
+		}
+	}
+	catch(const AReaderFileDescriptor::ReadError& e)
+	{
+		return (clean());
+	}
+	catch(const AReaderFileDescriptor::WriteError& e)
+	{
+		return (clean());
 	}
 	return (-1);
 }
@@ -129,9 +141,14 @@ HandlerRequest::parse()
 	{
 		if ((_client->get_revent() & POLLIN) != 0)
 		{
-			ret = reader.next_read();
-			if (ret == -1)
-				throw RecvError();
+			try
+			{
+				ret = reader.next_read();
+			}
+			catch(const std::exception& e)
+			{
+				_client->set_close(true);
+			}
 			reader.concatenation();
 		}
 	}
@@ -189,6 +206,15 @@ HandlerRequest::read_header(servers & v_servers)
 	{
 		_client->set_strategy(new StrategyError(405));
 	}
+}
+
+int
+HandlerRequest::clean()
+{
+	_client->clean_reponse();
+	get_request().reset();
+	_account++;
+	return (_client->get_socket());
 }
 
 void
