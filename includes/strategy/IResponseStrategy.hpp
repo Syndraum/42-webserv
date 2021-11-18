@@ -5,6 +5,7 @@
 # include "Response.hpp"
 # include "Server.hpp"
 # include "Request.hpp"
+# include "poll.h"
 
 class Client;
 

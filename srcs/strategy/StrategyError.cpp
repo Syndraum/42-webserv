@@ -36,10 +36,15 @@ StrategyError::clone() const
 Response * 
 StrategyError::create(Client & client)
 {
-	Response * response = 0;
+	Response *	response	= client.get_response();
 
-	(void)client;
-	response = new Response();
+	if ((client.get_revent() & POLLIN) != 0)
+	{
+		client.get_socket_struct().get_reader()._reset_buffer();
+		return 0;
+	}
+	if (response == 0)
+		response = new Response();
 	response->set_error(_code, client.get_server().get_path_error_page());
 	_finish = true;
 	return (response);
