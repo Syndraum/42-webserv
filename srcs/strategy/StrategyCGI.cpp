@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   StrategyCGI.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:33:13 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 01:04:18 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:30:16 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,6 @@ StrategyCGI::create(Client & client)
 		}
 		catch (std::bad_cast &bc)
 		{
-			std::cerr << e.what() << std::endl;
-			std::cerr << "Bad CGI Response" << std::endl;
 			response->set_error(500, client.get_server().get_path_error_page());
 			_state = END;
 			_finish = true;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodPost.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 16:05:23 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/16 17:11:18 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:28:27 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ MethodPost &
 MethodPost::operator=(MethodPost const & rhs)
 {
 	AMethod::operator=(rhs);
-	std::cout << "COPY" << std::endl;
 	if (this != &rhs)
 	{
 		_uploader = rhs._uploader;
@@ -96,7 +95,6 @@ MethodPost::action(const Request & request, Response & response, Server & server
 AMethod *
 MethodPost::clone() const
 {
-	std::cout << "CLONE" << std::endl;
 	MethodPost * clone = new MethodPost();
 	*clone = *this;
 	return (clone);

@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:34:55 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:26:17 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:29:21 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ Upload::upload(Server & server, const Request & request)
 	if (_boundary == "")
 	{
 		set_boundary(request);
-		std::cout << "Boundary : " << _boundary << std::endl;
 	}
 	_buffer = _reader->get_buffer();
 	switch (_state)
@@ -153,7 +152,6 @@ Upload::header(const Server & server)
 			if (_message.has_header("Content-Type"))
 			{
 				set_filename(_message);
-				std::cout << "filename : " << _filename << std::endl;
 				_file.open((server.get_root() + "/" + server.get_upload_path() + "/" + _filename).c_str(), std::fstream::out | std::fstream::trunc);
 				if ((_file.rdstate() & std::ifstream::failbit ) != 0)
 					throw std::exception();

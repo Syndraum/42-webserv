@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/19 20:25:39 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:28:43 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ std::string
 AReaderFileDescriptor::get_buffer(void) const
 {
 	std::string tmp = std::string(_buffer, _size);
-	std::cout << "size : " << tmp.size() << std::endl;
 	return (tmp);
 }
 
@@ -199,7 +198,6 @@ AReaderFileDescriptor::move_buffer_until(size_t pos)
 	std::string	tmp;
 	size_t		remain	= 0;
 
-	std::cout << "pos : " << pos << " size : " << _size << std::endl;
 	if (pos > _size)
 		throw OutOfBound();
 	if (pos == 0)
