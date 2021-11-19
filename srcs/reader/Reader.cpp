@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:36 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:25:50 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 23:41:12 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ Reader::get_line()
 	std::getline(_ifs, _line);
 }
 
-int
+size_t
 Reader::get_length() const
 {
 	return _length;

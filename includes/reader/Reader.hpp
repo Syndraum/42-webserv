@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Reader.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/28 18:51:39 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 23:42:34 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class Reader
 
 		std::string		_path;
 		std::ifstream	_ifs;
-		int				_length;
+		size_t			_length;
 		std::string		_line;
 
 	public:
@@ -44,7 +44,7 @@ class Reader
 		void			get_line();
 
 		std::ifstream &	get_ifs();
-		int				get_length() const;
+		size_t			get_length() const;
 		void			set_length();
 		std::string		get_buffer();
 		bool			finished() const;
