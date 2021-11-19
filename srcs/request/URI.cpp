@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:06 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 18:23:27 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:26:23 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,6 @@ URI::convert(std::string & str)
 
 	while((pos = find_percent(str)) != std::string::npos)
 	{
-		// replace = std::string()
 		str.replace(pos, 3, 1, get_next_percent(str));
 	}
 }

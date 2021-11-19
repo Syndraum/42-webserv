@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BuilderCore.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 00:49:09 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:24:50 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -542,8 +542,6 @@ BuilderCore::parse_worker()
 void
 BuilderCore::print_debug() const
 {
-	// std::cerr << &_line[_idx] << std::endl;
-	// std::cerr << _idx << std::endl;
 	std::cerr << "Worker : " << _core->get_worker() << std::endl;
 	_core->print();
 }

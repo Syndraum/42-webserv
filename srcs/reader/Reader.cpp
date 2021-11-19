@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Reader.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:36 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 15:20:32 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:25:50 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,7 @@ Reader::get_buffer()
 {
 	char * buffer = new char[BUFFER_SIZE];
 	_ifs.read(buffer, BUFFER_SIZE);
-	// buffer[BUFFER_SIZE] = '\0';
 	std::streamsize nb_char_readed = _ifs.gcount();
-
-	// if (nb_char_readed == 0)
-	// {
-	// 	std::cout << "nb_char_readed :" << nb_char_readed << std::endl;
-	// }
 	std::string str(buffer, (std::size_t)nb_char_readed);
 	delete[] buffer;
 	return str;

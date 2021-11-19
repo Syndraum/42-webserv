@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:02 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:06:20 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:06:59 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int
 HandlerRequest::handle(Client & client, servers & v_servers)
 {
 	set_client(&client);
-	// std::cout << "state : " << client.get_state() << std::endl;
 	try
 	{
 		switch (_client->get_state())
@@ -98,10 +97,6 @@ HandlerRequest::handle(Client & client, servers & v_servers)
 			break;
 		case Client::END:
 			return (clean());
-			// _client->clean_reponse();
-			// get_request().reset();
-			// _account++;
-			// return (_client->get_socket());
 		default:
 			break;
 		}
@@ -165,7 +160,6 @@ void
 HandlerRequest::read_header(servers & v_servers)
 {
 	try{
-		// if ((_client->get_revent() & POLLIN) != 0)
 		this->parse();
 		if (!is_complete())
 			return;

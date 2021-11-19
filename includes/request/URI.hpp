@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:37:35 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 18:08:12 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:26:49 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <string>
 #include <sstream>
 
-// debug
 #include <iostream>
 
 class URI

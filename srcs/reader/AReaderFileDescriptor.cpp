@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/19 20:01:27 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:25:39 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ AReaderFileDescriptor::write_body(int fd)
 bool
 AReaderFileDescriptor::has_line() const
 {
-	// std::cout << "BUFFER : " << _chunck << std::endl;
 	if (_chunck.find("\r\n") == std::string::npos)
 		return (false);
 	return (true);
@@ -151,7 +150,6 @@ AReaderFileDescriptor::has_line() const
 bool
 AReaderFileDescriptor::has_all_headers() const
 {
-	// std::cout << "BUFFER : " << _chunck << std::endl;
 	if (_chunck.find("\r\n\r\n") == std::string::npos)
 		return (false);
 	return (true);
@@ -163,8 +161,6 @@ AReaderFileDescriptor::concatenation()
 	std::string tmp(_buffer, _size);
 
 	_chunck = _chunck + tmp;
-	// std::cout << "BUFFER : " << tmp << std::endl;
-	// std::cout << "CHUNCK : " << _chunck << std::endl;
 }
 
 void
@@ -194,9 +190,6 @@ AReaderFileDescriptor::cut_header()
 		tmp.copy(_buffer, _size - pivot, pivot);
 		_buffer[_size - pivot] = 0;
 		_size = _size - pivot;
-
-		// tmp = std::string(_buffer, _size);
-		// std::cout << "Size : " << _size << " BUFFER : |" << _buffer << "|" << std::endl;
 	}
 }
 
