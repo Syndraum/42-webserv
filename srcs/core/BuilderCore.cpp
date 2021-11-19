@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/16 16:54:32 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 00:49:09 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ BuilderCore::build(std::istream &fd)
 		if (!directive.compare("worker"))
 			parse_worker();
 		else if (!directive.compare("server"))
-			parse_server(_core);
+			parse_server();
 		else if (_line[_idx] ==  ';')
 			unexpected_character_error(';');
 		else if (_line[_idx] ==  '}')
@@ -199,7 +199,7 @@ BuilderCore::parse_server_listen(Server *server)
 		if (_line[_idx] == '.')
 		{
 			ip = check_return_ip(port, cursor);
-			if (_line[_idx] == ':')
+			if (_line[_idx - 1] == ':')
 			{
 				port = stoi_skip();
 				if (port < 0|| (!skip_whitespaces() && _line[_idx] != ';'))
@@ -211,6 +211,8 @@ BuilderCore::parse_server_listen(Server *server)
 			else
 				port = 8080;
 		}
+		else
+			ip = "0.0.0.0";
 		active = !_core->has_host_port(ip, port);
 		try
 		{
@@ -218,8 +220,8 @@ BuilderCore::parse_server_listen(Server *server)
 		}
 		catch (const Server::PortAlreadyUsed& e)
 		{
-			std::cerr << "Error : line " << line_count() <<" : port already in use"<< std::endl;
-			throw e;
+			std::cerr << "Parsing Error : a duplicate listen " << ip << ":" << port << " on line " << line_count() << std::endl;
+			throw(ParsingError());
 		}
 		skip_whitespaces();
 	}
@@ -243,7 +245,7 @@ BuilderCore::parse_server_index(Server *server)
 }
 
 void
-BuilderCore::parse_server_allow_methods(Server *server, Core *core)
+BuilderCore::parse_server_allow_methods(Server *server)
 {
 	std::string	allow_methods;
 	AMethod *	tmp;
@@ -254,7 +256,7 @@ BuilderCore::parse_server_allow_methods(Server *server, Core *core)
 	while (_line[_idx] && _line[_idx] != ';' && _line[_idx] != '}')
 	{
 		allow_methods = next_word_skip();
-		tmp = core->get_method(allow_methods);
+		tmp = _core->get_method(allow_methods);
 		if (tmp)
 			server->add_method(tmp);
 		else
@@ -451,7 +453,7 @@ BuilderCore::parse_server_return(Server *server)
 }
 
 void
-BuilderCore::parse_server(Core *core)
+BuilderCore::parse_server()
 {
 	skip_whitespaces();
 	std::string	directive;
@@ -474,7 +476,7 @@ BuilderCore::parse_server(Core *core)
 		else if (!directive.compare("index"))
 			parse_server_index(&server);
 		else if (!directive.compare("allow_methods"))
-			parse_server_allow_methods(&server, core);
+			parse_server_allow_methods(&server);
 		else if (!directive.compare("client_max_body_size"))
 			parse_server_client_max_body_size(&server);
 		else if (!directive.compare("path_error_page"))
@@ -492,10 +494,11 @@ BuilderCore::parse_server(Core *core)
 	}
 	if (_line[_idx] != '}')
 		unexpected_eof_error("\"}\"");
-	if (server.get_map_socket().size() == 0)
+	if (server.get_vector_socket().size() == 0)
 		server.add_listen(8080, "0.0.0.0");
 	if (server.get_list_index().size() == 0)
 		server.add_index("index.html");
+	check_duplicate_server(&server);
 	if (server.get_list_method().size() == 0)
 	{
 		const MethodLibrary::vector_method &			methods	= _core->get_library().get_vector();
@@ -568,6 +571,25 @@ BuilderCore::no_arg_error(std::string directive)
 }
 
 void
+BuilderCore::check_duplicate_server(Server *server)
+{
+	const std::string	name = server->get_name();
+
+	for (size_t i = 0; i < _core->get_server_count(); i++)
+		if (name == _core->get_server(i).get_name())
+		{
+			Server::port_vector	old_m = _core->get_server(i).get_vector_socket();
+			Server::port_vector	new_m = server->get_vector_socket();
+			for (Server::port_vector::iterator it = old_m.begin(); it != old_m.end(); it++)
+			{
+				for (Server::port_vector::iterator it2 = new_m.begin(); it2 != new_m.end(); it2++)
+					if (it->first == it2->first && it->second.get_ip() == it2->second.get_ip())
+						duplicate_server_error(name, it->second.get_ip(), it->first );
+			}
+		}
+}
+
+void
 BuilderCore::parse_mime_type()
 {
 	Extension * extension = Extension::get_instance();
@@ -627,5 +649,12 @@ void
 BuilderCore::duplicate_error(std::string directive)
 {
 	std::cerr << "Parsing Error : \"" << directive << "\" directive is duplicate"  << " on line " << line_count() << std::endl;
+	throw(ParsingError());
+}
+
+void
+BuilderCore::duplicate_server_error(std::string name, std::string ip, int port)
+{
+	std::cerr << "Parsing Error : conflicting server name \"" << name << "\" on " << ip << ":" << port << std::endl;
 	throw(ParsingError());
 }

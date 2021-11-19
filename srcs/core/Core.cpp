@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/16 17:10:42 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 00:38:46 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,12 @@ Core::get_server(int index) const
 	return (_servers.at(index));
 }
 
+size_t
+Core::get_server_count() const
+{
+	return (_servers.size());
+}
+
 int	
 Core::get_worker(void) const
 {
@@ -196,8 +202,8 @@ Core::has_host_port(const std::string & ip, int port) const
 	{
 		const Server & server = _servers[i];
 
-		for (Server::port_map::const_iterator it = server.get_map_socket().begin();
-			it != server.get_map_socket().end(); it++)
+		for (Server::port_vector::const_iterator it = server.get_vector_socket().begin();
+			it != server.get_vector_socket().end(); it++)
 		{
 			const ServerSocket & server_socket = it->second;
 

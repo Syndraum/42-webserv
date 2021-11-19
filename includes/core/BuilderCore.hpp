@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/16 16:01:05 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/18 22:34:14 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,16 @@ class BuilderCore
 		void			parse_server_upload_path(Server *server);
 		void			parse_server_auto_index(Server *server);
 		void			parse_server_index(Server *server);
-		void			parse_server_allow_methods(Server *server, Core *core);
+		void			parse_server_allow_methods(Server *server);
 		void			parse_server_client_max_body_size(Server *server);
 		void			parse_server_CGI_param(CGI *cgi);
 		void			parse_server_CGI_exec_name(CGI *cgi);
 		void			parse_server_extension(Server *server);
 		void			parse_server_return(Server *server);
-		void			parse_server(Core *core);
+		void			parse_server();
 		void			parse_worker();
 		int				stoi_skip();
+		void			check_duplicate_server(Server *server);
 		void			check_semicolon(std::string directive);
 		void			no_arg_error(std::string directive);
 		void			unexpected_character_error(char character);
@@ -68,6 +69,7 @@ class BuilderCore
 		void			no_opening_bracket_error(std::string directive);
 		void			host_not_found_error(std::string argument);
 		void			duplicate_error(std::string directive);
+		void			duplicate_server_error(std::string name, std::string ip, int port);
 
 	public:
 
@@ -77,6 +79,7 @@ class BuilderCore
 		void			print_debug() const; //tmp
 		Core *			get_builded_core() const;
 		void			parse_mime_type();
+		void			check_duplicate();
 	
 		class ParsingError : public std::exception
 		{

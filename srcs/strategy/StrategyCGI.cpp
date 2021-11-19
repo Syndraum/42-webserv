@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:33:13 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:33:14 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 01:04:18 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,21 +71,21 @@ StrategyCGI::create(Client & client)
 		{
 		case StrategyCGI::INIT:
 			init(client);
-			break;
+			break ;
 		case StrategyCGI::WRITE_BODY:
 			write_body(client);
-			break;
+			break ;
 		case StrategyCGI::PARSE_HEADER:
 			parse_header();
-			break;
+			break ;
 		case StrategyCGI::PREPARE_REPONSE:
 			prepare_response(client);
-			break;
+			break ;
 		case StrategyCGI::END:
 			_finish = true;
-			break;
-		default:
-			break;
+			break ;
+		default :
+			break ;
 		}
 	}
 	catch (std::exception& e)
@@ -186,7 +186,7 @@ StrategyCGI::get_state() const
 void
 StrategyCGI::clear()
 {
-	delete(_response_cgi);
+	delete (_response_cgi);
 	_response_cgi = 0;
 }
 
@@ -222,7 +222,7 @@ StrategyCGI::parse_header()
 	{
 		_handler.parse();
 	}
-	catch(const AReaderFileDescriptor::EndOfFile& e)
+	catch (const AReaderFileDescriptor::EndOfFile& e)
 	{
 		_state = PREPARE_REPONSE;
 	}

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:34:02 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:34:02 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 01:03:23 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,9 +202,18 @@ Client::send(int fd)
 			break;
 		}
 	}
-	catch(const std::exception& e)
+	catch (std::exception& e)
 	{
-		_state = Client::END;
+		try
+		{
+			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
+			(void)e_exit;
+			throw (ExitException());
+		}
+		catch (std::bad_cast &bc)
+		{
+			_state = Client::END;
+		}
 	}
 }
 
