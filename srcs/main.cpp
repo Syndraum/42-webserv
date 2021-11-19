@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/07 20:58:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/16 16:44:17 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 17:45:08 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		main(int argc, char *argv[], char *env[])
 		sigemptyset(&sigIntHandler.sa_mask);
 		sigIntHandler.sa_flags = 0;
 
-		sigaction(SIGINT, &sigIntHandler, NULL);
+		// sigaction(SIGINT, &sigIntHandler, NULL);
 		if (!core.init(argc, argv, env))
 			core.start();
 	}
@@ -36,6 +36,4 @@ int		main(int argc, char *argv[], char *env[])
 	{
 		return (0);
 	}
-	// while (1)
-	// 	;
 }

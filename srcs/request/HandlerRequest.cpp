@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:02 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:06:59 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:31:05 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,14 @@ HandlerRequest::handle(Client & client, servers & v_servers)
 			break;
 		case Client::STRATEGY:
 			if ((_client->get_revent() & POLLIN) != 0)
-				_client->get_socket_struct().get_reader().fill_buffer();
+				try
+				{
+					_client->get_socket_struct().get_reader().fill_buffer();
+				}
+				catch (const AReaderFileDescriptor::EndOfFile& e)
+				{
+					_client->set_close(true);
+				}
 			_client->do_strategy(*_client);
 			break;
 		case Client::SEND_RESPONSE:
