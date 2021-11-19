@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:15:52 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/28 18:51:51 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:12:50 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@
 class ReaderSocket : public AReaderFileDescriptor
 {
 	private:
+	
 		ReaderSocket(void);
 
-
 	public:
+
 		ReaderSocket(int fd);
 		ReaderSocket(ReaderSocket const &);
 		virtual ~ReaderSocket(void);

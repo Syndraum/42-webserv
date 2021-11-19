@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AReaderFileDescriptor.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/19 20:28:43 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:06:49 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,9 @@ AReaderFileDescriptor::fill_buffer()
 		return (-2);
 	ret = _read(&_buffer[_size], BUFFER_SIZE - 1 - _size);
 	if (ret == -1)
-		throw ReadError(); //
+		throw ReadError();
 	else if (ret == 0)
-		throw EndOfFile(); //
+		throw EndOfFile();
 	if (ret >= 0)
 		_size += ret;
 	_account_body += ret;
@@ -243,10 +243,4 @@ bool
 AReaderFileDescriptor::body_full() const
 {
 	return (_account_body >= _limit_body );
-}
-
-void
-AReaderFileDescriptor::debug() const
-{
-	std::cout << "Size : " << _size << " BUFFER : |" << _buffer << "|" << std::endl;
 }

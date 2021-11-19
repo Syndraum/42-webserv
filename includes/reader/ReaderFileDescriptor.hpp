@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:06:02 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/28 18:51:46 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:12:43 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@
 class ReaderFileDescriptor : public AReaderFileDescriptor
 {
 	private:
+
 		ReaderFileDescriptor(void);
 
-
 	public:
+
 		ReaderFileDescriptor(int);
 		ReaderFileDescriptor(ReaderFileDescriptor const &);
 		virtual ~ReaderFileDescriptor(void);

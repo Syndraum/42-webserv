@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:36:15 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:36:16 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:08:16 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class Pipe
 	std::vector<int>			_out;
 	std::vector<int>			_err;
 	std::vector<int>			_in;
+
 public:
 
 	Pipe(void);

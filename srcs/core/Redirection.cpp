@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:34:17 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:34:17 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:18:31 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ Redirection::Redirection(Redirection const & src)
 }
 
 Redirection::~Redirection(void)
-{
-	
-}
+{}
 
 Redirection &
 Redirection::operator=(Redirection const & rhs)

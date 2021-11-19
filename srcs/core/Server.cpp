@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/19 20:38:43 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:06:21 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ Server::add_index(std::string const &index)
 Server &
 Server::add_method(AMethod *method)
 {
-	if (!get_method(method->get_name())) //else error?
+	if (!get_method(method->get_name()))
 		_methods.push_back(method);
 	return(*this);
 }
@@ -213,7 +213,7 @@ Server::get_index(const std::string & uri)
 }
 
 AMethod *
-Server::get_method(const std::string &name) // TO TEST
+Server::get_method(const std::string &name)
 {
 	for (std::list<AMethod *>::iterator it = _methods.begin(); it != _methods.end(); it++)
 	{
@@ -365,52 +365,4 @@ Server::find_socket(int socket)
 			return (&(it->second));
 	}
 	return (0);
-}
-
-void
-Server::print() const
-{
-	std::cout << "Server " << _name << std::endl;
-	for (port_vector::const_iterator it = _server_sockets.begin(); it != _server_sockets.end(); it++)
-	{
-		it->second.print();
-	}
-	for (cgi_map::const_iterator it = _CGI_map.begin(); it != _CGI_map.end(); it++)
-	{
-		std::cerr << "CGI : " << it->first << std::endl;
-		
-		it->second.print();
-	}
-	if (_server_sockets.size() == 0)
-		std::cout << "no port found" << std::endl;
-	std::cout << "Auto Index : " << (_auto_index ? "on":"off") << std::endl;
-	if (_index.size())
-	{
-		std::cout << "Index list : ";
-		for (std::list<std::string>::const_iterator it2 = _index.begin(); it2 != _index.end(); it2++)
-		{
-			std::cout << "  \"" << *it2 << "\" ";
-		}
-		std::cout << std::endl;
-	}
-	if (_methods.size())
-	{
-		std::cout << "Authorised Methods : ";
-		for (std::list<AMethod*>::const_iterator it3 = _methods.begin(); it3 != _methods.end(); it3++)
-		{
-			std::cout << "\"" << (*it3)->get_name() << "\" ";
-		}
-		std::cout << std::endl;
-	}
-	if (_return_list.size())
-	{
-		std::cout << "Returns : " << std::endl;
-		for (return_list::const_iterator it4 = _return_list.begin(); it4 != _return_list.end(); it4++)
-		{
-			std::cout << " - " << it4->get_code() << " : \"" << it4->get_ressource() << "\"" << std::endl;
-		}
-		std::cout << std::endl;
-	}
-	std::cout << "client_max_body_size : " << _client_max_body_size << std::endl;
-	std::cout << std::endl;
 }

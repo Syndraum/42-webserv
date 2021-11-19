@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   StrategyIndex.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:36 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:09:02 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:21:32 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ IResponseStrategy()
 }
 
 StrategyIndex::~StrategyIndex(void)
-{
-	
-}
+{}
 
 StrategyIndex &	StrategyIndex::operator=(StrategyIndex const & rhs)
 {

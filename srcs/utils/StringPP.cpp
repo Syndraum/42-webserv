@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:32:58 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:33:02 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:22:02 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ StringPP::StringPP(void) : m_string(std::string()) {}
 StringPP::StringPP(StringPP const & src) : m_string(src.m_string) {}
 
 StringPP::~StringPP(void)
-{
-	
-}
+{}
 
 StringPP &
 StringPP::operator=(StringPP const & rhs)

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:34:12 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:34:13 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:18:24 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ Message::Message(Message const & src)
 }
 
 Message::~Message(void)
-{
-	
-}
+{}
 
 Message &	Message::operator=(Message const & rhs)
 {
@@ -109,17 +107,3 @@ Message::lock_header()
 void
 Message::lock_body()
 { set_body_lock(true); }
-
-void
-Message::debug()
-{
-	for (map::iterator it = _headers.begin(); it != _headers.end(); it++)
-	{
-		std::cout << "[" << it->first << "] " << it->second << std::endl;
-	}
-	std::cout << std::endl;
-	if (_body == "")
-		std::cout << "empty body" << std::endl;
-	else
-		std::cout << _body << std::endl;
-}

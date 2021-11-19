@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BuilderRequest.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:20 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/16 13:16:55 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:13:15 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class BuilderRequest : public BuilderMessage
 		int						_add_method(std::string line);
 		int						_add_path(std::string line);
 		int						_add_version(std::string line);
+		
 	public:
 
 		BuilderRequest(void);

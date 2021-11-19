@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:49:15 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/29 01:44:36 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:20:10 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ _methods(methods)
 {}
 
 BuilderRequest::~BuilderRequest(void)
-{
-
-}
+{}
 
 int
 BuilderRequest::_add_method(std::string line)
@@ -36,7 +34,6 @@ BuilderRequest::_add_method(std::string line)
 	_request->set_method(_methods->clone_method(name));
 	if (!_request->get_method())
 		throw MethodNotImplemented();
-	 //should check here if not allowed
 	return (ret + 1);
 }
 

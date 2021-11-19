@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AReaderFileDescriptor.hpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:11:35 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/19 19:42:28 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:12:03 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,9 @@ class AReaderFileDescriptor
 			return "End of file";
 		}
 	};
+	
 	protected:
+
 		int			_fd;
 		size_t		_size;
 		char		_buffer[BUFFER_SIZE];
@@ -101,7 +103,6 @@ class AReaderFileDescriptor
 		void		cut_header();
 		void		move_buffer_until(size_t pivot = BUFFER_SIZE - 1);
 
-		void		debug() const;
 };
 
 #endif

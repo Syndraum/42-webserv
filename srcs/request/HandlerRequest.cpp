@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerRequest.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:02 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:31:05 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:20:19 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ HandlerRequest::HandlerRequest(HandlerRequest const & src) :
 {}
 
 HandlerRequest::~HandlerRequest(void)
-{
-	
-}
+{}
 
 HandlerRequest &
 HandlerRequest::operator=(HandlerRequest const & rhs)

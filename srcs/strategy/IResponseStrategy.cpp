@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:22 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:35:22 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:21:05 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,11 @@
 
 IResponseStrategy::IResponseStrategy() :
 _finish(false)
-{
-
-}
+{}
 
 IResponseStrategy::IResponseStrategy(IResponseStrategy const & src) : 
 _finish(src._finish)
-{
-
-}
+{}
 
 IResponseStrategy &
 IResponseStrategy::operator=(IResponseStrategy const &rhs)

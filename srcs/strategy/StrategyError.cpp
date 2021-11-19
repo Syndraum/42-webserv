@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   StrategyError.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:31 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 19:48:04 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:21:26 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ IResponseStrategy()
 }
 
 StrategyError::~StrategyError(void)
-{
-	
-}
+{}
 
 StrategyError &
 StrategyError::operator=(StrategyError const & rhs)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:41 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/19 20:24:26 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:14:07 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ class Response : public Message
 		std::string									_5xx__response(int code);
 
 	public:
+	
 		Response(int code = 200);
 		Response(Response const & src);
 		virtual ~Response(void);

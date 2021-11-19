@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   URI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:06 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:26:23 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:20:29 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ URI::URI(URI const & src)
 }
 
 URI::~URI(void)
-{
-	
-}
+{}
 
 URI &
 URI::operator=(URI const & rhs)
@@ -158,17 +156,4 @@ URI::convert(std::string & str)
 	{
 		str.replace(pos, 3, 1, get_next_percent(str));
 	}
-}
-
-void
-URI::debug() const
-{
-	std::cout << " ~'~'~ URI ~'~'~ " << std::endl;
-	std::cout << "content : " << _content << std::endl;
-	std::cout << "scheme : " << _scheme << std::endl;
-	std::cout << "server_name : " << _server_name << std::endl;
-	std::cout << "port : " << _port << std::endl;
-	std::cout << "path : " << _path << std::endl;
-	std::cout << "extra_path : " << _extra_path << std::endl;
-	std::cout << "query_string : " << _query_string << std::endl;
 }

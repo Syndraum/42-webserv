@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:24:41 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:52:21 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,15 +117,4 @@ CGI::start(Message & request, const std::string & script_path, Pipe & pipes)
 		close(pipe_in[0]);
 	}
 	return (pid);
-}
-
-void
-CGI::print() const
-{
-	std::cout << "exec name : " << _exec_name << std::endl;
-	std::cout << "CGI params : " << std::endl;
-	for (env_map::const_iterator it = _cgi_env.begin(); it != _cgi_env.end(); it++)
-	{
-		std::cout << it->first << " = " << it->second << std::endl;
-	}
 }

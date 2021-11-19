@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:25 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:35:25 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:21:15 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ IResponseStrategy()
 }
 
 StrategyAccept::~StrategyAccept(void)
-{
-	
-}
+{}
 
 StrategyAccept &	StrategyAccept::operator=(StrategyAccept const & rhs)
 {

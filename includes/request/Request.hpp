@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/16 13:17:16 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:13:43 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@ class Response;
 class Request : public Message
 {
 	private:
+
 		AMethod	*									_method;
 		std::string									_path;
 		URI											_uri;
 		std::string									_version;
 
 	public:
+	
 		class NoMethod : public std::exception
 		{
 			virtual const char* what() const throw(){

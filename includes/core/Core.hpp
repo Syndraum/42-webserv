@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:48 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/18 21:53:18 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:09:52 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class BuilderCore;
 class Core
 {
 	public:
+
 		typedef std::vector<Client>	client_vector;
 
 	private:
@@ -70,9 +71,7 @@ class Core
 		const MethodLibrary &				get_library() const;
 		void								set_extension(Extension * extensoin);
 		bool								has_host_port(const std::string &, int) const;
-
 		void								remove_client(client_vector::iterator);
-		void								print() const;
 };
 
 

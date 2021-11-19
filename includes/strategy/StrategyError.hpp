@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:37:54 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:37:55 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:14:55 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,18 @@
 class StrategyError : public IResponseStrategy
 {
 	int	_code;
-public:
 
-	StrategyError(int code = 500);
-	StrategyError(StrategyError const & src);
-	virtual ~StrategyError(void);
-	StrategyError &	operator=(StrategyError const &rhs);
-	virtual IResponseStrategy *	clone() const;
+	public:
 
-private:
-	virtual Response * create(Client &);
+		StrategyError(int code = 500);
+		StrategyError(StrategyError const & src);
+		virtual ~StrategyError(void);
+		StrategyError &	operator=(StrategyError const &rhs);
+		virtual IResponseStrategy *	clone() const;
+
+	private:
+	
+		virtual Response * create(Client &);
 };
 
 #endif

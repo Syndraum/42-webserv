@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:38:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:38:01 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:15:02 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,17 @@
 
 class StrategyIndex : public IResponseStrategy
 {
-public:
+	public:
 
-	StrategyIndex(void);
-	StrategyIndex(StrategyIndex const & src);
-	virtual ~StrategyIndex(void);
-	StrategyIndex &	operator=(StrategyIndex const &rhs);
-	IResponseStrategy *	clone() const;
+		StrategyIndex(void);
+		StrategyIndex(StrategyIndex const & src);
+		virtual ~StrategyIndex(void);
+		StrategyIndex &	operator=(StrategyIndex const &rhs);
+		IResponseStrategy *	clone() const;
 
-private:
-	virtual Response * create(Client &);
+	private:
+	
+		virtual Response * create(Client &);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:19:18 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/16 16:52:12 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:08:32 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 class HandlerResponseCGI
 {
 	private:
+
 		ReaderFileDescriptor	_reader;
 		BuilderMessage			_builder;
 		Message *				_response;
@@ -30,6 +31,7 @@ class HandlerResponseCGI
 		HandlerResponseCGI(void);
 
 	public:
+
 		HandlerResponseCGI(int);
 		HandlerResponseCGI(HandlerResponseCGI const &);
 		~HandlerResponseCGI(void);

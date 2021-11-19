@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/19 20:26:37 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:20:46 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ Response::Response(Response const & src)
 }
 
 Response::~Response(void)
-{
-	
-}
+{}
 
 Response &
 Response::operator=(Response const & rhs)

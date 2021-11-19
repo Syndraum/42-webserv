@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:34:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:34:45 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:19:35 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ Extension::Extension(void) : _csv_reader("./config/mine_type.csv")
 }
 
 Extension::~Extension(void)
-{
-}
+{}
 
 std::string
 Extension::get_extension(const std::string & path)

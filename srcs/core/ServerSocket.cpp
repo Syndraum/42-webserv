@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:14:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/29 18:54:07 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:23:58 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ ServerSocket::bind_socket()
 {
 	if ((bind(_socket, reinterpret_cast<sockaddr*>(&_address), sizeof(_address)) < 0))
 		throw BindError();
-	std::cout << "bind done. Listen on port " << _port <<std::endl;
+	std::cout << "Bind done. Listen on port " << _port <<std::endl;
 }
 
 void
@@ -111,14 +111,4 @@ bool
 ServerSocket::get_active() const
 {
 	return (_active);
-}
-
-void
-ServerSocket::print() const
-{
-	std::cout << " adress : " << this << "\n";
-	std::cout << " port : " << _port << "\n";
-	std::cout << " ip : " << _ip << "\n";
-	std::cout << " active : " << std::boolalpha << _active << "\n";
-	std::cout << " fd : " << _socket << "\n";
 }

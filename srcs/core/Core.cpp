@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/19 20:21:11 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:52:31 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,17 +219,6 @@ Core::has_host_port(const std::string & ip, int port) const
 		}
 	}
 	return false;
-}
-
-void
-Core::print() const
-{
-	for (size_t i = 0; i < _servers.size(); i++)
-	{
-		_servers[i].print();
-	}
-	if (_servers.size() == 0)
-		std::cout << "no Server found \n";
 }
 
 AMethod *

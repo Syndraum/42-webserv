@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:37:57 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:37:58 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:14:46 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,42 +23,46 @@
 
 class StrategyCGI : public IResponseStrategy
 {
-public:
-	enum cgi_state {
-		INIT,
-		WRITE_BODY,
-		PARSE_HEADER,
-		PREPARE_REPONSE,
-		END
-	};
-private:
-	CGI &				_cgi;
-	RequestCGI			_request;
-	HandlerResponseCGI	_handler;
-	Pipe				_pipe;
-	cgi_state			_state;
-	Message *			_response_cgi;
+	public:
 
-	StrategyCGI(void);
+		enum cgi_state {
+			INIT,
+			WRITE_BODY,
+			PARSE_HEADER,
+			PREPARE_REPONSE,
+			END
+		};
 
-public:
-	StrategyCGI(CGI &);
-	StrategyCGI(StrategyCGI const & src);
-	virtual ~StrategyCGI(void);
-	StrategyCGI &	operator=(StrategyCGI const &rhs);
-	virtual IResponseStrategy *	clone() const;
+	private:
 
-private:
-	virtual Response *	create(Client &);
-	void				_prepare(Client &);
-	void				handle_status(const Message &, Response &, Server & server);
-	cgi_state			get_state() const;
-	void				clear();
-	void				init(Client &);
-	void				write_body(Client &);
-	void				parse_header();
-	void				prepare_response(Client &);
+		CGI &				_cgi;
+		RequestCGI			_request;
+		HandlerResponseCGI	_handler;
+		Pipe				_pipe;
+		cgi_state			_state;
+		Message *			_response_cgi;
 
+		StrategyCGI(void);
+
+	public:
+
+		StrategyCGI(CGI &);
+		StrategyCGI(StrategyCGI const & src);
+		virtual ~StrategyCGI(void);
+		StrategyCGI &	operator=(StrategyCGI const &rhs);
+		virtual IResponseStrategy *	clone() const;
+
+	private:
+	
+		virtual Response *	create(Client &);
+		void				_prepare(Client &);
+		void				handle_status(const Message &, Response &, Server & server);
+		cgi_state			get_state() const;
+		void				clear();
+		void				init(Client &);
+		void				write_body(Client &);
+		void				parse_header();
+		void				prepare_response(Client &);
 };
 
 #endif

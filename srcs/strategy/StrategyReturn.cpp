@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   StrategyReturn.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:39 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:09:52 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:21:42 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ StrategyReturn::StrategyReturn(StrategyReturn const & src) :
 }
 
 StrategyReturn::~StrategyReturn(void)
-{
-	
-}
+{}
 
 StrategyReturn &
 StrategyReturn::operator=(StrategyReturn const & rhs)

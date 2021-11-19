@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:38:06 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:38:06 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:15:11 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,18 @@ class StrategyReturn : public IResponseStrategy
 {
 	const Redirection & _redirection;
 	StrategyReturn(void);
-public:
+	
+	public:
 
-	StrategyReturn(const Redirection &);
-	StrategyReturn(StrategyReturn const & src);
-	virtual ~StrategyReturn(void);
-	StrategyReturn &	operator=(StrategyReturn const &rhs);
-	virtual IResponseStrategy *	clone() const;
+		StrategyReturn(const Redirection &);
+		StrategyReturn(StrategyReturn const & src);
+		virtual ~StrategyReturn(void);
+		StrategyReturn &	operator=(StrategyReturn const &rhs);
+		virtual IResponseStrategy *	clone() const;
 
-private:
-	virtual Response *	create(Client &);
+	private:
+	
+		virtual Response *	create(Client &);
 };
 
 #endif

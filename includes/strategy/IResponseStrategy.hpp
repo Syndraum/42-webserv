@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:37:48 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:37:48 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:14:17 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,20 @@ class Client;
 
 class IResponseStrategy
 {
-protected:
-	bool		_finish;
+	protected:
+	
+		bool		_finish;
 
-	IResponseStrategy();
-	IResponseStrategy(IResponseStrategy const & src);
-	IResponseStrategy &			operator=(IResponseStrategy const &rhs);
-public:
-	virtual ~IResponseStrategy() {}
-	virtual Response * create(Client &) = 0;
-	bool	is_finish() const;
-	virtual IResponseStrategy *	clone() const = 0;
+		IResponseStrategy();
+		IResponseStrategy(IResponseStrategy const & src);
+		IResponseStrategy &			operator=(IResponseStrategy const &rhs);
+
+	public:
+
+		virtual ~IResponseStrategy() {}
+		virtual Response * create(Client &) = 0;
+		bool	is_finish() const;
+		virtual IResponseStrategy *	clone() const = 0;
 };
 
 #endif

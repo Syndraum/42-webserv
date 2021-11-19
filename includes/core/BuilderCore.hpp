@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 22:34:14 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:51:55 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ class BuilderCore
 		BuilderCore(Core *core);
 		~BuilderCore();
 		void			build(std::istream &fd);
-		void			print_debug() const; //tmp
 		Core *			get_builded_core() const;
 		void			parse_mime_type();
 		void			check_duplicate();

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:14:00 by syndraum          #+#    #+#             */
-/*   Updated: 2021/07/29 18:55:08 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:52:11 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ class ServerSocket : public ASocket
 		const std::string &	get_ip() const;
 		ServerSocket *		set_active(bool);
 		bool				get_active() const;
-		void				print() const;
 
 		class SocketError : public std::exception
 		{

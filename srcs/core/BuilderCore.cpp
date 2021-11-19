@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BuilderCore.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 17:04:45 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:24:50 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:52:26 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -537,13 +537,6 @@ BuilderCore::parse_worker()
 	}
 	else
 		not_terminated_by_semicolon_error("worker");
-}
-
-void
-BuilderCore::print_debug() const
-{
-	std::cerr << "Worker : " << _core->get_worker() << std::endl;
-	_core->print();
 }
 
 void

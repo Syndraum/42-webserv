@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Upload.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:34:55 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:29:21 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:19:58 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ _reader(src._reader)
 }
 
 Upload::~Upload(void)
-{
-	
-}
+{}
 
 Upload &
 Upload::operator=(Upload const & rhs)
@@ -202,10 +200,4 @@ Upload::write()
 		next_position();
 	}
 	
-}
-
-void
-Upload::debug()
-{
-	std::cout << "BUFFER ~~~~|" << _buffer << "|~~~~" << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:22:23 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/19 00:38:46 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:52:17 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ class Server
 		Server &							set_upload_path(std::string const & path);
 		bool								is_directory(const Request &);
 		ServerSocket *						find_socket(int);
-		void								print() const;
 
 };
 

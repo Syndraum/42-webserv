@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   URI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:37:35 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:26:49 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:13:50 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,25 @@ class URI
 	std::string		_extra_path;
 	std::string		_query_string;
 
-public:
+	public:
 
-	URI(void);
-	URI(const std::string & uri);
-	URI(URI const & src);
-	virtual ~URI(void);
-	URI &	operator=(URI const &rhs);
+		URI(void);
+		URI(const std::string & uri);
+		URI(URI const & src);
+		virtual ~URI(void);
+		URI &	operator=(URI const &rhs);
 
-	const std::string & get_scheme() const;
-	const std::string & get_server_name() const;
-	const std::string & get_port() const;
-	const std::string & get_path() const;
-	const std::string & get_extra_path() const;
-	const std::string & get_query_string() const;
+		const std::string & get_scheme() const;
+		const std::string & get_server_name() const;
+		const std::string & get_port() const;
+		const std::string & get_path() const;
+		const std::string & get_extra_path() const;
+		const std::string & get_query_string() const;
 
-	void	set_uri(const std::string &);
-	size_t	find_percent(const std::string &) const;
-	char	get_next_percent(const std::string &) const;
-	void	convert(std::string & str);
-	void	debug() const;
-private:
-
+		void	set_uri(const std::string &);
+		size_t	find_percent(const std::string &) const;
+		char	get_next_percent(const std::string &) const;
+		void	convert(std::string & str);
 };
 
 #endif

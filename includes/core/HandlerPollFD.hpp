@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerPollFD.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:49:36 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/19 20:19:23 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:11:07 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 class HandlerPollFD
 {
 	public:
+
 		typedef std::vector<struct pollfd>	pollfd_vector;
 
 		class ErrorPoll : public std::exception
@@ -34,7 +35,9 @@ class HandlerPollFD
 				return "Error Poll";
 		}
 	};
+
 	private:
+
 		pollfd_vector	_pfd;
 		int				_fd_server_max;
 		HandlerRequest	* _hr;
@@ -42,7 +45,9 @@ class HandlerPollFD
 
 		int				_accept_connection(std::vector<Client> &, int);
 		void			_add_clients_pfd(int fd, short event);
+
 	public:
+	
 		HandlerPollFD(void);
 		HandlerPollFD(HandlerPollFD &);
 		virtual ~HandlerPollFD(void);

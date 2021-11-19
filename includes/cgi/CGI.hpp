@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 16:13:49 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/14 21:24:34 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:51:49 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ class CGI
 		void										add_CGI_param(std::string key, std::string value);
 
 		pid_t										start(Message & request, const std::string & path, Pipe & pipes);
-		void										print() const;
 		class MyError: public std::exception
 		{
 			virtual const char*	what() const throw(){

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 16:50:07 by cdai              #+#    #+#             */
-/*   Updated: 2021/07/24 19:22:09 by cdai             ###   ########.fr       */
+/*   Updated: 2021/11/19 21:04:47 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 ASocket::ASocket(void) :
 _socket(-1),
 _reader(1)
-{
-//	reset_buffer();
-}
+{}
 
 ASocket::ASocket(ASocket const & rhs):
 _reader(rhs._reader)
@@ -26,9 +24,7 @@ _reader(rhs._reader)
 }
 
 ASocket::~ASocket(void)
-{
-	
-}
+{}
 
 ASocket const & ASocket::operator=(ASocket const & rhs)
 {
@@ -38,8 +34,6 @@ ASocket const & ASocket::operator=(ASocket const & rhs)
 		this->_address = rhs._address;
 		this->_reader = rhs._reader;
 	}
-//	for (int i = 0; i < BUFFER_SIZE; i++)
-//		_buffer[i] = rhs._buffer[i];
 	return *this;
 }
 

@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:37:16 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:37:16 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:12:17 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,31 @@
 
 class CsvReader : public Reader
 {
-public:
-	typedef	std::vector<std::string>	vector;
-	typedef std::map< std::string, vector> map;
-private:
-	vector				_categories;
-	std::string			_key_name;
-	map					_content;
-public:
+	public:
 
-	CsvReader(void);
-	CsvReader(const std::string &);
-	CsvReader(CsvReader const & src);
-	virtual ~CsvReader(void);
-	CsvReader &	operator=(CsvReader const &rhs);
+		typedef	std::vector<std::string>	vector;
+		typedef std::map< std::string, vector> map;
 
-	bool		has_category(const std::string &) const;
-	CsvReader &	set_key_name(const std::string &);
-	CsvReader &	parse_categeries();
-	CsvReader &	parse_content();
+	private:
 
-	std::string operator[](const std::string &) const;
+		vector				_categories;
+		std::string			_key_name;
+		map					_content;
+		
+	public:
 
-	void	debug() const;
+		CsvReader(void);
+		CsvReader(const std::string &);
+		CsvReader(CsvReader const & src);
+		virtual ~CsvReader(void);
+		CsvReader &	operator=(CsvReader const &rhs);
+
+		bool		has_category(const std::string &) const;
+		CsvReader &	set_key_name(const std::string &);
+		CsvReader &	parse_categeries();
+		CsvReader &	parse_content();
+
+		std::string operator[](const std::string &) const;
 };
 
 #endif

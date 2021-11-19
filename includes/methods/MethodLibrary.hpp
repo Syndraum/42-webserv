@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:31 by mchardin          #+#    #+#             */
-/*   Updated: 2021/07/28 18:50:52 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:11:39 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@
 class MethodLibrary
 {
 	public:
+
 		typedef std::vector<AMethod *>	vector_method;
+		
 	private:
 
 		vector_method	_methods;

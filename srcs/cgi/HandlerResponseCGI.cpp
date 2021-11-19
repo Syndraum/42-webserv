@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerResponseCGI.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 16:19:20 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/18 23:26:29 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:55:11 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ HandlerResponseCGI::parse()
 				chunck = chunck.substr(chunck.find("\r\n") + 2);
 			}
 			_response->set_header_lock(true);
-			_reader.debug();
 		}
 		else
 		{

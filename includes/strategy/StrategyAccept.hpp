@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:37:51 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:37:52 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:14:24 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,17 @@
 
 class StrategyAccept : public IResponseStrategy
 {
-public:
+	public:
 
-	StrategyAccept(void);
-	StrategyAccept(StrategyAccept const & src);
-	virtual ~StrategyAccept(void);
-	StrategyAccept &	operator=(StrategyAccept const &rhs);
-	virtual IResponseStrategy *	clone() const;
+		StrategyAccept(void);
+		StrategyAccept(StrategyAccept const & src);
+		virtual ~StrategyAccept(void);
+		StrategyAccept &	operator=(StrategyAccept const &rhs);
+		virtual IResponseStrategy *	clone() const;
 
-private:
-	virtual Response * create(Client &);
+	private:
+	
+		virtual Response * create(Client &);
 };
 
 #endif

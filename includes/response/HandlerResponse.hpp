@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerResponse.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:37:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:24:18 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:14:00 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ class HandlerResponse
 {
 	IResponseStrategy *		_strategy;
 	Response *				_response;
+
 public:
 
 	HandlerResponse(void);
@@ -32,9 +33,6 @@ public:
 	void	set_strategy(IResponseStrategy *);
 	void	do_strategy(Client &);
 	void	reset();
-
-private:
-
 };
 
 #endif

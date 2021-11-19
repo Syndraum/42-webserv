@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:34:41 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:34:41 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 21:19:27 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ CsvReader::CsvReader(CsvReader const & src) : Reader()
 }
 
 CsvReader::~CsvReader(void)
-{
-
-}
+{}
 
 CsvReader &
 CsvReader::operator=(CsvReader const & rhs)
@@ -129,24 +127,5 @@ CsvReader::operator[](const std::string & key) const
 		{
 			return ("");
 		}
-	}
-}
-
-void
-CsvReader::debug() const
-{
-	for (size_t i = 0; i < _categories.size(); i++)
-	{
-		std::cout << _categories.at(i) << "\t" << std::flush;
-	}
-	std::cout << std::endl;
-	for (map::const_iterator it = _content.begin(); it != _content.end(); it++)
-	{
-		std::cout << _key_name << " : " << it->first << " | ";
-		for (size_t i = 0; i < it->second.size(); i++)
-		{
-			std::cout <<it->second[i] << "\t";
-		}
-		std::cout << std::endl;
 	}
 }
