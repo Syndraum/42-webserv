@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerResponse.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:37:40 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 16:26:31 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:24:18 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ public:
 
 	void	set_strategy(IResponseStrategy *);
 	void	do_strategy(Client &);
-	// void	send(int fd);
 	void	reset();
 
 private:

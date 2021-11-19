@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BuilderMessage.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:33:55 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:33:56 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:24:56 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ BuilderMessage::_parse_headers(std::string line)
 
 	if (line.length() == 1 && line[0] == '\r'){
 		_message->set_header_lock(true);
-		// _message->set_body_lock(true); // TEMPORARY
 	}
 	else if (line[line.length() - 1] != '\r' || len == std::string::npos || line[len - 1] == ' ')
 		throw BadRequest();

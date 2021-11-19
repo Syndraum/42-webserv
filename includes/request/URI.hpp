@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   URI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:37:35 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:37:35 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:26:49 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define URI_HPP
 
 #include <string>
+#include <sstream>
 
-// debug
 #include <iostream>
 
 class URI
@@ -44,6 +44,9 @@ public:
 	const std::string & get_query_string() const;
 
 	void	set_uri(const std::string &);
+	size_t	find_percent(const std::string &) const;
+	char	get_next_percent(const std::string &) const;
+	void	convert(std::string & str);
 	void	debug() const;
 private:
 

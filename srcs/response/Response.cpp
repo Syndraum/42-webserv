@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 12:02:30 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/18 16:27:38 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:26:37 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,16 +133,6 @@ Response::set_code(int code)
 	_code = code;
 	return *this;
 }
-
-// Response &
-// Response::set_body_from_file(const std::string & filename)
-// {
-// 	Reader	file_reader(filename);
-// 	file_reader.open();
-// 	file_reader.to_string(_body);
-// 	file_reader.close();
-// 	return *this;
-// }
 
 Response &
 Response::set_filename(const std::string & filename)

@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/19 00:05:26 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:28:43 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ AReaderFileDescriptor::AReaderFileDescriptor(void)
 AReaderFileDescriptor::AReaderFileDescriptor(int fd):
 _fd(fd),
 _size(0),
-_chunck()
+_chunck(),
+_account_body(0),
+_limit_body(0)
 {
 	_reset_buffer();
 }
@@ -41,6 +43,8 @@ AReaderFileDescriptor::operator=(AReaderFileDescriptor const & rhs)
 			_buffer[i] = rhs._buffer[i];
 		_size = rhs._size;
 		_chunck = rhs._chunck;
+		_account_body = rhs._account_body;
+		_limit_body = rhs._limit_body;
 	}
 	return *this;
 }
@@ -57,7 +61,6 @@ std::string
 AReaderFileDescriptor::get_buffer(void) const
 {
 	std::string tmp = std::string(_buffer, _size);
-	std::cout << "size : " << tmp.size() << std::endl;
 	return (tmp);
 }
 
@@ -115,6 +118,7 @@ AReaderFileDescriptor::fill_buffer()
 		throw EndOfFile(); //
 	if (ret >= 0)
 		_size += ret;
+	_account_body += ret;
 	return (ret);
 }
 
@@ -135,7 +139,6 @@ AReaderFileDescriptor::write_body(int fd)
 bool
 AReaderFileDescriptor::has_line() const
 {
-	// std::cout << "BUFFER : " << _chunck << std::endl;
 	if (_chunck.find("\r\n") == std::string::npos)
 		return (false);
 	return (true);
@@ -146,7 +149,6 @@ AReaderFileDescriptor::has_line() const
 bool
 AReaderFileDescriptor::has_all_headers() const
 {
-	// std::cout << "BUFFER : " << _chunck << std::endl;
 	if (_chunck.find("\r\n\r\n") == std::string::npos)
 		return (false);
 	return (true);
@@ -158,8 +160,6 @@ AReaderFileDescriptor::concatenation()
 	std::string tmp(_buffer, _size);
 
 	_chunck = _chunck + tmp;
-	// std::cout << "BUFFER : " << tmp << std::endl;
-	// std::cout << "CHUNCK : " << _chunck << std::endl;
 }
 
 void
@@ -189,9 +189,6 @@ AReaderFileDescriptor::cut_header()
 		tmp.copy(_buffer, _size - pivot, pivot);
 		_buffer[_size - pivot] = 0;
 		_size = _size - pivot;
-
-		// tmp = std::string(_buffer, _size);
-		// std::cout << "Size : " << _size << " BUFFER : |" << _buffer << "|" << std::endl;
 	}
 }
 
@@ -201,7 +198,6 @@ AReaderFileDescriptor::move_buffer_until(size_t pos)
 	std::string	tmp;
 	size_t		remain	= 0;
 
-	std::cout << "pos : " << pos << " size : " << _size << std::endl;
 	if (pos > _size)
 		throw OutOfBound();
 	if (pos == 0)
@@ -217,6 +213,36 @@ std::string &
 AReaderFileDescriptor::get_chunck()
 {
 	return (_chunck);
+}
+
+size_t
+AReaderFileDescriptor::get_account_body() const
+{
+	return (_account_body);
+}
+
+void
+AReaderFileDescriptor::set_account_body(size_t account)
+{
+	_account_body = account;
+}
+
+size_t
+AReaderFileDescriptor::get_size() const
+{
+	return (_size);
+}
+
+void
+AReaderFileDescriptor::set_limit(size_t limit)
+{
+	_limit_body = limit;
+}
+
+bool
+AReaderFileDescriptor::body_full() const
+{
+	return (_account_body >= _limit_body );
 }
 
 void

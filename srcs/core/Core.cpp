@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Core.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 18:13:51 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/19 00:38:46 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:21:11 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,10 +127,17 @@ Core::start()
 	_pfdh.set_hr(hr);
 	while (run)
 	{
-		_pfdh.watch();
-		_pfdh.handle(_servers, _client);
-		// if (hr.get_account() >= 1000)
-		// 	run = false;
+		try
+		{
+			_pfdh.watch();
+			_pfdh.handle(_servers, _client);
+			// if (hr.get_account() >= 1000)
+			// 	run = false;
+		}
+		catch(const HandlerPollFD::ErrorPoll& e)
+		{
+			run = false;
+		}
 	}
 }
 

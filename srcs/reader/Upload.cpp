@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Upload.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:34:55 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:34:55 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:29:21 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,8 @@ Upload::upload(Server & server, const Request & request)
 	if (_boundary == "")
 	{
 		set_boundary(request);
-		std::cout << "Boundary : " << _boundary << std::endl;
-		// _reader->debug();
-		// _reader->fill_buffer();
-		// _reader->debug();
 	}
 	_buffer = _reader->get_buffer();
-	// std::cout << "state : " << _state << std::endl;
 	switch (_state)
 	{
 	case FIND_BOUNDARY:
@@ -157,10 +152,9 @@ Upload::header(const Server & server)
 			if (_message.has_header("Content-Type"))
 			{
 				set_filename(_message);
-				std::cout << "filename : " << _filename << std::endl;
 				_file.open((server.get_root() + "/" + server.get_upload_path() + "/" + _filename).c_str(), std::fstream::out | std::fstream::trunc);
 				if ((_file.rdstate() & std::ifstream::failbit ) != 0)
-					throw std::exception(); // should catch to return error 500
+					throw std::exception();
 				_state = WRITE;
 			}
 			else
@@ -171,18 +165,6 @@ Upload::header(const Server & server)
 	{
 		_reader->concatenation();
 	}
-
-	// while(_buffer[0] != '\r')
-	// {
-	// 	position = _buffer.find(": ");
-	// 	if (position == std::string::npos)
-	// 		throw BadMessage();
-	// 	_message.add_header(_buffer.substr(0, position), _buffer.substr(position + 2, _buffer.find('\n') - (position + 2)));
-	// 	_position = _buffer.find('\n') + 1;
-	// 	next_position();
-	// }
-	// _position = 2;
-	// next_position();
 }
 
 void

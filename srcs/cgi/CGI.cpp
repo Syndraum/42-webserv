@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/16 13:18:14 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:24:41 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,10 @@ CGI::start(Message & request, const std::string & script_path, Pipe & pipes)
 
 	create_env(request.get_headers(), a_env);
 	if (pipe(pipe_out) == -1 || pipe(pipe_err) == -1 || pipe(pipe_in) == -1)
-		throw (std::exception()); // specify
+		throw (std::exception());
 	pid = fork();
 	if (pid < 0)
-		throw (std::exception()); // specify
+		throw (std::exception());
 	else if (!pid)
 	{
 		if (dup2(pipe_out[1], 1) == -1 || dup2(pipe_err[1], 2) == -1 || dup2(pipe_in[0], 0) == -1)

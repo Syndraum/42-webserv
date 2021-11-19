@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerPollFD.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:58:45 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/19 00:38:46 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:25:07 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,10 @@ HandlerPollFD::remove(int socket)
 int
 HandlerPollFD::watch(void)
 {
-	return (poll(&(_pfd.front()), _pfd.size(), 60000));
+	int ret = poll(&(_pfd.front()), _pfd.size(), 60000);
+	if (ret == -1)
+		throw ErrorPoll();
+	return (ret);
 }
 
 int
@@ -119,16 +122,6 @@ HandlerPollFD::handle(std::vector<Server> & servers, std::vector<Client> & clien
 {
 	for (size_t i = 0; i < _pfd.size(); i++)
 	{
-		// if (_pfd[i].revents != 0)
-		// {
-		// 	std::cout << "fd : " << _pfd[i].fd << std::endl;
-		// 	if ((_pfd[i].revents & POLLIN) == POLLIN)
-		// 		std::cout << "\tPOLLIN" << std::endl;
-		// 	if ((_pfd[i].revents & POLLOUT) == POLLOUT)
-		// 		std::cout << "\tPOLLOUT" << std::endl;
-		// 	if ((_pfd[i].revents & POLLOUT) == 0 && (_pfd[i].revents & POLLIN) == 0)
-		// 		std::cout << "\tOTHER" << std::endl;
-		// }
 		if ((_pfd[i].revents & POLLIN) == POLLIN || (_pfd[i].revents & POLLOUT) == POLLOUT)
 		{
 			if (_fd_server_max < _pfd[i].fd)

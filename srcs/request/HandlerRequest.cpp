@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerRequest.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:02 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 19:58:59 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:31:05 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int
 HandlerRequest::handle(Client & client, servers & v_servers)
 {
 	set_client(&client);
-	// std::cout << "state : " << client.get_state() << std::endl;
 	try
 	{
 		switch (_client->get_state())
@@ -105,10 +104,6 @@ HandlerRequest::handle(Client & client, servers & v_servers)
 			break;
 		case Client::END:
 			return (clean());
-			// _client->clean_reponse();
-			// get_request().reset();
-			// _account++;
-			// return (_client->get_socket());
 		default:
 			break;
 		}
@@ -143,6 +138,13 @@ HandlerRequest::parse()
 			chunck = chunck.substr(chunck.find("\r\n") + 2);
 		}
 		get_request().set_header_lock(true);
+		reader.set_account_body(reader.get_size());
+		if (get_request().has_header("content-length")){
+			std::stringstream sstream(get_request().get_header("content-length"));
+			size_t result;
+			sstream >> result;
+			reader.set_limit(result);
+		}
 	}
 	else
 	{
@@ -165,7 +167,6 @@ void
 HandlerRequest::read_header(servers & v_servers)
 {
 	try{
-		// if ((_client->get_revent() & POLLIN) != 0)
 		this->parse();
 		if (!is_complete())
 			return;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/19 00:49:49 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:38:43 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,10 +242,12 @@ Server::get_index_page(const Request & request)
 	if ((directory = opendir(path.c_str())) != NULL)
 	{
 		while ((entry = readdir(directory)) != NULL){
-			ss << "<a href=\"" << request.get_path();
-			if (request.get_path()[request.get_path().length() - 1] != '/')
-				ss << "\\";
-			ss << entry->d_name << "\">" << entry->d_name << "</a>\n";
+			if (entry->d_name[0] != '.' || (entry->d_name[0] == '.' && entry->d_name[1] == '.')){
+				ss << "<a href=\"" << request.get_path();
+				if (request.get_path()[request.get_path().length() - 1] != '/')
+					ss << "\\";
+				ss << entry->d_name << "\">" << entry->d_name << "</a>\n";
+			}
 		}
 	}
 	closedir (directory);

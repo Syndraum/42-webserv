@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   URI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:06 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:35:07 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:26:23 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,39 @@ URI::set_uri(const std::string & uri)
 	}
 	if (query_begin != _content.length())
 		_query_string = _content.substr(query_begin + 1, _content.length() - query_begin);
+	convert(_path);
+	convert(_extra_path);
+}
+
+size_t
+URI::find_percent(const std::string & str) const
+{
+	return (str.find('%'));
+}
+
+char
+URI::get_next_percent(const std::string & str) const
+{
+	size_t 				pos = find_percent(str);
+	std::string			hexa(str, pos + 1, 2);
+	unsigned int		c;
+	std::stringstream	ss;
+
+	ss << std::hex << hexa;
+	ss >> c;
+	return c;
+}
+
+void 
+URI::convert(std::string & str)
+{
+	size_t pos = 0;
+	std::string replace;
+
+	while((pos = find_percent(str)) != std::string::npos)
+	{
+		str.replace(pos, 3, 1, get_next_percent(str));
+	}
 }
 
 void

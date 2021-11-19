@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:12 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/12 22:06:28 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:11:56 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,11 @@ MethodDelete::~MethodDelete() {}
 void
 MethodDelete::action(const Request & request, Response & response, Server & server, AReaderFileDescriptor & reader)
 {
-	(void)reader;
+	if (!reader.body_full())
+	{
+		reader._reset_buffer();
+		return ;
+	}
 	if (0 != (std::remove(request.get_path().c_str())))
 	{
 		response.set_error(404, server.get_path_error_page());

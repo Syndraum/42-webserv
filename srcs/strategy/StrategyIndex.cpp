@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   StrategyIndex.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:36 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:35:37 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:09:02 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,18 @@ StrategyIndex::clone() const
 Response * 
 StrategyIndex::create(Client & client)
 {
-	Response *	response	= 0;
-	Request	&	request		= client.get_request();
-	Server &	server		= client.get_server();
+	Request	&				request		= client.get_request();
+	Server &				server		= client.get_server();
+	Response *				response	= client.get_response();
+	AReaderFileDescriptor & reader		= client.get_socket_struct().get_reader();
 
-
-	response = new Response();
+	if (!reader.body_full())
+	{
+		reader._reset_buffer();
+		return 0;
+	}
+	if (response == 0)
+		response = new Response();
 	response
 		->set_code(200)
 		.set_body(server.get_index_page(request))
