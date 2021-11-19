@@ -6,7 +6,7 @@
 #    By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/07 09:56:55 by mchardin          #+#    #+#              #
-#    Updated: 2021/11/19 21:41:12 by mchardin         ###   ########.fr        #
+#    Updated: 2021/11/19 22:30:48 by mchardin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -118,10 +118,6 @@ all:
 
 ${NAME}:		${OBJS}
 				${CXX} ${CXXFLAGS} ${OBJS} -o ${NAME}
-				chmod 755 ${NAME}
-				chmod -R 755 srcs
-				chmod -R 755 includes
-				chmod -R 755 config
 
 run:			all
 				./$(NAME)
