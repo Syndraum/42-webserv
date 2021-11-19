@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerRequest.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:02 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 01:06:28 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:06:20 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,13 @@ HandlerRequest::parse()
 			chunck = chunck.substr(chunck.find("\r\n") + 2);
 		}
 		get_request().set_header_lock(true);
+		reader.set_account_body(reader.get_size());
+		if (get_request().has_header("content-length")){
+			std::stringstream sstream(get_request().get_header("content-length"));
+			size_t result;
+			sstream >> result;
+			reader.set_limit(result);
+		}
 	}
 	else
 	{

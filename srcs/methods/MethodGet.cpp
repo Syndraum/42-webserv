@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodGet.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 15:50:20 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/16 17:10:54 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:11:44 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,12 @@ MethodGet::action(const Request & request, Response & response, Server & server,
 	Extension *	extension = Extension::get_instance();
 	std::string	ext = Extension::get_extension(request.get_path().c_str());
 	std::string	mine = extension->get_reader()[ext];
-	(void)reader;
 
+	if (!reader.body_full())
+	{
+		reader._reset_buffer();
+		return ;
+	}
 	if (mine.empty())
 		mine = "application/octet-stream";
 	try

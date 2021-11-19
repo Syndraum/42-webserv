@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/23 11:22:22 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/19 00:05:26 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:01:27 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ AReaderFileDescriptor::AReaderFileDescriptor(void)
 AReaderFileDescriptor::AReaderFileDescriptor(int fd):
 _fd(fd),
 _size(0),
-_chunck()
+_chunck(),
+_account_body(0),
+_limit_body(0)
 {
 	_reset_buffer();
 }
@@ -41,6 +43,8 @@ AReaderFileDescriptor::operator=(AReaderFileDescriptor const & rhs)
 			_buffer[i] = rhs._buffer[i];
 		_size = rhs._size;
 		_chunck = rhs._chunck;
+		_account_body = rhs._account_body;
+		_limit_body = rhs._limit_body;
 	}
 	return *this;
 }
@@ -115,6 +119,7 @@ AReaderFileDescriptor::fill_buffer()
 		throw EndOfFile(); //
 	if (ret >= 0)
 		_size += ret;
+	_account_body += ret;
 	return (ret);
 }
 
@@ -217,6 +222,36 @@ std::string &
 AReaderFileDescriptor::get_chunck()
 {
 	return (_chunck);
+}
+
+size_t
+AReaderFileDescriptor::get_account_body() const
+{
+	return (_account_body);
+}
+
+void
+AReaderFileDescriptor::set_account_body(size_t account)
+{
+	_account_body = account;
+}
+
+size_t
+AReaderFileDescriptor::get_size() const
+{
+	return (_size);
+}
+
+void
+AReaderFileDescriptor::set_limit(size_t limit)
+{
+	_limit_body = limit;
+}
+
+bool
+AReaderFileDescriptor::body_full() const
+{
+	return (_account_body >= _limit_body );
 }
 
 void

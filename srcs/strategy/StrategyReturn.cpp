@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   StrategyReturn.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:39 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/18 14:35:39 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:09:52 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,20 @@ StrategyReturn::clone() const
 Response *
 StrategyReturn::create(Client & client)
 {
-	Response *	response	= 0;
+	Response *				response	= client.get_response();
+	AReaderFileDescriptor & reader		= client.get_socket_struct().get_reader();
 
-	(void)client;
-	response = new Response();
+	if (!reader.body_full())
+	{
+		reader._reset_buffer();
+		return 0;
+	}
+	if (response == 0)
+		response = new Response();
 	response->set_code(_redirection.get_code());
 	if (_redirection.is_handler())
 		response->add_header("Location", _redirection.get_ressource());
 	_finish = true;
+	(void)client;
 	return (response);
 }
