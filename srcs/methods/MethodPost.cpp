@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 16:05:23 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/19 20:28:27 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 23:05:58 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,11 @@ MethodPost::action(const Request & request, Response & response, Server & server
 		}
 		if (_uploader.get_state() != Upload::END)
 			return ;
+	}
+	else if (!reader.body_full())
+	{
+		reader._reset_buffer();
+		return ;
 	}
 
 	if (mine.empty())

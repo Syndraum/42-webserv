@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:23:05 by syndraum          #+#    #+#             */
-/*   Updated: 2021/11/19 21:06:21 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 23:02:52 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ _methods(),
 _auto_index(false),
 _client_max_body_size(5 << 20),
 _path_error_page("./config/error.html"),
-_upload_path(_root),
+_upload_path("."),
 _CGI_map(),
 _return_list()
 {}
