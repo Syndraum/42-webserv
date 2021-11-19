@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:49:36 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/17 17:14:26 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:19:23 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@ class HandlerPollFD
 {
 	public:
 		typedef std::vector<struct pollfd>	pollfd_vector;
+
+		class ErrorPoll : public std::exception
+		{
+			virtual const char* what() const throw(){
+				return "Error Poll";
+		}
+	};
 	private:
 		pollfd_vector	_pfd;
 		int				_fd_server_max;

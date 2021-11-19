@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   HandlerPollFD.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 15:58:45 by cdai              #+#    #+#             */
-/*   Updated: 2021/11/19 00:38:46 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:19:40 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,10 @@ HandlerPollFD::remove(int socket)
 int
 HandlerPollFD::watch(void)
 {
-	return (poll(&(_pfd.front()), _pfd.size(), 60000));
+	int ret = poll(&(_pfd.front()), _pfd.size(), 60000);
+	if (ret == -1)
+		throw ErrorPoll();
+	return (ret);
 }
 
 int
