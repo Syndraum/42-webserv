@@ -6,7 +6,7 @@
 /*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:02 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 00:47:55 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/19 01:06:28 by mchardin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,11 @@ HandlerRequest::handle(Client & client, servers & v_servers)
 			break;
 		}
 	}
-	catch(const AReaderFileDescriptor::ReadError& e)
+	catch (const AReaderFileDescriptor::ReadError& e)
 	{
 		return (clean());
 	}
-	catch(const AReaderFileDescriptor::WriteError& e)
+	catch (const AReaderFileDescriptor::WriteError& e)
 	{
 		return (clean());
 	}
@@ -145,7 +145,7 @@ HandlerRequest::parse()
 			{
 				ret = reader.next_read();
 			}
-			catch(const std::exception& e)
+			catch(const AReaderFileDescriptor::EndOfFile& e)
 			{
 				_client->set_close(true);
 			}
