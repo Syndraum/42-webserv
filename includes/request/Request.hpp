@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 18:27:00 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 21:13:43 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/22 12:40:05 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ class Request : public Message
 	private:
 
 		AMethod	*									_method;
-		std::string									_path;
 		URI											_uri;
 		std::string									_version;
 

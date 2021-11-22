@@ -6,7 +6,7 @@
 /*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/11 16:28:56 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/16 13:38:49 by syndraum         ###   ########.fr       */
+/*   Updated: 2021/11/22 12:43:01 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 Request::Request():
 	Message(),
 	_method(0),
-	_path(),
 	_uri(),
 	_version()
 {}
@@ -38,7 +37,6 @@ Request::operator=(Request const &rhs)
 	_method = 0;
 	if(rhs.get_method())
 		_method = rhs.get_method()->clone();
-	_path = rhs.get_path();
 	_uri = rhs._uri;
 	_version = rhs.get_version();
 	return (*this);
@@ -50,7 +48,7 @@ Request::get_method() const
 
 std::string const &
 Request::get_path() const
-{ return (_path); }
+{ return (_uri.get_path()); }
 
 URI &
 Request::get_uri()
@@ -71,7 +69,7 @@ Request::set_method(AMethod * rhs)
 void
 Request::set_path(std::string const &rhs)
 { 
-	_path = rhs;
+	_uri.set_path(rhs);
 }
 
 void
@@ -91,7 +89,6 @@ Request::reset()
 	if (_method != 0)
 		delete (_method);
 	_method = 0;
-	_path = "";
 	_version = "";
 	_headers.clear();
 }

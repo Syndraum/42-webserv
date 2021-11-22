@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   URI.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:37:35 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 21:13:50 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/22 12:32:38 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ class URI
 		const std::string & get_path() const;
 		const std::string & get_extra_path() const;
 		const std::string & get_query_string() const;
+		void				set_path(const std::string &);
 
 		void	set_uri(const std::string &);
 		size_t	find_percent(const std::string &) const;

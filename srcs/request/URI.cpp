@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   URI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 14:35:06 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 21:20:29 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/22 12:31:30 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,12 @@ URI::get_extra_path() const
 const std::string &
 URI::get_query_string() const
 { return (_query_string); }
+
+void
+URI::set_path(const std::string & path)
+{
+	_path = path;
+}
 
 void
 URI::set_uri(const std::string & uri)
