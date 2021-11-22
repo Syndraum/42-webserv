@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGI.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchardin <mchardin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: syndraum <syndraum@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/06 18:35:26 by mchardin          #+#    #+#             */
-/*   Updated: 2021/11/19 20:52:21 by mchardin         ###   ########.fr       */
+/*   Updated: 2021/11/21 15:39:33 by syndraum         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,12 @@ CGI::start(Message & request, const std::string & script_path, Pipe & pipes)
 	else if (!pid)
 	{
 		if (dup2(pipe_out[1], 1) == -1 || dup2(pipe_err[1], 2) == -1 || dup2(pipe_in[0], 0) == -1)
-			_exit(2);
+			throw (std::exception());
 		close(pipe_out[0]);
 		close(pipe_err[0]);
 		close(pipe_in[1]);
 		if (execle(_exec_name.c_str(), _exec_name.c_str(), script_path.c_str() ,NULL, a_env.data()) == -1){
-			_exit(1);
+			throw (std::exception());
 		}
 		_exit(0);
 	}
