@@ -90,18 +90,9 @@ StrategyCGI::create(Client & client)
 	}
 	catch (std::exception& e)
 	{
-		try
-		{
-			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
-			(void)e_exit;
-			throw (ExitException());
-		}
-		catch (std::bad_cast &bc)
-		{
-			response->set_error(500, client.get_server().get_path_error_page());
-			_state = END;
-			_finish = true;
-		}
+		response->set_error(500, client.get_server().get_path_error_page());
+		_state = END;
+		_finish = true;
 	}
 	return (response);
 }
@@ -123,16 +114,7 @@ StrategyCGI::handle_status(const Message & message, Response & response, Server 
 		}
 		catch (std::exception& e)
 		{
-			try
-			{
-				ExitException	&e_exit = dynamic_cast<ExitException&>(e);
-				(void)e_exit;
-				throw (ExitException());
-			}
-			catch (std::bad_cast &bc)
-			{
-				response.set_error(500, server.get_path_error_page());
-			}
+			response.set_error(500, server.get_path_error_page());
 		}
 	}
 	else

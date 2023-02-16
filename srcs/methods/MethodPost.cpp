@@ -45,18 +45,9 @@ MethodPost::action(const Request & request, Response & response, Server & server
 		}
 		catch (std::exception& e)
 		{
-			try
-			{
-				ExitException	&e_exit = dynamic_cast<ExitException&>(e);
-				(void)e_exit;
-				throw (ExitException());
-			}
-			catch (std::bad_cast &bc)
-			{
-				response.set_error(500, server.get_path_error_page());
-				finished();
-				return ;
-			}
+			response.set_error(500, server.get_path_error_page());
+			finished();
+			return ;
 		}
 		if (_uploader.get_state() != Upload::END)
 			return ;
@@ -82,16 +73,7 @@ MethodPost::action(const Request & request, Response & response, Server & server
 	}
 	catch (std::exception& e)
 	{
-		try
-		{
-			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
-			(void)e_exit;
-			throw (ExitException());
-		}
-		catch (std::bad_cast &bc)
-		{
-			response.set_error(404, server.get_path_error_page());
-		}
+		response.set_error(404, server.get_path_error_page());
 	}
 	(void)response;
 	finished();

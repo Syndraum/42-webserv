@@ -163,16 +163,7 @@ Response::set_error(int code, std::string const & path_error_file)
 	}
 	catch (std::exception &e)
 	{
-		try
-		{
-			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
-			(void)e_exit;
-			throw (ExitException());
-		}
-		catch (std::bad_cast &bc)
-		{
-			this->set_code(code).clear_header();
-		}
+		this->set_code(code).clear_header();
 	}
 	file_reader.close();
 	return *this;

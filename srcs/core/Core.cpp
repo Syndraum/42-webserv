@@ -62,17 +62,8 @@ Core::init(int argc, char * argv[], char *env[])
 	}
 	catch (std::exception& e)
 	{
-		try
-		{
-			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
-			(void)e_exit;
-			throw (ExitException());
-		}
-		catch (std::bad_cast &bc)
-		{
-			std::cerr << "Error: Configuration file: " << path_config_file << " not found" << std::endl;
-			return (1);
-		}
+		std::cerr << "Error: Configuration file: " << path_config_file << " not found" << std::endl;
+		return (1);
 	}
 	try
 	{
@@ -82,16 +73,7 @@ Core::init(int argc, char * argv[], char *env[])
 	}
 	catch (std::exception& e)
 	{
-		try
-		{
-			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
-			(void)e_exit;
-			throw (ExitException());
-		}
-		catch (std::bad_cast &bc)
-		{
-			return (3);
-		}
+		return (3);
 	}
 	Info::env = env;
 	return (0);
@@ -111,17 +93,8 @@ Core::start()
 	}
 	catch (std::exception & e)
 	{
-		try
-		{
-			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
-			(void)e_exit;
-			throw (ExitException());
-		}
-		catch (std::bad_cast &bc)
-		{
-			std::cerr << "Error: " << e.what() << '\n';
-			return ;
-		}
+		std::cerr << "Error: " << e.what() << '\n';
+		return ;
 	}
 	_pfdh.init(_servers);
 	_pfdh.set_hr(hr);

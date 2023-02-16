@@ -204,16 +204,7 @@ Client::send(int fd)
 	}
 	catch (std::exception& e)
 	{
-		try
-		{
-			ExitException	&e_exit = dynamic_cast<ExitException&>(e);
-			(void)e_exit;
-			throw (ExitException());
-		}
-		catch (std::bad_cast &bc)
-		{
-			_state = Client::END;
-		}
+		_state = Client::END;
 	}
 }
 

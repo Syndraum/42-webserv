@@ -49,11 +49,11 @@ Reader::operator=(Reader const & rhs)
 void
 Reader::open()
 {
-	if (_ifs.is_open())
+	if (_ifs.is_open()) // WHY ?
 		close();
 	_ifs.open(_path.c_str(), std::ios_base::in );
 	if (_ifs.fail())
-		throw std::exception();
+		throw std::ios_base::failure("");
 	_ifs.seekg (0, _ifs.end);
 	_length = _ifs.tellg();
 	_ifs.seekg (0, _ifs.beg);
